@@ -1,0 +1,52 @@
+.alternator {
+  color: white;
+  margin: 15px;
+  position: absolute;
+  width: 100%;
+  transition: all 1s ease-in-out; }
+
+.helperImage1 {
+  position: absolute;
+  right: 0px; }
+
+.bold {
+  font-weight: 900;
+  font-size: 24px; }
+
+.descriptionOfText {
+  margin-top: 25px;
+  font-size: 14px; }
+
+@keyframes startingImage {
+  0%,
+    25% {
+    opacity: 100; }
+  75%,
+    100% {
+    opacity: 0; } }
+@keyframes hiddenImage {
+  0%,
+    25% {
+    opacity: 0; }
+  75%,
+    100% {
+    opacity: 100; } }
+@keyframes startingText {
+  0%,
+    25% {
+    transform: translateY(0); }
+  75%,
+    100% {
+    transform: translateY(-150px); } }
+@keyframes hiddenText {
+  0%,
+    25% {
+    transform: translateY(0); }
+  75%,
+    100% {
+    transform: translateY(-200px); } }
+.textTile {
+  cursor: default;
+  overflow: hidden; }
+
+/*# sourceMappingURL=TextTile.css.map */

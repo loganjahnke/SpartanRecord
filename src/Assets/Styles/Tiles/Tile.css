@@ -1,0 +1,201 @@
+.tile {
+  border-radius: 5px;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+  background-color: #dad7cd; }
+  .tile .green {
+    background-color: #336699;
+    color: #F9C80E;
+    padding: 10px 10px 10px 10px;
+    margin: -10px -10px -10px -10px;
+    border-radius: 0px 5px 0px 0px; }
+  .tile .red {
+    color: red; }
+
+.half {
+  flex-basis: 175px;
+  margin: 20px; }
+
+.full {
+  flex-basis: 350px;
+  margin: 20px; }
+
+.half,
+.full {
+  flex-grow: 1;
+  flex-shrink: 1; }
+  .half .action,
+  .full .action {
+    position: relative;
+    height: 100px; }
+  .half .statTitle,
+  .full .statTitle {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 16px;
+    color: #000000;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300; }
+  .half .statValue,
+  .full .statValue {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    font-size: 42px;
+    color: #000000;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900; }
+  .half .placement,
+  .full .placement {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-weight: 100;
+    font-size: 16px;
+    text-align: right; }
+
+.flat,
+.firstFlat,
+.lastFlat {
+  border-bottom: 1px solid black; }
+  .flat .action,
+  .firstFlat .action,
+  .lastFlat .action {
+    position: relative;
+    height: 50px;
+    align-items: center;
+    display: flex; }
+  .flat .statTitle,
+  .firstFlat .statTitle,
+  .lastFlat .statTitle {
+    display: block;
+    font-size: 16px;
+    color: #000000;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    width: 125px;
+    margin-left: 10px;
+    margin-right: 10px; }
+  .flat .statValue,
+  .firstFlat .statValue,
+  .lastFlat .statValue {
+    display: block;
+    font-size: 24px;
+    text-align: right;
+    color: #000000;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900;
+    flex-grow: 1;
+    margin-right: 20px; }
+  .flat .placement,
+  .firstFlat .placement,
+  .lastFlat .placement {
+    display: block;
+    font-weight: 100;
+    font-size: 16px;
+    text-align: right;
+    margin-right: 10px;
+    width: 15px; }
+
+.flat {
+  border-radius: 0px; }
+  .flat .green {
+    background-color: #336699;
+    color: #F9C80E;
+    border-radius: 0px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    margin-right: 0px; }
+
+.firstFlat {
+  border-radius: 5px 5px 0px 0px; }
+  .firstFlat .green {
+    background-color: #336699;
+    color: #F9C80E;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    border-radius: 0px 5px 0px 0px;
+    margin-right: 0px; }
+
+.lastFlat {
+  border-radius: 0px 0px 5px 5px; }
+  .lastFlat .green {
+    background-color: #336699;
+    color: #F9C80E;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    border-radius: 0px 0px 5px 0px;
+    margin-right: 0px; }
+
+.chartTile {
+  width: 33%;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 300px;
+  max-width: 500px;
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: #dad7cd;
+  border-radius: 15px; }
+  .chartTile .chartTitle {
+    color: #000000;
+    font-weight: 100;
+    text-align: center;
+    font-size: 16px;
+    margin: 15px; }
+  .chartTile .chartValue {
+    color: #000000;
+    font-weight: 900;
+    font-size: 36px;
+    text-align: center; }
+
+.tileRow {
+  padding: 5px;
+  height: 30px;
+  color: white; }
+  .tileRow .action {
+    position: relative;
+    height: 50px;
+    align-items: baseline;
+    display: flex; }
+  .tileRow .myAction {
+    position: relative;
+    height: 50px;
+    align-items: baseline;
+    display: flex;
+    color: #5c93ca; }
+  .tileRow .statTitle {
+    display: block;
+    font-size: 12px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    width: 95px;
+    margin-left: 10px;
+    margin-right: 10px; }
+  .tileRow .statValue {
+    display: block;
+    font-size: 16px;
+    text-align: right;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900;
+    width: 100px; }
+  .tileRow .placement {
+    display: block;
+    font-weight: 100;
+    font-size: 12px;
+    text-align: right;
+    padding-top: 5px; }
+  .tileRow .green {
+    background-color: #336699;
+    color: #F9C80E;
+    padding: 10px 10px 10px 10px;
+    margin: -10px -10px -10px -10px;
+    border-radius: 0px 5px 0px 0px; }
+  .tileRow .red {
+    color: red; }
+
+/*# sourceMappingURL=Tile.css.map */

@@ -1,0 +1,9 @@
+.versionTooltipDiv {
+  height: 400px;
+  overflow-y: scroll; }
+  .versionTooltipDiv h2 {
+    font-weight: 900 !important; }
+  .versionTooltipDiv li {
+    font-weight: 300 !important; }
+
+/*# sourceMappingURL=Footer.css.map */

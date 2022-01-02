@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,MAAO;EACH,WAAW,EAAE,GAAG;EAChB,KAAK,EAAE,KAAK;EACZ,SAAS,EAAE,IAAI;EACf,QAAQ,EAAE,QAAQ;EAClB,MAAM,EAAE,GAAG;EACX,KAAK,EAAE,IAAI;EACX,UAAU,EAAE,MAAM",
+"sources": ["LeaderboardTile.scss"],
+"names": [],
+"file": "LeaderboardTile.css"
+}

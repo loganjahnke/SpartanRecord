@@ -1,0 +1,88 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+.arrowheadIcon {
+  -ms-filter: brightness(0) invert(1);
+  filter: brightness(0) invert(1); }
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #24362d; }
+
+#root,
+#root > div,
+.App,
+.App > div {
+  height: 100%; }
+
+.nodisp {
+  display: none; }
+
+.floatRight {
+  float: right; }
+
+a:link,
+a:visited,
+a:active {
+  color: white;
+  text-decoration: none; }
+
+a:hover {
+  color: #CFCF00; }
+
+.defaultNav {
+  background-color: #080C0A; }
+
+.noTitle {
+  background-color: transparent; }
+  .noTitle .navTitle {
+    display: none; }
+
+.container {
+  background-color: #24362d;
+  height: 100%;
+  width: 100%; }
+
+.split {
+  display: flex;
+  flex-wrap: wrap; }
+  .split .left {
+    flex-basis: calc(100% - 400px);
+    flex-grow: 1; }
+  .split .right {
+    flex-grow: 1;
+    min-width: 330px;
+    flex-basis: 330px;
+    margin: 20px; }
+
+.tileHolder {
+  display: flex;
+  flex-wrap: wrap; }
+
+.spacer {
+  margin-top: 75px; }
+
+.section {
+  background-color: #dad7cd;
+  margin: 0px 0px 20px 0px;
+  border-radius: 15px; }
+
+tbody > tr > th {
+  cursor: pointer; }
+
+.loadingMessage {
+  position: absolute;
+  text-align: center;
+  margin-top: 75px;
+  color: #DDDDDD;
+  font-size: 8px; }
+
+.viewToggleButtons button {
+  color: white;
+  border-color: white;
+  background-color: #24362d; }
+.viewToggleButtons .Mui-selected {
+  color: #24362d !important;
+  border-color: white !important;
+  background-color: white !important; }
+
+/*# sourceMappingURL=index.css.map */

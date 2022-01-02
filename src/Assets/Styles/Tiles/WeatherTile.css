@@ -1,0 +1,52 @@
+span {
+  font-family: 'Roboto', sans-serif;
+  color: white;
+  text-shadow: 2px 2px black;
+  position: absolute; }
+
+.tile {
+  cursor: pointer; }
+
+.temperature {
+  font-weight: 700;
+  font-size: 36px;
+  top: 10px;
+  right: 10px;
+  text-align: right; }
+
+.highlow {
+  font-weight: 500;
+  font-size: 14px;
+  top: 55px;
+  right: 10px;
+  text-align: right; }
+
+.feelsLike {
+  font-weight: 500;
+  font-size: 14px;
+  top: 75px;
+  right: 10px;
+  text-align: right; }
+
+.wind {
+  font-weight: 500;
+  font-size: 12px;
+  bottom: 10px;
+  right: 10px;
+  text-align: right; }
+
+.sunrise {
+  font-weight: 500;
+  font-size: 12px;
+  bottom: 30px;
+  left: 10px;
+  text-align: left; }
+
+.sunset {
+  font-weight: 500;
+  font-size: 12px;
+  bottom: 10px;
+  left: 10px;
+  text-align: left; }
+
+/*# sourceMappingURL=WeatherTile.css.map */
