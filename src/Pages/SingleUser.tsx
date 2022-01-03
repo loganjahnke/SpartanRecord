@@ -278,6 +278,7 @@ export function SingleUser(props: { arrowheadDB: ArrowheadFirebase })
             let key: keyof any;
             for (key in obj)
             {
+				if (key === "medals") { continue; }
                 if (typeof obj[key] === "string") { return; }
                 if (typeof obj[key] === "number") { setPlacementForStat(key, obj, them, ranks, myMatchesPlayed, themMatchesPlayed); }
                 else { loopThroughGenericObject(obj[key], them.map((t: any) => t[key]), ranks[key], myMatchesPlayed, themMatchesPlayed); }

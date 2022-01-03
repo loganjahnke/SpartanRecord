@@ -5,8 +5,6 @@ import { useNavigate } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 import { ArrowheadFirebase } from "../Database/ArrowheadFirebase";
 
@@ -18,13 +16,6 @@ import { Appearance } from "../Objects/Model/Appearance";
 import { Halo5Converter } from "../Objects/Helpers/Halo5Converter";
 import { Card, CardContent, Grid, Typography } from "@mui/material";
 import MedalTile from "../Tiles and Tables/MedalTile";
-
-enum SingleView
-{
-	ServiceRecord = "ServiceRecord",
-	PerMatch = "PerMatch",
-	PerKill = "PerKill"
-}
 
 export function MedalsSummary(props: { arrowheadDB: ArrowheadFirebase })
 {
@@ -43,7 +34,6 @@ export function MedalsSummary(props: { arrowheadDB: ArrowheadFirebase })
 
 	//#region States
 	const [myPlayer, setMyPlayer] = useState(new Player());
-    const [view, setView] = useState(SingleView.ServiceRecord);
 	const [loadingMessage, setLoadingMessage] = useState("");
 	//#endregion
 
@@ -51,14 +41,6 @@ export function MedalsSummary(props: { arrowheadDB: ArrowheadFirebase })
 	//#endregion
 
 	//#region Callbacks
-	const changeView = useCallback((_event: React.MouseEvent<HTMLElement>, newView: SingleView) => 
-	{
-		if (newView !== null)
-		{
-			setView(newView);
-		}
-	}, [setView]);
-
 	const goHome = useCallback(() =>
 	{
 		navigate("/");
@@ -97,7 +79,7 @@ export function MedalsSummary(props: { arrowheadDB: ArrowheadFirebase })
         setMyPlayer(player); 
 		setLoadingMessage("");
 
-    }, [setMyPlayer, gamertag, lastUpdate, arrowheadDB]);
+    }, [setMyPlayer, gamertag, lastUpdate, arrowheadDB, myPlayer]);
 	//#endregion
 	//#endregion
 

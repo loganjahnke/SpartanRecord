@@ -1,11 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
-import { ArrowheadCompany } from './Pages/ArrowheadCompany';
 import { SingleUser } from './Pages/SingleUser';
 import { MedalsSummary } from './Pages/MedalsSummary';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { ArrowheadFirebase } from "./Database/ArrowheadFirebase";
+import { CompanyView } from "./Pages/CompanyView";
+import { Company } from "./Objects/Model/Company";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -25,7 +26,9 @@ const App = () =>
 	// Initialize Firebase
 	const app = initializeApp(firebaseConfig);
 	const database = getDatabase(app);
-	const arrowheadDB = new ArrowheadFirebase(database);
+	
+	const db = new ArrowheadFirebase(database);
+	const company = new Company("Arrowhead");
 
 	// Create theme
 	const theme = createTheme({
@@ -51,9 +54,9 @@ const App = () =>
 			<div className="App">
 				<Router>
 					<Routes>
-						<Route path="/" element={<ArrowheadCompany arrowheadDB={arrowheadDB} />} />
-						<Route path="/service_record/:gamertag" element={<SingleUser arrowheadDB={arrowheadDB} />} />
-						<Route path="/service_record/:gamertag/medals" element={<MedalsSummary arrowheadDB={arrowheadDB} />} />
+						<Route path="/" element={<CompanyView db={db} company={company} />} />
+						<Route path="/service_record/:gamertag" element={<SingleUser arrowheadDB={db} />} />
+						<Route path="/service_record/:gamertag/medals" element={<MedalsSummary arrowheadDB={db} />} />
 					</Routes>
 				</Router>
 			</div>

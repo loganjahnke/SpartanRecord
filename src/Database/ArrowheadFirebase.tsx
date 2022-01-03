@@ -83,14 +83,16 @@ export class ArrowheadFirebase
     /**
      * Gets the entire player from firebase or locally if available
      * @param gamertag the gamertag to get
+     * @param getHistoricSR should we load all historical service records for the player?
+     * @param getAllMatches should we load all matches for the player?
      * @returns the player object containing all stats and appearance
      */
-    public async GetPlayer(gamertag: string): Promise<Player>
+    public async GetPlayer(gamertag: string, getHistoricSR: boolean = false, getAllMatches: boolean = false): Promise<Player>
     {
         const serviceRecord = await this.GetCurrentServiceRecord(gamertag);
-        const historicServiceRecords = await this.GetHistoricServiceRecord(gamertag);
+        const historicServiceRecords = getHistoricSR ? await this.GetHistoricServiceRecord(gamertag) : [];
         const appearance = await this.GetAppearance(gamertag);
-        const matches = await this.GetAllMatches(gamertag);
+        const matches = getAllMatches ? await this.GetAllMatches(gamertag) : [];
         
         return new Player(gamertag, serviceRecord, historicServiceRecords, appearance, matches);
     }

@@ -85,4 +85,9 @@ tbody > tr > th {
   border-color: white !important;
   background-color: white !important; }
 
+.ahTab {
+  text-transform: none !important;
+  text-align: left !important;
+  justify-content: left !important; }
+
 /*# sourceMappingURL=index.css.map */
