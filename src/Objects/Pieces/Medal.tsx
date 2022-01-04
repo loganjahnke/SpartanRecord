@@ -21,9 +21,9 @@ export class Medal
         this.description = "";
         this.count = data?.count ?? -1;
         this.images = { 
-            small: data?.image_urls.small ?? "", 
-            medium: data?.image_urls.medium ?? "",
-            large: data?.image_urls.large ?? ""
+            small: data?.image_urls?.small ?? "", 
+            medium: data?.image_urls?.medium ?? "",
+            large: data?.image_urls?.large ?? ""
         };
     }
 

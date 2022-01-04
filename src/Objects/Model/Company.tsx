@@ -64,10 +64,10 @@ export class Company
      */
     public GetServiceRecord(): ServiceRecord
     {
-        const sr = new ServiceRecord();
+        let sr = new ServiceRecord();
         for (const player of this.players)
         {
-            sr.AddServiceRecord(player.serviceRecord);
+            sr = sr.AddServiceRecord(player.serviceRecord);
         }
 
         return sr;

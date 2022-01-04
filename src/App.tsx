@@ -3,10 +3,11 @@ import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { SingleUser } from './Pages/SingleUser';
 import { MedalsSummary } from './Pages/MedalsSummary';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import { ArrowheadFirebase } from "./Database/ArrowheadFirebase";
 import { CompanyView } from "./Pages/CompanyView";
 import { Company } from "./Objects/Model/Company";
+import { ArrowheadTheme } from "./Assets/Theme/ArrowheadTheme";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -30,27 +31,8 @@ const App = () =>
 	const db = new ArrowheadFirebase(database);
 	const company = new Company("Arrowhead");
 
-	// Create theme
-	const theme = createTheme({
-		palette:
-		{
-			background:
-			{
-				paper: "#dad7cd"
-			},
-			primary: 
-			{
-				main: "#344e41"
-			},
-			secondary:
-			{
-				main: "#4D424D"
-			}
-		}
-	});
-
 	return (
-		<ThemeProvider theme={theme}>
+		<ThemeProvider theme={ArrowheadTheme}>
 			<div className="App">
 				<Router>
 					<Routes>

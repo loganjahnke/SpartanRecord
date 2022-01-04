@@ -221,7 +221,16 @@ export class ServiceRecord
             human: ""
         };
 
-        newSR.medals = [];
+        const medals1 = new Map<number, Medal>();
+        sr.medals.forEach(m => medals1.set(m.id, m));
+        this.medals.forEach(m => 
+        {
+            const medal = medals1.get(m.id) ?? new Medal({ id: m.id });
+            medal.count += m.count;
+            medals1.set(m.id, medal);
+        });
+
+        newSR.medals = Array.from(medals1.values());
 
         newSR.totalScore = sr.totalScore + this.totalScore;
         newSR.matchesPlayed = this.matchesPlayed + 1;
