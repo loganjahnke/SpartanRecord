@@ -39,8 +39,9 @@ export class Company
      * @param gamertag the gamertag to get the player object for
      * @returns player
      */
-    public GetPlayer(gamertag: string): Player | undefined
+    public GetPlayer(gamertag?: string): Player | undefined
     {
+        if (!gamertag) { return undefined; }
         const index = this.__gamertagToPlayerIndex.get(gamertag);
         if (index !== undefined)
         {

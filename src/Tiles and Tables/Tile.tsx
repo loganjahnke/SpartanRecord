@@ -51,7 +51,7 @@ const Tile = (props: TileProps) =>
 	let place = -1;
 	if (placement)
 	{
-		place = lessIsBetter ? 6 - placement : placement;
+		place = lessIsBetter ? 7 - placement : placement;
 		if (place === 1) { color = "green"; }
 		if (place === 5) { color = "red"; }
 	}

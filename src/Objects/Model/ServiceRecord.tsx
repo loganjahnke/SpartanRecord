@@ -110,7 +110,7 @@ export class ServiceRecord
             this.medals = core.breakdowns.medals.map((data: any) => 
             {
                 const medal = new Medal(data);
-                const parent = (AllMedals as any)[(medal.id + 1)];
+                const parent = (AllMedals as any)[(medal.id)];
                 medal.rarity = parent.type ?? "N/A";
                 medal.description = parent.description ?? "N/A";
                 return medal;
@@ -226,14 +226,14 @@ export class ServiceRecord
         this.medals.forEach(m => 
         {
             const medal = medals1.get(m.id) ?? new Medal({ id: m.id });
-            medal.count += m.count;
-            medals1.set(m.id, medal);
+            const count = medal.count + m.count;
+            medals1.set(m.id, Medal.FromCount(m.id, count));
         });
 
         newSR.medals = Array.from(medals1.values());
 
         newSR.totalScore = sr.totalScore + this.totalScore;
-        newSR.matchesPlayed = this.matchesPlayed + 1;
+        newSR.matchesPlayed = (sr.matchesPlayed === 0 ? 1 : sr.matchesPlayed) + this.matchesPlayed;
         
         if (newSR.summary.deaths !== 0)
         {

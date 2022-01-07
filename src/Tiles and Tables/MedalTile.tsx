@@ -18,7 +18,7 @@ const MedalTile = (props: MedalTileProps) =>
             <Paper sx={{ textAlign: "center" }}>
                 <Tooltip title={medal.description}>
                     <div>
-                        <div className="medalImage"><img src={medal.images.small} alt={medal.name} /></div>
+                        <img src={medal.images.small} alt={medal.name} width="48px" />
                         <Typography variant="subtitle2" color="inherit" component="div" sx={{ fontWeight: 300, fontSize: "10px" }}>{medal.name}</Typography>
                         <Typography variant="subtitle2" color="inherit" component="div" sx={{ fontWeight: 900, fontSize: "18px" }}>{medal.count}</Typography>
                     </div>

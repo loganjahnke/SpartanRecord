@@ -1,32 +1,28 @@
 import { AppBar, Backdrop, Box, CircularProgress, Divider, Drawer, Grid, IconButton, Tab, Tabs, Toolbar, Typography } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ArrowheadFirebase } from "../Database/ArrowheadFirebase";
 import { Company } from "../Objects/Model/Company";
 
 import GroupsIcon from '@mui/icons-material/Groups';
 import ModeStandbyIcon from '@mui/icons-material/ModeStandby';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
-import { MemberList } from "../Assets/Components/Members/MemberList";
 
 import ArrowheadImg from "../Assets/Images/arrowhead.png";
 import MenuIcon from '@mui/icons-material/Menu';
 import { TopMedals } from "../Assets/Components/Medals/TopMedals";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
+import { KillBreakdown } from "../Assets/Components/Breakdowns/KillBreakdown";
 import { AssistBreakdown } from "../Assets/Components/Breakdowns/AssistBreakdown";
-import { DamageBreakdown } from "../Assets/Components/Breakdowns/DamageBreakdown";
 import { MatchesBreakdown } from "../Assets/Components/Breakdowns/MatchesBreakdown";
 import { ShotsBreakdown } from "../Assets/Components/Breakdowns/ShotsBreakdown";
-import { KillRanks } from "../Assets/Components/Ranks/KillRanks";
-import { KDARanks } from "../Assets/Components/Ranks/KDARanks";
-import { WinRateRanks } from "../Assets/Components/Ranks/WinRateRanks";
-import { AccuracyRanks } from "../Assets/Components/Ranks/AccuracyRanks";
-import { KillBreakdown } from "../Assets/Components/Breakdowns/KillBreakdown";
+import { DamageBreakdown } from "../Assets/Components/Breakdowns/DamageBreakdown";
 
-export function CompanyView(props: { db: ArrowheadFirebase, company: Company })
+export function MedalsView(props: { db: ArrowheadFirebase, company: Company })
 {
 	//#region Props and Navigate
 	const { db, company } = props;
+	const { gamertag } = useParams();
 	const navigate = useNavigate();
 	//#endregion
 
@@ -37,20 +33,20 @@ export function CompanyView(props: { db: ArrowheadFirebase, company: Company })
 	//#region State
 	const [loadingMessage, setLoadingMessage] = useState("");
 	const [spartanCompany, setSpartanCompany] = useState(company);
-	const [sharedSR, setSharedSR] = useState(new ServiceRecord());
-	const [tab, setTab] = useState(0);
+	const [mySR, setMySR] = useState(new ServiceRecord());
+	const [tab, setTab] = useState(2);
 	const [mobileOpen, setMobileOpen] = useState(false);
 	//#endregion
 
-    const loadData = useCallback(async () => 
-    {
+	const loadData = useCallback(async () => 
+	{
 		if (!await db.PopulateMembers()) { return; }
 		
 		// Check if we need to check Firebase or HaloDotAPI
 		setLoadingMessage("Loading Service Records");
 		
-        // Get last update instant
-        await db.GetLastUpdate();
+		// Get last update instant
+		await db.GetLastUpdate();
 		lastUpdate.current = db.lastUpdate;
 		
 		// Get service records for all users
@@ -64,36 +60,28 @@ export function CompanyView(props: { db: ArrowheadFirebase, company: Company })
 			spartanCompany.AddPlayer(player);
 		}
 
-		const sr = spartanCompany.GetServiceRecord();
+		// Get player's service record
+		if (gamertag)
+		{
+			const sr = spartanCompany.GetPlayer(gamertag)?.serviceRecord ?? new ServiceRecord();
+			setMySR(sr);
+		}
 
 		setSpartanCompany(spartanCompany);
-		setSharedSR(sr);
 		setLoadingMessage("");
-    }, [spartanCompany, lastUpdate, db, setSpartanCompany, setSharedSR]);
-    
-    useEffect(() =>
-    {
-        loadData();
-    }, []);
+	}, [spartanCompany, lastUpdate, db, gamertag, setSpartanCompany, setMySR]);
+	
+	useEffect(() =>
+	{
+		loadData();
+	}, []);
 
-	/**
-	 * On tab click, navigates to the right one
-	 */
 	const onTabClick = useCallback((_event: React.SyntheticEvent, newValue: number) =>
 	{
 		setTab(newValue);
 		if (newValue === 0) { navigate("/"); }
 		if (newValue === 1) { navigate("/service_record/BoundlessEcho"); }
 		if (newValue === 2) { navigate("/service_record/BoundlessEcho/medals"); }
-	}, [navigate, setTab]);
-
-	/**
-	 * Goes to the service record
-	 */
-	const goToServiceRecord = useCallback((gamertag: string) =>
-	{
-		setTab(1);
-		navigate("/service_record/" + gamertag);
 	}, [navigate, setTab]);
 
 	function handleDrawerToggle()
@@ -125,8 +113,8 @@ export function CompanyView(props: { db: ArrowheadFirebase, company: Company })
 						<MenuIcon />
 					</IconButton>
 					<Divider orientation="vertical" flexItem sx={{ display: { sm: "none" }}} />
-					<Typography variant="body1" sx={{ flexGrow: 1, textAlign: "right", padding: 2 }}>BoundlessEcho</Typography>
-					<img src={spartanCompany.GetPlayer("BoundlessEcho")?.appearance.emblemURL} alt="emblem" height="32px" />
+					<Typography variant="body1" sx={{ flexGrow: 1, textAlign: "right", padding: 2 }}>{gamertag}</Typography>
+					<img src={spartanCompany.GetPlayer(gamertag)?.appearance.emblemURL} alt="emblem" height="32px" />
 				</Toolbar>
 			</AppBar>
 			<Backdrop sx={{ color: '#fff', zIndex: 1000 }} open={!!loadingMessage}>
@@ -140,38 +128,29 @@ export function CompanyView(props: { db: ArrowheadFirebase, company: Company })
 				<Drawer variant="permanent" open sx={{ display: { xs: 'none', sm: 'block' }, '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 }}}>
 					{drawer}
 				</Drawer>
-      		</Box>
-      		<Box component="main" sx={{ flexGrow: 1 }}>
+	  		</Box>
+	  		<Box component="main" sx={{ flexGrow: 1 }}>
 				<Toolbar />
 				<Divider />
 				<Box sx={{ p: 2 }}>
 					<Grid container spacing={2}>
-						<Grid container item spacing={2} xs={12} md={4} xl={3}>
-							<Grid item xs={12}>
-								<MemberList company={spartanCompany} goToMember={goToServiceRecord} />
-							</Grid>
+						<Grid item xs={12} md={6} lg={4} xl={3}>
+							<KillBreakdown serviceRecord={mySR} icon={ArrowheadImg} />
 						</Grid>
-						<Grid container item spacing={2} xs={12} md={4} xl={6} sx={{ alignContent: "flex-start" }}>
-							<Grid item xs={12}>
-								<TopMedals medals={sharedSR.medals} />
-							</Grid>
-							<Grid item xs={12} md={6}>
-								<KillBreakdown serviceRecord={sharedSR} icon={ArrowheadImg} />
-							</Grid>
-							<Grid item xs={12} md={6}>
-								<MatchesBreakdown serviceRecord={sharedSR} icon={ArrowheadImg} />
-							</Grid>
+						<Grid item xs={12} md={6} lg={4} xl={3}>
+							<MatchesBreakdown serviceRecord={mySR} icon={ArrowheadImg} />
 						</Grid>
-						<Grid container item spacing={2} xs={12} md={4} xl={3}>
-							<Grid item xs={12}>
-								<WinRateRanks company={spartanCompany} sharedSR={sharedSR} goToMember={goToServiceRecord} />
-							</Grid>
-							<Grid item xs={12}>
-								<KDARanks company={spartanCompany} sharedSR={sharedSR} goToMember={goToServiceRecord} />
-							</Grid>
-							<Grid item xs={12}>
-								<AccuracyRanks company={spartanCompany} sharedSR={sharedSR} goToMember={goToServiceRecord} />
-							</Grid>
+						<Grid item xs={12} md={6} lg={4} xl={3}>
+							<AssistBreakdown serviceRecord={mySR} icon={ArrowheadImg} />
+						</Grid>
+						<Grid item xs={12} md={6} lg={4} xl={3}>
+							<ShotsBreakdown serviceRecord={mySR} icon={ArrowheadImg} />
+						</Grid>
+						<Grid item xs={12} md={6} lg={4} xl={3}>
+							<DamageBreakdown serviceRecord={mySR} icon={ArrowheadImg} />
+						</Grid>
+						<Grid item xs={12} lg={6}>
+							<TopMedals medals={mySR.medals} />
 						</Grid>
 					</Grid>
 				</Box>

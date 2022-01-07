@@ -1,5 +1,5 @@
 import { Box, Grid, Typography } from "@mui/material";
-import { Medal } from "../../Objects/Pieces/Medal";
+import { Medal } from "../../../Objects/Pieces/Medal";
 
 export function TopMedals(props: { medals: Medal[] })
 {
@@ -14,7 +14,7 @@ export function TopMedals(props: { medals: Medal[] })
                 {
                     return (
                         <Grid item xs={4} sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                            <img src={medal.images.medium} alt="medal" />
+                            <img src={medal.images.small} alt="medal" />
                             <Typography variant="caption" sx={{ mt: 2 }}>{medal.name}</Typography>
                             <Typography variant="h4">{medal.count.toLocaleString()}</Typography>
                         </Grid>
