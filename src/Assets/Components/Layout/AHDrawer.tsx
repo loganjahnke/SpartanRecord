@@ -5,6 +5,7 @@ import { Company } from "../../../Objects/Model/Company";
 import GroupsIcon from '@mui/icons-material/Groups';
 import ModeStandbyIcon from '@mui/icons-material/ModeStandby';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
+import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 
 interface AHDrawerProps
 {
@@ -37,6 +38,7 @@ export function AHDrawer(props: AHDrawerProps)
 				<Tab className="ahTab" label="Company" icon={<GroupsIcon />} iconPosition="start" />
 				{hasUser ? <Tab className="ahTab" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" /> : undefined}
 				{hasUser ? <Tab className="ahTab" label="Medals" icon={<MilitaryTechIcon />} iconPosition="start" /> : undefined}
+				{hasUser ? <Tab className="ahTab" label="Matches" icon={<SportsEsportsIcon />} iconPosition="start" /> : undefined}
 			</Tabs>
 		</div>
 	);

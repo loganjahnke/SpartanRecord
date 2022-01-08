@@ -12,6 +12,8 @@ import { useCallback, useState } from "react";
 import { User } from "./Objects/Model/User";
 import { getAuth } from "firebase/auth";
 import { Player } from "./Objects/Model/Player";
+import { MatchesView } from "./Pages/MatchesView";
+import { SingleMatchView } from "./Pages/SingleMatchView";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -50,8 +52,10 @@ const App = () =>
 				<Router>
 					<Routes>
 						<Route path="/" element={<CompanyView db={db} company={company} user={myUser} setPlayer={setPlayer} />} />
-						<Route path="/service_record/:gamertag" element={<PlayerView db={db} company={company} user={myUser} />} />
-						<Route path="/service_record/:gamertag/medals" element={<MedalsView db={db} company={company} user={myUser} />} />
+						<Route path="/sr/:gamertag" element={<PlayerView db={db} company={company} user={myUser} />} />
+						<Route path="/medals/:gamertag" element={<MedalsView db={db} company={company} user={myUser} />} />
+						<Route path="/matches/:gamertag" element={<MatchesView db={db} company={company} user={myUser} />} />
+						<Route path="/match/:id" element={<SingleMatchView db={db} company={company} user={myUser} />} />
 					</Routes>
 				</Router>
 			</div>

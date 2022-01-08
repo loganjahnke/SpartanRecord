@@ -37,13 +37,13 @@ export function AHAppBar(props: AHAppBarProps)
 				</IconButton>
 				<Divider orientation="vertical" flexItem sx={{ display: { sm: "none" }}} />
 					{player ? (
-						<Box sx={{ textAlign: "right", display: "flex", alignItems: "center" }}>
+						<Box sx={{ flexGrow: 1, textAlign: "right", display: "flex", alignItems: "center" }}>
 							<Typography variant="body1" sx={{ textAlign: "right", p: 2 }}>{player.gamertag}</Typography>
 							<img src={player.appearance.emblemURL} alt="emblem" height="32px" />
 						</Box>
 					) : (
-						<Box sx={{ textAlign: "right", display: "flex", alignItems: "center" }}>
-							<Typography variant="subtitle1">Select a gamertag from the Member List</Typography>
+						<Box sx={{ flexGrow: 1, textAlign: "right", display: "flex", alignItems: "center" }}>
+							<Typography variant="subtitle1" sx={{ textAlign: "right" }}>Select a gamertag from the Member List</Typography>
 							{/* <Button variant="text" sx={{ mr: 1 }}>Log In</Button>
 							<Button variant="text" onClick={openSignUp}>Signup</Button> */}
 						</Box>

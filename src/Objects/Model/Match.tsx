@@ -13,7 +13,7 @@ export class Match
     /** The game mode details */
     public mode: GameMode;
     /** The map the match was played on */
-    public map: Map;
+    public haloMap: Map;
     /** The playlist */
     public playlist: Playlist;
     /** Was this a teams game? */
@@ -31,7 +31,7 @@ export class Match
     {
         this.id = data?.id ?? "";
         this.mode = new GameMode(data?.details?.category);
-        this.map = new Map(data?.details?.map);
+        this.haloMap = new Map(data?.details?.map);
         this.playlist = new Playlist(data?.details?.playlist);
         this.teamGame = data?.teams?.enabled;
         this.player = new MatchPlayer(data?.player);
@@ -76,7 +76,7 @@ export class MatchFilter
      */
     public DoesMatchMeetFilter(match: Match): boolean
     {
-        const conditionMaps = !this.HasMapFilter() || match.map.name === this.map;
+        const conditionMaps = !this.HasMapFilter() || match.haloMap.name === this.map;
         const conditionMode = !this.HasModeFilter() || match.mode.name === this.mode;
         const conditionRank = !this.HasIsRankedFilter() || Converter.BooleanToYesNoAll(match.playlist.ranked) === this.isRanked;
         const conditionWins = !this.HasIsWinFilter() || Converter.BooleanToYesNoAll(match.player.outcome === "win") === this.isWin;

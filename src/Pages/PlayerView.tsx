@@ -82,8 +82,9 @@ export function PlayerView(props: { db: ArrowheadFirebase, company: Company, use
 	{
 		setTab(newValue);
 		if (newValue === 0) { navigate("/"); }
-		if (newValue === 1) { navigate(`/service_record/${user.player?.gamertag ?? gamertag}`); }
-		if (newValue === 2) { navigate(`/service_record/${user.player?.gamertag ?? gamertag}/medals`); }
+		if (newValue === 1) { navigate(`/sr/${user.player?.gamertag ?? gamertag}`); }
+		if (newValue === 2) { navigate(`/medals/${user.player?.gamertag ?? gamertag}`); }
+		if (newValue === 3) { navigate(`/matches/${user.player?.gamertag ?? gamertag}`); }
 	}, [navigate, setTab]);
 
 	function handleDrawerToggle()

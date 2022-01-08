@@ -81,8 +81,9 @@ export function CompanyView(props: { db: ArrowheadFirebase, company: Company, us
 	{
 		setTab(newValue);
 		if (newValue === 0) { navigate("/"); }
-		if (newValue === 1) { navigate(`/service_record/${user.player?.gamertag}`); }
-		if (newValue === 2) { navigate(`/service_record/${user.player?.gamertag}/medals`); }
+		if (newValue === 1) { navigate(`/sr/${user.player?.gamertag}`); }
+		if (newValue === 2) { navigate(`/medals/${user.player?.gamertag}`); }
+		if (newValue === 3) { navigate(`/matches/${user.player?.gamertag}`); }
 	}, [navigate, setTab]);
 
 	/**
@@ -91,7 +92,7 @@ export function CompanyView(props: { db: ArrowheadFirebase, company: Company, us
 	const goToServiceRecord = useCallback((gamertag: string) =>
 	{
 		setTab(1);
-		navigate("/service_record/" + gamertag);
+		navigate("/sr/" + gamertag);
 	}, [navigate, setTab]);
 
 	function handleDrawerToggle()

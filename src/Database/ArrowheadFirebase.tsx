@@ -1,4 +1,4 @@
-import { Database, ref, get, child, update } from "firebase/database";
+import { Database, ref, get, child, update, query, orderByChild, limitToFirst, onValue } from "firebase/database";
 import { Timestamp } from "firebase/firestore";
 import { Appearance } from "../Objects/Model/Appearance";
 import { Debugger } from "../Objects/Helpers/Debugger";
@@ -43,500 +43,638 @@ export enum YesNoAll
 
 export class ArrowheadFirebase
 {
-    /** Turns on or off debugging mode */
-    private readonly IS_DEBUGGING = process.env.NODE_ENV !== "production";
+	/** Turns on or off debugging mode */
+	private readonly IS_DEBUGGING = process.env.NODE_ENV !== "production";
 
-    /** The last time the Halo API was used */
-    public lastUpdate: Date | null = null;
-    /** An array of all Arrowhead members */
-    public members: string[] = [];
+	/** The last time the Halo API was used */
+	public lastUpdate: Date | null = null;
+	/** An array of all Arrowhead members */
+	public members: string[] = [];
 
-    /** The firebase database */
-    private __database: Database;
-    /** All players, locally stored */
-    private __allPlayers: Map<string, Player> = new Map<string, Player>();
+	/** The firebase database */
+	private __database: Database;
+	/** All players, locally stored */
+	private __allPlayers: Map<string, Player> = new Map<string, Player>();
+	/** All matches, locally stored */
+	private __allMatches: Map<string, Match> = new Map<string, Match>();
 
-    constructor(database: Database)
-    {
-        this.__database = database;
-    }
+	constructor(database: Database)
+	{
+		this.__database = database;
+	}
 
-    //#region Members
-    /**
-     * Populates the members field
-     */
-    public async PopulateMembers(): Promise<boolean>
-    {
-        if (this.members && this.members.length > 0) { return true; }
-        const membersSnapshot = await get(child(ref(this.__database), "members"));
-        if (membersSnapshot?.exists())
-        {
-            this.members = Object.keys(membersSnapshot.val());
-            return true;
-        }
+	//#region Members
+	/**
+	 * Populates the members field
+	 */
+	public async PopulateMembers(): Promise<boolean>
+	{
+		if (this.members && this.members.length > 0) { return true; }
+		const membersSnapshot = await get(child(ref(this.__database), "members"));
+		if (membersSnapshot?.exists())
+		{
+			this.members = Object.keys(membersSnapshot.val());
+			return true;
+		}
 
-        return false;
-    }
-    //#endregion
+		return false;
+	}
+	//#endregion
 
-    //#region Player
-    /**
-     * Gets the entire player from firebase or locally if available
-     * @param gamertag the gamertag to get
-     * @param getHistoricSR should we load all historical service records for the player?
-     * @param getAllMatches should we load all matches for the player?
-     * @returns the player object containing all stats and appearance
-     */
-    public async GetPlayer(gamertag: string, getHistoricSR: boolean = false, getAllMatches: boolean = false): Promise<Player>
-    {
-        const serviceRecord = await this.GetCurrentServiceRecord(gamertag);
-        const historicServiceRecords = getHistoricSR ? await this.GetHistoricServiceRecord(gamertag) : [];
-        const appearance = await this.GetAppearance(gamertag);
-        const matches = getAllMatches ? await this.GetAllMatches(gamertag) : [];
-        
-        return new Player(gamertag, serviceRecord, historicServiceRecords, appearance, matches);
-    }
-    //#endregion
+	//#region Player
+	/**
+	 * Gets the entire player from firebase or locally if available
+	 * @param gamertag the gamertag to get
+	 * @param getHistoricSR should we load all historical service records for the player?
+	 * @param matchesToGet the number of matches to get starting from the latest match
+	 * @returns the player object containing all stats and appearance
+	 */
+	public async GetPlayer(gamertag: string, getHistoricSR: boolean = false, matchesToGet: number = 0): Promise<Player>
+	{
+		const serviceRecord = await this.GetCurrentServiceRecord(gamertag);
+		const historicServiceRecords = getHistoricSR ? await this.GetHistoricServiceRecord(gamertag) : [];
+		const appearance = await this.GetAppearance(gamertag);
+		const matches = await this.GetMatches(gamertag, matchesToGet, 0);
+		
+		return new Player(gamertag, serviceRecord, historicServiceRecords, appearance, matches);
+	}
+	//#endregion
 
-    //#region Data Stale Checks
-    /**
-     * Gets the date and time the last time we used the Halo API
-     * @returns nothing, sets CurrentPull and LastUpdate
-     */
-    public async GetLastUpdate(): Promise<void>
-    {
-        if (!this.__database) { return; }
+	//#region Data Stale Checks
+	/**
+	 * Gets the date and time the last time we used the Halo API
+	 * @returns nothing, sets CurrentPull and LastUpdate
+	 */
+	public async GetLastUpdate(): Promise<void>
+	{
+		if (!this.__database) { return; }
 
-        const queryFactsSnapshot = await get(child(ref(this.__database), "query_facts"));
-        if (queryFactsSnapshot?.exists())
-        {
-            const result = queryFactsSnapshot.val();
+		const queryFactsSnapshot = await get(child(ref(this.__database), "query_facts"));
+		if (queryFactsSnapshot?.exists())
+		{
+			const result = queryFactsSnapshot.val();
 
-            if (result.last_update)
-            {
-                const lastUpdateTimestamp = new Timestamp(result.last_update._seconds, result.last_update._nanoseconds);
-                this.lastUpdate = lastUpdateTimestamp.toDate();
-            }
-        }
-
-        if (this.IS_DEBUGGING) { Debugger.Print(false, "GetLastUpdate()", undefined, this); }
-    }
-    //#endregion
-
-    //#region Player Appearence 
-    /**
-     * Gets the appearance for a gamertag, checks locally before querying Firebase
-     * @param gamertag the gamertag to get stats from
-     * @returns The current appearance for the gamertag
-     */
-    public async GetAppearance(gamertag: string): Promise<Appearance | undefined>
-    {
-        if (this.IS_DEBUGGING) { Debugger.Print(true, "GetAppearance()", gamertag); }
-        
-        // Check locally
-        let player = this.__allPlayers.get(gamertag);
-        if (player?.appearance?.emblemURL) 
-        { 
-            if (this.IS_DEBUGGING) { Debugger.Continue("Locally"); }
-            return player.appearance; 
-        }
-
-        // Otherwise get from Firebase
-        const reference = `appearance/${gamertag}`;
-        const gamertagSnapshot = await get(child(ref(this.__database), reference));
-        if (gamertagSnapshot?.exists())
-        {
-            if (this.IS_DEBUGGING) { Debugger.Continue("Firebase"); }
-            const result = gamertagSnapshot.val();
-            const appearance = new Appearance(result);
-
-            // Store locally
-            this.__storeAppearanceLocally(gamertag, appearance);
-            return appearance;
-        }
-
-        return undefined;
-    }
-
-     /**
-     * Stores the service record into the AllUserStatistics map if it's not already in there
-     * @param serviceRecord The service record to push in
-     * @param pull The pull to push in
-     */
-    private __storeAppearanceLocally(gamertag: string, appearance: Appearance): void
-    {
-        const player = this.__allPlayers.get(gamertag) ?? new Player(gamertag);
-        player.appearance = appearance;
-        this.__allPlayers.set(gamertag, player);
-    }
-    //#endregion
-
-    //#region Service Record
-    /**
-     * Gets the service record for a gamertag, checks locally before going to Firebase
-     * @param gamertag the gamertag to get stats from
-     * @returns The current service record for the gamertag
-     */
-    public async GetCurrentServiceRecord(gamertag: string): Promise<ServiceRecord | undefined>
-    {
-        if (this.IS_DEBUGGING) { Debugger.Print(true, "GetCurrentServiceRecord()", gamertag); }
-
-        // Try locally
-        if (this.__hasCurrentPullData(gamertag))
-        {
-            if (this.IS_DEBUGGING) { Debugger.Continue("Locally"); }
-            return this.__getCurrentStatsForGamertagLocally(gamertag);
-        }
-
-        // Otherwise go to Firebase
-        const reference = `gamertag/${gamertag}/current`;
-        const gamertagSnapshot = await get(child(ref(this.__database), reference));
-        if (gamertagSnapshot?.exists())
-        {
-            if (this.IS_DEBUGGING) { Debugger.Continue("Firebase"); }
-            const result = gamertagSnapshot.val();
-            const serviceRecord = new ServiceRecord(result);
-
-            // Store locally for current pull
-            this.__storeCurrentServiceRecordLocally(gamertag, serviceRecord);
-            return serviceRecord;
-        }
-
-        return undefined;
-    }
-
-    /**
-     * Gets the entire history of service records for a gamertag, tries locally before going to Firebase
-     * @param gamertag the gamertag to get stats from
-     * @returns An array of service record JSONs
-     */
-    public async GetHistoricServiceRecord(gamertag: string): Promise<ServiceRecord[] | undefined>
-    {
-        if (this.IS_DEBUGGING) { Debugger.Print(true, "GetHistoricServiceRecord()", gamertag); }
-
-        // First locally
-        let historicSRs = this.__getAllHistoricStatsLocally(gamertag);
-        if (historicSRs)
-        {
-            if (this.IS_DEBUGGING) { Debugger.Continue("Locally"); }
-            return historicSRs;
-        }
-
-        // Otherwise go to Firebase
-        const reference = `gamertag/${gamertag}`;
-        const gamertagSnapshot = await get(child(ref(this.__database), reference));
-        if (gamertagSnapshot?.exists())
-        {
-            if (this.IS_DEBUGGING) { Debugger.Continue("Firebase"); }
-            const result = gamertagSnapshot.val();
-            historicSRs = [];
-
-            for (const key in result)
+			if (result.last_update)
 			{
-                if (key === "current") { continue; }
-                historicSRs.push(new ServiceRecord(result[key]));
+				const lastUpdateTimestamp = new Timestamp(result.last_update._seconds, result.last_update._nanoseconds);
+				this.lastUpdate = lastUpdateTimestamp.toDate();
+			}
+		}
+
+		if (this.IS_DEBUGGING) { Debugger.Print(false, "GetLastUpdate()", undefined, this); }
+	}
+	//#endregion
+
+	//#region Player Appearence 
+	/**
+	 * Gets the appearance for a gamertag, checks locally before querying Firebase
+	 * @param gamertag the gamertag to get stats from
+	 * @returns The current appearance for the gamertag
+	 */
+	public async GetAppearance(gamertag: string): Promise<Appearance | undefined>
+	{
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "GetAppearance()", gamertag); }
+		
+		// Check locally
+		let player = this.__allPlayers.get(gamertag);
+		if (player?.appearance?.emblemURL) 
+		{ 
+			if (this.IS_DEBUGGING) { Debugger.Continue("Locally"); }
+			return player.appearance; 
+		}
+
+		// Otherwise get from Firebase
+		const reference = `appearance/${gamertag}`;
+		const gamertagSnapshot = await get(child(ref(this.__database), reference));
+		if (gamertagSnapshot?.exists())
+		{
+			if (this.IS_DEBUGGING) { Debugger.Continue("Firebase"); }
+			const result = gamertagSnapshot.val();
+			const appearance = new Appearance(result);
+
+			// Store locally
+			this.__storeAppearanceLocally(gamertag, appearance);
+			return appearance;
+		}
+
+		return undefined;
+	}
+
+	 /**
+	 * Stores the service record into the AllUserStatistics map if it's not already in there
+	 * @param serviceRecord The service record to push in
+	 * @param pull The pull to push in
+	 */
+	private __storeAppearanceLocally(gamertag: string, appearance: Appearance): void
+	{
+		const player = this.__allPlayers.get(gamertag) ?? new Player(gamertag);
+		player.appearance = appearance;
+		this.__allPlayers.set(gamertag, player);
+	}
+	//#endregion
+
+	//#region Service Record
+	/**
+	 * Gets the service record for a gamertag, checks locally before going to Firebase
+	 * @param gamertag the gamertag to get stats from
+	 * @returns The current service record for the gamertag
+	 */
+	public async GetCurrentServiceRecord(gamertag: string): Promise<ServiceRecord | undefined>
+	{
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "GetCurrentServiceRecord()", gamertag); }
+
+		// Try locally
+		if (this.__hasCurrentPullData(gamertag))
+		{
+			if (this.IS_DEBUGGING) { Debugger.Continue("Locally"); }
+			return this.__getCurrentStatsForGamertagLocally(gamertag);
+		}
+
+		// Otherwise go to Firebase
+		const reference = `gamertag/${gamertag}/current`;
+		const gamertagSnapshot = await get(child(ref(this.__database), reference));
+		if (gamertagSnapshot?.exists())
+		{
+			if (this.IS_DEBUGGING) { Debugger.Continue("Firebase"); }
+			const result = gamertagSnapshot.val();
+			const serviceRecord = new ServiceRecord(result);
+
+			// Store locally for current pull
+			this.__storeCurrentServiceRecordLocally(gamertag, serviceRecord);
+			return serviceRecord;
+		}
+
+		return undefined;
+	}
+
+	/**
+	 * Gets the entire history of service records for a gamertag, tries locally before going to Firebase
+	 * @param gamertag the gamertag to get stats from
+	 * @returns An array of service record JSONs
+	 */
+	public async GetHistoricServiceRecord(gamertag: string): Promise<ServiceRecord[] | undefined>
+	{
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "GetHistoricServiceRecord()", gamertag); }
+
+		// First locally
+		let historicSRs = this.__getAllHistoricStatsLocally(gamertag);
+		if (historicSRs)
+		{
+			if (this.IS_DEBUGGING) { Debugger.Continue("Locally"); }
+			return historicSRs;
+		}
+
+		// Otherwise go to Firebase
+		const reference = `gamertag/${gamertag}`;
+		const gamertagSnapshot = await get(child(ref(this.__database), reference));
+		if (gamertagSnapshot?.exists())
+		{
+			if (this.IS_DEBUGGING) { Debugger.Continue("Firebase"); }
+			const result = gamertagSnapshot.val();
+			historicSRs = [];
+
+			for (const key in result)
+			{
+				if (key === "current") { continue; }
+				historicSRs.push(new ServiceRecord(result[key]));
 			}
 
-            this.__storeHistoricServiceRecordsLocally(gamertag, historicSRs);
-        }
+			this.__storeHistoricServiceRecordsLocally(gamertag, historicSRs);
+		}
 
-        return historicSRs;
-    }
+		return historicSRs;
+	}
 
-    /**
-     * Checks if we have the stats for the current pull stored locally
-     */
-    private __hasCurrentPullData(gamertag: string): boolean
-    {
-        const player = this.__allPlayers.get(gamertag);
-        if (!player) { return false; }
+	/**
+	 * Checks if we have the stats for the current pull stored locally
+	 */
+	private __hasCurrentPullData(gamertag: string): boolean
+	{
+		const player = this.__allPlayers.get(gamertag);
+		if (!player) { return false; }
 
-        const hasCurrentData = !!player.serviceRecord;
-        return hasCurrentData;
-    }
+		const hasCurrentData = !!player.serviceRecord;
+		return hasCurrentData;
+	}
 
-    /**
-     * Gets the statistics for a user for the current pull
-     * @param gamertag the gamertag to retrieve
-     * @returns The Service Record for the current pull
-     */
-    private __getCurrentStatsForGamertagLocally(gamertag: string): ServiceRecord | undefined
-    {
-        const player = this.__allPlayers.get(gamertag);
-        return player?.serviceRecord;
-    }
+	/**
+	 * Gets the statistics for a user for the current pull
+	 * @param gamertag the gamertag to retrieve
+	 * @returns The Service Record for the current pull
+	 */
+	private __getCurrentStatsForGamertagLocally(gamertag: string): ServiceRecord | undefined
+	{
+		const player = this.__allPlayers.get(gamertag);
+		return player?.serviceRecord;
+	}
 
-    /**
-     * Gets all stats for a certain gamertag
-     * @param gamertag The gamertag to get stats from
-     * @returns Array of service records
-     */
-    private __getAllHistoricStatsLocally(gamertag: string): ServiceRecord[] | undefined
-    {
-        const player = this.__allPlayers.get(gamertag);
-        return player?.historicStats;
-    }
+	/**
+	 * Gets all stats for a certain gamertag
+	 * @param gamertag The gamertag to get stats from
+	 * @returns Array of service records
+	 */
+	private __getAllHistoricStatsLocally(gamertag: string): ServiceRecord[] | undefined
+	{
+		const player = this.__allPlayers.get(gamertag);
+		return player?.historicStats;
+	}
 
-    /**
-     * Stores the service record into the AllUserStatistics map if it's not already in there
-     * @param serviceRecord The service record to push in
-     * @param pull The pull to push in
-     */
-    private __storeCurrentServiceRecordLocally(gamertag: string, serviceRecord: ServiceRecord): void
-    {
-        const player = this.__allPlayers.get(gamertag) ?? new Player(gamertag);
-        player.serviceRecord = serviceRecord;
-        this.__allPlayers.set(gamertag, player);
-    }
+	/**
+	 * Stores the service record into the AllUserStatistics map if it's not already in there
+	 * @param serviceRecord The service record to push in
+	 * @param pull The pull to push in
+	 */
+	private __storeCurrentServiceRecordLocally(gamertag: string, serviceRecord: ServiceRecord): void
+	{
+		const player = this.__allPlayers.get(gamertag) ?? new Player(gamertag);
+		player.serviceRecord = serviceRecord;
+		this.__allPlayers.set(gamertag, player);
+	}
 
-    /**
-     * Stores the service record into the AllUserStatistics map if it's not already in there
-     * @param serviceRecord The service record to push in
-     * @param pull The pull to push in
-     */
-    private __storeHistoricServiceRecordsLocally(gamertag: string, serviceRecords: ServiceRecord[]): void
-    {
-        const player = this.__allPlayers.get(gamertag) ?? new Player(gamertag);
-        player.historicStats = serviceRecords;
-        this.__allPlayers.set(gamertag, player);
-    }
-    //#endregion
+	/**
+	 * Stores the service record into the AllUserStatistics map if it's not already in there
+	 * @param serviceRecord The service record to push in
+	 * @param pull The pull to push in
+	 */
+	private __storeHistoricServiceRecordsLocally(gamertag: string, serviceRecords: ServiceRecord[]): void
+	{
+		const player = this.__allPlayers.get(gamertag) ?? new Player(gamertag);
+		player.historicStats = serviceRecords;
+		this.__allPlayers.set(gamertag, player);
+	}
+	//#endregion
 
-    //#region Matches
-    /**
-     * Gets all matches for a gamertag
-     * @param gamertag The gamertag to get matches for
-     * @returns The matches
-     */
-    public async GetAllMatches(gamertag: string): Promise<Match[] | undefined>
-    {
-        if (this.IS_DEBUGGING) { Debugger.Print(true, "GetAllMatches()"); }
+	//#region Matches
+	/**
+	 * Gets the number of matches specified for the gamertag starting from the latest match
+	 * @param gamertag the gamertag
+	 * @param numberOfMatches the number of matches to get
+	 * @param offset the offset
+	 */
+	 public async GetMatch(id: string): Promise<Match | undefined>
+	 {
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "GetMatch()", id); }
 
-        // Try locally
-        let matches = this.__getMatchesLocally(gamertag);
-        if (matches && matches.length > 0)
-        {
-            if (this.IS_DEBUGGING) { Debugger.Continue("Locally"); }
-            return matches;
-        }
+		// Try locally
+		let match = this.__getMatchLocally(id);
+		if (match)
+		{
+			if (this.IS_DEBUGGING) { Debugger.Continue("Locally"); }
+			return match;
+		}
 
-        // Otherwise go to Firebase
-        const reference = `matches/${gamertag}`;
-        const matchIndexesSnapshot = await get(child(ref(this.__database), reference));
-        if (matchIndexesSnapshot?.exists())
-        {
-            if (this.IS_DEBUGGING) { Debugger.Continue("Firebase"); }
-            const result = matchIndexesSnapshot.val();
-            matches = [];
-            
-            // Loop through all matches
-            let matchId: keyof any;
-            for (matchId in result)
-            {
-                // Get match
-                const data = result[matchId];
-                if (!data) { continue; }
+		// Otherwise go to Autocode
+		const result = await this.__getMatchFromHaloDotAPI(id);
+		if (result?.data)
+		{
+			if (this.IS_DEBUGGING) { Debugger.Continue("Autocode"); }
+			match = new Match(result.data);
+		}
 
-                // Construct match object and store into local array
-                matches.push(new Match(data));
-            }
-        }
+		// Store locally
+		if (match) { this.__storeMatchLocally([match]); }
 
-        // Store locally
-        if (matches) { this.__storeMatchesLocally(gamertag, matches); }
+		return match;
+	}
 
-        return matches;
-    }
+	/**
+	 * Gets the number of matches specified for the gamertag starting from the latest match
+	 * @param gamertag the gamertag
+	 * @param numberOfMatches the number of matches to get
+	 * @param offset the offset
+	 */
+	public async GetMatches(gamertag: string, numberOfMatches: number, offset: number): Promise<Match[] | undefined>
+	{
+		if (numberOfMatches <= 0) { return; }
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "GetMatches()", `${gamertag} - ${numberOfMatches} matches`); }
 
-    /**
-     * Gets all matches for a gamertag
-     * @param gamertag The gamertag to get matches for
-     * @returns The matches
-     */
-    public async GetMatchesForFilter(gamertag: string, filter: MatchFilter): Promise<Match[] | undefined>
-    {
-        if (filter.IsEmpty()) { return []; }
-        if (this.IS_DEBUGGING) { Debugger.Print(true, "GetMatchesForFilter()"); }
+		// Try locally
+		let matches = this.__getMatchesLocally(gamertag);
+		if (matches && matches.length >= numberOfMatches)
+		{
+			if (this.IS_DEBUGGING) { Debugger.Continue("Locally"); }
+			return matches;
+		}
 
-        // Get local player if available
-        let matchIDs: Set<string> = new Set<string>();
-        const player = this.__allPlayers.get(gamertag) ?? new Player(gamertag);
+		// Otherwise go to Autocode
+		matches = [];
+		const result = await this.__getMatchesFromHaloDotAPI(gamertag, numberOfMatches, offset);
+		if (result?.data?.length > 0)
+		{
+			if (this.IS_DEBUGGING) { Debugger.Continue("Autocode"); }
+			for (const data of result?.data)
+			{
+				// Construct match object and store into local array
+				matches.push(new Match(data));
+			}
+		}
 
-        // Start with the map filter
-        if (filter.HasMapFilter())
-        {
-            // No need to append here since it's our first filter
-            const localIDs = player.MapToMatchIDs.get(filter.map);
+		// Store locally
+		if (matches) { this.__storeMatchesLocally(gamertag, matches); }
 
-            if (localIDs && localIDs.length > 0) { matchIDs = new Set<string>(localIDs); }
-            else { matchIDs = await this.__getMatchIndexFromFirebase(`match_indexes/map/${gamertag}/${filter.map}`); }
+		return matches;
+	}
 
-            if (matchIDs.size === 0) { return []; }
-        }
+	/**
+	 * Gets all matches for a gamertag
+	 * @param gamertag The gamertag to get matches for
+	 * @returns The matches
+	 */
+	public async GetAllMatches(gamertag: string): Promise<Match[] | undefined>
+	{
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "GetAllMatches()"); }
 
-        // Now the mode filter
-        if (filter.HasModeFilter())
-        {
-            let filterIDs: Set<string>;
+		// Try locally
+		let matches = this.__getMatchesLocally(gamertag);
+		if (matches && matches.length > 0)
+		{
+			if (this.IS_DEBUGGING) { Debugger.Continue("Locally"); }
+			return matches;
+		}
 
-            const localIDs = player.ModeToMatchIDs.get(filter.mode);
-            if (localIDs && localIDs.length > 0) { filterIDs = new Set<string>(localIDs); }
-            else { filterIDs = await this.__getMatchIndexFromFirebase(`match_indexes/mode/${gamertag}/${filter.mode}`); }
+		// Otherwise go to Firebase
+		const reference = `matches/${gamertag}`;
+		const matchIndexesSnapshot = await get(child(ref(this.__database), reference));
+		if (matchIndexesSnapshot?.exists())
+		{
+			if (this.IS_DEBUGGING) { Debugger.Continue("Firebase"); }
+			const result = matchIndexesSnapshot.val();
+			matches = [];
+			
+			// Loop through all matches
+			let matchId: keyof any;
+			for (matchId in result)
+			{
+				// Get match
+				const data = result[matchId];
+				if (!data) { continue; }
 
-            if (filterIDs.size === 0) { return []; }
-            matchIDs = this.__combineSets(matchIDs, filterIDs);
-        }
+				// Construct match object and store into local array
+				matches.push(new Match(data));
+			}
+		}
 
-        // Ranked filter
-        if (filter.HasIsRankedFilter())
-        {
-            let filterIDs: Set<string>;
+		// Store locally
+		if (matches) { this.__storeMatchesLocally(gamertag, matches); }
 
-            const localIDs = player.IsRankedToMatchIDs.get(filter.isRanked === YesNoAll.Yes);
-            if (localIDs && localIDs.length > 0) { filterIDs = new Set<string>(localIDs); }
-            else { filterIDs = await this.__getMatchIndexFromFirebase(`match_indexes/ranked/${gamertag}`); }
+		return matches;
+	}
 
-            if (filterIDs.size === 0) { return []; }
-            matchIDs = this.__combineSets(matchIDs, filterIDs);
-        }
+	/**
+	 * Gets all matches for a gamertag
+	 * @param gamertag The gamertag to get matches for
+	 * @returns The matches
+	 */
+	public async GetMatchesForFilter(gamertag: string, filter: MatchFilter): Promise<Match[] | undefined>
+	{
+		if (filter.IsEmpty()) { return []; }
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "GetMatchesForFilter()"); }
 
-        // Finally the win filter
-        if (filter.HasIsWinFilter())
-        {
-            let filterIDs: Set<string>;
+		// Get local player if available
+		let matchIDs: Set<string> = new Set<string>();
+		const player = this.__allPlayers.get(gamertag) ?? new Player(gamertag);
 
-            const localIDs = player.IsWinToMatchIDs.get(filter.isWin === YesNoAll.Yes);
-            if (localIDs && localIDs.length > 0) { filterIDs = new Set<string>(localIDs); }
-            else { filterIDs = await this.__getMatchIndexFromFirebase(`match_indexes/win/${gamertag}`); }
+		// Start with the map filter
+		if (filter.HasMapFilter())
+		{
+			// No need to append here since it's our first filter
+			const localIDs = player.MapToMatchIDs.get(filter.map);
 
-            if (filterIDs.size === 0) { return []; }
-            matchIDs = this.__combineSets(matchIDs, filterIDs);
-        }
+			if (localIDs && localIDs.length > 0) { matchIDs = new Set<string>(localIDs); }
+			else { matchIDs = await this.__getMatchIndexFromFirebase(`match_indexes/map/${gamertag}/${filter.map}`); }
 
-        const matches: Match[] = [];
-        for (const matchID of Array.from(matchIDs.values()))
-        {
-            // See if we have this one locally
-            let match = player.GetMatchFromID(matchID);
-            if (match)
-            {
-                matches.push(match);
-                continue;
-            }
+			if (matchIDs.size === 0) { return []; }
+		}
 
-            // Otherwise go to Firebase for the match details
-            const reference = `matches/${gamertag}/${matchID}`;
-            const matchSnapshot = await get(child(ref(this.__database), reference));
-            if (matchSnapshot?.exists())
-            {
-                const result = matchSnapshot.val();
-                const match = new Match(result);
+		// Now the mode filter
+		if (filter.HasModeFilter())
+		{
+			let filterIDs: Set<string>;
 
-                if (match) 
-                { 
-                    matches.push(match); 
-                    player.AddMatch(match);
-                }
-            }
-        }
+			const localIDs = player.ModeToMatchIDs.get(filter.mode);
+			if (localIDs && localIDs.length > 0) { filterIDs = new Set<string>(localIDs); }
+			else { filterIDs = await this.__getMatchIndexFromFirebase(`match_indexes/mode/${gamertag}/${filter.mode}`); }
 
-        // Set back into the local map
-        this.__allPlayers.set(gamertag, player);
+			if (filterIDs.size === 0) { return []; }
+			matchIDs = this.__combineSets(matchIDs, filterIDs);
+		}
 
-        return matches;
-    }
+		// Ranked filter
+		if (filter.HasIsRankedFilter())
+		{
+			let filterIDs: Set<string>;
 
-    /**
-     * Gets an array of match IDs from the firebase path
-     * @param path the path to get
-     * @returns array of match IDs
-     */
-    private async __getMatchIndexFromFirebase(path: string): Promise<Set<string>>
-    {
-        const snapshot = await get(ref(this.__database, path));
-        if (snapshot.exists())
-        {
-            return new Set<string>(Object.keys(snapshot.val()));
-        }
+			const localIDs = player.IsRankedToMatchIDs.get(filter.isRanked === YesNoAll.Yes);
+			if (localIDs && localIDs.length > 0) { filterIDs = new Set<string>(localIDs); }
+			else { filterIDs = await this.__getMatchIndexFromFirebase(`match_indexes/ranked/${gamertag}`); }
 
-        return new Set<string>();
-    }
+			if (filterIDs.size === 0) { return []; }
+			matchIDs = this.__combineSets(matchIDs, filterIDs);
+		}
 
-    /**
-     * Combines the matches set and the filtered set via intersection
-     * @param matchesSet the matches set
-     * @param filteredSet the filtered set
-     * @returns intersection of the two sets
-     */
-    private __combineSets(matchesSet: Set<string>, filteredSet: Set<string>): Set<string>
-    {
-        if (matchesSet.size === 0) { return filteredSet; }
-        else { return new Set(Array.from(filteredSet).filter(id => matchesSet.has(id))); }
-    }
+		// Finally the win filter
+		if (filter.HasIsWinFilter())
+		{
+			let filterIDs: Set<string>;
 
-    /**
-     * Gets all matches for a certain gamertag
-     * @param gamertag The gamertag to get stats from
-     * @returns Array of matches
-     */
-     private __getMatchesLocally(gamertag: string): Match[] | undefined
-     {
-         const player = this.__allPlayers.get(gamertag);
-         return player?.matches;
-     }
+			const localIDs = player.IsWinToMatchIDs.get(filter.isWin === YesNoAll.Yes);
+			if (localIDs && localIDs.length > 0) { filterIDs = new Set<string>(localIDs); }
+			else { filterIDs = await this.__getMatchIndexFromFirebase(`match_indexes/win/${gamertag}`); }
 
-    /**
-     * Stores the service record into the __allPlayers map if it's not already in there
-     * @param matches The matches to store locally
-     * @param pull The pull to push in
-     */
-     private __storeMatchesLocally(gamertag: string, matches: Match[]): void
-     {
-         const player = this.__allPlayers.get(gamertag) ?? new Player(gamertag);
-         player.matches = matches;
-         this.__allPlayers.set(gamertag, player);
-     }
-    //#endregion
+			if (filterIDs.size === 0) { return []; }
+			matchIDs = this.__combineSets(matchIDs, filterIDs);
+		}
 
-    //#region You really shouldn't need this anymore
-    private async IndexMatches(gamertag: string): Promise<void>
-    {
-        // Determine number of matches we need to query during this iteration of the loop (max is 25)
-        const reference = `matches/${gamertag}`;
-        const matchIndexesSnapshot = await get(child(ref(this.__database), reference));
-        if (matchIndexesSnapshot.exists())
-        {
-            let matchId: keyof any;
-            const data = matchIndexesSnapshot.val();
+		const matches: Match[] = [];
+		for (const matchID of Array.from(matchIDs.values()))
+		{
+			// See if we have this one locally
+			let match = player.GetMatchFromID(matchID);
+			if (match)
+			{
+				matches.push(match);
+				continue;
+			}
 
-            // Loop through all matches for this query, index them, and store details to gamertag
-            for (matchId in data)
-            {
-                // Get match
-                const match = data[matchId];
-                if (!match) { continue; }
+			// Otherwise go to Firebase for the match details
+			const reference = `matches/${gamertag}/${matchID}`;
+			const matchSnapshot = await get(child(ref(this.__database), reference));
+			if (matchSnapshot?.exists())
+			{
+				const result = matchSnapshot.val();
+				const match = new Match(result);
 
-                // Match ID is required
-                const id: string = match.id;
-                if (!id) { continue; }
+				if (match) 
+				{ 
+					matches.push(match); 
+					player.AddMatch(match);
+				}
+			}
+		}
 
-                // Indexing items
-                const isRanked: boolean | undefined = match.details?.playlist?.properties?.ranked;
-                const isWin: boolean = match.player?.outcome === "win";
-                const map: string | undefined = match.details?.map?.name;
-                const playlist: string | undefined = match.details?.playlist?.name;
-                const mode: string | undefined = playlist === "Tactical Slayer" ? playlist : match.details?.category?.name;
+		// Set back into the local map
+		this.__allPlayers.set(gamertag, player);
 
-                // First store details into gamertag
-                await update(ref(this.__database, `matches/${gamertag}`), { [id]: match });
+		return matches;
+	}
 
-                // Now add to the appropriate indexes
-                if (isRanked) { await update(ref(this.__database, `match_indexes/ranked/${gamertag}`), { [id]: true }); }
-                if (isWin) { await update(ref(this.__database, `match_indexes/win/${gamertag}`), { [id]: true }); }
-                if (map) { await update(ref(this.__database, `match_indexes/map/${gamertag}/${map}`), { [id]: true }); }
-                if (mode) { await update(ref(this.__database, `match_indexes/mode/${gamertag}/${mode}`), { [id]: true }); }
-            }
-        }
-    }
-    //#endregion
+	/**
+	 * Gets an array of match IDs from the firebase path
+	 * @param path the path to get
+	 * @returns array of match IDs
+	 */
+	private async __getMatchIndexFromFirebase(path: string): Promise<Set<string>>
+	{
+		const snapshot = await get(ref(this.__database, path));
+		if (snapshot.exists())
+		{
+			return new Set<string>(Object.keys(snapshot.val()));
+		}
+
+		return new Set<string>();
+	}
+
+	/**
+	 * Combines the matches set and the filtered set via intersection
+	 * @param matchesSet the matches set
+	 * @param filteredSet the filtered set
+	 * @returns intersection of the two sets
+	 */
+	private __combineSets(matchesSet: Set<string>, filteredSet: Set<string>): Set<string>
+	{
+		if (matchesSet.size === 0) { return filteredSet; }
+		else { return new Set(Array.from(filteredSet).filter(id => matchesSet.has(id))); }
+	}
+
+	/**
+	 * Gets all matches for a certain gamertag
+	 * @param gamertag The gamertag to get stats from
+	 * @returns Array of matches
+	 */
+	 private __getMatchesLocally(gamertag: string): Match[] | undefined
+	 {
+		 const player = this.__allPlayers.get(gamertag);
+		 return player?.matches;
+	 }
+
+	/**
+	 * Stores the service record into the __allPlayers map if it's not already in there
+	 * @param matches The matches to store locally
+	 * @param pull The pull to push in
+	 */
+	private __storeMatchesLocally(gamertag: string, matches: Match[]): void
+	{
+		const player = this.__allPlayers.get(gamertag) ?? new Player(gamertag);
+		player.matches = matches;
+		this.__allPlayers.set(gamertag, player);
+		this.__storeMatchLocally(matches);
+	}
+
+	/**
+	 * Stores the service record into the __allPlayers map if it's not already in there
+	 * @param matches The matches to store locally
+	 * @param pull The pull to push in
+	 */
+	private __storeMatchLocally(matches: Match[]): void
+	{
+		for (const match of matches)
+		{
+			this.__allMatches.set(match.id, match);
+		}
+	}
+
+	/**
+	 * Stores the service record into the __allPlayers map if it's not already in there
+	 * @param matches The matches to store locally
+	 * @param pull The pull to push in
+	 */
+	 private __getMatchLocally(id: string): Match | undefined
+	 {
+		 return this.__allMatches.get(id);
+	 }
+	//#endregion
+
+	//#region Autocode
+	/**
+	 * Gets the match from HaloDotAPI
+	 * @param gamertag the gamertag
+	 */
+	 private async __getMatchFromHaloDotAPI(id: string): Promise<any>
+	 {
+		 const response = await fetch("https://dev--ArrowheadCompany.loganjahnke.autocode.gg/match", {
+			 method: "POST",
+			 headers: { "Content-Type": "application/json" },
+			 body: JSON.stringify({
+				 id: id
+			 })
+		 });
+	 
+		 return await response.json();
+	 }
+
+	/**
+	 * Gets the matches from HaloDotAPI for a specific gamertag
+	 * @param gamertag the gamertag
+	 */
+	private async __getMatchesFromHaloDotAPI(gamertag: string, count: number, offset: number): Promise<any>
+	{
+		const response = await fetch("https://dev--ArrowheadCompany.loganjahnke.autocode.gg/matches", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				gamertag: gamertag,
+				count: count,
+				offset: offset
+			})
+		});
+	
+		return await response.json();
+	}
+	//#endregion
+
+	//#region You really shouldn't need this anymore
+	/**
+	 * Loops through all matches for a gamertag and indexes them
+	 * @param gamertag the gamertag to loop through
+	 */
+	private async IndexMatches(gamertag: string): Promise<void>
+	{
+		// Determine number of matches we need to query during this iteration of the loop (max is 25)
+		const reference = `matches/${gamertag}`;
+		const matchIndexesSnapshot = await get(child(ref(this.__database), reference));
+		if (matchIndexesSnapshot.exists())
+		{
+			let matchId: keyof any;
+			const data = matchIndexesSnapshot.val();
+
+			// Loop through all matches for this query, index them, and store details to gamertag
+			for (matchId in data)
+			{
+				// Get match
+				const match = data[matchId];
+				if (!match) { continue; }
+
+				// Match ID is required
+				const id: string = match.id;
+				if (!id) { continue; }
+
+				// Indexing items
+				const isRanked: boolean | undefined = match.details?.playlist?.properties?.ranked;
+				const isWin: boolean = match.player?.outcome === "win";
+				const map: string | undefined = match.details?.map?.name;
+				const playlist: string | undefined = match.details?.playlist?.name;
+				const mode: string | undefined = playlist === "Tactical Slayer" ? playlist : match.details?.category?.name;
+
+				// First store details into gamertag
+				await update(ref(this.__database, `matches/${gamertag}`), { [id]: match });
+
+				// Now add to the appropriate indexes
+				if (isRanked) { await update(ref(this.__database, `match_indexes/ranked/${gamertag}`), { [id]: true }); }
+				if (isWin) { await update(ref(this.__database, `match_indexes/win/${gamertag}`), { [id]: true }); }
+				if (map) { await update(ref(this.__database, `match_indexes/map/${gamertag}/${map}`), { [id]: true }); }
+				if (mode) { await update(ref(this.__database, `match_indexes/mode/${gamertag}/${mode}`), { [id]: true }); }
+			}
+		}
+	}
+	//#endregion
 }
