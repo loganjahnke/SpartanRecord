@@ -1,15 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
-import { MedalsSummary } from './Pages/MedalsSummary';
 import { ThemeProvider } from '@mui/material/styles';
 import { ArrowheadFirebase } from "./Database/ArrowheadFirebase";
 import { CompanyView } from "./Pages/CompanyView";
 import { Company } from "./Objects/Model/Company";
 import { ArrowheadTheme } from "./Assets/Theme/ArrowheadTheme";
 import { PlayerView } from "./Pages/PlayerView";
-import { SingleUser } from "./Pages/SingleUser";
 import { MedalsView } from "./Pages/MedalsView";
+import { useCallback, useState } from "react";
+import { User } from "./Objects/Model/User";
+import { getAuth } from "firebase/auth";
+import { Player } from "./Objects/Model/Player";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -23,24 +25,33 @@ const firebaseConfig = {
 	measurementId: "G-LWFYKTGPY4"
 };
 
-
 const App = () =>
 {
 	// Initialize Firebase
 	const app = initializeApp(firebaseConfig);
 	const database = getDatabase(app);
-	
+	const auth = getAuth();
+
 	const db = new ArrowheadFirebase(database);
 	const company = new Company("Arrowhead");
+
+	const [myUser, setMyUser] = useState(new User(auth));
+
+	const setPlayer = useCallback((player: Player) =>
+	{
+		let user = myUser;
+		user.player = player;
+		setMyUser(user);
+	}, [myUser, setMyUser]);
 
 	return (
 		<ThemeProvider theme={ArrowheadTheme.theme}>
 			<div className="App">
 				<Router>
 					<Routes>
-						<Route path="/" element={<CompanyView db={db} company={company} />} />
-						<Route path="/service_record/:gamertag" element={<PlayerView db={db} company={company} />} />
-						<Route path="/service_record/:gamertag/medals" element={<MedalsView db={db} company={company} />} />
+						<Route path="/" element={<CompanyView db={db} company={company} user={myUser} setPlayer={setPlayer} />} />
+						<Route path="/service_record/:gamertag" element={<PlayerView db={db} company={company} user={myUser} />} />
+						<Route path="/service_record/:gamertag/medals" element={<MedalsView db={db} company={company} user={myUser} />} />
 					</Routes>
 				</Router>
 			</div>

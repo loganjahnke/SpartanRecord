@@ -13,7 +13,7 @@ import {
 import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 enum HistoricDataSets
 {

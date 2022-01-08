@@ -1,7 +1,7 @@
 import { AllMedals } from "../Helpers/AllMedals";
 import { Breakdowns } from "../Pieces/Breakdowns";
 import { Damage } from "../Pieces/Damage";
-import { Medal } from "../Pieces/Medal";
+import { Medal, MedalRarity, MedalType } from "../Pieces/Medal";
 import { Shots } from "../Pieces/Shots";
 import { Summary } from "../Pieces/Summary";
 import { TimePlayed } from "../Pieces/TimePlayed";
@@ -111,7 +111,9 @@ export class ServiceRecord
             {
                 const medal = new Medal(data);
                 const parent = (AllMedals as any)[(medal.id)];
-                medal.rarity = parent.type ?? "N/A";
+                medal.rarity = parent.type ?? MedalRarity.Normal;
+                medal.type = parent.category ?? MedalType.Unknown;
+                medal.sort = parent.sort ?? -1;
                 medal.description = parent.description ?? "N/A";
                 return medal;
             });
@@ -249,15 +251,15 @@ export class ServiceRecord
 
         return newSR;
     }
-
+    
     /**
-     * Pads the time value to always be two digits
-     * @param time the time value
-     * @returns padded time value
+     * Gets the entire group of medals that match the medal type
+     * @param type the medal type
+     * @returns array of medals sorted by rarity
      */
-    private pad(time: number): string
+    public GetMedalType(type: MedalType)
     {
-        if (time < 10) { return "0" + time; }
-        return time.toString();
+        const filtered = this.medals.filter(medal => medal.type === type);
+        return filtered.sort((a, b) => a.sort > b.sort ? 1 : -1);
     }
 }

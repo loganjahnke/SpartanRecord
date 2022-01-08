@@ -1,27 +1,28 @@
-import { AppBar, Backdrop, Box, CircularProgress, Divider, Drawer, Grid, IconButton, Tab, Tabs, Toolbar, Typography } from "@mui/material";
+import { Box, Divider, Grid, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowheadFirebase } from "../Database/ArrowheadFirebase";
 import { Company } from "../Objects/Model/Company";
 
-import GroupsIcon from '@mui/icons-material/Groups';
-import ModeStandbyIcon from '@mui/icons-material/ModeStandby';
-import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
-
 import ArrowheadImg from "../Assets/Images/arrowhead.png";
-import MenuIcon from '@mui/icons-material/Menu';
+
 import { TopMedals } from "../Assets/Components/Medals/TopMedals";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
-import { KillBreakdown } from "../Assets/Components/Breakdowns/KillBreakdown";
 import { AssistBreakdown } from "../Assets/Components/Breakdowns/AssistBreakdown";
 import { MatchesBreakdown } from "../Assets/Components/Breakdowns/MatchesBreakdown";
 import { ShotsBreakdown } from "../Assets/Components/Breakdowns/ShotsBreakdown";
 import { DamageBreakdown } from "../Assets/Components/Breakdowns/DamageBreakdown";
+import { User } from "../Objects/Model/User";
+import { AHAppBar } from "../Assets/Components/Layout/AHAppBar";
+import { AHDrawer } from "../Assets/Components/Layout/AHDrawer";
+import { AHLoading } from "../Assets/Components/Layout/AHLoading";
+import { MedalTypeBreakdown } from "../Assets/Components/Medals/MedalTypeBreakdown";
+import { MedalType } from "../Objects/Pieces/Medal";
 
-export function MedalsView(props: { db: ArrowheadFirebase, company: Company })
+export function MedalsView(props: { db: ArrowheadFirebase, company: Company, user: User })
 {
 	//#region Props and Navigate
-	const { db, company } = props;
+	const { db, company, user } = props;
 	const { gamertag } = useParams();
 	const navigate = useNavigate();
 	//#endregion
@@ -33,7 +34,7 @@ export function MedalsView(props: { db: ArrowheadFirebase, company: Company })
 	//#region State
 	const [loadingMessage, setLoadingMessage] = useState("");
 	const [spartanCompany, setSpartanCompany] = useState(company);
-	const [mySR, setMySR] = useState(new ServiceRecord());
+	const [mySR, setMySR] = useState(user.player?.serviceRecord ?? new ServiceRecord());
 	const [tab, setTab] = useState(2);
 	const [mobileOpen, setMobileOpen] = useState(false);
 	//#endregion
@@ -80,8 +81,8 @@ export function MedalsView(props: { db: ArrowheadFirebase, company: Company })
 	{
 		setTab(newValue);
 		if (newValue === 0) { navigate("/"); }
-		if (newValue === 1) { navigate("/service_record/BoundlessEcho"); }
-		if (newValue === 2) { navigate("/service_record/BoundlessEcho/medals"); }
+		if (newValue === 1) { navigate(`/service_record/${user.player?.gamertag ?? gamertag}`); }
+		if (newValue === 2) { navigate(`/service_record/${user.player?.gamertag ?? gamertag}/medals`); }
 	}, [navigate, setTab]);
 
 	function handleDrawerToggle()
@@ -91,66 +92,54 @@ export function MedalsView(props: { db: ArrowheadFirebase, company: Company })
 
 	const container = window !== undefined ? () => window.document.body : undefined;
 
-	//#region Drawer
-	const drawer = (
-		<div>
-			<Toolbar><Typography variant="h6" sx={{ padding: 2 }}>{spartanCompany.name} Company</Typography></Toolbar>
-			<Divider />
-			<Tabs orientation="vertical" value={tab} onChange={onTabClick} sx={{ mt: 5 }}>
-				<Tab className="ahTab" label="Company" icon={<GroupsIcon />} iconPosition="start" />
-				<Tab className="ahTab" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" />
-				<Tab className="ahTab" label="Medals" icon={<MilitaryTechIcon />} iconPosition="start" />
-			</Tabs>
-		</div>
-	);
-	//#endregion
-
 	return (
 		<Box sx={{ display: "flex", backgroundColor: "background.paper" }}>
-			<AppBar position="fixed" sx={{ width: { sm: `calc(100% - 240px)` }, ml: { sm: `240px` }}}>
-				<Toolbar sx={{ display: "flex", alignItems: "center" }}>
-					<IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2, display: { sm: "none" } }}>
-						<MenuIcon />
-					</IconButton>
-					<Divider orientation="vertical" flexItem sx={{ display: { sm: "none" }}} />
-					<Typography variant="body1" sx={{ flexGrow: 1, textAlign: "right", padding: 2 }}>{gamertag}</Typography>
-					<img src={spartanCompany.GetPlayer(gamertag)?.appearance.emblemURL} alt="emblem" height="32px" />
-				</Toolbar>
-			</AppBar>
-			<Backdrop sx={{ color: '#fff', zIndex: 1000 }} open={!!loadingMessage}>
-				<CircularProgress color="inherit" />
-				<div className="loadingMessage">{loadingMessage}</div>
-			</Backdrop>
-			<Box component="nav" sx={{ width: { sm: 240 }, flexShrink: { sm: 0 } }} aria-label="mailbox folders">
-				<Drawer container={container} variant="temporary" open={mobileOpen} onClose={handleDrawerToggle} ModalProps={{ keepMounted: true }} sx={{ display: { xs: 'block', sm: 'none' }, '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 }}}>
-					{drawer}
-				</Drawer>
-				<Drawer variant="permanent" open sx={{ display: { xs: 'none', sm: 'block' }, '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 }}}>
-					{drawer}
-				</Drawer>
-	  		</Box>
+			<AHAppBar player={user.player} handleDrawerToggle={handleDrawerToggle} />
+			<AHLoading loadingMessage={loadingMessage} />
+			<AHDrawer spartanCompany={spartanCompany} currentTab={2} container={container} mobileOpen={mobileOpen} onTabClick={onTabClick} handleDrawerToggle={handleDrawerToggle} hasUser={!!user.player} />
 	  		<Box component="main" sx={{ flexGrow: 1 }}>
 				<Toolbar />
 				<Divider />
 				<Box sx={{ p: 2 }}>
 					<Grid container spacing={2}>
-						<Grid item xs={12} md={6} lg={4} xl={3}>
-							<KillBreakdown serviceRecord={mySR} icon={ArrowheadImg} />
+						{/** Far left 2 */}
+						<Grid container item spacing={2} xs={12} md={4} xl={2} sx={{ alignContent: "flex-start" }}>
+							<Grid item xs={12}>
+								<MedalTypeBreakdown type={MedalType.Spree} medals={mySR.medals} />
+							</Grid>
+							<Grid item xs={12}>
+								<MedalTypeBreakdown type={MedalType.MultiKill} medals={mySR.medals} />
+							</Grid>
 						</Grid>
-						<Grid item xs={12} md={6} lg={4} xl={3}>
-							<MatchesBreakdown serviceRecord={mySR} icon={ArrowheadImg} />
+						{/** Middle 6 */}
+						<Grid container item spacing={2} xs={12} md={4} xl={6} sx={{ alignContent: "flex-start" }}>
+							<Grid item xs={12} lg={4}>
+								<MedalTypeBreakdown type={MedalType.CTF} medals={mySR.medals} />
+							</Grid>
+							<Grid item xs={12} lg={4}>
+								<MedalTypeBreakdown type={MedalType.Oddball} medals={mySR.medals} />
+							</Grid>
+							<Grid item xs={12} lg={4}>
+								<MedalTypeBreakdown type={MedalType.Strongholds} medals={mySR.medals} />
+							</Grid>
+							<Grid item xs={12} lg={4}>
+								<MedalTypeBreakdown type={MedalType.Stockpile} medals={mySR.medals} />
+							</Grid>
+							<Grid item xs={12} lg={8}>
+								<MedalTypeBreakdown type={MedalType.Sniper} medals={mySR.medals} wrap />
+							</Grid>
 						</Grid>
-						<Grid item xs={12} md={6} lg={4} xl={3}>
-							<AssistBreakdown serviceRecord={mySR} icon={ArrowheadImg} />
-						</Grid>
-						<Grid item xs={12} md={6} lg={4} xl={3}>
-							<ShotsBreakdown serviceRecord={mySR} icon={ArrowheadImg} />
-						</Grid>
-						<Grid item xs={12} md={6} lg={4} xl={3}>
-							<DamageBreakdown serviceRecord={mySR} icon={ArrowheadImg} />
-						</Grid>
-						<Grid item xs={12} lg={6}>
-							<TopMedals medals={mySR.medals} />
+						{/** Far right 4 */}
+						<Grid container item spacing={2} xs={12} md={4} xl={4} sx={{ alignContent: "flex-start" }}>
+							<Grid item xs={12}>
+								<MedalTypeBreakdown type={MedalType.Weapons} medals={mySR.medals} wrap />
+							</Grid>
+							<Grid item xs={12}>
+								<MedalTypeBreakdown type={MedalType.Boom} medals={mySR.medals} wrap />
+							</Grid>
+							<Grid item xs={12}>
+								<MedalTypeBreakdown type={MedalType.Skill} medals={mySR.medals} wrap />
+							</Grid>
 						</Grid>
 					</Grid>
 				</Box>

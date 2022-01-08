@@ -1,32 +1,29 @@
-import { AppBar, Backdrop, Box, CircularProgress, Divider, Drawer, Grid, IconButton, Tab, Tabs, Toolbar, Typography } from "@mui/material";
+import { Box, Divider, Grid, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowheadFirebase } from "../Database/ArrowheadFirebase";
 import { Company } from "../Objects/Model/Company";
-
-import GroupsIcon from '@mui/icons-material/Groups';
-import ModeStandbyIcon from '@mui/icons-material/ModeStandby';
-import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import { MemberList } from "../Assets/Components/Members/MemberList";
 
 import ArrowheadImg from "../Assets/Images/arrowhead.png";
-import MenuIcon from '@mui/icons-material/Menu';
+
 import { TopMedals } from "../Assets/Components/Medals/TopMedals";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
-import { AssistBreakdown } from "../Assets/Components/Breakdowns/AssistBreakdown";
-import { DamageBreakdown } from "../Assets/Components/Breakdowns/DamageBreakdown";
 import { MatchesBreakdown } from "../Assets/Components/Breakdowns/MatchesBreakdown";
-import { ShotsBreakdown } from "../Assets/Components/Breakdowns/ShotsBreakdown";
-import { KillRanks } from "../Assets/Components/Ranks/KillRanks";
 import { KDARanks } from "../Assets/Components/Ranks/KDARanks";
 import { WinRateRanks } from "../Assets/Components/Ranks/WinRateRanks";
 import { AccuracyRanks } from "../Assets/Components/Ranks/AccuracyRanks";
 import { KillBreakdown } from "../Assets/Components/Breakdowns/KillBreakdown";
+import { AHAppBar } from "../Assets/Components/Layout/AHAppBar";
+import { AHDrawer } from "../Assets/Components/Layout/AHDrawer";
+import { AHLoading } from "../Assets/Components/Layout/AHLoading";
+import { User } from "../Objects/Model/User";
+import { Player } from "../Objects/Model/Player";
 
-export function CompanyView(props: { db: ArrowheadFirebase, company: Company })
+export function CompanyView(props: { db: ArrowheadFirebase, company: Company, user: User, setPlayer: Function })
 {
 	//#region Props and Navigate
-	const { db, company } = props;
+	const { db, company, user, setPlayer } = props;
 	const navigate = useNavigate();
 	//#endregion
 
@@ -35,6 +32,7 @@ export function CompanyView(props: { db: ArrowheadFirebase, company: Company })
 	//#endregion
 	
 	//#region State
+	const [myPlayer, setMyPlayer] = useState(user.player);
 	const [loadingMessage, setLoadingMessage] = useState("");
 	const [spartanCompany, setSpartanCompany] = useState(company);
 	const [sharedSR, setSharedSR] = useState(new ServiceRecord());
@@ -83,8 +81,8 @@ export function CompanyView(props: { db: ArrowheadFirebase, company: Company })
 	{
 		setTab(newValue);
 		if (newValue === 0) { navigate("/"); }
-		if (newValue === 1) { navigate("/service_record/BoundlessEcho"); }
-		if (newValue === 2) { navigate("/service_record/BoundlessEcho/medals"); }
+		if (newValue === 1) { navigate(`/service_record/${user.player?.gamertag}`); }
+		if (newValue === 2) { navigate(`/service_record/${user.player?.gamertag}/medals`); }
 	}, [navigate, setTab]);
 
 	/**
@@ -101,46 +99,19 @@ export function CompanyView(props: { db: ArrowheadFirebase, company: Company })
 		setMobileOpen(!mobileOpen);
 	};
 
-	const container = window !== undefined ? () => window.document.body : undefined;
+	function memberListSetPlayer(player: Player)
+	{
+		setMyPlayer(player);
+		setPlayer(player);
+	}
 
-	//#region Drawer
-	const drawer = (
-		<div>
-			<Toolbar><Typography variant="h6" sx={{ padding: 2 }}>{spartanCompany.name} Company</Typography></Toolbar>
-			<Divider />
-			<Tabs orientation="vertical" value={tab} onChange={onTabClick} sx={{ mt: 5 }}>
-				<Tab className="ahTab" label="Company" icon={<GroupsIcon />} iconPosition="start" />
-				<Tab className="ahTab" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" />
-				<Tab className="ahTab" label="Medals" icon={<MilitaryTechIcon />} iconPosition="start" />
-			</Tabs>
-		</div>
-	);
-	//#endregion
+	const container = window !== undefined ? () => window.document.body : undefined;
 
 	return (
 		<Box sx={{ display: "flex", backgroundColor: "background.paper" }}>
-			<AppBar position="fixed" sx={{ width: { sm: `calc(100% - 240px)` }, ml: { sm: `240px` }}}>
-				<Toolbar sx={{ display: "flex", alignItems: "center" }}>
-					<IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2, display: { sm: "none" } }}>
-						<MenuIcon />
-					</IconButton>
-					<Divider orientation="vertical" flexItem sx={{ display: { sm: "none" }}} />
-					<Typography variant="body1" sx={{ flexGrow: 1, textAlign: "right", padding: 2 }}>BoundlessEcho</Typography>
-					<img src={spartanCompany.GetPlayer("BoundlessEcho")?.appearance.emblemURL} alt="emblem" height="32px" />
-				</Toolbar>
-			</AppBar>
-			<Backdrop sx={{ color: '#fff', zIndex: 1000 }} open={!!loadingMessage}>
-				<CircularProgress color="inherit" />
-				<div className="loadingMessage">{loadingMessage}</div>
-			</Backdrop>
-			<Box component="nav" sx={{ width: { sm: 240 }, flexShrink: { sm: 0 } }} aria-label="mailbox folders">
-				<Drawer container={container} variant="temporary" open={mobileOpen} onClose={handleDrawerToggle} ModalProps={{ keepMounted: true }} sx={{ display: { xs: 'block', sm: 'none' }, '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 }}}>
-					{drawer}
-				</Drawer>
-				<Drawer variant="permanent" open sx={{ display: { xs: 'none', sm: 'block' }, '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 }}}>
-					{drawer}
-				</Drawer>
-      		</Box>
+			<AHAppBar player={myPlayer} handleDrawerToggle={handleDrawerToggle} />
+			<AHLoading loadingMessage={loadingMessage} />
+			<AHDrawer spartanCompany={spartanCompany} currentTab={0} container={container} mobileOpen={mobileOpen} onTabClick={onTabClick} handleDrawerToggle={handleDrawerToggle} hasUser={!!myPlayer} />
       		<Box component="main" sx={{ flexGrow: 1 }}>
 				<Toolbar />
 				<Divider />
@@ -148,7 +119,7 @@ export function CompanyView(props: { db: ArrowheadFirebase, company: Company })
 					<Grid container spacing={2}>
 						<Grid container item spacing={2} xs={12} md={4} xl={3}>
 							<Grid item xs={12}>
-								<MemberList company={spartanCompany} goToMember={goToServiceRecord} />
+								<MemberList company={spartanCompany} goToMember={goToServiceRecord} setPlayer={memberListSetPlayer} />
 							</Grid>
 						</Grid>
 						<Grid container item spacing={2} xs={12} md={4} xl={6} sx={{ alignContent: "flex-start" }}>

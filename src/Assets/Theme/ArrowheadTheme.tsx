@@ -46,7 +46,9 @@ export class ArrowheadTheme
 			},
 			h6:
 			{
-				color: this.text_primary
+				color: this.text_primary,
+				fontSize: "1.1rem",
+				fontWeight: 300
 			},
 			body1:
 			{
@@ -59,6 +61,11 @@ export class ArrowheadTheme
 			caption:
 			{
 				color: this.text_secondary
+			},
+			subtitle1:
+			{
+				color: this.text_primary,
+				fontSize: "0.75rem"
 			}
 		},
 		palette:
