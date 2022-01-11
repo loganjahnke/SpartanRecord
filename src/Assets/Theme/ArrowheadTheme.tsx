@@ -20,6 +20,11 @@ export class ArrowheadTheme
 	public static text_secondary = `#${this.__coolors[3]}`;
 	/** #F9F0FA */
 	public static text_primary = `#${this.__coolors[4]}`;
+
+	public static good = `#1B9D46`;
+	public static bad = `#CC2500`;
+	public static neutral1 = `#70A288`;
+	public static neutral2 = `#5FDD9D`;
 	
 	public static theme = responsiveFontSizes(createTheme({
 		typography:

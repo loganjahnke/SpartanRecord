@@ -1,3 +1,4 @@
+import { HaloOutcome } from "../../Database/ArrowheadFirebase";
 import { ServiceRecord } from "../Model/ServiceRecord";
 import { Team } from "./Team";
 
@@ -10,7 +11,7 @@ export class MatchPlayer
     /** Ranking in the match */
     public rank: number;
     /** Outcome */
-    public outcome: string;
+    public outcome: HaloOutcome;
     /** Was this a win? */
     public won: boolean;
     /** Was this game joined after it started? */
@@ -22,7 +23,7 @@ export class MatchPlayer
         this.stats = new ServiceRecord(data?.stats);
         this.rank = data?.rank ?? -1;
         this.outcome = data?.outcome ?? "";
-        this.won = this.outcome === "win";
+        this.won = this.outcome === HaloOutcome.Win;
         this.joinedInProgress = data?.participation?.joined_in_progress;
     }
 }

@@ -77,14 +77,7 @@ export function CompanyView(props: { db: ArrowheadFirebase, company: Company, us
 	/**
 	 * On tab click, navigates to the right one
 	 */
-	const onTabClick = useCallback((_event: React.SyntheticEvent, newValue: number) =>
-	{
-		setTab(newValue);
-		if (newValue === 0) { navigate("/"); }
-		if (newValue === 1) { navigate(`/sr/${user.player?.gamertag}`); }
-		if (newValue === 2) { navigate(`/medals/${user.player?.gamertag}`); }
-		if (newValue === 3) { navigate(`/matches/${user.player?.gamertag}`); }
-	}, [navigate, setTab]);
+	const onTabClick = useCallback((url: string) => navigate(url), [navigate]);
 
 	/**
 	 * Goes to the service record
@@ -92,8 +85,9 @@ export function CompanyView(props: { db: ArrowheadFirebase, company: Company, us
 	const goToServiceRecord = useCallback((gamertag: string) =>
 	{
 		setTab(1);
+		memberListSetPlayer(spartanCompany.GetPlayer(gamertag) ?? new Player(gamertag));
 		navigate("/sr/" + gamertag);
-	}, [navigate, setTab]);
+	}, [navigate, setTab, spartanCompany, memberListSetPlayer]);
 
 	function handleDrawerToggle()
 	{
@@ -112,7 +106,7 @@ export function CompanyView(props: { db: ArrowheadFirebase, company: Company, us
 		<Box sx={{ display: "flex", backgroundColor: "background.paper" }}>
 			<AHAppBar player={myPlayer} handleDrawerToggle={handleDrawerToggle} />
 			<AHLoading loadingMessage={loadingMessage} />
-			<AHDrawer spartanCompany={spartanCompany} currentTab={0} container={container} mobileOpen={mobileOpen} onTabClick={onTabClick} handleDrawerToggle={handleDrawerToggle} hasUser={!!myPlayer} />
+			<AHDrawer spartanCompany={spartanCompany} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={onTabClick} handleDrawerToggle={handleDrawerToggle} gamertag={myPlayer?.gamertag} />
       		<Box component="main" sx={{ flexGrow: 1 }}>
 				<Toolbar />
 				<Divider />
@@ -127,11 +121,11 @@ export function CompanyView(props: { db: ArrowheadFirebase, company: Company, us
 							<Grid item xs={12}>
 								<TopMedals medals={sharedSR.medals} />
 							</Grid>
-							<Grid item xs={12} md={6}>
-								<KillBreakdown serviceRecord={sharedSR} icon={ArrowheadImg} />
+							<Grid item xs={12}>
+								<KillBreakdown serviceRecord={sharedSR} />
 							</Grid>
-							<Grid item xs={12} md={6}>
-								<MatchesBreakdown serviceRecord={sharedSR} icon={ArrowheadImg} />
+							<Grid item xs={12}>
+								<MatchesBreakdown serviceRecord={sharedSR} />
 							</Grid>
 						</Grid>
 						<Grid container item spacing={2} xs={12} md={4} xl={3}>

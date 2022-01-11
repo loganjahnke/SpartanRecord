@@ -1,12 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
-.arrowheadIcon {
-  -ms-filter: brightness(0) invert(1);
-  filter: brightness(0) invert(1); }
-
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
-  background-color: #24362d; }
+  background-color: #002029; }
 
 #root,
 #root > div,
@@ -38,7 +34,7 @@ a:hover {
     display: none; }
 
 .container {
-  background-color: #24362d;
+  background-color: #002029;
   height: 100%;
   width: 100%; }
 
@@ -79,9 +75,9 @@ tbody > tr > th {
 .viewToggleButtons button {
   color: white;
   border-color: white;
-  background-color: #24362d; }
+  background-color: #002029; }
 .viewToggleButtons .Mui-selected {
-  color: #24362d !important;
+  color: #002029 !important;
   border-color: white !important;
   background-color: white !important; }
 

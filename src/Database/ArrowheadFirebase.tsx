@@ -1,14 +1,13 @@
-import { Database, ref, get, child, update, query, orderByChild, limitToFirst, onValue } from "firebase/database";
+import { Database, ref, get, child, update } from "firebase/database";
 import { Timestamp } from "firebase/firestore";
 import { Appearance } from "../Objects/Model/Appearance";
 import { Debugger } from "../Objects/Helpers/Debugger";
 import { Player } from "../Objects/Model/Player";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
-import { Match, MatchFilter } from "../Objects/Model/Match";
+import { Match } from "../Objects/Model/Match";
 
 export enum HaloMap
 {
-	All = "All",
 	Aquarius = "Aquarius",
 	Bazaar = "Bazaar",
 	Behemoth = "Behemoth",
@@ -23,8 +22,8 @@ export enum HaloMap
 
 export enum HaloMode
 {
-	All = "All",
 	CTF = "CTF",
+	FFASlayer = "FFA Slayer",
 	Fiesta = "Fiesta",
 	Oddball = "Oddball",
 	Slayer = "Slayer",
@@ -34,11 +33,26 @@ export enum HaloMode
 	TotalControl = "Total Control"
 }
 
-export enum YesNoAll
+export enum HaloRanked
 {
-	All = "All",
-	Yes = "Yes",
-	No = "No"
+	Yes = "true",
+	No = "false"
+}
+
+export enum HaloOutcome
+{
+	Win = "win",
+	Loss = "loss",
+	Draw = "draw",
+	Left = "left"
+}
+
+export enum ServiceRecordFilter
+{
+	Map = "map",
+	Mode = "mode",
+	IsRanked = "isRanked",
+	Outcome = "outcome"
 }
 
 export class ArrowheadFirebase
@@ -55,7 +69,9 @@ export class ArrowheadFirebase
 	private __database: Database;
 	/** All players, locally stored */
 	private __allPlayers: Map<string, Player> = new Map<string, Player>();
-	/** All matches, locally stored */
+	/** All matches with details for just the player, locally stored */
+	private __allMatchesForGamertag: Map<string, Match> = new Map<string, Match>();
+	/** All matches with all details, locally stored */
 	private __allMatches: Map<string, Match> = new Map<string, Match>();
 
 	constructor(database: Database)
@@ -184,14 +200,15 @@ export class ArrowheadFirebase
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "GetCurrentServiceRecord()", gamertag); }
 
 		// Try locally
-		if (this.__hasCurrentPullData(gamertag))
+		let sr = this.__getCurrentStatsForGamertagLocally(gamertag);
+		if (sr && sr.matchesPlayed > 0)
 		{
 			if (this.IS_DEBUGGING) { Debugger.Continue("Locally"); }
-			return this.__getCurrentStatsForGamertagLocally(gamertag);
+			return sr;
 		}
 
 		// Otherwise go to Firebase
-		const reference = `gamertag/${gamertag}/current`;
+		const reference = `service_record/current/${gamertag}`;
 		const gamertagSnapshot = await get(child(ref(this.__database), reference));
 		if (gamertagSnapshot?.exists())
 		{
@@ -225,7 +242,7 @@ export class ArrowheadFirebase
 		}
 
 		// Otherwise go to Firebase
-		const reference = `gamertag/${gamertag}`;
+		const reference = `service_record/historic/${gamertag}`;
 		const gamertagSnapshot = await get(child(ref(this.__database), reference));
 		if (gamertagSnapshot?.exists())
 		{
@@ -235,7 +252,7 @@ export class ArrowheadFirebase
 
 			for (const key in result)
 			{
-				if (key === "current") { continue; }
+				if (key === "25") { continue; }
 				historicSRs.push(new ServiceRecord(result[key]));
 			}
 
@@ -246,15 +263,37 @@ export class ArrowheadFirebase
 	}
 
 	/**
-	 * Checks if we have the stats for the current pull stored locally
+	 * Gets the entire history of service records for a gamertag, tries locally before going to Firebase
+	 * @param gamertag the gamertag to get stats from
+	 * @returns An array of service record JSONs
 	 */
-	private __hasCurrentPullData(gamertag: string): boolean
+	public async GetServiceRecordForFilter(gamertag: string, tree: ServiceRecordFilter, filter: HaloMap | HaloMode | HaloRanked | HaloOutcome): Promise<ServiceRecord | undefined>
 	{
-		const player = this.__allPlayers.get(gamertag);
-		if (!player) { return false; }
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "GetServiceRecordForFilter()", `${gamertag} - ${filter}`); }
 
-		const hasCurrentData = !!player.serviceRecord;
-		return hasCurrentData;
+		// First locally
+		let filteredSR = this.__getFilteredServiceRecordLocally(gamertag, tree, filter);
+		if (filteredSR)
+		{
+			if (this.IS_DEBUGGING) { Debugger.Continue("Locally"); }
+			return filteredSR;
+		}
+
+		// Otherwise go to Firebase
+		const reference = `service_record/filtered/${gamertag}/${tree}/${filter}`;
+		const gamertagSnapshot = await get(child(ref(this.__database), reference));
+		if (gamertagSnapshot?.exists())
+		{
+			if (this.IS_DEBUGGING) { Debugger.Continue("Firebase"); }
+			const result = gamertagSnapshot.val();
+			filteredSR = new ServiceRecord(result);
+
+			// Store locally for current pull
+			this.__storeFilteredServiceRecordLocally(gamertag, tree, filter, filteredSR);
+			return filteredSR;
+		}
+
+		return filteredSR;
 	}
 
 	/**
@@ -280,6 +319,19 @@ export class ArrowheadFirebase
 	}
 
 	/**
+	 * Gets the service record for the filter locally, if possible
+	 * @param gamertag: the gamertag to get
+	 * @param tree the filter tree
+	 * @param filter the map/mode/outcome/rank filter
+	 * @returns the service record for the filter
+	 */
+	 private __getFilteredServiceRecordLocally(gamertag: string, tree: ServiceRecordFilter, filter: HaloMap | HaloMode | HaloRanked | HaloOutcome): ServiceRecord | undefined
+	{
+		const player = this.__allPlayers.get(gamertag) ?? new Player(gamertag);
+		return player.GetFilteredServiceRecord(gamertag, tree, filter);
+	}
+
+	/**
 	 * Stores the service record into the AllUserStatistics map if it's not already in there
 	 * @param serviceRecord The service record to push in
 	 * @param pull The pull to push in
@@ -302,6 +354,20 @@ export class ArrowheadFirebase
 		player.historicStats = serviceRecords;
 		this.__allPlayers.set(gamertag, player);
 	}
+
+	/**
+	 * Sets the service record for the filter locally
+	 * @param gamertag: the gamertag to get
+	 * @param tree the filter tree
+	 * @param filter the map/mode/outcome/rank filter
+	 * @param serviceRecord the service record for the filter
+	 */
+	private __storeFilteredServiceRecordLocally(gamertag: string, tree: ServiceRecordFilter, filter: HaloMap | HaloMode | HaloRanked | HaloOutcome, serviceRecord: ServiceRecord): void
+	{
+		const player = this.__allPlayers.get(gamertag) ?? new Player(gamertag);
+		player.SetFilteredServiceRecord(gamertag, tree, filter, serviceRecord);
+		this.__allPlayers.set(gamertag, player);
+	}
 	//#endregion
 
 	//#region Matches
@@ -316,7 +382,7 @@ export class ArrowheadFirebase
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "GetMatch()", id); }
 
 		// Try locally
-		let match = this.__getMatchLocally(id);
+		let match = this.__getMatchWithDetailsLocally(id);
 		if (match)
 		{
 			if (this.IS_DEBUGGING) { Debugger.Continue("Locally"); }
@@ -332,7 +398,7 @@ export class ArrowheadFirebase
 		}
 
 		// Store locally
-		if (match) { this.__storeMatchLocally([match]); }
+		if (match) { this.__storeMatchWithDetailsLocally([match]); }
 
 		return match;
 	}
@@ -420,103 +486,103 @@ export class ArrowheadFirebase
 		return matches;
 	}
 
-	/**
-	 * Gets all matches for a gamertag
-	 * @param gamertag The gamertag to get matches for
-	 * @returns The matches
-	 */
-	public async GetMatchesForFilter(gamertag: string, filter: MatchFilter): Promise<Match[] | undefined>
-	{
-		if (filter.IsEmpty()) { return []; }
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "GetMatchesForFilter()"); }
+	// /**
+	//  * Gets all matches for a gamertag
+	//  * @param gamertag The gamertag to get matches for
+	//  * @returns The matches
+	//  */
+	// public async GetMatchesForFilter(gamertag: string, filter: MatchFilter): Promise<Match[] | undefined>
+	// {
+	// 	if (filter.IsEmpty()) { return []; }
+	// 	if (this.IS_DEBUGGING) { Debugger.Print(true, "GetMatchesForFilter()"); }
 
-		// Get local player if available
-		let matchIDs: Set<string> = new Set<string>();
-		const player = this.__allPlayers.get(gamertag) ?? new Player(gamertag);
+	// 	// Get local player if available
+	// 	let matchIDs: Set<string> = new Set<string>();
+	// 	const player = this.__allPlayers.get(gamertag) ?? new Player(gamertag);
 
-		// Start with the map filter
-		if (filter.HasMapFilter())
-		{
-			// No need to append here since it's our first filter
-			const localIDs = player.MapToMatchIDs.get(filter.map);
+	// 	// Start with the map filter
+	// 	if (filter.HasMapFilter())
+	// 	{
+	// 		// No need to append here since it's our first filter
+	// 		const localIDs = player.MapToMatchIDs.get(filter.map);
 
-			if (localIDs && localIDs.length > 0) { matchIDs = new Set<string>(localIDs); }
-			else { matchIDs = await this.__getMatchIndexFromFirebase(`match_indexes/map/${gamertag}/${filter.map}`); }
+	// 		if (localIDs && localIDs.length > 0) { matchIDs = new Set<string>(localIDs); }
+	// 		else { matchIDs = await this.__getMatchIndexFromFirebase(`match_indexes/map/${gamertag}/${filter.map}`); }
 
-			if (matchIDs.size === 0) { return []; }
-		}
+	// 		if (matchIDs.size === 0) { return []; }
+	// 	}
 
-		// Now the mode filter
-		if (filter.HasModeFilter())
-		{
-			let filterIDs: Set<string>;
+	// 	// Now the mode filter
+	// 	if (filter.HasModeFilter())
+	// 	{
+	// 		let filterIDs: Set<string>;
 
-			const localIDs = player.ModeToMatchIDs.get(filter.mode);
-			if (localIDs && localIDs.length > 0) { filterIDs = new Set<string>(localIDs); }
-			else { filterIDs = await this.__getMatchIndexFromFirebase(`match_indexes/mode/${gamertag}/${filter.mode}`); }
+	// 		const localIDs = player.ModeToMatchIDs.get(filter.mode);
+	// 		if (localIDs && localIDs.length > 0) { filterIDs = new Set<string>(localIDs); }
+	// 		else { filterIDs = await this.__getMatchIndexFromFirebase(`match_indexes/mode/${gamertag}/${filter.mode}`); }
 
-			if (filterIDs.size === 0) { return []; }
-			matchIDs = this.__combineSets(matchIDs, filterIDs);
-		}
+	// 		if (filterIDs.size === 0) { return []; }
+	// 		matchIDs = this.__combineSets(matchIDs, filterIDs);
+	// 	}
 
-		// Ranked filter
-		if (filter.HasIsRankedFilter())
-		{
-			let filterIDs: Set<string>;
+	// 	// Ranked filter
+	// 	if (filter.HasIsRankedFilter())
+	// 	{
+	// 		let filterIDs: Set<string>;
 
-			const localIDs = player.IsRankedToMatchIDs.get(filter.isRanked === YesNoAll.Yes);
-			if (localIDs && localIDs.length > 0) { filterIDs = new Set<string>(localIDs); }
-			else { filterIDs = await this.__getMatchIndexFromFirebase(`match_indexes/ranked/${gamertag}`); }
+	// 		const localIDs = player.IsRankedToMatchIDs.get(filter.isRanked === YesNoAll.Yes);
+	// 		if (localIDs && localIDs.length > 0) { filterIDs = new Set<string>(localIDs); }
+	// 		else { filterIDs = await this.__getMatchIndexFromFirebase(`match_indexes/ranked/${gamertag}`); }
 
-			if (filterIDs.size === 0) { return []; }
-			matchIDs = this.__combineSets(matchIDs, filterIDs);
-		}
+	// 		if (filterIDs.size === 0) { return []; }
+	// 		matchIDs = this.__combineSets(matchIDs, filterIDs);
+	// 	}
 
-		// Finally the win filter
-		if (filter.HasIsWinFilter())
-		{
-			let filterIDs: Set<string>;
+	// 	// Finally the win filter
+	// 	if (filter.HasIsWinFilter())
+	// 	{
+	// 		let filterIDs: Set<string>;
 
-			const localIDs = player.IsWinToMatchIDs.get(filter.isWin === YesNoAll.Yes);
-			if (localIDs && localIDs.length > 0) { filterIDs = new Set<string>(localIDs); }
-			else { filterIDs = await this.__getMatchIndexFromFirebase(`match_indexes/win/${gamertag}`); }
+	// 		const localIDs = player.IsWinToMatchIDs.get(filter.isWin === YesNoAll.Yes);
+	// 		if (localIDs && localIDs.length > 0) { filterIDs = new Set<string>(localIDs); }
+	// 		else { filterIDs = await this.__getMatchIndexFromFirebase(`match_indexes/win/${gamertag}`); }
 
-			if (filterIDs.size === 0) { return []; }
-			matchIDs = this.__combineSets(matchIDs, filterIDs);
-		}
+	// 		if (filterIDs.size === 0) { return []; }
+	// 		matchIDs = this.__combineSets(matchIDs, filterIDs);
+	// 	}
 
-		const matches: Match[] = [];
-		for (const matchID of Array.from(matchIDs.values()))
-		{
-			// See if we have this one locally
-			let match = player.GetMatchFromID(matchID);
-			if (match)
-			{
-				matches.push(match);
-				continue;
-			}
+	// 	const matches: Match[] = [];
+	// 	for (const matchID of Array.from(matchIDs.values()))
+	// 	{
+	// 		// See if we have this one locally
+	// 		let match = player.GetMatchFromID(matchID);
+	// 		if (match)
+	// 		{
+	// 			matches.push(match);
+	// 			continue;
+	// 		}
 
-			// Otherwise go to Firebase for the match details
-			const reference = `matches/${gamertag}/${matchID}`;
-			const matchSnapshot = await get(child(ref(this.__database), reference));
-			if (matchSnapshot?.exists())
-			{
-				const result = matchSnapshot.val();
-				const match = new Match(result);
+	// 		// Otherwise go to Firebase for the match details
+	// 		const reference = `matches/${gamertag}/${matchID}`;
+	// 		const matchSnapshot = await get(child(ref(this.__database), reference));
+	// 		if (matchSnapshot?.exists())
+	// 		{
+	// 			const result = matchSnapshot.val();
+	// 			const match = new Match(result);
 
-				if (match) 
-				{ 
-					matches.push(match); 
-					player.AddMatch(match);
-				}
-			}
-		}
+	// 			if (match) 
+	// 			{ 
+	// 				matches.push(match); 
+	// 				player.AddMatch(match);
+	// 			}
+	// 		}
+	// 	}
 
-		// Set back into the local map
-		this.__allPlayers.set(gamertag, player);
+	// 	// Set back into the local map
+	// 	this.__allPlayers.set(gamertag, player);
 
-		return matches;
-	}
+	// 	return matches;
+	// }
 
 	/**
 	 * Gets an array of match IDs from the firebase path
@@ -558,24 +624,22 @@ export class ArrowheadFirebase
 	 }
 
 	/**
-	 * Stores the service record into the __allPlayers map if it's not already in there
-	 * @param matches The matches to store locally
-	 * @param pull The pull to push in
+	 * Stores an array of matches with details locally
+	 * @param matches the matches to store
 	 */
 	private __storeMatchesLocally(gamertag: string, matches: Match[]): void
 	{
 		const player = this.__allPlayers.get(gamertag) ?? new Player(gamertag);
 		player.matches = matches;
 		this.__allPlayers.set(gamertag, player);
-		this.__storeMatchLocally(matches);
+		this.__storeGamertagMatchLocally(matches);
 	}
 
 	/**
-	 * Stores the service record into the __allPlayers map if it's not already in there
-	 * @param matches The matches to store locally
-	 * @param pull The pull to push in
+	 * Stores an array of matches with details locally
+	 * @param matches the matches
 	 */
-	private __storeMatchLocally(matches: Match[]): void
+	private __storeMatchWithDetailsLocally(matches: Match[]): void
 	{
 		for (const match of matches)
 		{
@@ -584,14 +648,34 @@ export class ArrowheadFirebase
 	}
 
 	/**
-	 * Stores the service record into the __allPlayers map if it's not already in there
-	 * @param matches The matches to store locally
-	 * @param pull The pull to push in
+	 * Gets a match with details locally
+	 * @param id the match ID
 	 */
-	 private __getMatchLocally(id: string): Match | undefined
-	 {
-		 return this.__allMatches.get(id);
-	 }
+	private __getMatchWithDetailsLocally(id: string): Match | undefined
+	{
+		return this.__allMatches.get(id);
+	}
+
+	/**
+	 * Stores an array of matches into the player match details map
+	 * @param matches the matches to store
+	 */
+	private __storeGamertagMatchLocally(matches: Match[]): void
+	{
+		for (const match of matches)
+		{
+			this.__allMatchesForGamertag.set(match.id, match);
+		}
+	}
+ 
+	/**
+	 * Gets a match for the gamertag locally
+	 * @param id the match ID
+	 */
+	private __getGamertagMatchLocally(id: string): Match | undefined
+	{
+		return this.__allMatches.get(id);
+	}
 	//#endregion
 
 	//#region Autocode

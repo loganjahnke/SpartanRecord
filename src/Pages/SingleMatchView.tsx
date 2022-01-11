@@ -66,14 +66,10 @@ export function SingleMatchView(props: { db: ArrowheadFirebase, company: Company
 		loadData();
 	}, []);
 
-	const onTabClick = useCallback((_event: React.SyntheticEvent, newValue: number) =>
-	{
-		setTab(newValue);
-		if (newValue === 0) { navigate("/"); }
-		if (newValue === 1) { navigate(`/service_record/${user.player?.gamertag ?? gamertag}`); }
-		if (newValue === 2) { navigate(`/service_record/${user.player?.gamertag ?? gamertag}/medals`); }
-        if (newValue === 3) { navigate(`/matches/${user.player?.gamertag ?? gamertag}`); }
-	}, [navigate, setTab]);
+	/**
+	 * On tab click, navigates to the right one
+	 */
+    const onTabClick = useCallback((url: string) => navigate(url), [navigate]);
 
 	function handleDrawerToggle()
 	{
@@ -86,7 +82,7 @@ export function SingleMatchView(props: { db: ArrowheadFirebase, company: Company
 		<Box sx={{ display: "flex", backgroundColor: "background.paper" }}>
 			<AHAppBar player={user.player} handleDrawerToggle={handleDrawerToggle} />
 			<AHLoading loadingMessage={loadingMessage} />
-			<AHDrawer spartanCompany={company} currentTab={3} container={container} mobileOpen={mobileOpen} onTabClick={onTabClick} handleDrawerToggle={handleDrawerToggle} hasUser={!!user.player} />
+			<AHDrawer spartanCompany={company} currentTab={3} container={container} mobileOpen={mobileOpen} switchTab={onTabClick} handleDrawerToggle={handleDrawerToggle} gamertag={user?.player?.gamertag} />
 	  		<Box component="main" sx={{ flexGrow: 1 }}>
 				<Toolbar />
 				<Divider />
@@ -94,7 +90,7 @@ export function SingleMatchView(props: { db: ArrowheadFirebase, company: Company
                     {match ?
                         <Card>
                             <CardActionArea>
-                                <CardMedia component="img" height="200" image={match.haloMap.asset.thumbnail} alt={match.haloMap.name} />
+                                <CardMedia component="img" height="200" image={match.map.asset.thumbnail} alt={match.map.name} />
                                 <CardContent>
                                     <Typography gutterBottom variant="h5" component="div" sx={{ textAlign: "center" }}>{match.mode.name}</Typography>
                                     <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>

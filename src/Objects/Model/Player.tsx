@@ -1,4 +1,4 @@
-import { HaloMap, HaloMode } from "../../Database/ArrowheadFirebase";
+import { HaloMap, HaloMode, HaloOutcome, HaloRanked, ServiceRecordFilter } from "../../Database/ArrowheadFirebase";
 import { Appearance } from "./Appearance";
 import { Match, MatchFilter } from "./Match";
 import { ServiceRecord } from "./ServiceRecord";
@@ -20,14 +20,14 @@ export class Player
 
     /** Match indexes for maps, stored locally */
     public MatchIDsToMatchIndex: Map<string, number> = new Map<string, number>();
-    /** Match indexes for maps, stored locally */
-    public MapToMatchIDs: Map<HaloMap, string[]> = new Map<HaloMap, string[]>();
-    /** Match indexes for modes, stored locally */
-    public ModeToMatchIDs: Map<HaloMode, string[]> = new Map<HaloMode, string[]>();
-    /** Match indexes for is ranked, stored locally */
-    public IsRankedToMatchIDs: Map<boolean, string[]> = new Map<boolean, string[]>();
-    /** Match indexes for is win, stored locally */
-    public IsWinToMatchIDs: Map<boolean, string[]> = new Map<boolean, string[]>();
+    /** Service record filtered per map, stored locally */
+    public MapToServiceRecord: Map<HaloMap, ServiceRecord> = new Map<HaloMap, ServiceRecord>();
+    /** Service record filtered per mode, stored locally */
+    public ModeToServiceRecord: Map<HaloMode, ServiceRecord> = new Map<HaloMode, ServiceRecord>();
+    /** Service record filtered per ranked, stored locally */
+    public IsRankedToServiceRecord: Map<string, ServiceRecord> = new Map<HaloRanked, ServiceRecord>();
+    /** Service record filtered per outcome, stored locally */
+    public OutcomeToServiceRecord: Map<string, ServiceRecord> = new Map<HaloOutcome, ServiceRecord>();
 
     constructor(gamertag?: string, serviceRecord?: ServiceRecord, history?: ServiceRecord[], appearance?: Appearance, matches?: Match[])
     {
@@ -37,27 +37,6 @@ export class Player
         this.appearance = appearance ?? new Appearance();
         this.matches = matches ?? [];
         this.placement = new ServiceRecord();
-    }
-
-    /**
-     * Constructs a single service record based on the filters provided by looping through the match history
-     * @param map The map
-     * @param mode The game mode
-     * @param isRanked Was the match ranked
-     * @param isWin Was the match a win
-     */
-    public GetServiceRecordForFilter(filter: MatchFilter): ServiceRecord
-    {
-        if (!this.matches || this.matches.length === 0) { return new ServiceRecord(); }
-        if (filter.IsEmpty()) { return this.serviceRecord; }
-
-        const filtered = this.matches.filter(match => filter.DoesMatchMeetFilter(match))
-        if (filtered.length === 0) { return new ServiceRecord(); }
-
-        const mapped = filtered.map(match => match.player.stats);
-        if (mapped.length === 0) { return new ServiceRecord(); }
-
-        return mapped.reduce((prev, curr) => prev?.AddServiceRecord(curr) ?? curr);
     }
 
     /**
@@ -84,4 +63,52 @@ export class Player
         const matchIndex = this.matches.push(match) - 1;
         this.MatchIDsToMatchIndex.set(matchID, matchIndex);
     } 
+
+    /**
+	 * Gets the service record for the filter locally, if possible
+	 * @param gamertag: the gamertag to get
+	 * @param tree the filter tree
+	 * @param filter the map/mode/outcome/rank filter
+	 * @returns the service record for the filter
+	 */
+    public SetFilteredServiceRecord(gamertag: string, tree: ServiceRecordFilter, filter: HaloMap | HaloMode | HaloRanked | HaloOutcome, serviceRecord: ServiceRecord): void
+    {
+        switch (tree)
+        {
+            case ServiceRecordFilter.Map:
+                this.MapToServiceRecord.set(filter as HaloMap, serviceRecord);
+                break;
+            case ServiceRecordFilter.Mode:
+                this.ModeToServiceRecord.set(filter as HaloMode, serviceRecord);
+                break;
+            case ServiceRecordFilter.IsRanked:
+                this.IsRankedToServiceRecord.set(filter as HaloRanked, serviceRecord);
+                break;
+            case ServiceRecordFilter.Outcome:
+                this.OutcomeToServiceRecord.set(filter as HaloOutcome, serviceRecord);
+                break;
+        }
+    }
+
+    /**
+	 * Gets the service record for the filter locally, if possible
+	 * @param gamertag: the gamertag to get
+	 * @param tree the filter tree
+	 * @param filter the map/mode/outcome/rank filter
+	 * @returns the service record for the filter
+	 */
+    public GetFilteredServiceRecord(gamertag: string, tree: ServiceRecordFilter, filter: HaloMap | HaloMode | HaloRanked | HaloOutcome): ServiceRecord | undefined
+    {
+        switch (tree)
+        {
+            case ServiceRecordFilter.Map:
+                return this.MapToServiceRecord.get(filter as HaloMap);
+            case ServiceRecordFilter.Mode:
+                return this.ModeToServiceRecord.get(filter as HaloMode);
+            case ServiceRecordFilter.IsRanked:
+                return this.IsRankedToServiceRecord.get(filter as HaloRanked);
+            case ServiceRecordFilter.Outcome:
+                return this.OutcomeToServiceRecord.get(filter as HaloOutcome);
+        }
+    }
 }

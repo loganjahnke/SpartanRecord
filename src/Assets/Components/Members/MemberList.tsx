@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, CardMedia, Checkbox, Typography } from "@mui/material";
 import { Company } from "../../../Objects/Model/Company";
 
 import GroupsIcon from '@mui/icons-material/Groups';
@@ -13,10 +13,12 @@ export function MemberList(props: { company: Company, goToMember: Function, setP
 	const { company, goToMember, setPlayer } = props;
 
 	return (
-		<Box sx={{ backgroundColor: "divider", borderRadius: 3, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-			<GroupsIcon sx={{ fontSize: "160px", padding: 2 }} />
-			{company.players.map(player => <MemberComponent player={player} goToMember={goToMember} setPlayer={setPlayer} />)}
-		</Box>
+		<Card sx={{ borderRadius: 3 }}>
+            <CardMedia component="img" height="200" image={"https://assets.halo.autocode.gg/static/infinite/images/multiplayer/playlists/ffa-slayer.jpg"} alt="Members" />
+            <CardContent sx={{ backgroundColor: "divider", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+				{company.players.map(player => <MemberComponent player={player} goToMember={goToMember} setPlayer={setPlayer} />)}
+            </CardContent>
+        </Card>
 	);
 }
 

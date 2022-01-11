@@ -3,7 +3,7 @@ import { Halo5Converter } from "../../../Objects/Helpers/Halo5Converter";
 import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import { BreakdownTile } from "./BreakdownTile";
 
-export function HighLevelBreakdown(props: { serviceRecord: ServiceRecord })
+export function KDABreakdown(props: { serviceRecord: ServiceRecord })
 {
 	const { serviceRecord } = props;
 
@@ -12,8 +12,6 @@ export function HighLevelBreakdown(props: { serviceRecord: ServiceRecord })
             <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "space-evenly", width: "100%" }}>
                 <BreakdownTile title="KDA" value={serviceRecord.kda} isMainStat />
                 <BreakdownTile title="KDR" value={serviceRecord.kdr} isMainStat />
-                <BreakdownTile title="Total Score" value={serviceRecord.totalScore} isMainStat />
-                <BreakdownTile title="Spartan Rank" value={Halo5Converter.GetLevelFromScore(serviceRecord.totalScore)} isMainStat />
             </Box>
 		</Box>
 	);

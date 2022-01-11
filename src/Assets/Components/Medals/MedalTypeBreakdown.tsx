@@ -10,12 +10,11 @@ interface MedalTypeBreakdownProps
 {
 	type: MedalType;
 	medals: Medal[];
-	wrap?: boolean;
 }
 
 export function MedalTypeBreakdown(props: MedalTypeBreakdownProps)
 {
-	const { type, medals, wrap } = props;
+	const { type, medals } = props;
 
 	const [showAll, setShowAll] = useState(false);
 
@@ -37,18 +36,18 @@ export function MedalTypeBreakdown(props: MedalTypeBreakdownProps)
 				<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", width: "100%" }}>
 					<BreakdownTile title={`Total ${type} Medals`} value={totalCount} isMainStat isHeader />
 				</Box>
-				<Grid container>
-					{filtered.map(medal => <MedalTile medal={medal} wrap={wrap} />)}
-				</Grid>
-					{showAll 
-						?  <Box sx={{ backgroundColor: "secondary.main", borderRadius:3, m: 2, display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "space-evenly", alignItems: "center" }}>
-								{Object.values(AllMedals)
-									.map((medalJSON: any) => new Medal(medalJSON))
-									.filter(medal => medal.type === type && (filtered.length > 0 ? !filtered.map(filter => filter.name).includes(medal.name) : true))
-									.sort((a, b) => a.sort > b.sort ? 1 : -1)
-									.map(medal => <UnearnedMedalTile medal={medal} />)}
-							</Box>
-						: undefined}
+				<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", flexWrap: "wrap", width: "100%" }}>
+					{filtered.map(medal => <MedalTile medal={medal} />)}
+				</Box>
+				{showAll 
+					?  <Box sx={{ backgroundColor: "secondary.main", borderRadius:3, m: 2, display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "space-evenly", alignItems: "center" }}>
+							{Object.values(AllMedals)
+								.map((medalJSON: any) => new Medal(medalJSON))
+								.filter(medal => medal.type === type && (filtered.length > 0 ? !filtered.map(filter => filter.name).includes(medal.name) : true))
+								.sort((a, b) => a.sort > b.sort ? 1 : -1)
+								.map(medal => <UnearnedMedalTile medal={medal} />)}
+						</Box>
+					: undefined}
 			</Box>
 		</Box>
 	);

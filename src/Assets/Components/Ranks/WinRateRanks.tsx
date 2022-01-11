@@ -12,9 +12,6 @@ export function WinRateRanks(props: { company: Company, sharedSR: ServiceRecord,
 
 	return (
         <Box sx={{ backgroundColor: "divider", borderRadius: 3, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-            <Box sx={{ p: 3, pb: 0 }}>
-                <img src={ArrowheadImg} alt="emblem" height="48px" />
-            </Box>
             <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "100%" }}>
                 <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                     <BreakdownTile title={`${company.name} Win Rate`} value={sharedSR.winRate} isMainStat isPercent />

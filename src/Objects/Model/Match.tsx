@@ -1,5 +1,4 @@
-import { HaloMap, HaloMode, YesNoAll } from "../../Database/ArrowheadFirebase";
-import { Converter } from "../Helpers/Converter";
+import { HaloMap, HaloMode, HaloOutcome, HaloRanked } from "../../Database/ArrowheadFirebase";
 import { GameMode } from "../Pieces/GameMode";
 import { Map } from "../Pieces/Map";
 import { MatchPlayer } from "../Pieces/MatchPlayer";
@@ -13,7 +12,7 @@ export class Match
     /** The game mode details */
     public mode: GameMode;
     /** The map the match was played on */
-    public haloMap: Map;
+    public map: Map;
     /** The playlist */
     public playlist: Playlist;
     /** Was this a teams game? */
@@ -31,7 +30,7 @@ export class Match
     {
         this.id = data?.id ?? "";
         this.mode = new GameMode(data?.details?.category);
-        this.haloMap = new Map(data?.details?.map);
+        this.map = new Map(data?.details?.map);
         this.playlist = new Playlist(data?.details?.playlist);
         this.teamGame = data?.teams?.enabled;
         this.player = new MatchPlayer(data?.player);
@@ -43,44 +42,87 @@ export class Match
 
 export class MatchFilter
 {
-    public map = HaloMap.All;
-    public mode = HaloMode.All;
-    public isRanked = YesNoAll.All;
-    public isWin = YesNoAll.All;
+    public map = HaloMap.Aquarius;
+    public mode = HaloMode.CTF;
+    public isRanked = HaloRanked.No;
+    public outcome = HaloOutcome.Win;
 
-    /** Determines if we are filtering on map */
-    public HasMapFilter(): boolean { return this.map !== HaloMap.All; }
-    /** Determines if we are filtering on mode */
-    public HasModeFilter(): boolean { return this.mode !== HaloMode.All; }
-    /** Determines if we are filtering on isRanked */
-    public HasIsRankedFilter(): boolean { return this.isRanked !== YesNoAll.All; }
-    /** Determines if we are filtering on isWin */
-    public HasIsWinFilter(): boolean { return this.isWin !== YesNoAll.All; }
-
-    /**
-     * If all the filters are set to All, then the filter is empty
-     * @returns true if all filters are set to All
-     */
-    public IsEmpty(): boolean
+    public static IsMapFilter(filter?: string)
     {
-        return !this.HasMapFilter()
-            && !this.HasModeFilter()
-            && !this.HasIsRankedFilter()
-            && !this.HasIsWinFilter();
+        return filter === HaloMap.Aquarius 
+            || filter === HaloMap.Bazaar 
+            || filter === HaloMap.Behemoth 
+            || filter === HaloMap.Deadlock 
+            || filter === HaloMap.Fragmentation 
+            || filter === HaloMap.Highpower 
+            || filter === HaloMap.LaunchSite 
+            || filter === HaloMap.LiveFire 
+            || filter === HaloMap.Recharge 
+            || filter === HaloMap.Streets;
     }
 
-    /**
-     * Determines if a match meets the filter
-     * @param match the match to evaluate
-     * @returns true if the match meets the filter
-     */
-    public DoesMatchMeetFilter(match: Match): boolean
+    public static IsModeFilter(filter?: string)
     {
-        const conditionMaps = !this.HasMapFilter() || match.haloMap.name === this.map;
-        const conditionMode = !this.HasModeFilter() || match.mode.name === this.mode;
-        const conditionRank = !this.HasIsRankedFilter() || Converter.BooleanToYesNoAll(match.playlist.ranked) === this.isRanked;
-        const conditionWins = !this.HasIsWinFilter() || Converter.BooleanToYesNoAll(match.player.outcome === "win") === this.isWin;
+        return filter === HaloMode.CTF 
+            || filter === HaloMode.FFASlayer 
+            || filter === HaloMode.Fiesta 
+            || filter === HaloMode.Oddball 
+            || filter === HaloMode.Slayer 
+            || filter === HaloMode.Stockpile 
+            || filter === HaloMode.Strongholds 
+            || filter === HaloMode.TacticalSlayer 
+            || filter === HaloMode.TotalControl;
+    }
 
-        return conditionMaps && conditionMode && conditionRank && conditionWins;
+    public static IsOutcomeFilter(filter?: string)
+    {
+        return filter === HaloOutcome.Win 
+            || filter === HaloOutcome.Loss 
+            || filter === HaloOutcome.Draw  
+            || filter === HaloOutcome.Left;
+    }
+
+    public static IsRankedFilter(filter?: string)
+    {
+        return filter === HaloRanked.Yes 
+            || filter === HaloRanked.No;
+    }
+
+    public static GetFilterSubTab(filter?: string)
+    {
+        return filter === HaloMap.Aquarius || filter === HaloMode.CTF || filter === HaloOutcome.Win || filter === HaloRanked.Yes
+            ? 0 
+        : filter === HaloMap.Bazaar || filter === HaloMode.FFASlayer || filter === HaloOutcome.Loss || filter === HaloRanked.No
+            ? 1
+        : filter === HaloMap.Behemoth || filter === HaloMode.Fiesta || filter === HaloOutcome.Draw
+            ? 2
+        : filter === HaloMap.Deadlock || filter === HaloMode.Oddball || filter === HaloOutcome.Left
+            ? 3
+        : filter === HaloMap.Fragmentation || filter === HaloMode.Slayer
+            ? 4
+        : filter === HaloMap.Highpower || filter === HaloMode.Stockpile
+            ? 5
+        : filter === HaloMap.LaunchSite || filter === HaloMode.Strongholds
+            ? 6
+        : filter === HaloMap.LiveFire || filter === HaloMode.TacticalSlayer
+            ? 7
+        : filter === HaloMap.Recharge || filter === HaloMode.TotalControl
+            ? 8
+        : filter === HaloMap.Streets
+            ? 9
+        : -1;
+    }
+
+    public static GetFilterTitle(filter?: string): string
+    {
+        if (MatchFilter.IsMapFilter(filter) || MatchFilter.IsModeFilter(filter)) { return filter ?? ""; }
+        if (filter === HaloOutcome.Win) { return "Wins"; }
+        if (filter === HaloOutcome.Loss) { return "Losses"; }
+        if (filter === HaloOutcome.Draw) { return "Draws"; }
+        if (filter === HaloOutcome.Left) { return "Left Early"; }
+        if (filter === HaloRanked.Yes) { return "Ranked"; }
+        if (filter === HaloRanked.No) { return "Social"; }
+
+        return "";
     }
 }

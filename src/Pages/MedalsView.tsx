@@ -4,14 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ArrowheadFirebase } from "../Database/ArrowheadFirebase";
 import { Company } from "../Objects/Model/Company";
 
-import ArrowheadImg from "../Assets/Images/arrowhead.png";
-
-import { TopMedals } from "../Assets/Components/Medals/TopMedals";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
-import { AssistBreakdown } from "../Assets/Components/Breakdowns/AssistBreakdown";
-import { MatchesBreakdown } from "../Assets/Components/Breakdowns/MatchesBreakdown";
-import { ShotsBreakdown } from "../Assets/Components/Breakdowns/ShotsBreakdown";
-import { DamageBreakdown } from "../Assets/Components/Breakdowns/DamageBreakdown";
 import { User } from "../Objects/Model/User";
 import { AHAppBar } from "../Assets/Components/Layout/AHAppBar";
 import { AHDrawer } from "../Assets/Components/Layout/AHDrawer";
@@ -35,7 +28,7 @@ export function MedalsView(props: { db: ArrowheadFirebase, company: Company, use
 	const [loadingMessage, setLoadingMessage] = useState("");
 	const [spartanCompany, setSpartanCompany] = useState(company);
 	const [mySR, setMySR] = useState(user.player?.serviceRecord ?? new ServiceRecord());
-	const [tab, setTab] = useState(2);
+	const [tab, setTab] = useState(10);
 	const [mobileOpen, setMobileOpen] = useState(false);
 	//#endregion
 
@@ -77,14 +70,10 @@ export function MedalsView(props: { db: ArrowheadFirebase, company: Company, use
 		loadData();
 	}, []);
 
-	const onTabClick = useCallback((_event: React.SyntheticEvent, newValue: number) =>
-	{
-		setTab(newValue);
-		if (newValue === 0) { navigate("/"); }
-		if (newValue === 1) { navigate(`/sr/${user.player?.gamertag ?? gamertag}`); }
-		if (newValue === 2) { navigate(`/medals/${user.player?.gamertag ?? gamertag}/medals`); }
-		if (newValue === 3) { navigate(`/matches/${user.player?.gamertag ?? gamertag}`); }
-	}, [navigate, setTab]);
+	/**
+	 * On tab click, navigates to the right one
+	 */
+	 const onTabClick = useCallback((url: string) => navigate(url), [navigate]);
 
 	function handleDrawerToggle()
 	{
@@ -97,50 +86,41 @@ export function MedalsView(props: { db: ArrowheadFirebase, company: Company, use
 		<Box sx={{ display: "flex", backgroundColor: "background.paper" }}>
 			<AHAppBar player={user.player} handleDrawerToggle={handleDrawerToggle} />
 			<AHLoading loadingMessage={loadingMessage} />
-			<AHDrawer spartanCompany={spartanCompany} currentTab={2} container={container} mobileOpen={mobileOpen} onTabClick={onTabClick} handleDrawerToggle={handleDrawerToggle} hasUser={!!user.player} />
+			<AHDrawer spartanCompany={spartanCompany} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={onTabClick} handleDrawerToggle={handleDrawerToggle} gamertag={user?.player?.gamertag} />
 	  		<Box component="main" sx={{ flexGrow: 1 }}>
 				<Toolbar />
 				<Divider />
 				<Box sx={{ p: 2 }}>
 					<Grid container spacing={2}>
-						{/** Far left 2 */}
-						<Grid container item spacing={2} xs={12} md={4} xl={2} sx={{ alignContent: "flex-start" }}>
-							<Grid item xs={12}>
-								<MedalTypeBreakdown type={MedalType.Spree} medals={mySR.medals} />
-							</Grid>
-							<Grid item xs={12}>
-								<MedalTypeBreakdown type={MedalType.MultiKill} medals={mySR.medals} />
-							</Grid>
+						<Grid item xs={12} md={6}>
+							<MedalTypeBreakdown type={MedalType.Spree} medals={mySR.medals} />
 						</Grid>
-						{/** Middle 6 */}
-						<Grid container item spacing={2} xs={12} md={4} xl={6} sx={{ alignContent: "flex-start" }}>
-							<Grid item xs={12} lg={4}>
-								<MedalTypeBreakdown type={MedalType.CTF} medals={mySR.medals} />
-							</Grid>
-							<Grid item xs={12} lg={4}>
-								<MedalTypeBreakdown type={MedalType.Oddball} medals={mySR.medals} />
-							</Grid>
-							<Grid item xs={12} lg={4}>
-								<MedalTypeBreakdown type={MedalType.Strongholds} medals={mySR.medals} />
-							</Grid>
-							<Grid item xs={12} lg={4}>
-								<MedalTypeBreakdown type={MedalType.Stockpile} medals={mySR.medals} />
-							</Grid>
-							<Grid item xs={12} lg={8}>
-								<MedalTypeBreakdown type={MedalType.Sniper} medals={mySR.medals} wrap />
-							</Grid>
+						<Grid item xs={12} md={6}>
+							<MedalTypeBreakdown type={MedalType.MultiKill} medals={mySR.medals} />
 						</Grid>
-						{/** Far right 4 */}
-						<Grid container item spacing={2} xs={12} md={4} xl={4} sx={{ alignContent: "flex-start" }}>
-							<Grid item xs={12}>
-								<MedalTypeBreakdown type={MedalType.Weapons} medals={mySR.medals} wrap />
-							</Grid>
-							<Grid item xs={12}>
-								<MedalTypeBreakdown type={MedalType.Boom} medals={mySR.medals} wrap />
-							</Grid>
-							<Grid item xs={12}>
-								<MedalTypeBreakdown type={MedalType.Skill} medals={mySR.medals} wrap />
-							</Grid>
+						<Grid item xs={12} lg={4}>
+							<MedalTypeBreakdown type={MedalType.CTF} medals={mySR.medals} />
+						</Grid>
+						<Grid item xs={12} lg={4}>
+							<MedalTypeBreakdown type={MedalType.Oddball} medals={mySR.medals} />
+						</Grid>
+						<Grid item xs={12} lg={4}>
+							<MedalTypeBreakdown type={MedalType.Strongholds} medals={mySR.medals} />
+						</Grid>
+						<Grid item xs={12} lg={4}>
+							<MedalTypeBreakdown type={MedalType.Stockpile} medals={mySR.medals} />
+						</Grid>
+						<Grid item xs={12} lg={8}>
+							<MedalTypeBreakdown type={MedalType.Sniper} medals={mySR.medals} />
+						</Grid>
+						<Grid item xs={12}>
+							<MedalTypeBreakdown type={MedalType.Weapons} medals={mySR.medals} />
+						</Grid>
+						<Grid item xs={12}>
+							<MedalTypeBreakdown type={MedalType.Boom} medals={mySR.medals} />
+						</Grid>
+						<Grid item xs={12}>
+							<MedalTypeBreakdown type={MedalType.Skill} medals={mySR.medals} />
 						</Grid>
 					</Grid>
 				</Box>

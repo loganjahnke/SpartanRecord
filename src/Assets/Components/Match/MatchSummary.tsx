@@ -20,7 +20,7 @@ export function MatchSummary(props: MatchSummaryProps)
 		<Grid item xs={12} md={4} lg={3}>
 			<Card>
 				<CardActionArea onClick={onCardAreaClick}>
-					<CardMedia component="img" height="200" image={match.haloMap.asset.thumbnail} alt={match.haloMap.name} />
+					<CardMedia component="img" height="200" image={match.map.asset.thumbnail} alt={match.map.name} />
 					<CardContent>
 						<Typography gutterBottom variant="h5" component="div" sx={{ textAlign: "center" }}>{match.mode.name}</Typography>
 						<Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>

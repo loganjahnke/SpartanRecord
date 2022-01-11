@@ -27,7 +27,7 @@ export function MatchesView(props: { db: ArrowheadFirebase, company: Company, us
 	const [loadingMessage, setLoadingMessage] = useState("");
 	const [spartanCompany, setSpartanCompany] = useState(company);
 	const [myPlayer, setMyPlayer] = useState(user.player ?? new Player());
-	const [tab, setTab] = useState(1);
+	const [tab, setTab] = useState(11);
 	const [mobileOpen, setMobileOpen] = useState(false);
 	//#endregion
 
@@ -61,14 +61,10 @@ export function MatchesView(props: { db: ArrowheadFirebase, company: Company, us
 		loadData();
 	}, []);
 
-	const onTabClick = useCallback((_event: React.SyntheticEvent, newValue: number) =>
-	{
-		setTab(newValue);
-		if (newValue === 0) { navigate("/"); }
-		if (newValue === 1) { navigate(`/sr/${user.player?.gamertag ?? gamertag}`); }
-		if (newValue === 2) { navigate(`/medals/${user.player?.gamertag ?? gamertag}`); }
-        if (newValue === 3) { navigate(`/matches/${user.player?.gamertag ?? gamertag}`); }
-	}, [navigate, setTab]);
+	/**
+	 * On tab click, navigates to the right one
+	 */
+    const onTabClick = useCallback((url: string) => navigate(url), [navigate]);
 
 	function handleDrawerToggle()
 	{
@@ -86,7 +82,7 @@ export function MatchesView(props: { db: ArrowheadFirebase, company: Company, us
 		<Box sx={{ display: "flex", backgroundColor: "background.paper" }}>
 			<AHAppBar player={user.player} handleDrawerToggle={handleDrawerToggle} />
 			<AHLoading loadingMessage={loadingMessage} />
-			<AHDrawer spartanCompany={spartanCompany} currentTab={3} container={container} mobileOpen={mobileOpen} onTabClick={onTabClick} handleDrawerToggle={handleDrawerToggle} hasUser={!!user.player} />
+			<AHDrawer spartanCompany={spartanCompany} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={onTabClick} handleDrawerToggle={handleDrawerToggle} gamertag={user?.player?.gamertag} />
 	  		<Box component="main" sx={{ flexGrow: 1 }}>
 				<Toolbar />
 				<Divider />
