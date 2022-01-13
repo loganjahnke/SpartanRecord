@@ -1,5 +1,6 @@
 import { Box, Button, Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import { Match } from "../../../Objects/Model/Match";
+import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 
 interface MatchSummaryProps
 {
@@ -13,7 +14,7 @@ export function MatchSummary(props: MatchSummaryProps)
 
 	function onCardAreaClick()
 	{
-		goToMatch(match.id);
+		// goToMatch(match.id);
 	}
 
 	return (
@@ -26,7 +27,7 @@ export function MatchSummary(props: MatchSummaryProps)
 						<Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
 							<Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 								<Typography variant="caption">Result</Typography>
-								<Typography variant="body1">
+								<Typography variant="body1" sx={{ color: match.player.outcome === "win" ? ArrowheadTheme.good : match.player.outcome === "loss" ? ArrowheadTheme.bad : ArrowheadTheme.text_primary }}>
 									{match.player.outcome === "win" 
 										? "Win"
 										: match.player.outcome === "loss" 

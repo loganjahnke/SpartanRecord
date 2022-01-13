@@ -1,10 +1,12 @@
-import { Database, ref, get, child, update } from "firebase/database";
+import { Database, ref, get, child, update, set } from "firebase/database";
 import { Timestamp } from "firebase/firestore";
 import { Appearance } from "../Objects/Model/Appearance";
 import { Debugger } from "../Objects/Helpers/Debugger";
 import { Player } from "../Objects/Model/Player";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { Match } from "../Objects/Model/Match";
+import { SpartanCompany } from "../Objects/Model/SpartanCompany";
+import { ArrowheadUser } from "../Objects/Model/ArrowheadUser";
 
 export enum HaloMap
 {
@@ -62,8 +64,6 @@ export class ArrowheadFirebase
 
 	/** The last time the Halo API was used */
 	public lastUpdate: Date | null = null;
-	/** An array of all Arrowhead members */
-	public members: string[] = [];
 
 	/** The firebase database */
 	private __database: Database;
@@ -79,17 +79,55 @@ export class ArrowheadFirebase
 		this.__database = database;
 	}
 
+	//#region User
+	/**
+	 * Saves the new user into the database
+	 * @param user the user to save
+	 * @returns error message if something went wrong
+	 */
+	public async SaveNewUser(user: ArrowheadUser): Promise<string>
+	{
+		if (user.user)
+		{
+			await set(child(ref(this.__database), `user/${user.user?.uid}`), { gamertag: user.user.displayName });
+			return "";
+		}
+		else
+		{
+			return "Can't save user that doesn't exist";
+		}
+	}
+
+	/**
+	 * Gets the profile for the UID
+	 * @param uid the user ID
+	 * @returns the player and spartan company for the user
+	 */
+	public async GetProfile(uid: string): Promise<undefined | { player: Player, spartanCompany: SpartanCompany }>
+    {
+        const snapshot = await get(child(ref(this.__database), `user/${uid}`));
+		const result = snapshot?.exists() ? snapshot.val() : null;
+
+		if (!result) { return undefined; }
+
+		return {
+			player: new Player(result.gamertag),
+			spartanCompany: new SpartanCompany(result.spartanCompany)
+		}
+    }
+	//#endregion
+
 	//#region Members
 	/**
 	 * Populates the members field
 	 */
-	public async PopulateMembers(): Promise<boolean>
+	public async GetMembers(spartanCompany: SpartanCompany): Promise<boolean>
 	{
-		if (this.members && this.members.length > 0) { return true; }
-		const membersSnapshot = await get(child(ref(this.__database), "members"));
+		if (!spartanCompany?.name) { return false; }
+		const membersSnapshot = await get(child(ref(this.__database), `company/${spartanCompany.name}/members`));
 		if (membersSnapshot?.exists())
 		{
-			this.members = Object.keys(membersSnapshot.val());
+			spartanCompany.members = Object.keys(membersSnapshot.val());
 			return true;
 		}
 
@@ -121,9 +159,9 @@ export class ArrowheadFirebase
 	 * Gets the date and time the last time we used the Halo API
 	 * @returns nothing, sets CurrentPull and LastUpdate
 	 */
-	public async GetLastUpdate(): Promise<void>
+	public async GetLastUpdate(): Promise<Date>
 	{
-		if (!this.__database) { return; }
+		if (!this.__database) { return new Date(); }
 
 		const queryFactsSnapshot = await get(child(ref(this.__database), "query_facts"));
 		if (queryFactsSnapshot?.exists())
@@ -138,6 +176,7 @@ export class ArrowheadFirebase
 		}
 
 		if (this.IS_DEBUGGING) { Debugger.Print(false, "GetLastUpdate()", undefined, this); }
+		return this.lastUpdate ?? new Date();
 	}
 	//#endregion
 
@@ -685,7 +724,7 @@ export class ArrowheadFirebase
 	 */
 	 private async __getMatchFromHaloDotAPI(id: string): Promise<any>
 	 {
-		 const response = await fetch("https://dev--ArrowheadCompany.loganjahnke.autocode.gg/match", {
+		 const response = await fetch("https://0-3-4--ArrowheadCompany.loganjahnke.autocode.gg/match", {
 			 method: "POST",
 			 headers: { "Content-Type": "application/json" },
 			 body: JSON.stringify({
@@ -702,7 +741,7 @@ export class ArrowheadFirebase
 	 */
 	private async __getMatchesFromHaloDotAPI(gamertag: string, count: number, offset: number): Promise<any>
 	{
-		const response = await fetch("https://dev--ArrowheadCompany.loganjahnke.autocode.gg/matches", {
+		const response = await fetch("https://0-3-4--ArrowheadCompany.loganjahnke.autocode.gg/matches", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({

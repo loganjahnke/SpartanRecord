@@ -1,14 +1,12 @@
-import { Box, Button, Card, CardContent, CardMedia, Checkbox, Typography } from "@mui/material";
-import { Company } from "../../../Objects/Model/Company";
+import { Box, Button, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { SpartanCompany } from "../../../Objects/Model/SpartanCompany";
 
-import GroupsIcon from '@mui/icons-material/Groups';
 import { Player } from "../../../Objects/Model/Player";
 import { Halo5Converter } from "../../../Objects/Helpers/Halo5Converter";
 
 import ArrowheadImg from "../../Images/arrowhead.png";
-import { User } from "../../../Objects/Model/User";
 
-export function MemberList(props: { company: Company, goToMember: Function, setPlayer: Function })
+export function MemberList(props: { company: SpartanCompany, goToMember: Function, setPlayer: Function })
 {
 	const { company, goToMember, setPlayer } = props;
 

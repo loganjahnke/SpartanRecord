@@ -1,21 +1,19 @@
 import { Box, Divider, Grid, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ArrowheadFirebase } from "../Database/ArrowheadFirebase";
-import { Company } from "../Objects/Model/Company";
 
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
-import { User } from "../Objects/Model/User";
 import { AHAppBar } from "../Assets/Components/Layout/AHAppBar";
 import { AHDrawer } from "../Assets/Components/Layout/AHDrawer";
 import { AHLoading } from "../Assets/Components/Layout/AHLoading";
 import { MedalTypeBreakdown } from "../Assets/Components/Medals/MedalTypeBreakdown";
 import { MedalType } from "../Objects/Pieces/Medal";
+import { Arrowhead } from "../Database/Arrowhead";
 
-export function MedalsView(props: { db: ArrowheadFirebase, company: Company, user: User })
+export function MedalsView(props: { app: Arrowhead })
 {
 	//#region Props and Navigate
-	const { db, company, user } = props;
+	const { app } = props;
 	const { gamertag } = useParams();
 	const navigate = useNavigate();
 	//#endregion
@@ -26,54 +24,54 @@ export function MedalsView(props: { db: ArrowheadFirebase, company: Company, use
 	
 	//#region State
 	const [loadingMessage, setLoadingMessage] = useState("");
-	const [spartanCompany, setSpartanCompany] = useState(company);
-	const [mySR, setMySR] = useState(user.player?.serviceRecord ?? new ServiceRecord());
+	const [mySR, setMySR] = useState(app.arrowheadUser?.player?.serviceRecord ?? new ServiceRecord());
 	const [tab, setTab] = useState(10);
 	const [mobileOpen, setMobileOpen] = useState(false);
 	//#endregion
 
 	const loadData = useCallback(async () => 
-	{
-		if (!await db.PopulateMembers()) { return; }
-		
+	{		
 		// Check if we need to check Firebase or HaloDotAPI
 		setLoadingMessage("Loading Service Records");
 		
 		// Get last update instant
-		await db.GetLastUpdate();
-		lastUpdate.current = db.lastUpdate;
+		lastUpdate.current = await app.db.GetLastUpdate();
 		
-		// Get service records for all users
-		for (const gamertag of db.members)
+		// Get player's service record
+		if (gamertag && gamertag === app.arrowheadUser?.player?.gamertag)
 		{
 			setLoadingMessage("Loading " + gamertag);
-
-			const player = await db.GetPlayer(gamertag);
-			if (!player) { continue; }
-			
-			spartanCompany.AddPlayer(player);
+			app.LogViewServiceRecord(gamertag);
+			if (app.arrowheadUser.player.serviceRecord)
+			{
+				setMySR(app.arrowheadUser.player.serviceRecord);	
+			}
+			else
+			{
+				app.arrowheadUser.player = await app.db.GetPlayer(gamertag);
+				setMySR(app.arrowheadUser.player.serviceRecord);
+			}			
 		}
-
-		// Get player's service record
-		if (gamertag)
+		else if (gamertag)
 		{
-			const sr = spartanCompany.GetPlayer(gamertag)?.serviceRecord ?? new ServiceRecord();
-			setMySR(sr);
+			setLoadingMessage("Loading " + gamertag);
+			const player = await app.db.GetPlayer(gamertag);
+			setMySR(player.serviceRecord);
+			app.LogViewMedals(gamertag);
 		}
 
-		setSpartanCompany(spartanCompany);
 		setLoadingMessage("");
-	}, [spartanCompany, lastUpdate, db, gamertag, setSpartanCompany, setMySR]);
+	}, [lastUpdate, app, gamertag, setMySR]);
 	
 	useEffect(() =>
 	{
 		loadData();
-	}, []);
+	}, [gamertag]);
 
 	/**
 	 * On tab click, navigates to the right one
 	 */
-	 const onTabClick = useCallback((url: string) => navigate(url), [navigate]);
+	const changeView = useCallback((url: string) => navigate(url), [navigate]);
 
 	function handleDrawerToggle()
 	{
@@ -82,11 +80,19 @@ export function MedalsView(props: { db: ArrowheadFirebase, company: Company, use
 
 	const container = window !== undefined ? () => window.document.body : undefined;
 
+	/** Logs out the current user */
+	async function logout()
+	{
+		setLoadingMessage("Logging out");
+		await app.Logout();
+		setLoadingMessage("");
+	}
+
 	return (
 		<Box sx={{ display: "flex", backgroundColor: "background.paper" }}>
-			<AHAppBar player={user.player} handleDrawerToggle={handleDrawerToggle} />
+			<AHAppBar player={app.arrowheadUser?.player} handleDrawerToggle={handleDrawerToggle} openAuth={changeView} />
 			<AHLoading loadingMessage={loadingMessage} />
-			<AHDrawer spartanCompany={spartanCompany} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={onTabClick} handleDrawerToggle={handleDrawerToggle} gamertag={user?.player?.gamertag} />
+			<AHDrawer loggedInUser={app.arrowheadUser} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={changeView} handleDrawerToggle={handleDrawerToggle} onLogout={logout} />
 	  		<Box component="main" sx={{ flexGrow: 1 }}>
 				<Toolbar />
 				<Divider />

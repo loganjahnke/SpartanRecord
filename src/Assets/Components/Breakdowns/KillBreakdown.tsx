@@ -17,9 +17,7 @@ export function KillBreakdown(props: { serviceRecord: ServiceRecord })
                   <Box sx={{ display: "flex", flexDirection: "row", width: "95%", mb: 1,
 				".MuiBox-root:first-child": { borderRadius: "8px 0 0 8px", mr: "1px" }, 
 				".MuiBox-root:last-child": { borderRadius: "0 8px 8px 0", ml: "1px" },
-				".MuiBox-root:not(:first-child):not(:last-child)": { ml: "1px", mr: "1px" },
-                        ".MuiBox-root > span": { fontSize: "8px", textOverflow: "ellipsis" },
-                        ".MuiBox-root > h4": { fontSize: "24px" } }}>
+				".MuiBox-root:not(:first-child):not(:last-child)": { ml: "1px", mr: "1px" }}}>
                         <BreakdownTile title="Melee" value={serviceRecord.breakdowns.kills.melee} total={total} />
                         <BreakdownTile title="Grenades" value={serviceRecord.breakdowns.kills.grenades} total={total} />
                         <BreakdownTile title="Headshots" value={serviceRecord.breakdowns.kills.headshots} total={total} />

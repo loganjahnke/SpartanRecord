@@ -1,12 +1,14 @@
 import { Player } from "./Player";
 import { ServiceRecord } from "./ServiceRecord";
 
-export class Company
+export class SpartanCompany
 {
     /** The company's name */
     public name: string;
     /** The players in the company */
     public players: Player[] = [];
+    /** The company's members */
+    public members: string[];
     
     /** Index of gamertag to player index */
     private __gamertagToPlayerIndex: Map<string, number> = new Map<string, number>();
@@ -14,6 +16,7 @@ export class Company
     constructor(name: string)
     {
         this.name = name;
+        this.members = [];
     }
 
     /**

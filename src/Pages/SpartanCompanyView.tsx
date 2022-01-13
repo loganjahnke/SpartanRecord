@@ -1,11 +1,8 @@
 import { Box, Divider, Grid, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ArrowheadFirebase } from "../Database/ArrowheadFirebase";
-import { Company } from "../Objects/Model/Company";
+import { useNavigate, useParams } from "react-router-dom";
+import { SpartanCompany } from "../Objects/Model/SpartanCompany";
 import { MemberList } from "../Assets/Components/Members/MemberList";
-
-import ArrowheadImg from "../Assets/Images/arrowhead.png";
 
 import { TopMedals } from "../Assets/Components/Medals/TopMedals";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
@@ -17,13 +14,14 @@ import { KillBreakdown } from "../Assets/Components/Breakdowns/KillBreakdown";
 import { AHAppBar } from "../Assets/Components/Layout/AHAppBar";
 import { AHDrawer } from "../Assets/Components/Layout/AHDrawer";
 import { AHLoading } from "../Assets/Components/Layout/AHLoading";
-import { User } from "../Objects/Model/User";
 import { Player } from "../Objects/Model/Player";
+import { Arrowhead } from "../Database/Arrowhead";
 
-export function CompanyView(props: { db: ArrowheadFirebase, company: Company, user: User, setPlayer: Function })
+export function SpartanCompanyView(props: { app: Arrowhead })
 {
 	//#region Props and Navigate
-	const { db, company, user, setPlayer } = props;
+	const { app } = props;
+	const { company } = useParams();
 	const navigate = useNavigate();
 	//#endregion
 
@@ -32,81 +30,91 @@ export function CompanyView(props: { db: ArrowheadFirebase, company: Company, us
 	//#endregion
 	
 	//#region State
-	const [myPlayer, setMyPlayer] = useState(user.player);
+	const [spartanCompany, setSpartanCompany] = useState(app.arrowheadUser?.spartanCompany ?? (company ? new SpartanCompany(company) : undefined))
+	const [myPlayer, setMyPlayer] = useState(app.arrowheadUser?.player);
 	const [loadingMessage, setLoadingMessage] = useState("");
-	const [spartanCompany, setSpartanCompany] = useState(company);
 	const [sharedSR, setSharedSR] = useState(new ServiceRecord());
-	const [tab, setTab] = useState(0);
 	const [mobileOpen, setMobileOpen] = useState(false);
 	//#endregion
 
     const loadData = useCallback(async () => 
     {
-		if (!await db.PopulateMembers()) { return; }
+		if (!spartanCompany) { return; }
+		if (!await app.db.GetMembers(spartanCompany)) { return; }
 		
 		// Check if we need to check Firebase or HaloDotAPI
 		setLoadingMessage("Loading Service Records");
 		
         // Get last update instant
-        await db.GetLastUpdate();
-		lastUpdate.current = db.lastUpdate;
+        lastUpdate.current = await app.db.GetLastUpdate();
 		
 		// Get service records for all users
-		for (const gamertag of db.members)
+		for (const gamertag of spartanCompany.members)
 		{
 			setLoadingMessage("Loading " + gamertag);
 
-			const player = await db.GetPlayer(gamertag);
+			const player = await app.db.GetPlayer(gamertag);
 			if (!player) { continue; }
 			
 			spartanCompany.AddPlayer(player);
 		}
 
 		const sr = spartanCompany.GetServiceRecord();
+		app.LogViewSpartanCompany(spartanCompany.name);
 
-		setSpartanCompany(spartanCompany);
 		setSharedSR(sr);
 		setLoadingMessage("");
-    }, [spartanCompany, lastUpdate, db, setSpartanCompany, setSharedSR]);
+    }, [lastUpdate, app, spartanCompany, setSharedSR]);
     
     useEffect(() =>
     {
         loadData();
-    }, []);
+    }, [app, company]);
 
 	/**
 	 * On tab click, navigates to the right one
 	 */
-	const onTabClick = useCallback((url: string) => navigate(url), [navigate]);
+	const changeView = useCallback((url: string) => navigate(url), [navigate]);
 
 	/**
 	 * Goes to the service record
 	 */
 	const goToServiceRecord = useCallback((gamertag: string) =>
 	{
-		setTab(1);
-		memberListSetPlayer(spartanCompany.GetPlayer(gamertag) ?? new Player(gamertag));
-		navigate("/sr/" + gamertag);
-	}, [navigate, setTab, spartanCompany, memberListSetPlayer]);
+		memberListSetPlayer(app.arrowheadUser?.spartanCompany?.GetPlayer(gamertag) ?? new Player(gamertag));
+		navigate("/service_record/" + gamertag);
+	}, [navigate, app, memberListSetPlayer]);
 
+	/** Opens or closes the drawer */
 	function handleDrawerToggle()
 	{
 		setMobileOpen(!mobileOpen);
 	};
 
+	/**
+	 * Sets the player
+	 * @param player the player to set
+	 */
 	function memberListSetPlayer(player: Player)
 	{
 		setMyPlayer(player);
-		setPlayer(player);
+	}
+
+	/** Logs out the current user */
+	async function logout()
+	{
+		setLoadingMessage("Logging out");
+		await app.Logout();
+		setLoadingMessage("");
 	}
 
 	const container = window !== undefined ? () => window.document.body : undefined;
 
 	return (
 		<Box sx={{ display: "flex", backgroundColor: "background.paper" }}>
-			<AHAppBar player={myPlayer} handleDrawerToggle={handleDrawerToggle} />
+			<AHAppBar player={app.arrowheadUser?.player} handleDrawerToggle={handleDrawerToggle} openAuth={changeView} />
 			<AHLoading loadingMessage={loadingMessage} />
-			<AHDrawer spartanCompany={spartanCompany} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={onTabClick} handleDrawerToggle={handleDrawerToggle} gamertag={myPlayer?.gamertag} />
+			<AHDrawer loggedInUser={app.arrowheadUser} currentTab={12} container={container} mobileOpen={mobileOpen} switchTab={changeView} handleDrawerToggle={handleDrawerToggle} onLogout={logout} />
       		<Box component="main" sx={{ flexGrow: 1 }}>
 				<Toolbar />
 				<Divider />
@@ -114,7 +122,7 @@ export function CompanyView(props: { db: ArrowheadFirebase, company: Company, us
 					<Grid container spacing={2}>
 						<Grid container item spacing={2} xs={12} md={4} xl={3}>
 							<Grid item xs={12}>
-								<MemberList company={spartanCompany} goToMember={goToServiceRecord} setPlayer={memberListSetPlayer} />
+								{spartanCompany ? <MemberList company={spartanCompany} goToMember={goToServiceRecord} setPlayer={memberListSetPlayer} /> : undefined}
 							</Grid>
 						</Grid>
 						<Grid container item spacing={2} xs={12} md={4} xl={6} sx={{ alignContent: "flex-start" }}>
@@ -130,13 +138,13 @@ export function CompanyView(props: { db: ArrowheadFirebase, company: Company, us
 						</Grid>
 						<Grid container item spacing={2} xs={12} md={4} xl={3}>
 							<Grid item xs={12}>
-								<WinRateRanks company={spartanCompany} sharedSR={sharedSR} goToMember={goToServiceRecord} />
+								{spartanCompany ? <WinRateRanks company={spartanCompany} sharedSR={sharedSR} goToMember={goToServiceRecord} /> : undefined}
 							</Grid>
 							<Grid item xs={12}>
-								<KDARanks company={spartanCompany} sharedSR={sharedSR} goToMember={goToServiceRecord} />
+								{spartanCompany ? <KDARanks company={spartanCompany} sharedSR={sharedSR} goToMember={goToServiceRecord} /> : undefined}
 							</Grid>
 							<Grid item xs={12}>
-								<AccuracyRanks company={spartanCompany} sharedSR={sharedSR} goToMember={goToServiceRecord} />
+								{spartanCompany ? <AccuracyRanks company={spartanCompany} sharedSR={sharedSR} goToMember={goToServiceRecord} /> : undefined}
 							</Grid>
 						</Grid>
 					</Grid>

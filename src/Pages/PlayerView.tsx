@@ -1,10 +1,7 @@
-import { Box, Divider, Grid, LinearProgress, Toolbar } from "@mui/material";
+import { Box, Divider, Grid, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ArrowheadFirebase } from "../Database/ArrowheadFirebase";
-import { Company } from "../Objects/Model/Company";
-
-import ArrowheadImg from "../Assets/Images/arrowhead.png";
+import { SpartanCompany } from "../Objects/Model/SpartanCompany";
 
 import { TopMedals } from "../Assets/Components/Medals/TopMedals";
 import { KillBreakdown } from "../Assets/Components/Breakdowns/KillBreakdown";
@@ -14,18 +11,19 @@ import { ShotsBreakdown } from "../Assets/Components/Breakdowns/ShotsBreakdown";
 import { DamageBreakdown } from "../Assets/Components/Breakdowns/DamageBreakdown";
 import { Player } from "../Objects/Model/Player";
 import { ServiceRecordChart } from "../Assets/Components/Charts/ServiceRecordChart";
-import { HighLevelBreakdown } from "../Assets/Components/Breakdowns/HighLevelBreakdown";
 import { AHDrawer } from "../Assets/Components/Layout/AHDrawer";
 import { AHAppBar } from "../Assets/Components/Layout/AHAppBar";
-import { User } from "../Objects/Model/User";
+import { ArrowheadUser } from "../Objects/Model/ArrowheadUser";
 import { AHLoading } from "../Assets/Components/Layout/AHLoading";
 import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
 import { LevelBreakdown } from "../Assets/Components/Breakdowns/LevelBreakdown";
+import { Arrowhead } from "../Database/Arrowhead";
+import { PlayerCard } from "../Assets/Components/Cards/PlayerCard";
 
-export function PlayerView(props: { db: ArrowheadFirebase, company: Company, user: User })
+export function PlayerView(props: { app: Arrowhead })
 {
 	//#region Props and Navigate
-	const { db, company, user } = props;
+	const { app } = props;
 	const { gamertag } = useParams();
 	const navigate = useNavigate();
 	//#endregion
@@ -36,35 +34,37 @@ export function PlayerView(props: { db: ArrowheadFirebase, company: Company, use
 	
 	//#region State
 	const [loadingMessage, setLoadingMessage] = useState("");
-	const [spartanCompany, setSpartanCompany] = useState(company);
-	const [myPlayer, setMyPlayer] = useState(user.player ?? new Player());
+	const [myPlayer, setMyPlayer] = useState(app.arrowheadUser?.player ?? new Player());
 	const [tab, setTab] = useState(1);
 	const [mobileOpen, setMobileOpen] = useState(false);
 	//#endregion
 
 	const loadData = useCallback(async () => 
-	{
-		if (!await db.PopulateMembers()) { return; }
-		
+	{		
 		// Check if we need to check Firebase or HaloDotAPI
 		setLoadingMessage("Loading Service Records");
 		
 		// Get last update instant
-		await db.GetLastUpdate();
-		lastUpdate.current = db.lastUpdate;
+		lastUpdate.current = await app.db.GetLastUpdate();
 
 		// Get player's service record
-		if (gamertag)
+		if (gamertag && gamertag === app.arrowheadUser?.user?.displayName)
 		{
 			setLoadingMessage("Loading " + gamertag);
-			const player = await db.GetPlayer(gamertag, true);
-			spartanCompany.AddPlayer(player);
+			app.arrowheadUser.player = await app.db.GetPlayer(gamertag, true);
+			setMyPlayer(app.arrowheadUser.player);
+			app.LogViewServiceRecord(gamertag);
+		}
+		else if (gamertag)
+		{
+			setLoadingMessage("Loading " + gamertag);
+			const player = await app.db.GetPlayer(gamertag, true);
 			setMyPlayer(player);
+			app.LogViewServiceRecord(gamertag);
 		}
 
-		setSpartanCompany(spartanCompany);
 		setLoadingMessage("");
-	}, [spartanCompany, lastUpdate, db, gamertag, setSpartanCompany, setMyPlayer]);
+	}, [lastUpdate, app, gamertag, setMyPlayer]);
 	
 	useEffect(() =>
 	{
@@ -74,7 +74,7 @@ export function PlayerView(props: { db: ArrowheadFirebase, company: Company, use
 	/**
 	 * On tab click, navigates to the right one
 	 */
-	 const onTabClick = useCallback((url: string) => navigate(url), [navigate]);
+	const changeView = useCallback((url: string) => navigate(url), [navigate]);
 
 	function handleDrawerToggle()
 	{
@@ -83,11 +83,19 @@ export function PlayerView(props: { db: ArrowheadFirebase, company: Company, use
 
 	const container = window !== undefined ? () => window.document.body : undefined;
 
+	/** Logs out the current user */
+	async function logout()
+	{
+		setLoadingMessage("Logging out");
+		await app.Logout();
+		setLoadingMessage("");
+	}
+
 	return (
 		<Box sx={{ display: "flex", backgroundColor: "background.paper" }}>
-			<AHAppBar player={user.player} handleDrawerToggle={handleDrawerToggle} />
+			<AHAppBar player={app.arrowheadUser?.player} handleDrawerToggle={handleDrawerToggle} openAuth={changeView} />
 			<AHLoading loadingMessage={loadingMessage} />
-			<AHDrawer spartanCompany={spartanCompany} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={onTabClick} handleDrawerToggle={handleDrawerToggle} gamertag={user?.player?.gamertag} />
+			<AHDrawer loggedInUser={app.arrowheadUser} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={changeView} handleDrawerToggle={handleDrawerToggle} onLogout={logout}/>
 	  		<Box component="main" sx={{ flexGrow: 1 }}>
 				<Toolbar />
 				<Divider />
@@ -95,6 +103,9 @@ export function PlayerView(props: { db: ArrowheadFirebase, company: Company, use
 					<Grid container spacing={2}>
 						{/** Far left */}
 						<Grid container item spacing={2} xs={12} md={4} xl={4} sx={{ alignContent: "flex-start" }}>
+							<Grid item xs={12}>
+								<PlayerCard player={myPlayer} />
+							</Grid>
 							<Grid item xs={12}>
 								<MatchesBreakdown serviceRecord={myPlayer.serviceRecord} />
 							</Grid>

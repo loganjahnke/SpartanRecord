@@ -4,6 +4,9 @@ body {
   font-family: 'Roboto', sans-serif;
   background-color: #002029; }
 
+.skinny {
+  font-weight: 300; }
+
 #root,
 #root > div,
 .App,

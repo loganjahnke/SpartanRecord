@@ -1,12 +1,12 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 
-interface ImageCardProps
+interface MatchCardProps
 {
 	image?: string;
     title: string;
 }
 
-export function ImageCard(props: ImageCardProps)
+export function MatchCard(props: MatchCardProps)
 {
 	const { image, title } = props;
 

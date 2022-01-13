@@ -1,6 +1,6 @@
-import { SyntheticEvent, useState } from "react";
-import { Box, Collapse, Divider, Drawer, Tab, Tabs, Toolbar, Typography } from "@mui/material";
-import { Company } from "../../../Objects/Model/Company";
+import { SyntheticEvent, useEffect, useState } from "react";
+import { Box, Button, Collapse, Divider, Drawer, Tab, Tabs, Toolbar, Typography } from "@mui/material";
+import { ArrowheadUser } from "../../../Objects/Model/ArrowheadUser";
 
 import GroupsIcon from '@mui/icons-material/Groups';
 import ModeStandbyIcon from '@mui/icons-material/ModeStandby';
@@ -8,11 +8,13 @@ import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import LogoutIcon from '@mui/icons-material/Logout';
+import HomeIcon from '@mui/icons-material/Home';
 
 interface AHDrawerProps
 {
-	/** The spartan company */
-	spartanCompany: Company;
+	/** The app containing the user and their spartan company */
+	loggedInUser?: ArrowheadUser;
 	/** Current tab */
 	currentTab: number;
 	/** Subtab */
@@ -25,13 +27,13 @@ interface AHDrawerProps
 	container?: Element | (() => HTMLElement);
 	/** Open on mobile? */
 	mobileOpen?: boolean;
-	/** The currently selected gamertag */
-	gamertag?: string;
+	/** What happens when logout is pressed? */
+	onLogout: Function;
 }
 
 export function AHDrawer(props: AHDrawerProps)
 {
-	const { spartanCompany, currentTab, subtab, switchTab, handleDrawerToggle, container, mobileOpen, gamertag } = props;
+	const { currentTab, subtab, switchTab, handleDrawerToggle, container, mobileOpen, loggedInUser, onLogout } = props;
 
 	const [expandMaps, setExpandMaps] = useState(currentTab === 2);
 	const [expandModes, setExpandModes] = useState(currentTab === 4);
@@ -45,13 +47,18 @@ export function AHDrawer(props: AHDrawerProps)
 	 */
 	function tabClicked(event: SyntheticEvent<Element, Event>, newValue: number)
 	{
+		const gamertag = loggedInUser?.user?.displayName;
 		switch (newValue)
 		{
+			case 12:
+				switchTab(`/company/${loggedInUser?.spartanCompany?.name ?? "join"}`);
+				break;
 			case 0:
 				switchTab(`/`);
 				break;
 			case 1:
-				switchTab(`/sr/${gamertag}`);
+				if (gamertag) { switchTab(`/service_record/${gamertag}`); }
+				else { switchTab("/something_went_wrong"); }
 				break;
 			case 2:
 				setExpandMaps(!expandMaps);
@@ -78,10 +85,12 @@ export function AHDrawer(props: AHDrawerProps)
 				setExpandRanked(!expandRanked);
 				break;
 			case 10:
-				switchTab(`/medals/${gamertag}`);
+				if (gamertag) { switchTab(`/medals/${gamertag}`); }
+				else { switchTab("/something_went_wrong"); }
 				break;
 			case 11:
-				switchTab(`/matches/${gamertag}`);
+				if (gamertag) { switchTab(`/matches/${gamertag}`); }
+				else { switchTab("/something_went_wrong"); }
 				break;
 			default: 
 				console.log("Something unexpected was pressed in the tabs: " + newValue);
@@ -97,7 +106,9 @@ export function AHDrawer(props: AHDrawerProps)
 	function mapClicked(event: SyntheticEvent<Element, Event>, newValue: number)
 	{
 		const map = event.currentTarget.textContent;
-		switchTab(`/sr/map/${map}/${gamertag}`);
+		const gamertag = loggedInUser?.user?.displayName;
+		if (gamertag) { switchTab(`/service_record/map/${map}/${gamertag}`); }
+		else { switchTab("/something_went_wrong"); }
 	}
 
 	/**
@@ -108,7 +119,9 @@ export function AHDrawer(props: AHDrawerProps)
 	function modeClicked(event: SyntheticEvent<Element, Event>, newValue: number)
 	{
 		const mode = event.currentTarget.textContent;
-		switchTab(`/sr/mode/${mode}/${gamertag}`);
+		const gamertag = loggedInUser?.user?.displayName;
+		if (gamertag) { switchTab(`/service_record/mode/${mode}/${gamertag}`); }
+		else { switchTab("/something_went_wrong"); }
 	}
 
 	 /**
@@ -118,19 +131,26 @@ export function AHDrawer(props: AHDrawerProps)
 	 */
 	function outcomeClicked(event: SyntheticEvent<Element, Event>, newValue: number)
 	{
+		const gamertag = loggedInUser?.user?.displayName;
+		if (!gamertag) 
+		{ 
+			switchTab("/something_went_wrong"); 
+			return;
+		}
+
 		switch (newValue)
 		{
 			case 0:
-				switchTab(`/sr/outcome/win/${gamertag}`);
+				switchTab(`/service_record/outcome/win/${gamertag}`);
 				break;
 			case 1:
-				switchTab(`/sr/outcome/loss/${gamertag}`);
+				switchTab(`/service_record/outcome/loss/${gamertag}`);
 				break;
 			case 2:
-				switchTab(`/sr/outcome/draw/${gamertag}`);
+				switchTab(`/service_record/outcome/draw/${gamertag}`);
 				break;
 			case 3:
-				switchTab(`/sr/outcome/left/${gamertag}`);
+				switchTab(`/service_record/outcome/left/${gamertag}`);
 				break;
 		}
 	}
@@ -142,25 +162,37 @@ export function AHDrawer(props: AHDrawerProps)
 	 */
 	function rankedClicked(event: SyntheticEvent<Element, Event>, newValue: number)
 	{
+		const gamertag = loggedInUser?.user?.displayName;
+		if (!gamertag) 
+		{ 
+			switchTab("/something_went_wrong"); 
+			return;
+		}
+
 		switch (newValue)
 		{
 			case 0:
-				switchTab(`/sr/isRanked/true/${gamertag}`);
+				switchTab(`/service_record/isRanked/true/${gamertag}`);
 				break;
 			case 1:
-				switchTab(`/sr/isRanked/false/${gamertag}`);
+				switchTab(`/service_record/isRanked/false/${gamertag}`);
 				break;
 		}
 	}
+
+	useEffect(() =>
+	{
+		
+	}, [loggedInUser]);
 	
 	//#region Drawer
 	const drawer = (
-		<div>
-			<Toolbar><Typography variant="h6" sx={{ padding: 2 }}>{spartanCompany.name} Company</Typography></Toolbar>
-			<Divider />
-				{gamertag ? 
+		<Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+			<Toolbar><Typography variant="h6" sx={{ padding: 2 }}>Halo Team Stats</Typography></Toolbar>
+			<Divider flexItem />
+				{loggedInUser?.user ? 
 				<Tabs orientation="vertical" value={currentTab === 2 || currentTab === 4 || currentTab === 6 || currentTab === 8 ? -1 : currentTab} onChange={tabClicked} sx={{ mt: 5 }}>
-					<Tab className="ahTab" label="Company" icon={<GroupsIcon />} iconPosition="start" />
+					<Tab className="ahTab" label="Home" icon={<HomeIcon />} iconPosition="start" />
 					<Tab className="ahTab" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" />
 					<Tab className="ahTab" label="Maps" icon={expandMaps ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Collapse in={expandMaps} timeout="auto" unmountOnExit>
@@ -208,12 +240,15 @@ export function AHDrawer(props: AHDrawerProps)
 						</Tabs>
 					</Collapse>
 					<Tab className="ahTab" label="Medals" icon={<MilitaryTechIcon />} iconPosition="start" />
-					{/* <Tab className="ahTab" label="Matches" icon={<SportsEsportsIcon />} iconPosition="start" /> */}
+					<Tab className="ahTab" label="Matches" icon={<SportsEsportsIcon />} iconPosition="start" />
+					<Tab className="ahTab" label={loggedInUser?.spartanCompany?.name ? loggedInUser.spartanCompany.name + " Company" : "Create or Join Spartan Company"} icon={<GroupsIcon />} iconPosition="start" />
 				</Tabs> 
 				: <Tabs orientation="vertical" value={currentTab} onChange={tabClicked} sx={{ mt: 5 }}>
-					<Tab className="ahTab" label="Company" icon={<GroupsIcon />} iconPosition="start" />
+					<Tab className="ahTab" label="Home" icon={<HomeIcon />} iconPosition="start" />
 				</Tabs>}
-		</div>
+			<Box sx={{ flexGrow: 1 }}></Box>
+			{loggedInUser?.user ? <Button sx={{ alignSelf: "flex-start", justifySelf: "flex-end", mb: 2, ml: 2 }} startIcon={<LogoutIcon />} onClick={() => onLogout()}>Log Out</Button> : undefined}
+		</Box>
 	);
 	//#endregion
 

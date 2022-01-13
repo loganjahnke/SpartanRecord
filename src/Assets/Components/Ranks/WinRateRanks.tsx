@@ -1,12 +1,10 @@
 import { Box } from "@mui/material";
-import { Company } from "../../../Objects/Model/Company";
+import { SpartanCompany } from "../../../Objects/Model/SpartanCompany";
 import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import { BreakdownTile } from "../Breakdowns/BreakdownTile";
 import { RankTile } from "./RankTile";
 
-import ArrowheadImg from "../../Images/arrowhead.png";
-
-export function WinRateRanks(props: { company: Company, sharedSR: ServiceRecord, goToMember: Function })
+export function WinRateRanks(props: { company: SpartanCompany, sharedSR: ServiceRecord, goToMember: Function })
 {
 	const { company, sharedSR, goToMember } = props;
 
