@@ -51,6 +51,10 @@ export class Arrowhead
             // Send email verification
             await sendEmailVerification(this.arrowheadUser.user);
 
+            // Save to session
+            sessionStorage.setItem("Auth Token", credential.user.refreshToken);
+            sessionStorage.setItem("Gamertag", gamertag);
+
             return "";
         }
         catch (error)
@@ -71,14 +75,20 @@ export class Arrowhead
         {
             await setPersistence(this.auth, browserLocalPersistence);
             const credential = await signInWithEmailAndPassword(this.auth, email, password);
-            this.arrowheadUser = new ArrowheadUser();
-            this.arrowheadUser.user = credential.user;
+            
+            this.arrowheadUser = new ArrowheadUser(credential.user);
             const result = await this.db.GetProfile(credential.user.uid);
+
             if (result)
             {
                 this.arrowheadUser.player = result.player;
                 this.arrowheadUser.spartanCompany = result.spartanCompany;
+                
+                // Save to session
+                sessionStorage.setItem("Auth Token", credential.user.refreshToken);
+                sessionStorage.setItem("Gamertag", result.player.gamertag);
             }
+
             return "";
         }
         catch (error)
@@ -97,6 +107,9 @@ export class Arrowhead
         {
             await signOut(this.auth);
             this.arrowheadUser = undefined;
+            // Remove from session
+            sessionStorage.removeItem("Auth Token");
+            sessionStorage.removeItem("Gamertag");
             return "";
         }
         catch (error)

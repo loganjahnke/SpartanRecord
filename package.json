@@ -1,6 +1,6 @@
 {
-  "name": "halo_api",
-  "version": "0.1.0",
+  "name": "spartan_record",
+  "version": "0.3.8",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.7.1",

@@ -10,7 +10,7 @@ interface AHAppBarProps
 	/** Callback for when the drawer is opened or closed */
 	handleDrawerToggle?: any;
 	/** Opens the authentication view */
-	openAuth: ((url: string) => void);
+	openAuth: ((url: string, tab?: string, subTab?: string) => void);
 }
 
 export function AHAppBar(props: AHAppBarProps)

@@ -1,21 +1,17 @@
 import { Box, Divider, Grid, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
-import { AHAppBar } from "../Assets/Components/Layout/AHAppBar";
-import { AHDrawer } from "../Assets/Components/Layout/AHDrawer";
-import { AHLoading } from "../Assets/Components/Layout/AHLoading";
 import { MedalTypeBreakdown } from "../Assets/Components/Medals/MedalTypeBreakdown";
 import { MedalType } from "../Objects/Pieces/Medal";
-import { Arrowhead } from "../Database/Arrowhead";
+import { ViewProps } from "./Props/ViewProps";
 
-export function MedalsView(props: { app: Arrowhead })
+export function MedalsView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app } = props;
+	const { app, setLoadingMessage } = props;
 	const { gamertag } = useParams();
-	const navigate = useNavigate();
 	//#endregion
 
 	//#region Refs
@@ -23,9 +19,7 @@ export function MedalsView(props: { app: Arrowhead })
 	//#endregion
 	
 	//#region State
-	const [loadingMessage, setLoadingMessage] = useState("");
 	const [mySR, setMySR] = useState(app.arrowheadUser?.player?.serviceRecord ?? new ServiceRecord());
-	const [mobileOpen, setMobileOpen] = useState(false);
 	//#endregion
 
 	const loadData = useCallback(async () => 
@@ -67,68 +61,43 @@ export function MedalsView(props: { app: Arrowhead })
 		loadData();
 	}, [gamertag]);
 
-	/**
-	 * On tab click, navigates to the right one
-	 */
-	const changeView = useCallback((url: string) => navigate(url), [navigate]);
-
-	function handleDrawerToggle()
-	{
-		setMobileOpen(!mobileOpen);
-	};
-
-	const container = window !== undefined ? () => window.document.body : undefined;
-
-	/** Logs out the current user */
-	async function logout()
-	{
-		setLoadingMessage("Logging out");
-		await app.Logout();
-		setLoadingMessage("");
-	}
-
 	return (
-		<Box sx={{ display: "flex", backgroundColor: "background.paper" }}>
-			<AHAppBar player={app.arrowheadUser?.player} handleDrawerToggle={handleDrawerToggle} openAuth={changeView} />
-			<AHLoading loadingMessage={loadingMessage} />
-			<AHDrawer loggedInUser={app.arrowheadUser} currentTab={9} container={container} mobileOpen={mobileOpen} switchTab={changeView} handleDrawerToggle={handleDrawerToggle} onLogout={logout} />
-	  		<Box component="main" sx={{ flexGrow: 1 }}>
-				<Toolbar />
-				<Divider />
-				<Box sx={{ p: 2 }}>
-					<Grid container spacing={2}>
-						<Grid item xs={12} md={6}>
-							<MedalTypeBreakdown type={MedalType.Spree} medals={mySR.medals} />
-						</Grid>
-						<Grid item xs={12} md={6}>
-							<MedalTypeBreakdown type={MedalType.MultiKill} medals={mySR.medals} />
-						</Grid>
-						<Grid item xs={12} lg={4}>
-							<MedalTypeBreakdown type={MedalType.CTF} medals={mySR.medals} />
-						</Grid>
-						<Grid item xs={12} lg={4}>
-							<MedalTypeBreakdown type={MedalType.Oddball} medals={mySR.medals} />
-						</Grid>
-						<Grid item xs={12} lg={4}>
-							<MedalTypeBreakdown type={MedalType.Strongholds} medals={mySR.medals} />
-						</Grid>
-						<Grid item xs={12} lg={4}>
-							<MedalTypeBreakdown type={MedalType.Stockpile} medals={mySR.medals} />
-						</Grid>
-						<Grid item xs={12} lg={8}>
-							<MedalTypeBreakdown type={MedalType.Sniper} medals={mySR.medals} />
-						</Grid>
-						<Grid item xs={12}>
-							<MedalTypeBreakdown type={MedalType.Weapons} medals={mySR.medals} />
-						</Grid>
-						<Grid item xs={12}>
-							<MedalTypeBreakdown type={MedalType.Boom} medals={mySR.medals} />
-						</Grid>
-						<Grid item xs={12}>
-							<MedalTypeBreakdown type={MedalType.Skill} medals={mySR.medals} />
-						</Grid>
+		<Box component="main" sx={{ flexGrow: 1 }}>
+			<Toolbar />
+			<Divider />
+			<Box sx={{ p: 2 }}>
+				<Grid container spacing={2}>
+					<Grid item xs={12} md={6}>
+						<MedalTypeBreakdown type={MedalType.Spree} medals={mySR.medals} />
 					</Grid>
-				</Box>
+					<Grid item xs={12} md={6}>
+						<MedalTypeBreakdown type={MedalType.MultiKill} medals={mySR.medals} />
+					</Grid>
+					<Grid item xs={12} lg={4}>
+						<MedalTypeBreakdown type={MedalType.CTF} medals={mySR.medals} />
+					</Grid>
+					<Grid item xs={12} lg={4}>
+						<MedalTypeBreakdown type={MedalType.Oddball} medals={mySR.medals} />
+					</Grid>
+					<Grid item xs={12} lg={4}>
+						<MedalTypeBreakdown type={MedalType.Strongholds} medals={mySR.medals} />
+					</Grid>
+					<Grid item xs={12} lg={4}>
+						<MedalTypeBreakdown type={MedalType.Stockpile} medals={mySR.medals} />
+					</Grid>
+					<Grid item xs={12} lg={8}>
+						<MedalTypeBreakdown type={MedalType.Sniper} medals={mySR.medals} />
+					</Grid>
+					<Grid item xs={12}>
+						<MedalTypeBreakdown type={MedalType.Weapons} medals={mySR.medals} />
+					</Grid>
+					<Grid item xs={12}>
+						<MedalTypeBreakdown type={MedalType.Boom} medals={mySR.medals} />
+					</Grid>
+					<Grid item xs={12}>
+						<MedalTypeBreakdown type={MedalType.Skill} medals={mySR.medals} />
+					</Grid>
+				</Grid>
 			</Box>
 		</Box>
 	);
