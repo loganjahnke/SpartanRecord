@@ -7,15 +7,15 @@ export class ArrowheadError
     /** Error code that specifies that profile update failed */
     public static ProfileUpdateErrorCode = 30016;
 
-    public static Dialog(props: { open: boolean, title: string, message: string, handleClose: any })
+    public static Dialog(props: { open: boolean, title: string, messages: string[], handleClose: any })
     {
-        const { open, title, message, handleClose } = props;
+        const { open, title, messages, handleClose } = props;
         
         return (
             <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
                 <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">{message}</DialogContentText>
+                    {messages.map(message => <DialogContentText>{message}</DialogContentText>)}                    
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} autoFocus>Okay</Button>

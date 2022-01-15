@@ -1,7 +1,6 @@
 import { Box, Divider, Grid, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { SpartanCompany } from "../Objects/Model/SpartanCompany";
 
 import { TopMedals } from "../Assets/Components/Medals/TopMedals";
 import { KillBreakdown } from "../Assets/Components/Breakdowns/KillBreakdown";
@@ -13,12 +12,14 @@ import { Player } from "../Objects/Model/Player";
 import { ServiceRecordChart } from "../Assets/Components/Charts/ServiceRecordChart";
 import { AHDrawer } from "../Assets/Components/Layout/AHDrawer";
 import { AHAppBar } from "../Assets/Components/Layout/AHAppBar";
-import { ArrowheadUser } from "../Objects/Model/ArrowheadUser";
 import { AHLoading } from "../Assets/Components/Layout/AHLoading";
 import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
 import { LevelBreakdown } from "../Assets/Components/Breakdowns/LevelBreakdown";
 import { Arrowhead } from "../Database/Arrowhead";
 import { PlayerCard } from "../Assets/Components/Cards/PlayerCard";
+import { GamertagSearch } from "./Subpage/GamertagSearch";
+import { VehicleBreakdown } from "../Assets/Components/Breakdowns/VehicleBreakdown";
+import { ServiceRecordFilters } from "./Subpage/ServiceRecordFilters";
 
 export function PlayerView(props: { app: Arrowhead })
 {
@@ -35,12 +36,15 @@ export function PlayerView(props: { app: Arrowhead })
 	//#region State
 	const [loadingMessage, setLoadingMessage] = useState("");
 	const [myPlayer, setMyPlayer] = useState(app.arrowheadUser?.player ?? new Player());
-	const [tab, setTab] = useState(1);
 	const [mobileOpen, setMobileOpen] = useState(false);
+	const [search, setSearch] = useState("");
+	const [showPerMatch, setShowPerMatch] = useState(false);
 	//#endregion
 
 	const loadData = useCallback(async () => 
 	{		
+		if (gamertag === "search") { return; }
+
 		// Check if we need to check Firebase or HaloDotAPI
 		setLoadingMessage("Loading Service Records");
 		
@@ -69,7 +73,12 @@ export function PlayerView(props: { app: Arrowhead })
 	useEffect(() =>
 	{
 		loadData();
-	}, [gamertag]);
+	}, [app, gamertag]);
+
+	useEffect(() =>
+	{
+		app.SyncProfile();
+	}, [app.auth.currentUser]);
 
 	/**
 	 * On tab click, navigates to the right one
@@ -91,56 +100,86 @@ export function PlayerView(props: { app: Arrowhead })
 		setLoadingMessage("");
 	}
 
+	/** Controlled search component */
+	function onGamertagTextChange(event: React.ChangeEvent<HTMLInputElement>)
+	{
+		setSearch(event.target.value);
+	};
+
+	/** When the search button is pressed */
+	function searchForGamertag()
+	{
+		if (search === "") { return; }
+		navigate(`/service_record/${search}`);
+	}
+
+	/** When enter is pressed */
+	function searchForGamertagViaEnter(event: React.KeyboardEvent<HTMLDivElement>)
+	{
+		if (event.key === "Enter")
+		{
+			searchForGamertag();
+		}
+	};
+
 	return (
-		<Box sx={{ display: "flex", backgroundColor: "background.paper" }}>
+		<Box sx={{ display: "flex", backgroundColor: "background.paper", height: "100vh" }}>
 			<AHAppBar player={app.arrowheadUser?.player} handleDrawerToggle={handleDrawerToggle} openAuth={changeView} />
 			<AHLoading loadingMessage={loadingMessage} />
-			<AHDrawer loggedInUser={app.arrowheadUser} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={changeView} handleDrawerToggle={handleDrawerToggle} onLogout={logout}/>
+			<AHDrawer loggedInUser={app.arrowheadUser} currentTab={0} container={container} mobileOpen={mobileOpen} switchTab={changeView} handleDrawerToggle={handleDrawerToggle} onLogout={logout}/>
 	  		<Box component="main" sx={{ flexGrow: 1 }}>
 				<Toolbar />
 				<Divider />
-				<Box sx={{ p: 2 }}>
-					<Grid container spacing={2}>
-						{/** Far left */}
-						<Grid container item spacing={2} xs={12} md={4} xl={4} sx={{ alignContent: "flex-start" }}>
-							<Grid item xs={12}>
-								<PlayerCard player={myPlayer} />
+				<Box sx={{ p: gamertag !== "search" && gamertag !== undefined ? 2 : 0, height: "calc(100% - 64px)" }}>
+					{gamertag !== "search" && gamertag !== undefined ? 
+						<Grid container spacing={2}>
+							{/** Far left */}
+							<Grid container item spacing={2} xs={12} md={4} xl={4} sx={{ alignContent: "flex-start" }}>
+								<Grid item xs={12} xl={7}>
+									<PlayerCard player={myPlayer} />
+								</Grid>
+								<Grid item xs={12} xl={5}>
+									<ServiceRecordFilters setPerMatch={setShowPerMatch} />
+								</Grid>
+								<Grid item xs={12}>
+									<MatchesBreakdown serviceRecord={myPlayer.serviceRecord} />
+								</Grid>
+								<Grid item xs={12}>
+									<KillBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+								</Grid>
+								<Grid item xs={12}>
+									<ShotsBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+								</Grid>
 							</Grid>
-							<Grid item xs={12}>
-								<MatchesBreakdown serviceRecord={myPlayer.serviceRecord} />
+							{/** Middle 6 */}
+							<Grid container item spacing={2} xs={12} md={4} xl={5} sx={{ alignContent: "flex-start" }}>
+								<Grid item xs={12}>
+									<TopMedals medals={myPlayer.serviceRecord.medals} matchesPlayed={myPlayer.serviceRecord.matchesPlayed} showPerMatch={showPerMatch} />
+								</Grid>
+								<Grid item xs={12}>
+									<ServiceRecordChart historicServiceRecords={myPlayer.historicStats ?? []} />
+								</Grid>
 							</Grid>
-							<Grid item xs={12}>
-								<KillBreakdown serviceRecord={myPlayer.serviceRecord} />
-							</Grid>
-							<Grid item xs={12}>
-								<ShotsBreakdown serviceRecord={myPlayer.serviceRecord} />
+							{/** Far right */}
+							<Grid container item spacing={2} xs={12} md={4} xl={3} sx={{ alignContent: "flex-start" }}>
+								<Grid item xs={12}>
+									<KDABreakdown serviceRecord={myPlayer.serviceRecord} />
+								</Grid>
+								<Grid item xs={12}>
+									<LevelBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+								</Grid>
+								<Grid item xs={12}>
+									<AssistBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+								</Grid>
+								<Grid item xs={12}>
+									<DamageBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+								</Grid>
+								<Grid item xs={12}>
+									<VehicleBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+								</Grid>
 							</Grid>
 						</Grid>
-						{/** Middle 6 */}
-						<Grid container item spacing={2} xs={12} md={4} xl={5} sx={{ alignContent: "flex-start" }}>
-							<Grid item xs={12}>
-								<TopMedals medals={myPlayer.serviceRecord.medals} />
-							</Grid>
-							<Grid item xs={12}>
-								<ServiceRecordChart historicServiceRecords={myPlayer.historicStats ?? []} />
-							</Grid>
-						</Grid>
-						{/** Far right */}
-						<Grid container item spacing={2} xs={12} md={4} xl={3} sx={{ alignContent: "flex-start" }}>
-							<Grid item xs={12}>
-								<KDABreakdown serviceRecord={myPlayer.serviceRecord} />
-							</Grid>
-							<Grid item xs={12}>
-								<LevelBreakdown serviceRecord={myPlayer.serviceRecord} />
-							</Grid>
-							<Grid item xs={12}>
-								<AssistBreakdown serviceRecord={myPlayer.serviceRecord} />
-							</Grid>
-							<Grid item xs={12}>
-								<DamageBreakdown serviceRecord={myPlayer.serviceRecord} />
-							</Grid>
-						</Grid>
-					</Grid>
+					: <GamertagSearch search={search} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} />}
 				</Box>
 			</Box>
 		</Box>

@@ -1,4 +1,4 @@
-import { Box, Checkbox, FormControlLabel, FormGroup, Grid, Typography } from "@mui/material";
+import { Box, Checkbox, FormControlLabel, FormGroup, Typography } from "@mui/material";
 import { useState } from "react";
 import { AllMedals } from "../../../Objects/Helpers/AllMedals";
 import { Medal, MedalType } from "../../../Objects/Pieces/Medal";

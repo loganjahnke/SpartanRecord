@@ -1,9 +1,7 @@
-import { Box, Tooltip } from "@mui/material";
-import { Halo5Converter } from "../../../Objects/Helpers/Halo5Converter";
-import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
-import { BreakdownTile } from "./BreakdownTile";
+import { Box } from "@mui/material";
+import { BreakdownProps, BreakdownTile } from "./BreakdownTile";
 
-export function KDABreakdown(props: { serviceRecord: ServiceRecord })
+export function KDABreakdown(props: BreakdownProps)
 {
 	const { serviceRecord } = props;
 

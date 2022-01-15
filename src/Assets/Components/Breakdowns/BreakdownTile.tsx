@@ -1,10 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
+import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 
-export enum BreakdownPosition
+export interface BreakdownProps
 {
-    first, middle, last
+    serviceRecord: ServiceRecord;
+    showPerMatch?: boolean;
 }
 
 interface BreakdownTileProps

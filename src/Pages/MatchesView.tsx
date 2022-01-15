@@ -1,12 +1,10 @@
 import { Box, Divider, Grid, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { SpartanCompany } from "../Objects/Model/SpartanCompany";
 
 import { Player } from "../Objects/Model/Player";
 import { AHDrawer } from "../Assets/Components/Layout/AHDrawer";
 import { AHAppBar } from "../Assets/Components/Layout/AHAppBar";
-import { ArrowheadUser } from "../Objects/Model/ArrowheadUser";
 import { AHLoading } from "../Assets/Components/Layout/AHLoading";
 import { MatchSummary } from "../Assets/Components/Match/MatchSummary";
 import { Arrowhead } from "../Database/Arrowhead";
@@ -26,7 +24,6 @@ export function MatchesView(props: { app: Arrowhead })
 	//#region State
 	const [loadingMessage, setLoadingMessage] = useState("");
 	const [myPlayer, setMyPlayer] = useState(app.arrowheadUser?.player ?? new Player());
-	const [tab, setTab] = useState(11);
 	const [mobileOpen, setMobileOpen] = useState(false);
 	//#endregion
 
@@ -84,7 +81,7 @@ export function MatchesView(props: { app: Arrowhead })
 		<Box sx={{ display: "flex", backgroundColor: "background.paper" }}>
 			<AHAppBar player={app.arrowheadUser?.player} handleDrawerToggle={handleDrawerToggle} openAuth={changeView} />
 			<AHLoading loadingMessage={loadingMessage} />
-			<AHDrawer loggedInUser={app.arrowheadUser} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={changeView} handleDrawerToggle={handleDrawerToggle} onLogout={logout} />
+			<AHDrawer loggedInUser={app.arrowheadUser} currentTab={10} container={container} mobileOpen={mobileOpen} switchTab={changeView} handleDrawerToggle={handleDrawerToggle} onLogout={logout} />
 	  		<Box component="main" sx={{ flexGrow: 1 }}>
 				<Toolbar />
 				<Divider />

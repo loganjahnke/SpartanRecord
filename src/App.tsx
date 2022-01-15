@@ -4,14 +4,11 @@ import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { ThemeProvider } from '@mui/material/styles';
 import { SpartanCompanyView } from "./Pages/SpartanCompanyView";
-import { SpartanCompany } from "./Objects/Model/SpartanCompany";
 import { ArrowheadTheme } from "./Assets/Theme/ArrowheadTheme";
 import { PlayerView } from "./Pages/PlayerView";
 import { MedalsView } from "./Pages/MedalsView";
-import { useCallback, useState } from "react";
-import { ArrowheadUser } from "./Objects/Model/ArrowheadUser";
+import { useCallback, useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
-import { Player } from "./Objects/Model/Player";
 import { MatchesView } from "./Pages/MatchesView";
 import { SingleMatchView } from "./Pages/SingleMatchView";
 import { FilteredView } from "./Pages/FilteredView";
@@ -39,7 +36,22 @@ const App = () =>
 	const auth = getAuth();
 	const analytics = getAnalytics();
 
-	const arrowhead = new Arrowhead(database, analytics, auth);
+	const [arrowhead] = useState(new Arrowhead(database, analytics, auth));
+
+	const updateUser = useCallback(async () =>
+	{
+		await arrowhead.SyncProfile();
+	}, [arrowhead]);
+
+	useEffect(() =>
+	{
+		updateUser();
+	}, [auth.currentUser]);
+
+	useEffect(() =>
+	{
+		updateUser();
+	}, []);
 
 	return (
 		<ThemeProvider theme={ArrowheadTheme.theme}>

@@ -1,14 +1,11 @@
-import { Avatar, Box, Button, Divider, Grid, List, ListItem, ListItemAvatar, ListItemText, styled, TextField, Toolbar, Typography } from "@mui/material";
-import { useCallback, useRef, useState } from "react";
+import { Avatar, Box, Button, Divider, Grid, List, ListItem, ListItemAvatar, ListItemText, TextField, Toolbar, Typography } from "@mui/material";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { SpartanCompany } from "../Objects/Model/SpartanCompany";
 
 import { AHDrawer } from "../Assets/Components/Layout/AHDrawer";
 import { AHAppBar } from "../Assets/Components/Layout/AHAppBar";
-import { ArrowheadUser } from "../Objects/Model/ArrowheadUser";
 import { AHLoading } from "../Assets/Components/Layout/AHLoading";
 import { Arrowhead } from "../Database/Arrowhead";
-import { ArrowheadTheme } from "../Assets/Theme/ArrowheadTheme";
 
 import TimelineIcon from '@mui/icons-material/Timeline';
 import MapIcon from '@mui/icons-material/Map';
@@ -25,7 +22,7 @@ export function AuthenticationView(props: { app: Arrowhead, registering?: boolea
 	//#region State
 	const [loadingMessage, setLoadingMessage] = useState("");
 	const [mobileOpen, setMobileOpen] = useState(false);
-    const [dialogAlertMessage, setDialogAlertMessage] = useState("");
+    const [dialogAlertMessages, setDialogAlertMessages] = useState<string[]>([]);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -52,13 +49,13 @@ export function AuthenticationView(props: { app: Arrowhead, registering?: boolea
 
         if (result)
         {
-            setDialogAlertMessage(result);
+            setDialogAlertMessages([result]);
         }
         else
         {
             navigate(`/service_record/${app.arrowheadUser?.user?.displayName}`);
         }
-    }, [app, navigate, email, password, confirmPassword, gamertag, setEmailValidation, setPasswordValidation, setConfirmPasswordValidation, setGamertagValidation, setLoadingMessage, setDialogAlertMessage]);
+    }, [app, navigate, email, password, setLoadingMessage, setDialogAlertMessages]);
 
     /**
      * Callback for when the sign up button is pressed
@@ -66,9 +63,10 @@ export function AuthenticationView(props: { app: Arrowhead, registering?: boolea
     const signUpClicked = useCallback(async () =>
     {
         let isValid = true;
+        let errors: string[] = [];
 
         // Is password good enough?
-        const errors = validatePassword(password);
+        errors = validatePassword(password);
         if (errors.length > 0)
         {
             isValid = false;
@@ -83,8 +81,10 @@ export function AuthenticationView(props: { app: Arrowhead, registering?: boolea
         if (password !== confirmPassword)
         {
             isValid = false;
-            setPasswordValidation("Passwords must match.");
-            setConfirmPasswordValidation("Passwords must match.");
+            const e = "Passwords must match.";
+            errors.push(e);
+            setPasswordValidation(e);
+            setConfirmPasswordValidation(e);
         }
         else
         {
@@ -95,19 +95,24 @@ export function AuthenticationView(props: { app: Arrowhead, registering?: boolea
         if (isValid)
         {
             setLoadingMessage("Signing up");
-            const result = await app.Register(email, password, gamertag);
+            const regResult = await app.Register(email, password, gamertag);
             setLoadingMessage("");
-
-            if (result)
-            {
-                setDialogAlertMessage(result);
-            }
+            if (regResult) { setDialogAlertMessages([regResult]); }
             else
             {
-                navigate(`/service_record/${app.arrowheadUser?.user?.displayName}`);
+                setLoadingMessage("Pulling statistics");
+                const newResult = await app.db.ProcessMatchesForNewUser(gamertag);
+                setLoadingMessage("");
+                if (newResult) { setDialogAlertMessages([newResult]); }
+                else
+                {
+                    navigate(`/service_record/${gamertag}`);
+                }
             }
+
         }
-    }, [app, navigate, email, password, confirmPassword, gamertag, setEmailValidation, setPasswordValidation, setConfirmPasswordValidation, setGamertagValidation, setLoadingMessage, setDialogAlertMessage]);
+        else { setDialogAlertMessages(errors); }
+    }, [app, navigate, email, password, confirmPassword, gamertag, setPasswordValidation, setConfirmPasswordValidation, setLoadingMessage, setDialogAlertMessages]);
 
 	function handleDrawerToggle()
 	{
@@ -130,6 +135,8 @@ export function AuthenticationView(props: { app: Arrowhead, registering?: boolea
     function changePassword(event: React.ChangeEvent<HTMLInputElement>)
     {
         setPassword(event.target.value);
+        if (!registering) { return; }
+
         // Is password good enough?
         const errors = validatePassword(event.target.value);
         if (errors.length > 0)
@@ -183,7 +190,7 @@ export function AuthenticationView(props: { app: Arrowhead, registering?: boolea
     /** Closes the dialog */
     function closeDialog()
     {
-        setDialogAlertMessage("");
+        setDialogAlertMessages([]);
     }
 
 	const container = window !== undefined ? () => window.document.body : undefined;
@@ -200,7 +207,7 @@ export function AuthenticationView(props: { app: Arrowhead, registering?: boolea
 			<AHLoading loadingMessage={loadingMessage} />
 			<AHDrawer loggedInUser={app.arrowheadUser} currentTab={-1} container={container} mobileOpen={mobileOpen} switchTab={changeView} handleDrawerToggle={handleDrawerToggle} onLogout={logout} />
 	  		<Box component="main" sx={{ flexGrow: 1, height: "100%" }}>
-                <ArrowheadError.Dialog open={!!dialogAlertMessage} handleClose={closeDialog} title="Something went wrong..." message={dialogAlertMessage} />
+                <ArrowheadError.Dialog open={dialogAlertMessages.length > 0} handleClose={closeDialog} title="Something went wrong..." messages={dialogAlertMessages} />
 				<Toolbar />
 				<Divider />
 				<Box sx={{ p: 2 }}>

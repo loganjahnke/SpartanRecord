@@ -1,5 +1,5 @@
 import { Analytics, logEvent } from "firebase/analytics";
-import { Auth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import { Auth, browserLocalPersistence, createUserWithEmailAndPassword, sendEmailVerification, setPersistence, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 import { Database } from "firebase/database";
 import { ArrowheadError } from "../Objects/Helpers/ArrowheadError";
 import { ArrowheadUser } from "../Objects/Model/ArrowheadUser";
@@ -10,17 +10,14 @@ export class Arrowhead
 {
     public db: ArrowheadFirebase;
     public arrowheadUser?: ArrowheadUser;
+    public auth: Auth;
 
-    private __database: Database;
     private __analytics: Analytics;
-    private __auth: Auth;
 
     constructor(database: Database, analytics: Analytics, auth: Auth)
     {
-        this.__database = database;
         this.__analytics = analytics;
-        this.__auth = auth;
-
+        this.auth = auth;
         this.db = new ArrowheadFirebase(database);
     }
 
@@ -37,7 +34,8 @@ export class Arrowhead
         try
         {
             // Create user
-            const credential = await createUserWithEmailAndPassword(this.__auth, email, password);
+            await setPersistence(this.auth, browserLocalPersistence);
+            const credential = await createUserWithEmailAndPassword(this.auth, email, password);
             this.arrowheadUser = new ArrowheadUser();
             this.arrowheadUser.user = credential.user;
             this.arrowheadUser.player = new Player(gamertag);
@@ -52,6 +50,7 @@ export class Arrowhead
 
             // Send email verification
             await sendEmailVerification(this.arrowheadUser.user);
+
             return "";
         }
         catch (error)
@@ -70,7 +69,8 @@ export class Arrowhead
     {
         try
         {
-            const credential = await signInWithEmailAndPassword(this.__auth, email, password);
+            await setPersistence(this.auth, browserLocalPersistence);
+            const credential = await signInWithEmailAndPassword(this.auth, email, password);
             this.arrowheadUser = new ArrowheadUser();
             this.arrowheadUser.user = credential.user;
             const result = await this.db.GetProfile(credential.user.uid);
@@ -95,7 +95,7 @@ export class Arrowhead
     {
         try
         {
-            await signOut(this.__auth);
+            await signOut(this.auth);
             this.arrowheadUser = undefined;
             return "";
         }
@@ -112,10 +112,10 @@ export class Arrowhead
      */
     public async UpdateGamertag(gamertag: string): Promise<string>
     {
-        if (!this.__auth.currentUser) { return "No user signed in, cannot change gamertag"; }
+        if (!this.auth.currentUser) { return "No user signed in, cannot change gamertag"; }
         try
         {
-            await updateProfile(this.__auth.currentUser, { displayName: gamertag });
+            await updateProfile(this.auth.currentUser, { displayName: gamertag });
             return "";
         }
         catch (error)
@@ -178,6 +178,25 @@ export class Arrowhead
     {
         console.log(event);
         //logEvent(this.__analytics, event, params);
+    }
+    //#endregion
+
+    //#region Profile
+    /**
+     * Syncs the profile with the server
+     */
+    public async SyncProfile()
+    {
+        if (this.auth?.currentUser)
+        {
+            const result = await this.db.GetProfile(this.auth.currentUser.uid);
+            this.arrowheadUser = new ArrowheadUser(this.auth.currentUser);
+            if (result)
+            {
+                this.arrowheadUser.player = result.player;
+                this.arrowheadUser.spartanCompany = result.spartanCompany;
+            }
+        }
     }
     //#endregion
 }

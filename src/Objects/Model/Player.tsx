@@ -1,6 +1,7 @@
 import { HaloMap, HaloMode, HaloOutcome, HaloRanked, ServiceRecordFilter } from "../../Database/ArrowheadFirebase";
 import { Appearance } from "./Appearance";
-import { Match, MatchFilter } from "./Match";
+import { CSRS } from "./CSRS";
+import { Match } from "./Match";
 import { ServiceRecord } from "./ServiceRecord";
 
 export class Player
@@ -17,6 +18,8 @@ export class Player
     public appearance: Appearance;
     /** All matches */
     public matches: Match[];
+    /** The player's ranks */
+    public ranks: CSRS[];
 
     /** Match indexes for maps, stored locally */
     public MatchIDsToMatchIndex: Map<string, number> = new Map<string, number>();
@@ -29,7 +32,7 @@ export class Player
     /** Service record filtered per outcome, stored locally */
     public OutcomeToServiceRecord: Map<string, ServiceRecord> = new Map<HaloOutcome, ServiceRecord>();
 
-    constructor(gamertag?: string, serviceRecord?: ServiceRecord, history?: ServiceRecord[], appearance?: Appearance, matches?: Match[])
+    constructor(gamertag?: string, serviceRecord?: ServiceRecord, history?: ServiceRecord[], appearance?: Appearance, matches?: Match[], ranks?: CSRS[])
     {
         this.gamertag = gamertag ?? "";
         this.serviceRecord = serviceRecord ?? new ServiceRecord();
@@ -37,6 +40,7 @@ export class Player
         this.appearance = appearance ?? new Appearance();
         this.matches = matches ?? [];
         this.placement = new ServiceRecord();
+        this.ranks = ranks ?? [];
     }
 
     /**
@@ -110,5 +114,25 @@ export class Player
             case ServiceRecordFilter.Outcome:
                 return this.OutcomeToServiceRecord.get(filter as HaloOutcome);
         }
+    }
+
+    /**
+     * Gets the highest current CSRS
+     * @returns the highest current CSRS
+     */
+    public GetHighestCurrentRank(): CSRS | undefined
+    {
+        if (!this.ranks || this.ranks.length <= 0) { return undefined; }
+
+        let highest: CSRS = this.ranks[0];
+        for (const rank of this.ranks)
+        {
+            if (rank.ranks.current.value > highest.ranks.current.value)
+            {
+                highest = rank;
+            }
+        }
+
+        return highest;
     }
 }

@@ -1,6 +1,6 @@
 import { SpartanCompany } from "./SpartanCompany";
 import { Player } from "./Player";
-import { Auth, User } from "firebase/auth";
+import { User } from "firebase/auth";
 
 export class ArrowheadUser
 {
@@ -8,7 +8,8 @@ export class ArrowheadUser
     public player?: Player;
     public user?: User;
 
-    constructor()
+    constructor(user?: User | null)
     {
+        this.user = user ?? undefined;
     }
 }

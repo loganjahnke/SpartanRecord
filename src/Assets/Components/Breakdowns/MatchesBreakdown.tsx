@@ -1,9 +1,8 @@
 import { Box } from "@mui/material";
-import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
-import { BreakdownPosition, BreakdownTile } from "./BreakdownTile";
+import { BreakdownProps, BreakdownTile } from "./BreakdownTile";
 
-export function MatchesBreakdown(props: { serviceRecord: ServiceRecord })
+export function MatchesBreakdown(props: BreakdownProps)
 {
 	const { serviceRecord } = props;
 

@@ -170,6 +170,7 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 							case HistoricDataSets.KillsPerGame: return sr.summary.kills / sr.matchesPlayed;
 							case HistoricDataSets.DeathsPerGame: return sr.summary.deaths / sr.matchesPlayed;
 							case HistoricDataSets.AssistsPerGame: return sr.summary.assists / sr.matchesPlayed;
+							default: return sr.damage.average;
 						}
 					}),
 				}
@@ -189,21 +190,27 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 	};
 	
 	return (
-		<Box sx={{ backgroundColor: "divider", borderRadius: 3, pt: 2 }}>
-			<Box sx={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-				<FormControl size="small" sx={{ minWidth: "125px" }}>
-					<InputLabel id="data-set-label">Data Set</InputLabel>
-					<Select labelId="data-set-label" id="data-set" value={dataSet.current} label="Data Set" onChange={changeDataSet}>
-						<MenuItem value={HistoricDataSets.WinRate}>{HistoricDataSets.WinRate}</MenuItem>
-						<MenuItem value={HistoricDataSets.KDA}>{HistoricDataSets.KDA}</MenuItem>
-						<MenuItem value={HistoricDataSets.KDR}>{HistoricDataSets.KDR}</MenuItem>
-						<MenuItem value={HistoricDataSets.KillsPerGame}>{HistoricDataSets.KillsPerGame}</MenuItem>
-						<MenuItem value={HistoricDataSets.DeathsPerGame}>{HistoricDataSets.DeathsPerGame}</MenuItem>
-						<MenuItem value={HistoricDataSets.AssistsPerGame}>{HistoricDataSets.AssistsPerGame}</MenuItem>
-					</Select>
-				</FormControl>
+		historicServiceRecords.length > 2 
+			?
+			<Box sx={{ backgroundColor: "divider", borderRadius: 3, pt: 2 }}>
+				<Box sx={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+					<FormControl size="small" sx={{ minWidth: "125px" }}>
+						<InputLabel id="data-set-label">Data Set</InputLabel>
+						<Select labelId="data-set-label" id="data-set" value={dataSet.current} label="Data Set" onChange={changeDataSet}>
+							<MenuItem value={HistoricDataSets.WinRate}>{HistoricDataSets.WinRate}</MenuItem>
+							<MenuItem value={HistoricDataSets.KDA}>{HistoricDataSets.KDA}</MenuItem>
+							<MenuItem value={HistoricDataSets.KDR}>{HistoricDataSets.KDR}</MenuItem>
+							<MenuItem value={HistoricDataSets.KillsPerGame}>{HistoricDataSets.KillsPerGame}</MenuItem>
+							<MenuItem value={HistoricDataSets.DeathsPerGame}>{HistoricDataSets.DeathsPerGame}</MenuItem>
+							<MenuItem value={HistoricDataSets.AssistsPerGame}>{HistoricDataSets.AssistsPerGame}</MenuItem>
+						</Select>
+					</FormControl>
+				</Box>
+				<Line options={options} data={chartData.labels.length === 0 ? initialChartData : chartData} />
 			</Box>
-			<Line options={options} data={chartData.labels.length === 0 ? initialChartData : chartData} />
-		</Box>
+			: 
+			<Box sx={{ p: 2, backgroundColor: "divider", borderRadius: 3, display: "flex", justifyContent: "center", alignItems: "center" }}>
+				<Typography variant="body1">Not enough data to show historic records.</Typography>
+			</Box>
 	);
 }

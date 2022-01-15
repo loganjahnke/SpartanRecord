@@ -1,12 +1,11 @@
 import { Box, LinearProgress, linearProgressClasses, styled, Tooltip, Typography } from "@mui/material";
 import { Halo5Converter } from "../../../Objects/Helpers/Halo5Converter";
-import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
-import { BreakdownTile } from "./BreakdownTile";
+import { BreakdownProps, BreakdownTile } from "./BreakdownTile";
 
-export function LevelBreakdown(props: { serviceRecord: ServiceRecord })
+export function LevelBreakdown(props: BreakdownProps)
 {
-	const { serviceRecord } = props;
+	const { serviceRecord, showPerMatch } = props;
 
 	const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 		height: 10,
@@ -30,7 +29,7 @@ export function LevelBreakdown(props: { serviceRecord: ServiceRecord })
 	return (
 		<Box sx={{ backgroundColor: "divider", borderRadius: 3, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
             <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "space-evenly", width: "100%" }}>
-                <BreakdownTile title="Total Score" value={serviceRecord.totalScore} isMainStat />
+                <BreakdownTile title="Total Score" value={showPerMatch ? serviceRecord.totalScore / serviceRecord.matchesPlayed : serviceRecord.totalScore} isMainStat />
                 <BreakdownTile title="Spartan Rank" value={Halo5Converter.GetLevelFromScore(serviceRecord.totalScore)} isMainStat />
             </Box>
 			<Box sx={{ display: "flex", flexDirection: "row", width: "90%", alignItems: "center", m: 1, mt: 0 }}>

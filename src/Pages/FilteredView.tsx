@@ -18,6 +18,8 @@ import { MatchFilter } from "../Objects/Model/Match";
 import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
 import { LevelBreakdown } from "../Assets/Components/Breakdowns/LevelBreakdown";
 import { Arrowhead } from "../Database/Arrowhead";
+import { PlayerCard } from "../Assets/Components/Cards/PlayerCard";
+import { ServiceRecordFilters } from "./Subpage/ServiceRecordFilters";
 
 export function FilteredView(props: { app: Arrowhead })
 {
@@ -32,6 +34,7 @@ export function FilteredView(props: { app: Arrowhead })
 	//#endregion
 	
 	//#region State
+	const [showPerMatch, setShowPerMatch] = useState(false);
 	const [loadingMessage, setLoadingMessage] = useState("");
 	const [myPlayer, setMyPlayer] = useState(app.arrowheadUser?.player ?? new Player());
     const [sr, setSR] = useState(myPlayer.serviceRecord ?? new ServiceRecord());
@@ -64,6 +67,7 @@ export function FilteredView(props: { app: Arrowhead })
             }
             
 			app.LogViewServiceRecord(gamertag, tree as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome);
+			setMyPlayer(player);
             setSR(sr);
 		}
 
@@ -118,6 +122,12 @@ export function FilteredView(props: { app: Arrowhead })
                             <Grid item xs={12}>
                                 <MatchCard image={image} title={MatchFilter.GetFilterTitle(filter)} />
                             </Grid>
+							<Grid item xs={12} lg={6}>
+                                <PlayerCard player={myPlayer} noImages />
+                            </Grid>
+							<Grid item xs={12} lg={6}>
+                                <ServiceRecordFilters setPerMatch={setShowPerMatch} />
+                            </Grid>
                             <Grid item xs={12}>
 								<MatchesBreakdown serviceRecord={sr} />
 							</Grid>
@@ -125,10 +135,10 @@ export function FilteredView(props: { app: Arrowhead })
 						{/** Middle 5 */}
 						<Grid container item spacing={2} xs={12} md={4} xl={5} sx={{ alignContent: "flex-start" }}>
 							<Grid item xs={12}>
-								<KillBreakdown serviceRecord={sr} />
+								<KillBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
-								<ShotsBreakdown serviceRecord={sr} />
+								<ShotsBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
 							</Grid>
 						</Grid>
 						{/** Far right */}
@@ -137,13 +147,13 @@ export function FilteredView(props: { app: Arrowhead })
 								<KDABreakdown serviceRecord={sr} />
 							</Grid>
 							<Grid item xs={12}>
-								<LevelBreakdown serviceRecord={sr} />
+								<LevelBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
-								<AssistBreakdown serviceRecord={sr} />
+								<AssistBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
-								<DamageBreakdown serviceRecord={sr} />
+								<DamageBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
 							</Grid>
 						</Grid>
 					</Grid>

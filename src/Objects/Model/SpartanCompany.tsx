@@ -76,4 +76,7 @@ export class SpartanCompany
 
         return sr;
     }
+
+    /** Does this spartan company exist? */
+    public Exists(): boolean { return this.members?.length > 0; }
 }

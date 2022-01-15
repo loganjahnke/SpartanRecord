@@ -7,6 +7,8 @@ import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { Match } from "../Objects/Model/Match";
 import { SpartanCompany } from "../Objects/Model/SpartanCompany";
 import { ArrowheadUser } from "../Objects/Model/ArrowheadUser";
+import { getFunctions, httpsCallable } from "firebase/functions";
+import { CSRS } from "../Objects/Model/CSRS";
 
 export enum HaloMap
 {
@@ -67,6 +69,8 @@ export class ArrowheadFirebase
 
 	/** The firebase database */
 	private __database: Database;
+	/** UID to player */
+	private __userMap: Map<string, ArrowheadUser> = new Map<string, ArrowheadUser>();
 	/** All players, locally stored */
 	private __allPlayers: Map<string, Player> = new Map<string, Player>();
 	/** All matches with details for just the player, locally stored */
@@ -87,9 +91,9 @@ export class ArrowheadFirebase
 	 */
 	public async SaveNewUser(user: ArrowheadUser): Promise<string>
 	{
-		if (user.user)
+		if (user.user?.displayName)
 		{
-			await set(child(ref(this.__database), `user/${user.user?.uid}`), { gamertag: user.user.displayName });
+			await set(child(ref(this.__database), `user/${user.user.uid}`), { gamertag: user.user.displayName });
 			return "";
 		}
 		else
@@ -105,16 +109,54 @@ export class ArrowheadFirebase
 	 */
 	public async GetProfile(uid: string): Promise<undefined | { player: Player, spartanCompany: SpartanCompany }>
     {
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "GetProfile()", uid); }
+
+		// Try to sync it locally
+		const localUser = this.__userMap.get(uid);
+		if (localUser && localUser.player && localUser.spartanCompany)
+		{
+			if (this.IS_DEBUGGING) { Debugger.Continue("Locally"); }
+
+			return {
+				player: localUser.player,
+				spartanCompany: localUser.spartanCompany
+			};
+		}
+
+		// Otherwise go to Firebase
         const snapshot = await get(child(ref(this.__database), `user/${uid}`));
 		const result = snapshot?.exists() ? snapshot.val() : null;
 
 		if (!result) { return undefined; }
 
+		// Save it locally
+		const user = new ArrowheadUser();
+		user.player = await this.GetPlayer(result.gamertag) ?? new Player(result.gamertag);
+		user.spartanCompany = new SpartanCompany(result.spartanCompany);
+
+		this.__userMap.set(uid, user);
+		if (this.IS_DEBUGGING) { Debugger.Continue("Firebase"); }
+
 		return {
-			player: new Player(result.gamertag),
-			spartanCompany: new SpartanCompany(result.spartanCompany)
+			player: user.player,
+			spartanCompany: user.spartanCompany
 		}
     }
+
+	/**
+	 * Process the statistics for a new user
+	 * @param gamertag the gamertag
+	 * @returns error message if there is one
+	 */
+	public async ProcessMatchesForNewUser(gamertag: string): Promise<string>
+	{
+		// Get statistics
+		const getNewUserStats = httpsCallable(getFunctions(), "getNewUserStats");
+		const result: any = await getNewUserStats({ gamertag: gamertag });
+		if (!result.success) { return result.message; }
+		if (result.message) { console.log("NEW USER WARNING: " + result.message); }
+		return "";
+	}
 	//#endregion
 
 	//#region Members
@@ -128,7 +170,7 @@ export class ArrowheadFirebase
 		if (membersSnapshot?.exists())
 		{
 			spartanCompany.members = Object.keys(membersSnapshot.val());
-			return true;
+			return spartanCompany.members.length > 0;
 		}
 
 		return false;
@@ -149,8 +191,9 @@ export class ArrowheadFirebase
 		const historicServiceRecords = getHistoricSR ? await this.GetHistoricServiceRecord(gamertag) : [];
 		const appearance = await this.GetAppearance(gamertag);
 		const matches = await this.GetMatches(gamertag, matchesToGet, 0);
+		const ranks = await this.GetRanks(gamertag);
 		
-		return new Player(gamertag, serviceRecord, historicServiceRecords, appearance, matches);
+		return new Player(gamertag, serviceRecord, historicServiceRecords, appearance, matches, ranks);
 	}
 	//#endregion
 
@@ -178,6 +221,59 @@ export class ArrowheadFirebase
 		if (this.IS_DEBUGGING) { Debugger.Print(false, "GetLastUpdate()", undefined, this); }
 		return this.lastUpdate ?? new Date();
 	}
+	//#endregion
+
+	//#region CSRS
+	/**
+	 * Gets the appearance for a gamertag, checks locally before querying Firebase
+	 * @param gamertag the gamertag to get stats from
+	 * @returns The current appearance for the gamertag
+	 */
+	public async GetRanks(gamertag: string): Promise<CSRS[] | undefined>
+	{
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "GetRanks()", gamertag); }
+		
+		// Check locally
+		let player = this.__allPlayers.get(gamertag);
+		if (player && player.ranks?.length > 0) 
+		{ 
+			if (this.IS_DEBUGGING) { Debugger.Continue("Locally"); }
+			return player.ranks; 
+		}
+
+		// Otherwise get from Firebase
+		const reference = `csrs/${gamertag}`;
+		const ranksSnapshot = await get(child(ref(this.__database), reference));
+		if (ranksSnapshot?.exists())
+		{
+			if (this.IS_DEBUGGING) { Debugger.Continue("Firebase"); }
+
+			const ranks = [];
+			const result = ranksSnapshot.val();
+			for (const data of result.data)
+			{
+				ranks.push(new CSRS(data));
+			}
+
+			// Store locally
+			this.__storeRanksLocally(gamertag, ranks);
+			return ranks;
+		}
+
+		return undefined;
+	}
+ 
+	  /**
+	  * Stores the service record into the AllUserStatistics map if it's not already in there
+	  * @param serviceRecord The service record to push in
+	  * @param pull The pull to push in
+	  */
+	 private __storeRanksLocally(gamertag: string, ranks: CSRS[]): void
+	 {
+		 const player = this.__allPlayers.get(gamertag) ?? new Player(gamertag);
+		 player.ranks = ranks;
+		 this.__allPlayers.set(gamertag, player);
+	 }
 	//#endregion
 
 	//#region Player Appearence 
@@ -212,7 +308,13 @@ export class ArrowheadFirebase
 			return appearance;
 		}
 
-		return undefined;
+		// Otherwise get from AutoCode
+		const result = await this.__getPlayerAppearanceFromHaloDotAPI(gamertag);
+		const appearance = new Appearance(result);
+		this.__storeAppearanceLocally(gamertag, appearance);
+		if (this.IS_DEBUGGING) { Debugger.Continue("Autocode"); }
+
+		return appearance;
 	}
 
 	 /**
@@ -253,14 +355,20 @@ export class ArrowheadFirebase
 		{
 			if (this.IS_DEBUGGING) { Debugger.Continue("Firebase"); }
 			const result = gamertagSnapshot.val();
-			const serviceRecord = new ServiceRecord(result);
+			sr = new ServiceRecord(result);
 
 			// Store locally for current pull
-			this.__storeCurrentServiceRecordLocally(gamertag, serviceRecord);
-			return serviceRecord;
+			this.__storeCurrentServiceRecordLocally(gamertag, sr);
+			return sr;
 		}
 
-		return undefined;
+		// Otherwise go to HaloDotAPI
+		const srJSON = await this.__getServiceRecordFromHaloDotAPI(gamertag);
+		sr = new ServiceRecord(srJSON);
+		this.__storeCurrentServiceRecordLocally(gamertag, sr);
+		if (this.IS_DEBUGGING) { Debugger.Continue("Autocode"); }
+
+		return sr;
 	}
 
 	/**
@@ -291,7 +399,7 @@ export class ArrowheadFirebase
 
 			for (const key in result)
 			{
-				if (key === "25") { continue; }
+				if (+key < 50) { continue; }
 				historicSRs.push(new ServiceRecord(result[key]));
 			}
 
@@ -719,12 +827,44 @@ export class ArrowheadFirebase
 
 	//#region Autocode
 	/**
+	 * Gets the service record from HaloDotAPI for a specific gamertag
+	 * @param gamertag the gamertag
+	 * @returns JSON result of the service record for a gamertag
+	 */
+	private async __getServiceRecordFromHaloDotAPI(gamertag: string): Promise<any>
+	{
+		const response = await fetch("https://0-3-6--ArrowheadCompany.loganjahnke.autocode.gg/service_record", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({gamertag: gamertag})
+		});
+
+		return await response.json();
+	}
+
+	/**
+	 * Gets the appearance from HaloDotAPI for a specific gamertag
+	 * @param gamertag the gamertag
+	 * @returns the URLs for the player appearance
+	 */
+	private async __getPlayerAppearanceFromHaloDotAPI(gamertag: string): Promise<any>
+	{
+		const response = await fetch("https://0-3-6--ArrowheadCompany.loganjahnke.autocode.gg/appearance", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({gamertag: gamertag})
+		});
+
+		return await response.json();
+	}
+
+	/**
 	 * Gets the match from HaloDotAPI
 	 * @param gamertag the gamertag
 	 */
 	 private async __getMatchFromHaloDotAPI(id: string): Promise<any>
 	 {
-		 const response = await fetch("https://0-3-4--ArrowheadCompany.loganjahnke.autocode.gg/match", {
+		 const response = await fetch("https://0-3-6--ArrowheadCompany.loganjahnke.autocode.gg/match", {
 			 method: "POST",
 			 headers: { "Content-Type": "application/json" },
 			 body: JSON.stringify({
@@ -741,7 +881,7 @@ export class ArrowheadFirebase
 	 */
 	private async __getMatchesFromHaloDotAPI(gamertag: string, count: number, offset: number): Promise<any>
 	{
-		const response = await fetch("https://0-3-4--ArrowheadCompany.loganjahnke.autocode.gg/matches", {
+		const response = await fetch("https://0-3-6--ArrowheadCompany.loganjahnke.autocode.gg/matches", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({

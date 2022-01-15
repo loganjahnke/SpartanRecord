@@ -9,7 +9,6 @@ import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import LogoutIcon from '@mui/icons-material/Logout';
-import HomeIcon from '@mui/icons-material/Home';
 
 interface AHDrawerProps
 {
@@ -50,45 +49,50 @@ export function AHDrawer(props: AHDrawerProps)
 		const gamertag = loggedInUser?.user?.displayName;
 		switch (newValue)
 		{
-			case 12:
-				switchTab(`/company/${loggedInUser?.spartanCompany?.name ?? "join"}`);
+			case 11:
+				switchTab(`/company/${loggedInUser?.spartanCompany?.name ?? "search"}`);
 				break;
 			case 0:
-				switchTab(`/`);
+				if (gamertag) { switchTab(`/service_record/${gamertag}`); }
+				else { switchTab("/service_record/search"); }
 				break;
 			case 1:
-				if (gamertag) { switchTab(`/service_record/${gamertag}`); }
-				else { switchTab("/something_went_wrong"); }
+				if (!gamertag)
+				{
+					switchTab("/company/search");
+				}
+				else
+				{
+					setExpandMaps(!expandMaps);
+					setExpandModes(false);
+					setExpandOutcome(false);
+					setExpandRanked(false);
+				}
+
 				break;
-			case 2:
-				setExpandMaps(!expandMaps);
-				setExpandModes(false);
-				setExpandOutcome(false);
-				setExpandRanked(false);
-				break;
-			case 4:
+			case 3:
 				setExpandMaps(false);
 				setExpandModes(!expandModes);
 				setExpandOutcome(false);
 				setExpandRanked(false);
 				break;
-			case 6:
+			case 5:
 				setExpandMaps(false);
 				setExpandModes(false);
 				setExpandOutcome(!expandOutcome);
 				setExpandRanked(false);
 				break;
-			case 8:
+			case 7:
 				setExpandMaps(false);
 				setExpandModes(false);
 				setExpandOutcome(false);
 				setExpandRanked(!expandRanked);
 				break;
-			case 10:
+			case 9:
 				if (gamertag) { switchTab(`/medals/${gamertag}`); }
 				else { switchTab("/something_went_wrong"); }
 				break;
-			case 11:
+			case 10:
 				if (gamertag) { switchTab(`/matches/${gamertag}`); }
 				else { switchTab("/something_went_wrong"); }
 				break;
@@ -180,19 +184,19 @@ export function AHDrawer(props: AHDrawerProps)
 		}
 	}
 
-	useEffect(() =>
+	/** Goes home */
+	function goHome()
 	{
-		
-	}, [loggedInUser]);
+		switchTab("/");
+	}
 	
 	//#region Drawer
 	const drawer = (
 		<Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
-			<Toolbar><Typography variant="h6" sx={{ padding: 2 }}>Halo Team Stats</Typography></Toolbar>
+			<Toolbar><Button className="ahTab" onClick={goHome}>SpartanCompany.com</Button></Toolbar>
 			<Divider flexItem />
 				{loggedInUser?.user ? 
 				<Tabs orientation="vertical" value={currentTab === 2 || currentTab === 4 || currentTab === 6 || currentTab === 8 ? -1 : currentTab} onChange={tabClicked} sx={{ mt: 5 }}>
-					<Tab className="ahTab" label="Home" icon={<HomeIcon />} iconPosition="start" />
 					<Tab className="ahTab" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" />
 					<Tab className="ahTab" label="Maps" icon={expandMaps ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Collapse in={expandMaps} timeout="auto" unmountOnExit>
@@ -244,7 +248,8 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab className="ahTab" label={loggedInUser?.spartanCompany?.name ? loggedInUser.spartanCompany.name + " Company" : "Create or Join Spartan Company"} icon={<GroupsIcon />} iconPosition="start" />
 				</Tabs> 
 				: <Tabs orientation="vertical" value={currentTab} onChange={tabClicked} sx={{ mt: 5 }}>
-					<Tab className="ahTab" label="Home" icon={<HomeIcon />} iconPosition="start" />
+					<Tab className="ahTab" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" />
+					<Tab className="ahTab" label="Spartan Company" icon={<GroupsIcon />} iconPosition="start" />
 				</Tabs>}
 			<Box sx={{ flexGrow: 1 }}></Box>
 			{loggedInUser?.user ? <Button sx={{ alignSelf: "flex-start", justifySelf: "flex-end", mb: 2, ml: 2 }} startIcon={<LogoutIcon />} onClick={() => onLogout()}>Log Out</Button> : undefined}

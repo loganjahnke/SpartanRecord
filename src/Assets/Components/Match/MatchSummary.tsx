@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from "@mui/material";
+import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import { Match } from "../../../Objects/Model/Match";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 

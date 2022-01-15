@@ -2,8 +2,6 @@ import { AppBar, Toolbar, IconButton, Divider, Typography, Box, Button } from "@
 import { Player } from "../../../Objects/Model/Player";
 
 import MenuIcon from '@mui/icons-material/Menu';
-import { Signup } from "../Authentication/Signup";
-import { useState } from "react";
 
 interface AHAppBarProps
 {

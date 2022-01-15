@@ -25,7 +25,6 @@ export function MedalsView(props: { app: Arrowhead })
 	//#region State
 	const [loadingMessage, setLoadingMessage] = useState("");
 	const [mySR, setMySR] = useState(app.arrowheadUser?.player?.serviceRecord ?? new ServiceRecord());
-	const [tab, setTab] = useState(10);
 	const [mobileOpen, setMobileOpen] = useState(false);
 	//#endregion
 
@@ -92,7 +91,7 @@ export function MedalsView(props: { app: Arrowhead })
 		<Box sx={{ display: "flex", backgroundColor: "background.paper" }}>
 			<AHAppBar player={app.arrowheadUser?.player} handleDrawerToggle={handleDrawerToggle} openAuth={changeView} />
 			<AHLoading loadingMessage={loadingMessage} />
-			<AHDrawer loggedInUser={app.arrowheadUser} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={changeView} handleDrawerToggle={handleDrawerToggle} onLogout={logout} />
+			<AHDrawer loggedInUser={app.arrowheadUser} currentTab={9} container={container} mobileOpen={mobileOpen} switchTab={changeView} handleDrawerToggle={handleDrawerToggle} onLogout={logout} />
 	  		<Box component="main" sx={{ flexGrow: 1 }}>
 				<Toolbar />
 				<Divider />
