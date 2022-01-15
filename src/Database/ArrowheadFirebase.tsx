@@ -800,7 +800,8 @@ export class ArrowheadFirebase
 	 */
 	private __getMatchWithDetailsLocally(id: string): Match | undefined
 	{
-		return this.__allMatches.get(id);
+		const match = this.__allMatches.get(id);
+		return match;
 	}
 
 	/**
@@ -821,7 +822,7 @@ export class ArrowheadFirebase
 	 */
 	private __getGamertagMatchLocally(id: string): Match | undefined
 	{
-		return this.__allMatches.get(id);
+		return this.__allMatchesForGamertag.get(id);
 	}
 	//#endregion
 
@@ -833,7 +834,7 @@ export class ArrowheadFirebase
 	 */
 	private async __getServiceRecordFromHaloDotAPI(gamertag: string): Promise<any>
 	{
-		const response = await fetch("https://0-3-6--ArrowheadCompany.loganjahnke.autocode.gg/service_record", {
+		const response = await fetch("https://0-3-8--ArrowheadCompany.loganjahnke.autocode.gg/service_record", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({gamertag: gamertag})
@@ -849,7 +850,7 @@ export class ArrowheadFirebase
 	 */
 	private async __getPlayerAppearanceFromHaloDotAPI(gamertag: string): Promise<any>
 	{
-		const response = await fetch("https://0-3-6--ArrowheadCompany.loganjahnke.autocode.gg/appearance", {
+		const response = await fetch("https://0-3-8--ArrowheadCompany.loganjahnke.autocode.gg/appearance", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({gamertag: gamertag})
@@ -864,7 +865,7 @@ export class ArrowheadFirebase
 	 */
 	 private async __getMatchFromHaloDotAPI(id: string): Promise<any>
 	 {
-		 const response = await fetch("https://0-3-6--ArrowheadCompany.loganjahnke.autocode.gg/match", {
+		 const response = await fetch("https://0-3-8--ArrowheadCompany.loganjahnke.autocode.gg/match", {
 			 method: "POST",
 			 headers: { "Content-Type": "application/json" },
 			 body: JSON.stringify({
@@ -881,7 +882,7 @@ export class ArrowheadFirebase
 	 */
 	private async __getMatchesFromHaloDotAPI(gamertag: string, count: number, offset: number): Promise<any>
 	{
-		const response = await fetch("https://0-3-6--ArrowheadCompany.loganjahnke.autocode.gg/matches", {
+		const response = await fetch("https://0-3-8--ArrowheadCompany.loganjahnke.autocode.gg/matches", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({

@@ -1,16 +1,20 @@
-import { Box, Card, CardActionArea, CardContent, CardMedia, Divider, Toolbar, Typography } from "@mui/material";
+import { Box, Card, CardActionArea, CardContent, CardMedia, Divider, Grid, Toolbar, Typography } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { KillBreakdown } from "../Assets/Components/Breakdowns/KillBreakdown";
+import { TeamResultBreakdown } from "../Assets/Components/Breakdowns/TeamResultBreakdown";
+import { ImageCard } from "../Assets/Components/Cards/ImageCard";
+import { ArrowheadTheme } from "../Assets/Theme/ArrowheadTheme";
 
 import { Match } from "../Objects/Model/Match";
 import { ViewProps } from "./Props/ViewProps";
+import { TeamTable } from "./Subpage/TeamTable";
 
 export function SingleMatchView(props: ViewProps)
 {
 	//#region Props and Navigate
 	const { app, setLoadingMessage } = props;
 	const { id } = useParams();
-	const navigate = useNavigate();
 	//#endregion
 
 	//#region Refs
@@ -19,7 +23,6 @@ export function SingleMatchView(props: ViewProps)
 	
 	//#region State
     const [match, setMatch] = useState<Match | undefined>(new Match());
-	const [gamertag, setGamertag] = useState(app.arrowheadUser?.player?.gamertag ?? "");
 	//#endregion
 
 	const loadData = useCallback(async () => 
@@ -36,7 +39,7 @@ export function SingleMatchView(props: ViewProps)
 		}
 
 		setLoadingMessage("");
-	}, [lastUpdate, app, gamertag, setMatch]);
+	}, [lastUpdate, app, setMatch]);
 	
 	useEffect(() =>
 	{
@@ -44,39 +47,22 @@ export function SingleMatchView(props: ViewProps)
 	}, [id]);
 
 	return (
-		<Box component="main" sx={{ flexGrow: 1 }}>
+		<Box component="main" sx={{ flexGrow: 1, width: "100%" }}>
 			<Toolbar />
 			<Divider />
 			<Box sx={{ p: 2 }}>
-				{match ?
-					<Card>
-						<CardActionArea>
-							<CardMedia component="img" height="200" image={match.map.asset.thumbnail} alt={match.map.name} />
-							<CardContent>
-								<Typography gutterBottom variant="h5" component="div" sx={{ textAlign: "center" }}>{match.mode.name}</Typography>
-								<Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
-									<Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-										<Typography variant="caption">Result</Typography>
-										<Typography variant="body1">{match.player.outcome}</Typography>
-									</Box>
-									<Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-										<Typography variant="caption">Kills</Typography>
-										<Typography variant="body1">{match.player.stats.summary.kills}</Typography>
-									</Box>
-									<Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-										<Typography variant="caption">Deaths</Typography>
-										<Typography variant="body1">{match.player.stats.summary.deaths}</Typography>
-									</Box>
-									<Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-										<Typography variant="caption">Played</Typography>
-										<Typography variant="body1">{match.date.toLocaleString()}</Typography>
-									</Box>
-								</Box>
-							</CardContent>
-						</CardActionArea>
-					</Card>
-					: undefined
-				}
+				{/* Description of the game (map, mode, playlist) */}
+				<Grid container spacing={2} sx={{ justifyContent: "start" }}>
+					<Grid item xs={12} lg={4}>
+						<ImageCard image={match?.map?.asset.thumbnail} 
+							titles={[match?.map?.name ?? "", match?.mode?.name ?? "", match?.playlist?.name ?? ""]} 
+							headers={["Map", "Mode", "Playlist"]} />
+					</Grid>
+					{match?.teams?.map(team => <Grid item xs={12} lg={4}><TeamResultBreakdown team={team} /></Grid>)}
+				</Grid>
+			</Box>
+			<Box sx={{ p: 2, pt: 0 }}>
+				{match?.teams?.map(team => <TeamTable team={team} best={match.best} />)}
 			</Box>
 		</Box>
 	);

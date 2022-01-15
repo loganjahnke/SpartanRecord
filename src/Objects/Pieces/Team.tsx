@@ -1,16 +1,25 @@
+import { ServiceRecord } from "../Model/ServiceRecord";
+import { MatchPlayer } from "./MatchPlayer";
+import { TeamDetails } from "./TeamDetails";
+
 export class Team
 {
-    /** Team ID */
-    public id: number;
-    /** Name of the Team */
-    public name: string;
-    /** Team emblem */
-    public emblem: string;
+    public details: TeamDetails;
+    public statistics: ServiceRecord;
+    public players: MatchPlayer[] = [];
 
-    constructor(data?: any)
+    constructor(teamData?: any, playersData?: any)
     {
-        this.id = data?.id ?? -1; 
-        this.name = data?.name ?? ""; 
-        this.emblem = data?.emblem_url ?? "";
+        this.details = new TeamDetails(teamData?.team);
+        this.statistics = new ServiceRecord(teamData?.stats);
+
+        if (playersData)
+        {
+            const filtered = playersData.filter((playerData: any) => playerData.team?.id === this.details.id);
+            if (filtered.length > 0)
+            {
+                this.players = filtered.map((playerData: any) => new MatchPlayer(playerData));
+            }
+        }
     }
 }

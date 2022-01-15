@@ -10,7 +10,7 @@ import { ShotsBreakdown } from "../Assets/Components/Breakdowns/ShotsBreakdown";
 import { DamageBreakdown } from "../Assets/Components/Breakdowns/DamageBreakdown";
 import { Player } from "../Objects/Model/Player";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
-import { MatchCard } from "../Assets/Components/Cards/MatchCard";
+import { ImageCard } from "../Assets/Components/Cards/ImageCard";
 import { MatchFilter } from "../Objects/Model/Match";
 import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
 import { LevelBreakdown } from "../Assets/Components/Breakdowns/LevelBreakdown";
@@ -85,7 +85,7 @@ export function FilteredView(props: ViewProps)
 					{/** Far left */}
 					<Grid container item spacing={2} xs={12} md={4} xl={4} sx={{ alignContent: "flex-start" }}>
 						<Grid item xs={12}>
-							<MatchCard image={image} title={MatchFilter.GetFilterTitle(filter)} />
+							<ImageCard image={image} title={MatchFilter.GetFilterTitle(filter)} />
 						</Grid>
 						<Grid item xs={12} lg={6}>
 							<PlayerCard player={myPlayer} noImages />

@@ -5,10 +5,9 @@ export function KillBreakdown(props: BreakdownProps)
 {
 	const { serviceRecord, showPerMatch } = props;
 
-      const total = (showPerMatch ? serviceRecord.summary.kills / serviceRecord.matchesPlayed : serviceRecord.summary.kills) -
-            (showPerMatch ? serviceRecord.breakdowns.kills.melee / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.melee) -
-            (showPerMatch ? serviceRecord.breakdowns.kills.grenades / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.grenades) -
-            (showPerMatch ? serviceRecord.breakdowns.kills.headshots / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.headshots) -
+      const total = (showPerMatch ? serviceRecord.breakdowns.kills.melee / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.melee) +
+            (showPerMatch ? serviceRecord.breakdowns.kills.grenades / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.grenades) +
+            (showPerMatch ? serviceRecord.breakdowns.kills.headshots / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.headshots) +
             (showPerMatch ? serviceRecord.breakdowns.kills.powerWeapons / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.powerWeapons);
 
 	return (

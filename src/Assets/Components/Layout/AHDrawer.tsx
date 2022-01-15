@@ -51,7 +51,7 @@ export function AHDrawer(props: AHDrawerProps)
 		{
 			case "Service Record":
 				if (gamertag) { switchTab(`/service_record/${gamertag}`, newTab); }
-				else { switchTab("/service_record/search"); }
+				else { switchTab("/service_record/search", newTab); }
 				break;
 			case "Maps":
 				setExpandMaps(!expandMaps);

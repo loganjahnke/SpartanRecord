@@ -25,6 +25,9 @@ export class ArrowheadTheme
 	public static bad = `#CC2500`;
 	public static neutral1 = `#70A288`;
 	public static neutral2 = `#5FDD9D`;
+	public static cobra = "#CC2500";
+	public static eagle = "#007FFF";
+	public static leftEarlyText = "#95A3B3";
 	
 	public static theme = responsiveFontSizes(createTheme({
 		typography:

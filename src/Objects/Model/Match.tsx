@@ -3,6 +3,7 @@ import { GameMode } from "../Pieces/GameMode";
 import { Map } from "../Pieces/Map";
 import { MatchPlayer } from "../Pieces/MatchPlayer";
 import { Playlist } from "../Pieces/Playlist";
+import { Team } from "../Pieces/Team";
 import { TimePlayed } from "../Pieces/TimePlayed";
 
 export class Match
@@ -25,6 +26,10 @@ export class Match
     public date: Date;
     /** The total duration of the match */
     public duration: TimePlayed;
+    /** The teams */
+    public teams: Team[];
+    /** High scores */
+    public best: { score: number, points: number, kills: number, deaths: number, assists: number };
 
     constructor(data?: any)
     {
@@ -37,6 +42,26 @@ export class Match
         this.experience = data?.experience ?? "";
         this.date = data?.played_at ? new Date(data.played_at) : new Date();
         this.duration = new TimePlayed(data?.duration);
+        this.teams = [];
+        this.best = { score: 0, points: 0, kills: 0, deaths: Number.MAX_VALUE, assists: 0 };
+
+        if (data?.teams?.details)
+        {
+            for (const team of data.teams.details)
+            {
+                const t = new Team(team, data.players);
+                this.teams.push(t);
+                for (const player of t.players)
+                {
+                    if (player.outcome === HaloOutcome.Left) { continue; }
+                    this.best.score = player.stats.totalScore > this.best.score ? player.stats.totalScore : this.best.score;
+                    this.best.points = player.stats.totalPoints > this.best.points ? player.stats.totalPoints : this.best.points;
+                    this.best.kills = player.stats.summary.kills > this.best.kills ? player.stats.summary.kills : this.best.kills;
+                    this.best.deaths = player.stats.summary.deaths < this.best.deaths ? player.stats.summary.deaths : this.best.deaths;
+                    this.best.assists = player.stats.summary.assists > this.best.assists ? player.stats.summary.assists : this.best.assists;
+                }
+            }
+        }
     }
 }
 

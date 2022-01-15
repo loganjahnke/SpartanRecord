@@ -40,10 +40,10 @@ const App = () =>
 	const database = getDatabase(app);
 	const auth = getAuth();
 	const analytics = getAnalytics();
-	const arrowhead = new Arrowhead(database, analytics, auth);
 	//#endregion
 
 	//#region My User
+	const [arrowhead] = useState(new Arrowhead(database, analytics, auth));
 	const [loggedInUser, setLoggedInUser] = useState<ArrowheadUser | undefined>();
 	//#endregion
 

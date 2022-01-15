@@ -27,6 +27,8 @@ export class ServiceRecord
     public kdr: number = 0;
     /** Total score */
     public totalScore: number = 0;
+    /** Total points */
+    public totalPoints: number = 0;
     /** Total matches played */
     public matchesPlayed: number = 0;
     /** Win rate */
@@ -121,7 +123,8 @@ export class ServiceRecord
 
         this.kda = core?.kda ?? 0;
         this.kdr = core?.kdr ?? 0;
-        this.totalScore = core?.total_score ?? 0;
+        this.totalScore = core?.total_score ?? core?.score ?? 0;
+        this.totalPoints = core?.total_points ?? core?.points ?? 0;
         this.matchesPlayed = data?.matches_played ?? 0;
         this.winRate = data?.win_rate ?? 0;
     }

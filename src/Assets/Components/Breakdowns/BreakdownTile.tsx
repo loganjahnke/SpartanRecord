@@ -5,6 +5,8 @@ import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 
 export interface BreakdownProps
 {
+    image?: string;
+    background?: string;
     serviceRecord: ServiceRecord;
     showPerMatch?: boolean;
 }
@@ -36,9 +38,32 @@ export function BreakdownTile(props: BreakdownTileProps)
     if (value === 0 && !isMainStat) { return <React.Fragment />; }
 
 	return (
-		<Box sx={{ backgroundColor: background, display: "flex", flexDirection: "column", alignItems: isMainStat ? "center" : "flex-start", width: "auto", margin: isMainStat ? 1 : 0, mt: 1, mb: 1, padding: 1, flexBasis: flexBasis }}>
-            <Typography variant={isHeader ? "h6" : "caption"} sx={{ fontSize: isMainStat ? "0.9rem" : "0.7rem", flexGrow: 1, flexWrap: "nowrap", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", mt: 0.5, ml: isMainStat ? 0 : 0.5, color: isMainStat ? "" : ArrowheadTheme.text_primary }}>{title}</Typography>
-            <Typography variant={"h4"} sx={{ fontSize: isMainStat ? "2.02rem" : "1.2rem !important", textAlign: "left", mb: 0.5, ml: isMainStat ? 0 : 0.5 }}>{typeof value === "number" ? (Math.round(value * 100) / 100).toLocaleString() : value}{isPercent ? "%" : ""}</Typography>
+		<Box sx={{ 
+            backgroundColor: background, 
+            display: "flex", 
+            flexDirection: "column", 
+            alignItems: isMainStat ? "center" : "flex-start", 
+            margin: isMainStat ? 1 : 0, 
+            mt: 1, 
+            mb: 1, 
+            padding: 1, 
+            width: isMainStat ? "auto" : flexBasis }}>
+            <Typography variant={isHeader ? "h6" : "caption"} sx={{ 
+                display: "block",
+                width: isMainStat ? "auto" : "100%",
+                fontSize: isMainStat ? "0.9rem" : "0.7rem", 
+                flexWrap: "nowrap", 
+                whiteSpace: "nowrap", 
+                overflow: "hidden", 
+                textOverflow: "ellipsis", 
+                mt: 0.5, 
+                ml: isMainStat ? 0 : 0.5, 
+                color: isMainStat ? "" : ArrowheadTheme.text_primary }}>{title}</Typography>
+            <Typography variant={"h4"} sx={{ 
+                fontSize: isMainStat ? "2.02rem" : "1.2rem !important", 
+                textAlign: "left", 
+                mb: 0.5, 
+                ml: isMainStat ? 0 : 0.5 }}>{typeof value === "number" ? (Math.round(value * 100) / 100).toLocaleString() : value}{isPercent ? "%" : ""}</Typography>
 		</Box>
 	);
 }

@@ -14,7 +14,7 @@ export function MatchSummary(props: MatchSummaryProps)
 
 	function onCardAreaClick()
 	{
-		// goToMatch(match.id);
+		goToMatch(match.id);
 	}
 
 	return (
