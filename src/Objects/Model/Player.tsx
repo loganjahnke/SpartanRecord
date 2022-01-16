@@ -44,6 +44,22 @@ export class Player
     }
 
     /**
+     * Gets a service record containing the matches
+     * @returns combined service record
+     */
+    public GetServiceRecordOfMatches(): ServiceRecord
+    {
+        let sr = new ServiceRecord();
+        for (const match of this.matches)
+        {
+            const stats = match.player?.stats;
+            const outcome = match.player?.outcome;
+            sr.AddServiceRecord(stats, outcome);
+        }
+        return sr;
+    }
+
+    /**
      * Gets the match from the match ID, if we have it
      * @param matchID the match ID to find
      * @returns match object or undefined if we don't have it

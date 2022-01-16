@@ -14,7 +14,7 @@ export function PlayerCard(props: PlayerCardProps)
     const highestRank = player?.GetHighestCurrentRank();
 
 	return (
-        <Card sx={{ borderRadius: 3 }}>
+        <Card className="playerCard" sx={{ borderRadius: 3 }}>
             <CardContent sx={{ pt: 3, backgroundColor: "divider", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: noImages ? "center" : "flex-start" }}>
                 {!noImages && player.appearance?.emblemURL ? <img src={player.appearance.emblemURL} alt="emblem" height="48px" /> : undefined}
                 <Box sx={{ display: "flex", flexDirection: "column", ml: noImages ? 0 : 1, flexGrow: 1, textAlign: noImages ? "center" : "left" }}>

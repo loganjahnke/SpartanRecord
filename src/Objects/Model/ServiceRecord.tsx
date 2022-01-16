@@ -1,3 +1,4 @@
+import { HaloOutcome } from "../../Database/ArrowheadFirebase";
 import { AllMedals } from "../Helpers/AllMedals";
 import { Breakdowns } from "../Pieces/Breakdowns";
 import { Damage } from "../Pieces/Damage";
@@ -156,12 +157,11 @@ export class ServiceRecord
     /**
      * Adds a service record to this and returns a new one
      * @param sr The service record to add
+     * @param outcome The outcome of the match
      */
-    public AddServiceRecord(sr: ServiceRecord): ServiceRecord
+    public AddServiceRecord(sr: ServiceRecord, outcome?: HaloOutcome): void
     {
-        const newSR = new ServiceRecord();
-
-        newSR.summary = 
+        this.summary = 
         {
             kills: sr.summary.kills + this.summary.kills,
             deaths: sr.summary.deaths + this.summary.deaths,
@@ -176,14 +176,14 @@ export class ServiceRecord
             medals: sr.summary.medals + this.summary.medals
         };
 
-        newSR.damage =
+        this.damage =
         {
             taken: sr.damage.taken + this.damage.taken,
             dealt: sr.damage.dealt + this.damage.dealt,
             average: 0
         };
 
-        newSR.shots = 
+        this.shots = 
         {
             fired: sr.shots.fired + this.shots.fired,
             landed: sr.shots.landed + this.shots.landed,
@@ -191,12 +191,12 @@ export class ServiceRecord
             accuracy: 0
         };
 
-        if (newSR.shots.fired !== 0)
+        if (this.shots.fired !== 0)
         {
-            newSR.shots.accuracy = (newSR.shots.landed / newSR.shots.fired) * 100;
+            this.shots.accuracy = (this.shots.landed / this.shots.fired) * 100;
         }
 
-        newSR.breakdowns =
+        this.breakdowns =
         {
             kills: 
             {
@@ -213,14 +213,14 @@ export class ServiceRecord
             },
             matches:
             {
-                wins: sr.breakdowns.matches.wins + this.breakdowns.matches.wins,
-                losses: sr.breakdowns.matches.losses + this.breakdowns.matches.losses,
-                left: sr.breakdowns.matches.left + this.breakdowns.matches.left,
-                draws: sr.breakdowns.matches.draws + this.breakdowns.matches.draws
+                wins: this.breakdowns.matches.wins + (outcome && outcome === HaloOutcome.Win ? 1 : sr.breakdowns.matches.wins),
+                losses: this.breakdowns.matches.losses + (outcome && outcome === HaloOutcome.Loss ? 1 : sr.breakdowns.matches.losses),
+                left: this.breakdowns.matches.left + (outcome && outcome === HaloOutcome.Draw ? 1 : sr.breakdowns.matches.left),
+                draws: this.breakdowns.matches.draws + (outcome && outcome === HaloOutcome.Left ? 1 : sr.breakdowns.matches.draws)
             }
         };
 
-        newSR.timePlayed =
+        this.timePlayed =
         {
             seconds: sr.timePlayed.seconds + this.timePlayed.seconds,
             human: ""
@@ -235,24 +235,22 @@ export class ServiceRecord
             medals1.set(m.id, Medal.FromCount(m.id, count));
         });
 
-        newSR.medals = Array.from(medals1.values());
+        this.medals = Array.from(medals1.values());
 
-        newSR.totalScore = sr.totalScore + this.totalScore;
-        newSR.matchesPlayed = (sr.matchesPlayed === 0 ? 1 : sr.matchesPlayed) + this.matchesPlayed;
+        this.totalScore = sr.totalScore + this.totalScore;
+        this.matchesPlayed = (sr.matchesPlayed === 0 ? 1 : sr.matchesPlayed) + this.matchesPlayed;
         
-        if (newSR.summary.deaths !== 0)
+        if (this.summary.deaths !== 0)
         {
-            newSR.kdr = newSR.summary.kills / newSR.summary.deaths;
+            this.kdr = this.summary.kills / this.summary.deaths;
         }
         
-        if (newSR.matchesPlayed !== 0)
+        if (this.matchesPlayed !== 0)
         {
-            newSR.winRate = (newSR.breakdowns.matches.wins / newSR.matchesPlayed) * 100;
-            newSR.kda = (newSR.summary.kills + (newSR.summary.assists / 3) - newSR.summary.deaths) / newSR.matchesPlayed;
-            newSR.damage.average = (newSR.damage.dealt / newSR.matchesPlayed) * 100;
+            this.winRate = (this.breakdowns.matches.wins / this.matchesPlayed) * 100;
+            this.kda = (this.summary.kills + (this.summary.assists / 3) - this.summary.deaths) / this.matchesPlayed;
+            this.damage.average = (this.damage.dealt / this.matchesPlayed) * 100;
         }
-
-        return newSR;
     }
     
     /**

@@ -68,7 +68,7 @@ export function PlayerView(props: ViewProps)
 	useEffect(() =>
 	{
 		loadData();
-	}, []);
+	}, [gamertag]);
 
 	/** Controlled search component */
 	function onGamertagTextChange(event: React.ChangeEvent<HTMLInputElement>)
@@ -123,7 +123,7 @@ export function PlayerView(props: ViewProps)
 								<TopMedals medals={myPlayer.serviceRecord.medals} matchesPlayed={myPlayer.serviceRecord.matchesPlayed} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
-								<ServiceRecordChart historicServiceRecords={myPlayer.historicStats ?? []} />
+								<ServiceRecordChart historicServiceRecords={myPlayer.historicStats ?? []} currentSR={myPlayer.serviceRecord} />
 							</Grid>
 						</Grid>
 						{/** Far right */}

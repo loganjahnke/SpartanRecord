@@ -71,7 +71,7 @@ export class SpartanCompany
         let sr = new ServiceRecord();
         for (const player of this.players)
         {
-            sr = sr.AddServiceRecord(player.serviceRecord);
+            sr.AddServiceRecord(player.serviceRecord);
         }
 
         return sr;

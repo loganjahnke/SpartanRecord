@@ -13,7 +13,7 @@ import {
 import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 enum HistoricDataSets
 {
@@ -22,10 +22,11 @@ enum HistoricDataSets
 	KDR = "KDR",
 	KillsPerGame = "Kills / Game",
 	DeathsPerGame = "Deaths / Game",
-	AssistsPerGame = "Assists / Game"
+	AssistsPerGame = "Assists / Game",
+	DamagePerGame = "Damage / Game"
 }
 
-export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecord[] }) =>
+export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecord[], currentSR: ServiceRecord }) =>
 {
 	ChartJS.defaults.font.family = "Roboto";
 	ChartJS.defaults.font.weight = "100";
@@ -39,7 +40,8 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 		Legend
 	);
 
-	const { historicServiceRecords } = props;
+	const { historicServiceRecords, currentSR } = props;
+	const allSRs = historicServiceRecords.concat(currentSR);
 	const dataSet = useRef<HistoricDataSets>(HistoricDataSets.WinRate);
 	const [options, setOptions] = useState<any>({
 		responsive: true,
@@ -98,14 +100,19 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 		]
 	});
 
+	useEffect(() => 
+	{
+		changeDataSet();
+	}, [historicServiceRecords, currentSR]);
+
 	/**
 	 * Changes the data set
 	 * @param event the event containing the new data set
 	 */
-	function changeDataSet(event: SelectChangeEvent): void
+	function changeDataSet(event?: SelectChangeEvent): void
 	{
-		const newDataSet = event.target.value as HistoricDataSets;
-		if (dataSet.current === newDataSet) { return; }
+		const newDataSet = event?.target.value as HistoricDataSets ?? HistoricDataSets.WinRate;
+		if (event && dataSet.current === newDataSet) { return; }
 		dataSet.current = newDataSet;
 
 		setOptions({
@@ -155,12 +162,12 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 		});
 
 		setChartData({
-			labels: historicServiceRecords.map(sr => sr.matchesPlayed),
+			labels: allSRs.map(sr => sr.matchesPlayed),
 			datasets: [
 				{
 					backgroundColor: ArrowheadTheme.text_secondary,
 					borderColor: ArrowheadTheme.text_secondary,
-					data: historicServiceRecords.map(sr => 
+					data: allSRs.map(sr => 
 					{
 						switch (dataSet.current)
 						{
@@ -170,6 +177,7 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 							case HistoricDataSets.KillsPerGame: return sr.summary.kills / sr.matchesPlayed;
 							case HistoricDataSets.DeathsPerGame: return sr.summary.deaths / sr.matchesPlayed;
 							case HistoricDataSets.AssistsPerGame: return sr.summary.assists / sr.matchesPlayed;
+							case HistoricDataSets.DamagePerGame: return sr.damage.dealt / sr.matchesPlayed;
 							default: return sr.damage.average;
 						}
 					}),
@@ -190,7 +198,7 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 	};
 	
 	return (
-		historicServiceRecords.length > 2 
+		allSRs.length > 2 
 			?
 			<Box sx={{ backgroundColor: "divider", borderRadius: 3, pt: 2 }}>
 				<Box sx={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -203,6 +211,7 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 							<MenuItem value={HistoricDataSets.KillsPerGame}>{HistoricDataSets.KillsPerGame}</MenuItem>
 							<MenuItem value={HistoricDataSets.DeathsPerGame}>{HistoricDataSets.DeathsPerGame}</MenuItem>
 							<MenuItem value={HistoricDataSets.AssistsPerGame}>{HistoricDataSets.AssistsPerGame}</MenuItem>
+							<MenuItem value={HistoricDataSets.DamagePerGame}>{HistoricDataSets.DamagePerGame}</MenuItem>
 						</Select>
 					</FormControl>
 				</Box>
