@@ -10,34 +10,33 @@ interface MedalTypeBreakdownProps
 {
 	type: MedalType;
 	medals: Medal[];
+	showAll: boolean;
 }
 
 export function MedalTypeBreakdown(props: MedalTypeBreakdownProps)
 {
-	const { type, medals } = props;
-
-	const [showAll, setShowAll] = useState(false);
+	const { type, medals, showAll } = props;
 
 	const filtered = medals.filter(medal => medal.type === type);
-	const totalCountArray = filtered.length > 0 ? filtered.map(medal => medal.count) : [];
-	const totalCount = totalCountArray.length > 0 ? totalCountArray.reduce((a, b) => a + b) : 0;
-
-	function onPressShowAll(event: React.ChangeEvent<HTMLInputElement>)
-	{
-		setShowAll(event.target.checked);
-	}
 
 	return (
 		<Box sx={{ backgroundColor: "divider", borderRadius: 3 }}>
-			<FormGroup sx={{ textAlign: "right", float: "right" }}>
-				<FormControlLabel control={<Checkbox checked={showAll} onChange={onPressShowAll} size="small" />} label={<Typography variant="subtitle1">Show All</Typography>} />
-			</FormGroup>
-			<Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", clear: "both" }}>
-				<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", width: "100%" }}>
-					<BreakdownTile title={`Total ${type} Medals`} value={totalCount} isMainStat isHeader />
+			<Box sx={{ 
+				display: "flex", 
+				flexDirection: "column", 
+				justifyContent: "center", 
+				alignItems: "center", 
+				clear: "both" }}>
+				<Box sx={{ borderRadius: "12px 12px 0 0", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", width: "100%", pt: 2, pb: 2, backgroundColor: "secondary.main" }}>
+					<Typography variant="h5">{type}</Typography>
 				</Box>
-				<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", flexWrap: "wrap", width: "100%" }}>
-					{filtered.map(medal => <MedalTile medal={medal} />)}
+				<Box sx={{ 
+					display: "grid", 
+					gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+					width: "100%" }}>
+					{filtered.length > 0 
+						? filtered.map(medal => <MedalTile medal={medal} />) 
+						: <Typography variant="body1" sx={{ m: 4 }}>No medals earned.</Typography>}
 				</Box>
 				{showAll 
 					?  <Box sx={{ backgroundColor: "secondary.main", borderRadius:3, m: 2, display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "space-evenly", alignItems: "center" }}>

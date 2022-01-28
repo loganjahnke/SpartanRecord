@@ -26,11 +26,9 @@ export function ServiceRecordFilters(props: ServiceRecordFiltersProps)
 	}
 
 	return (
-		<Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: "transparent", height: "100%", width: "100%", borderRadius: 3 }}>
-			<ToggleButtonGroup value={mode} exclusive onChange={handleToggleButtonChange} aria-label="text alignment">
-				<ToggleButton value="overall" aria-label="left aligned">Overall</ToggleButton>
-				<ToggleButton value="per match" aria-label="centered">Per Match</ToggleButton>
-			</ToggleButtonGroup>
-		</Box>
+		<ToggleButtonGroup value={mode} exclusive onChange={handleToggleButtonChange} aria-label="text alignment" size="small">
+			<ToggleButton value="overall" aria-label="left aligned">Overall</ToggleButton>
+			<ToggleButton value="per match" aria-label="centered">Per Match</ToggleButton>
+		</ToggleButtonGroup>
 	);
 }

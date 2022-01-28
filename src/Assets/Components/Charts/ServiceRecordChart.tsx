@@ -20,6 +20,7 @@ enum HistoricDataSets
 	WinRate = "Win Rate",
 	KDA = "KDA",
 	KDR = "KDR",
+	Accuracy = "Accuracy",
 	KillsPerGame = "Kills / Game",
 	DeathsPerGame = "Deaths / Game",
 	AssistsPerGame = "Assists / Game",
@@ -174,6 +175,7 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 							case HistoricDataSets.WinRate: return sr.winRate;
 							case HistoricDataSets.KDA: return sr.kda;
 							case HistoricDataSets.KDR: return sr.kdr;
+							case HistoricDataSets.Accuracy: return sr.shots.accuracy;
 							case HistoricDataSets.KillsPerGame: return sr.summary.kills / sr.matchesPlayed;
 							case HistoricDataSets.DeathsPerGame: return sr.summary.deaths / sr.matchesPlayed;
 							case HistoricDataSets.AssistsPerGame: return sr.summary.assists / sr.matchesPlayed;
@@ -208,6 +210,7 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 							<MenuItem value={HistoricDataSets.WinRate}>{HistoricDataSets.WinRate}</MenuItem>
 							<MenuItem value={HistoricDataSets.KDA}>{HistoricDataSets.KDA}</MenuItem>
 							<MenuItem value={HistoricDataSets.KDR}>{HistoricDataSets.KDR}</MenuItem>
+							<MenuItem value={HistoricDataSets.Accuracy}>{HistoricDataSets.Accuracy}</MenuItem>
 							<MenuItem value={HistoricDataSets.KillsPerGame}>{HistoricDataSets.KillsPerGame}</MenuItem>
 							<MenuItem value={HistoricDataSets.DeathsPerGame}>{HistoricDataSets.DeathsPerGame}</MenuItem>
 							<MenuItem value={HistoricDataSets.AssistsPerGame}>{HistoricDataSets.AssistsPerGame}</MenuItem>

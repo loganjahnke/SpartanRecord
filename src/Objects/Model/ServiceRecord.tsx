@@ -114,10 +114,16 @@ export class ServiceRecord
             {
                 const medal = new Medal(data);
                 const parent = (AllMedals as any)[(medal.id)];
+                medal.name = parent.name ?? "";
                 medal.rarity = parent.type ?? MedalRarity.Normal;
                 medal.type = parent.category ?? MedalType.Unknown;
                 medal.sort = parent.sort ?? -1;
                 medal.description = parent.description ?? "N/A";
+                medal.images = {
+                    small: parent.image_urls?.small ?? "",
+                    medium: parent.image_urls?.medium ?? "",
+                    large: parent.image_urls?.large ?? ""
+                };
                 return medal;
             });
         }

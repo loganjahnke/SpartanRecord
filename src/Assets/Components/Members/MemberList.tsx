@@ -6,28 +6,27 @@ import { Halo5Converter } from "../../../Objects/Helpers/Halo5Converter";
 
 import ArrowheadImg from "../../Images/arrowhead.png";
 
-export function MemberList(props: { company: SpartanCompany, goToMember: Function, setPlayer: Function })
+export function MemberList(props: { company: SpartanCompany, goToMember: Function })
 {
-	const { company, goToMember, setPlayer } = props;
+	const { company, goToMember } = props;
 
 	return (
 		<Card sx={{ borderRadius: 3 }}>
             <CardMedia component="img" height="200" image={"https://assets.halo.autocode.gg/static/infinite/images/multiplayer/playlists/ffa-slayer.jpg"} alt="Members" />
             <CardContent sx={{ backgroundColor: "divider", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-				<Typography variant="h6" sx={{ mb: 1 }}>{company.name} Company</Typography>
-				{company.players.map(player => <MemberComponent player={player} goToMember={goToMember} setPlayer={setPlayer} />)}
+				<Typography variant="h6" sx={{ mb: 1 }}>Members</Typography>
+				{company.players.map(player => <MemberComponent player={player} goToMember={goToMember} />)}
             </CardContent>
         </Card>
 	);
 }
 
-function MemberComponent(props: { player: Player, goToMember: Function, setPlayer: Function })
+function MemberComponent(props: { player: Player, goToMember: Function })
 {
-	const { player, goToMember, setPlayer } = props;
+	const { player, goToMember } = props;
 
 	function setPlayerClick(): void
 	{
-		setPlayer(player);
 		goToMember(player.gamertag);
 	}
 

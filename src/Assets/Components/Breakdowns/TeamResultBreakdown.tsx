@@ -23,8 +23,25 @@ export function TeamResultBreakdown(props: TeamResultBreakdownProps)
 	return (
 		<Box sx={{ backgroundColor: "divider", borderRadius: 3, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
                   {image ? 
-                        <Box sx={{ mt: 2, backgroundColor: background, borderRadius: 3, p: 2 }}>
-                              <img src={image} alt="team image" height="64px" />
+                        <Box sx={{ mt: 2, 
+                            background: `url(${image}) ${background}`, 
+                            backgroundBlendMode: "soft-light",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "center",
+                            backgroundSize: "cover",
+                            color: "primary.main", 
+                            borderRadius: 3, 
+                            p: 2, 
+                            height: "64px", 
+                            width: "64px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            textAlign: "center",
+                            letterSpacing: "8px",
+                            textIndent: "8px",
+                            fontWeight: 900 }}>
+                                {team.details.name.toUpperCase()}
                         </Box> 
                   : undefined}
                   <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", width: "100%" }}>

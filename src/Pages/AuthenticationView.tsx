@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, Divider, Grid, List, ListItem, ListItemAvatar, ListItemText, TextField, Toolbar, Typography } from "@mui/material";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { ArrowheadError } from "../Objects/Helpers/ArrowheadError";
@@ -27,6 +27,16 @@ export function AuthenticationView(props: AuthViewProps)
     const [confirmPasswordValidation, setConfirmPasswordValidation] = useState("");
     const [gamertagValidation, setGamertagValidation] = useState("");
 	//#endregion
+
+    useEffect(() =>
+	{
+		const authToken = sessionStorage.getItem("Auth Token");
+		const gamertag = sessionStorage.getItem("Gamertag");
+		if (authToken && gamertag)
+		{
+			afterAuth(true);
+		}
+	}, []);
 
     /**
      * Callback for when the sign up button is pressed
@@ -177,14 +187,6 @@ export function AuthenticationView(props: AuthViewProps)
     {
         setDialogAlertMessages([]);
     }
-
-	const container = window !== undefined ? () => window.document.body : undefined;
-
-    /** Logs out the current user */
-	async function logout()
-	{
-		await app.Logout();
-	}
 
 	return (
         <Box component="main" sx={{ flexGrow: 1, height: "100%" }}>

@@ -88,7 +88,8 @@ export class MatchFilter
 
     public static IsModeFilter(filter?: string)
     {
-        return filter === HaloMode.CTF 
+        return filter === HaloMode.Attrition
+            || filter === HaloMode.CTF 
             || filter === HaloMode.FFASlayer 
             || filter === HaloMode.Fiesta 
             || filter === HaloMode.Oddball 

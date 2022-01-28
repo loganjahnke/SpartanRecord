@@ -20,6 +20,8 @@ export class ArrowheadTheme
 	public static text_secondary = `#${this.__coolors[3]}`;
 	/** #F9F0FA */
 	public static text_primary = `#${this.__coolors[4]}`;
+	/** #70A288 */
+	public static thin_border = `#${this.__coolors[3]}` + "40";
 
 	public static good = `#1B9D46`;
 	public static bad = `#CC2500`;

@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, Toolbar } from "@mui/material";
+import { Box, Divider, Grid, Toolbar, Typography } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -65,8 +65,15 @@ export function MatchesView(props: ViewProps)
 			<Divider />
 			<Box sx={{ p: 2 }}>
 				<Grid container spacing={2}>
-					<Grid item xs={12} lg={4} sx={{ ".playerCard": { borderRadius: "12px 12px 0 0 !important" }, ".kdaBreakdown": { borderRadius: "0 0 12px 12px !important" }}}>
-						<PlayerCard player={myPlayer} />
+					{/* Top */}
+					<Grid item xs={12}>
+						<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
+							<PlayerCard player={myPlayer} />
+							<Box sx={{ flexGrow: 1 }}></Box>
+							<Typography sx={{ mr: 1 }}>Last 25 matches</Typography>
+						</Box>
+					</Grid>
+					<Grid item xs={12} lg={4}>
 						<KDABreakdown serviceRecord={combinedSR} />
 					</Grid>
 					<Grid item xs={12} lg={4}>

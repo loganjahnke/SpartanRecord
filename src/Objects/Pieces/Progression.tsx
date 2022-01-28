@@ -1,13 +1,13 @@
-import { CSRS } from "../Model/CSRS";
+import { Rank } from "../Model/CSRS";
 
 export class Progression
 {
-    pre: CSRS;
-    post: CSRS;
+    pre: Rank;
+    post: Rank;
 
     constructor(data?: any)
     {
-        this.pre = new CSRS(data?.csr?.pre_match);
-        this.post = new CSRS(data?.csr?.post_match);
+        this.pre = new Rank(data?.csr?.pre_match);
+        this.post = new Rank(data?.csr?.post_match);
     }
 }

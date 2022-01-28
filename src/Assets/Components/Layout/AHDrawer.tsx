@@ -9,6 +9,7 @@ import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { HaloMode } from "../../../Database/ArrowheadFirebase";
 
 interface AHDrawerProps
 {
@@ -208,15 +209,7 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab className="ahTab" value="Modes" label="Modes" icon={expandModes ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Collapse in={expandModes} timeout="auto" unmountOnExit>
 						<Tabs orientation="vertical" value={currentTab === "Modes" ? subtab : undefined} onChange={modeClicked} sx={{ borderBottom: "0.5px solid", borderColor: "divider" }}>
-							<Tab className="ahTab" value="CTF" label="CTF" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="FFA Slayer" label="FFA Slayer" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Fiesta" label="Fiesta" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Oddball" label="Oddball" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Slayer" label="Slayer" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Stockpile" label="Stockpile" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Strongholds" label="Strongholds" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Tactical Slayer" label="Tactical Slayer" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Total Control" label="Total Control" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
+							{(Object.values(HaloMode) as Array<keyof typeof HaloMode>).map((mode) => <Tab className="ahTab" value={mode} label={mode} sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />)}
 						</Tabs>
 					</Collapse>
 					<Tab className="ahTab" value="Match Outcome" label="Match Outcome" icon={expandOutcome ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />

@@ -14,7 +14,7 @@ export function TopMedals(props: { medals: Medal[], matchesPlayed?: number, show
                 {
                     return (
                         <Grid item key={medal.name} xs={4} sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                            <img src={medal.images.small} alt="medal" />
+                            <img src={medal.images.large} alt="medal" height="64px" />
                             <Typography variant="caption" sx={{ mt: 2 }}>{medal.name}</Typography>
                             <Typography variant="h4">{(showPerMatch ? medal.count / (matchesPlayed ?? 1) : medal.count).toLocaleString()}</Typography>
                         </Grid>

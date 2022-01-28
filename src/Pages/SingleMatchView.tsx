@@ -1,10 +1,9 @@
-import { Box, Card, CardActionArea, CardContent, CardMedia, Divider, Grid, Toolbar, Typography } from "@mui/material";
+import { Box, Divider, Grid, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { KillBreakdown } from "../Assets/Components/Breakdowns/KillBreakdown";
 import { TeamResultBreakdown } from "../Assets/Components/Breakdowns/TeamResultBreakdown";
 import { ImageCard } from "../Assets/Components/Cards/ImageCard";
-import { ArrowheadTheme } from "../Assets/Theme/ArrowheadTheme";
+import { HaloMode } from "../Database/ArrowheadFirebase";
 
 import { Match } from "../Objects/Model/Match";
 import { ViewProps } from "./Props/ViewProps";
@@ -15,6 +14,7 @@ export function SingleMatchView(props: ViewProps)
 	//#region Props and Navigate
 	const { app, setLoadingMessage } = props;
 	const { id } = useParams();
+	const navigate = useNavigate();
 	//#endregion
 
 	//#region Refs
@@ -46,23 +46,37 @@ export function SingleMatchView(props: ViewProps)
 		loadData();
 	}, [id]);
 
+	/**
+	 * Navigates the service record for the gamertag
+	 * @param gamertag the gamertag
+	 */
+	function onGamertagClick(gamertag: string): void
+	{
+		if (gamertag && gamertag.indexOf("343 Bot") !== 0)
+		{
+			navigate("/service_record/" + gamertag);
+		}
+	}
+
 	return (
 		<Box component="main" sx={{ flexGrow: 1, width: "100%" }}>
 			<Toolbar />
 			<Divider />
 			<Box sx={{ p: 2 }}>
 				{/* Description of the game (map, mode, playlist) */}
-				<Grid container spacing={2} sx={{ justifyContent: "start" }}>
-					<Grid item xs={12} lg={4}>
-						<ImageCard image={match?.map?.asset.thumbnail} 
-							titles={[match?.map?.name ?? "", match?.mode?.name ?? "", match?.playlist?.name ?? ""]} 
-							headers={["Map", "Mode", "Playlist"]} />
+				<Grid container spacing={2} sx={{ alignItems: "flex-start", justifyContent: "flex-start" }}>
+					<Grid container item spacing={2} xs={12} lg={4}>
+						<Grid item xs={12}>
+							<ImageCard image={match?.map?.asset.thumbnail} 
+								titles={[match?.map?.name ?? "", match?.mode?.name ?? "", match?.playlist?.name ?? ""]} 
+								headers={["Map", "Mode", "Playlist"]} />
+						</Grid>
+						{match?.teams?.map(team => <Grid item xs={12}><TeamResultBreakdown team={team} /></Grid>)}
 					</Grid>
-					{match?.teams?.map(team => <Grid item xs={12} lg={4}><TeamResultBreakdown team={team} /></Grid>)}
+					<Grid container item spacing={2} xs={12} lg={8}>
+						{match?.teams?.map(team => <Grid item xs={12}><TeamTable mode={match.mode.name as HaloMode} team={team} best={match.best} onGamertagClick={onGamertagClick} ranked={match.playlist.ranked} /></Grid>)}
+					</Grid>
 				</Grid>
-			</Box>
-			<Box sx={{ p: 2, pt: 0 }}>
-				{match?.teams?.map(team => <TeamTable team={team} best={match.best} />)}
 			</Box>
 		</Box>
 	);

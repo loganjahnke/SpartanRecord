@@ -11,7 +11,7 @@ import { DamageBreakdown } from "../Assets/Components/Breakdowns/DamageBreakdown
 import { Player } from "../Objects/Model/Player";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { ImageCard } from "../Assets/Components/Cards/ImageCard";
-import { MatchFilter } from "../Objects/Model/Match";
+import { Match, MatchFilter } from "../Objects/Model/Match";
 import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
 import { LevelBreakdown } from "../Assets/Components/Breakdowns/LevelBreakdown";
 import { PlayerCard } from "../Assets/Components/Cards/PlayerCard";
@@ -49,26 +49,33 @@ export function FilteredView(props: ViewProps)
 		{
 			setLoadingMessage("Loading " + gamertag);
 
-			let player: Player = new Player(gamertag);
-			let sr: ServiceRecord | undefined;
-
-            if (!sr)
-            {
-                sr = await app.db.GetServiceRecordForFilter(gamertag, tree as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome) ?? new ServiceRecord();
-                player.SetFilteredServiceRecord(gamertag, tree as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome, sr);
-            }
+			let player: Player = await app.db.GetPlayerFilter(gamertag, tree as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome);
+			const sr = player.GetFilteredServiceRecord(tree as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome) ?? new ServiceRecord();
             
 			app.LogViewServiceRecord(gamertag, tree as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome);
 			setMyPlayer(player);
             setSR(sr);
 		}
 
+		let image = "";
+		if (MatchFilter.IsMapFilter(filter))
+		{
+			image = `https://assets.halo.autocode.gg/static/infinite/images/multiplayer/maps/${filter?.toLowerCase().replace(/\s/g , "-")}.jpg`;
+		}
+		else if (MatchFilter.IsModeFilter(filter))
+		{
+			if (filter === HaloMode.FFASlayer || filter === HaloMode.TacticalSlayer)
+			{
+				image = `https://assets.halo.autocode.gg/static/infinite/images/multiplayer/playlists/${filter?.toLowerCase().replace(/\s/g , "-")}.jpg`;
+			}
+			else
+			{
+				image = `https://assets.halo.autocode.gg/static/infinite/images/multiplayer/ugcgamevariants/${filter?.toLowerCase().replace(/\s/g , "-")}.jpg`;
+			}
+		}
+
 		setLoadingMessage("");
-        setImage(MatchFilter.IsMapFilter(filter) 
-            ? `https://assets.halo.autocode.gg/static/infinite/images/multiplayer/maps/${filter?.toLowerCase().replace(/\s/g , "-")}.jpg`
-        : MatchFilter.IsModeFilter(filter)
-            ? `https://assets.halo.autocode.gg/static/infinite/images/multiplayer/${filter === HaloMode.FFASlayer || filter === HaloMode.TacticalSlayer ? "playlists" : "ugcgamevariants"}/${filter?.toLowerCase().replace(/\s/g , "-")}.jpg`
-        : "");
+        setImage(image);
 	}, [lastUpdate, app, gamertag, setMyPlayer, tree, filter, setImage]);
 
     useEffect(() =>
@@ -82,22 +89,24 @@ export function FilteredView(props: ViewProps)
 			<Divider />
 			<Box sx={{ p: 2 }}>
 				<Grid container spacing={2}>
-					{/** Far left */}
+					{/* Top */}
+					<Grid item xs={12}>
+						<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
+							<PlayerCard player={myPlayer} />
+							<Box sx={{ flexGrow: 1 }}></Box>
+							<ServiceRecordFilters setPerMatch={setShowPerMatch} />
+						</Box>
+					</Grid>
+					{/* Far left */}
 					<Grid container item spacing={2} xs={12} md={4} xl={4} sx={{ alignContent: "flex-start" }}>
 						<Grid item xs={12}>
 							<ImageCard image={image} title={MatchFilter.GetFilterTitle(filter)} />
-						</Grid>
-						<Grid item xs={12} lg={6}>
-							<PlayerCard player={myPlayer} noImages />
-						</Grid>
-						<Grid item xs={12} lg={6}>
-							<ServiceRecordFilters setPerMatch={setShowPerMatch} />
 						</Grid>
 						<Grid item xs={12}>
 							<MatchesBreakdown serviceRecord={sr} />
 						</Grid>
 					</Grid>
-					{/** Middle 5 */}
+					{/* Middle 5 */}
 					<Grid container item spacing={2} xs={12} md={4} xl={5} sx={{ alignContent: "flex-start" }}>
 						<Grid item xs={12}>
 							<KillBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
@@ -106,7 +115,7 @@ export function FilteredView(props: ViewProps)
 							<ShotsBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
 						</Grid>
 					</Grid>
-					{/** Far right */}
+					{/* Far right */}
 					<Grid container item spacing={2} xs={12} md={4} xl={3} sx={{ alignContent: "flex-start" }}>
 						<Grid item xs={12}>
 							<KDABreakdown serviceRecord={sr} />

@@ -189,8 +189,7 @@ export class Arrowhead
      */
     public LogEvent(event: string, params?: any): void
     {
-        console.log(event);
-        //logEvent(this.__analytics, event, params);
+        logEvent(this.__analytics, event, params);
     }
     //#endregion
 

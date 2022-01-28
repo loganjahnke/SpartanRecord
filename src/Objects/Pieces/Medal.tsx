@@ -39,7 +39,7 @@ export enum MedalType
 	VIP = "VIP",
 
 	// Unknown
-	Unknown = "Unknown"
+	Unknown = "Other"
 }
 
 export class Medal

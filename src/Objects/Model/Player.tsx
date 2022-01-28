@@ -85,13 +85,11 @@ export class Player
     } 
 
     /**
-	 * Gets the service record for the filter locally, if possible
-	 * @param gamertag: the gamertag to get
+	 * Sets the service record for the filter locally
 	 * @param tree the filter tree
 	 * @param filter the map/mode/outcome/rank filter
-	 * @returns the service record for the filter
 	 */
-    public SetFilteredServiceRecord(gamertag: string, tree: ServiceRecordFilter, filter: HaloMap | HaloMode | HaloRanked | HaloOutcome, serviceRecord: ServiceRecord): void
+    public SetFilteredServiceRecord(tree: ServiceRecordFilter, filter: HaloMap | HaloMode | HaloRanked | HaloOutcome, serviceRecord: ServiceRecord): void
     {
         switch (tree)
         {
@@ -117,7 +115,7 @@ export class Player
 	 * @param filter the map/mode/outcome/rank filter
 	 * @returns the service record for the filter
 	 */
-    public GetFilteredServiceRecord(gamertag: string, tree: ServiceRecordFilter, filter: HaloMap | HaloMode | HaloRanked | HaloOutcome): ServiceRecord | undefined
+    public GetFilteredServiceRecord(tree: ServiceRecordFilter, filter: HaloMap | HaloMode | HaloRanked | HaloOutcome): ServiceRecord | undefined
     {
         switch (tree)
         {

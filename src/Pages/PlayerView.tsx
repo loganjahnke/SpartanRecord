@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, Toolbar } from "@mui/material";
+import { Box, Checkbox, Divider, FormControlLabel, FormGroup, Grid, Toolbar, Typography } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -99,14 +99,16 @@ export function PlayerView(props: ViewProps)
 			<Box sx={{ p: gamertag !== "search" && gamertag !== undefined ? 2 : 0, height: "calc(100% - 64px)" }}>
 				{gamertag !== "search" && gamertag !== undefined ? 
 					<Grid container spacing={2}>
-						{/** Far left */}
-						<Grid container item spacing={2} xs={12} md={4} xl={4} sx={{ alignContent: "flex-start" }}>
-							<Grid item xs={12} xl={7}>
+						{/* Top */}
+						<Grid item xs={12}>
+							<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
 								<PlayerCard player={myPlayer} />
-							</Grid>
-							<Grid item xs={12} xl={5}>
+								<Box sx={{ flexGrow: 1 }}></Box>
 								<ServiceRecordFilters setPerMatch={setShowPerMatch} />
-							</Grid>
+							</Box>
+						</Grid>
+						{/* Far left */}
+						<Grid container item spacing={2} xs={12} md={4} xl={4} sx={{ alignContent: "flex-start" }}>
 							<Grid item xs={12}>
 								<MatchesBreakdown serviceRecord={myPlayer.serviceRecord} />
 							</Grid>
@@ -117,7 +119,7 @@ export function PlayerView(props: ViewProps)
 								<ShotsBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 						</Grid>
-						{/** Middle 6 */}
+						{/* Middle 6 */}
 						<Grid container item spacing={2} xs={12} md={4} xl={5} sx={{ alignContent: "flex-start" }}>
 							<Grid item xs={12}>
 								<TopMedals medals={myPlayer.serviceRecord.medals} matchesPlayed={myPlayer.serviceRecord.matchesPlayed} showPerMatch={showPerMatch} />
@@ -126,7 +128,7 @@ export function PlayerView(props: ViewProps)
 								<ServiceRecordChart historicServiceRecords={myPlayer.historicStats ?? []} currentSR={myPlayer.serviceRecord} />
 							</Grid>
 						</Grid>
-						{/** Far right */}
+						{/* Far right */}
 						<Grid container item spacing={2} xs={12} md={4} xl={3} sx={{ alignContent: "flex-start" }}>
 							<Grid item xs={12}>
 								<KDABreakdown serviceRecord={myPlayer.serviceRecord} />

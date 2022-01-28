@@ -8,7 +8,13 @@ export class SpartanCompany
     /** The players in the company */
     public players: Player[] = [];
     /** The company's members */
-    public members: string[];
+    public members: UID2Gamertag[];
+    /** The company medal */
+    public emblem: string;
+    /** The admin of the company */
+    public adminUID: string = "";
+    /** The list of gamertags who have requested permission to join the spartan company */
+    public requested: UID2Gamertag[];
     
     /** Index of gamertag to player index */
     private __gamertagToPlayerIndex: Map<string, number> = new Map<string, number>();
@@ -17,6 +23,8 @@ export class SpartanCompany
     {
         this.name = name;
         this.members = [];
+        this.requested = [];
+        this.emblem = "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/gunner.png";
     }
 
     /**
@@ -79,4 +87,21 @@ export class SpartanCompany
 
     /** Does this spartan company exist? */
     public Exists(): boolean { return this.members?.length > 0; }
+}
+
+export class UID2Gamertag
+{
+    public userID: string;
+    public gamertag: string;
+
+    constructor(uid: string, gamertag: string)
+    {
+        this.userID = uid;
+        this.gamertag = gamertag;
+    }
+
+    public IsGuest(): boolean
+    {
+        return this.userID === "true";
+    }
 }

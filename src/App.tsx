@@ -3,7 +3,7 @@ import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { ThemeProvider } from '@mui/material/styles';
-import { SpartanCompanyView } from "./Pages/SpartanCompanyView";
+import { SpartanCompanyView } from "./Pages/Spartan Company/SpartanCompanyView";
 import { ArrowheadTheme } from "./Assets/Theme/ArrowheadTheme";
 import { PlayerView } from "./Pages/PlayerView";
 import { MedalsView } from "./Pages/MedalsView";
@@ -20,6 +20,8 @@ import { AHDrawer } from "./Assets/Components/Layout/AHDrawer";
 import { Box } from "@mui/material";
 import { AHLoading } from "./Assets/Components/Layout/AHLoading";
 import { ArrowheadUser } from "./Objects/Model/ArrowheadUser";
+import { SCConfigView } from "./Pages/Spartan Company/SCConfigView";
+import { UhOh } from "./Pages/UhOh";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -43,7 +45,7 @@ const App = () =>
 	//#endregion
 
 	//#region My User
-	const [arrowhead] = useState(new Arrowhead(database, analytics, auth));
+	const [arrowhead, setArrowhead] = useState(new Arrowhead(database, analytics, auth));
 	const [loggedInUser, setLoggedInUser] = useState<ArrowheadUser | undefined>();
 	//#endregion
 
@@ -55,6 +57,7 @@ const App = () =>
 	const loadUser = useCallback(async () =>
 	{
 		await arrowhead.SyncProfile();
+		setArrowhead(arrowhead);
 		setLoggedInUser(arrowhead.arrowheadUser);
 		if (arrowhead.arrowheadUser?.player?.gamertag)
 		{
@@ -124,11 +127,13 @@ const App = () =>
 					<Route path="/service_record/:gamertag" element={<PlayerView app={arrowhead} setLoadingMessage={setLoadingMessage} />} />
 					<Route path="/service_record/:tree/:filter/:gamertag" element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} />} />
 					<Route path="/company/:company" element={<SpartanCompanyView app={arrowhead} setLoadingMessage={setLoadingMessage} />} />
+					<Route path="/company/:company/configure" element={<SCConfigView app={arrowhead} setLoadingMessage={setLoadingMessage} />} />
 					<Route path="/medals/:gamertag" element={<MedalsView app={arrowhead} setLoadingMessage={setLoadingMessage} />} />
 					<Route path="/matches/:gamertag" element={<MatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} />} />
 					<Route path="/match/:id" element={<SingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} />} />
 					<Route path="/login" element={<AuthenticationView app={arrowhead} setLoadingMessage={setLoadingMessage} afterAuth={afterAuth} />} />
 					<Route path="/signup" element={<AuthenticationView app={arrowhead} setLoadingMessage={setLoadingMessage} afterAuth={afterAuth} registering />} />
+					<Route path="*" element={<UhOh />} />
 				</Routes>
 			</Box>
 		</ThemeProvider>
