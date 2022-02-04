@@ -17,6 +17,7 @@ import { GamertagSearch } from "./Subpage/GamertagSearch";
 import { VehicleBreakdown } from "../Assets/Components/Breakdowns/VehicleBreakdown";
 import { ServiceRecordFilters } from "./Subpage/ServiceRecordFilters";
 import { ViewProps } from "./Props/ViewProps";
+import { CampaignBreakdown } from "../Assets/Components/Breakdowns/CampaignBreakdown";
 
 export function PlayerView(props: ViewProps)
 {
@@ -127,6 +128,9 @@ export function PlayerView(props: ViewProps)
 							<Grid item xs={12}>
 								<ServiceRecordChart historicServiceRecords={myPlayer.historicStats ?? []} currentSR={myPlayer.serviceRecord} />
 							</Grid>
+							{/* <Grid item xs={12}>
+								<CampaignBreakdown campaignRecord={myPlayer.campaignRecord} />
+							</Grid> */}
 						</Grid>
 						{/* Far right */}
 						<Grid container item spacing={2} xs={12} md={4} xl={3} sx={{ alignContent: "flex-start" }}>

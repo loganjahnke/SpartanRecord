@@ -26,8 +26,10 @@ export class Match
     public date: Date;
     /** The total duration of the match */
     public duration: TimePlayed;
-    /** The teams */
+    /** The teams (for team games) */
     public teams: Team[];
+    /** The players (for FFA games) */
+    public players: MatchPlayer[];
     /** High scores */
     public best: { score: number, points: number, kills: number, deaths: number, assists: number };
 
@@ -43,6 +45,7 @@ export class Match
         this.date = data?.played_at ? new Date(data.played_at) : new Date();
         this.duration = new TimePlayed(data?.duration);
         this.teams = [];
+        this.players = [];
         this.best = { score: 0, points: 0, kills: 0, deaths: Number.MAX_VALUE, assists: 0 };
 
         if (data?.teams?.details)
@@ -60,6 +63,22 @@ export class Match
                     this.best.deaths = player.stats.summary.deaths < this.best.deaths ? player.stats.summary.deaths : this.best.deaths;
                     this.best.assists = player.stats.summary.assists > this.best.assists ? player.stats.summary.assists : this.best.assists;
                 }
+            }
+        }
+        
+        if (data?.players)
+        {
+            for (const player of data.players)
+            {
+                const mp = new MatchPlayer(player);
+                if (!mp) { continue; }
+                this.players.push(mp);
+                if (mp.outcome === HaloOutcome.Left) { continue; }
+                this.best.score = mp.stats.totalScore > this.best.score ? mp.stats.totalScore : this.best.score;
+                this.best.points = mp.stats.totalPoints > this.best.points ? mp.stats.totalPoints : this.best.points;
+                this.best.kills = mp.stats.summary.kills > this.best.kills ? mp.stats.summary.kills : this.best.kills;
+                this.best.deaths = mp.stats.summary.deaths < this.best.deaths ? mp.stats.summary.deaths : this.best.deaths;
+                this.best.assists = mp.stats.summary.assists > this.best.assists ? mp.stats.summary.assists : this.best.assists;
             }
         }
     }

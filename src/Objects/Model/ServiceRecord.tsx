@@ -9,6 +9,9 @@ import { TimePlayed } from "../Pieces/TimePlayed";
 
 export class ServiceRecord
 {
+    /** The damage needed for a perfect kill */
+    private readonly PERFECT_KILL_DAMAGE = 225;
+
     /** Contains summary information */
     public summary: Summary;
     /** Contains information about the damage taken and dealt */
@@ -21,6 +24,20 @@ export class ServiceRecord
     public timePlayed: TimePlayed;
     /** Contains all medals */
     public medals: Medal[];
+ 
+    /** The damage efficiency per kill */
+    public get damageEfficiency(): number
+    {
+        if (this.damage.dealt === 0 || this.summary.kills === 0) { return 0; }
+        return this.PERFECT_KILL_DAMAGE / (this.damage.dealt / this.summary.kills);
+    }
+
+    /** The enemy damage efficiency per death */
+    public get enemyDamageEfficiency(): number
+    {
+        if (this.damage.taken === 0 || this.summary.deaths === 0) { return 0; }
+        return this.PERFECT_KILL_DAMAGE / (this.damage.taken / this.summary.deaths);
+    }
 
     /** KDA */
     public kda: number = 0;

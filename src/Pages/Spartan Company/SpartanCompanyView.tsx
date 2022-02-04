@@ -19,6 +19,8 @@ import AddIcon from '@mui/icons-material/Add';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import SlowMotionVideoIcon from '@mui/icons-material/SlowMotionVideo';
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
+import { DamageBreakdown } from "../../Assets/Components/Breakdowns/DamageBreakdown";
+import { ShotsBreakdown } from "../../Assets/Components/Breakdowns/ShotsBreakdown";
 
 export function SpartanCompanyView(props: ViewProps)
 {
@@ -149,6 +151,12 @@ export function SpartanCompanyView(props: ViewProps)
 							</Grid>
 							<Grid item xs={12}>
 								<MatchesBreakdown serviceRecord={sharedSR} />
+							</Grid>
+							<Grid item xs={12}>
+								<DamageBreakdown serviceRecord={sharedSR} />
+							</Grid>
+							<Grid item xs={12}>
+								<ShotsBreakdown serviceRecord={sharedSR} />
 							</Grid>
 						</Grid>
 						<Grid container item spacing={2} xs={12} md={4} xl={3}>

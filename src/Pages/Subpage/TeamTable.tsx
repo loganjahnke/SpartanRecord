@@ -11,6 +11,8 @@ import { MedalTile } from "../../Assets/Components/Medals/MedalTile";
 import { DamageBreakdown } from "../../Assets/Components/Breakdowns/DamageBreakdown";
 import { ShotsBreakdown } from "../../Assets/Components/Breakdowns/ShotsBreakdown";
 
+import StarIcon from '@mui/icons-material/Star';
+
 interface TeamTableProps
 {
 	mode: HaloMode;
@@ -64,15 +66,15 @@ function Row(props: TeamTableRowProps)
 	const { onGamertagClick, player, topSR, showRank, showPoints } = props;
 	const [expanded, setExpanded] = useState(false);
 
-	const bestScore = player.stats.totalScore === topSR?.score ? ArrowheadTheme.good + " !important" : "";
-	const bestPoints = player.stats.totalPoints === topSR?.points ? ArrowheadTheme.good + " !important" : "";
-	const bestKills = player.stats.summary.kills === topSR?.kills ? ArrowheadTheme.good + " !important" : "";
-	const bestDeaths = player.stats.summary.deaths === topSR?.deaths ? ArrowheadTheme.good + " !important" : "";
-	const bestAssists = player.stats.summary.assists === topSR?.assists ? ArrowheadTheme.good + " !important" : "";
+	const bestScore = player.stats.totalScore === topSR?.score;
+	const bestPoints = player.stats.totalPoints === topSR?.points;
+	const bestKills = player.stats.summary.kills === topSR?.kills;
+	const bestDeaths = player.stats.summary.deaths === topSR?.deaths;
+	const bestAssists = player.stats.summary.assists === topSR?.assists;
 
 	return (
 		<React.Fragment>
-			<TableRow sx={{ ".MuiTableCell-body": { color: player.outcome === HaloOutcome.Left ? ArrowheadTheme.leftEarlyText : ArrowheadTheme.text_primary } }}>
+		<TableRow sx={{ ".MuiTableCell-body": { verticalAlign: "middle", color: player.outcome === HaloOutcome.Left ? ArrowheadTheme.leftEarlyText : ArrowheadTheme.text_primary } }}>
 				<TableCell width={"32px"}>
 					<IconButton size="small" onClick={() => setExpanded(!expanded)}>
 						{expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -84,11 +86,37 @@ function Row(props: TeamTableRowProps)
 					</TableCell> 
 				: undefined}
 				<TableCell sx={{ pl: 2, pr: 2, position: "sticky", left: 0, backgroundColor: ArrowheadTheme.box }} component="th" scope="row" onClick={() => onGamertagClick(player.gamertag)} width={"150px"}>{player.gamertag}</TableCell>
-				<TableCell sx={{ pl: 2, pr: 2, backgroundColor: bestScore }} width={"80px"} align="right">{player.stats.totalScore}</TableCell>
-				{showPoints ? <TableCell sx={{ pl: 2, pr: 2, backgroundColor: bestPoints }} width={"80px"} align="right">{player.stats.totalPoints}</TableCell> : undefined}
-				<TableCell sx={{ pl: 2, pr: 2, backgroundColor: bestKills }} width={"80px"} align="right">{player.stats.summary.kills}</TableCell>
-				<TableCell sx={{ pl: 2, pr: 2, backgroundColor: bestDeaths }} width={"80px"} align="right">{player.stats.summary.deaths}</TableCell>
-				<TableCell sx={{ pl: 2, pr: 2, backgroundColor: bestAssists }} width={"80px"} align="right">{player.stats.summary.assists}</TableCell>
+				<TableCell sx={{ pl: 2, pr: 2 }} width={"80px"} align="right">
+					<Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+						{bestScore ? <StarIcon sx={{ color: ArrowheadTheme.good, mr: 1 }} /> : undefined}
+						{player.stats.totalScore}
+					</Box>
+				</TableCell>
+				{showPoints ? (
+					<TableCell sx={{ pl: 2, pr: 2 }} width={"80px"} align="right">
+						<Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+							{bestPoints ? <StarIcon sx={{ color: ArrowheadTheme.good, mr: 1 }} /> : undefined}
+							{player.stats.totalPoints}
+						</Box>
+					</TableCell>) : undefined}
+				<TableCell sx={{ pl: 2, pr: 2 }} width={"80px"} align="right">
+					<Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+						{bestKills ? <StarIcon sx={{ color: ArrowheadTheme.good, mr: 1 }} /> : undefined}
+						{player.stats.summary.kills}
+					</Box>
+				</TableCell>
+				<TableCell sx={{ pl: 2, pr: 2 }} width={"80px"} align="right">
+					<Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+						{bestDeaths ? <StarIcon sx={{ color: ArrowheadTheme.good, mr: 1 }} /> : undefined}
+						{player.stats.summary.deaths}
+					</Box>
+				</TableCell>
+				<TableCell sx={{ pl: 2, pr: 2 }} width={"80px"} align="right">
+					<Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+						{bestAssists ? <StarIcon sx={{ color: ArrowheadTheme.good, mr: 1 }} /> : undefined}
+						{player.stats.summary.assists}
+					</Box>
+				</TableCell>
 				<TableCell sx={{ pr: 2 }} width={"80px"} align="right">{player.stats.kda}</TableCell>
 			</TableRow>
 			<TableRow sx={{ width: "calc(100%-128px)"}}>

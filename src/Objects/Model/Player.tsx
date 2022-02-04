@@ -1,5 +1,6 @@
 import { HaloMap, HaloMode, HaloOutcome, HaloRanked, ServiceRecordFilter } from "../../Database/ArrowheadFirebase";
 import { Appearance } from "./Appearance";
+import { CampaignRecord } from "./CampaignRecord";
 import { CSRS } from "./CSRS";
 import { Match } from "./Match";
 import { ServiceRecord } from "./ServiceRecord";
@@ -11,7 +12,7 @@ export class Player
     /** The player's current service record */
     public serviceRecord: ServiceRecord;
     /** The player's placement among their peers */
-    public placement: ServiceRecord;
+    public campaignRecord: CampaignRecord | undefined;
     /** The player's historic service records */
     public historicStats: ServiceRecord[] | undefined;
     /** The player's appearance */
@@ -32,14 +33,14 @@ export class Player
     /** Service record filtered per outcome, stored locally */
     public OutcomeToServiceRecord: Map<string, ServiceRecord> = new Map<HaloOutcome, ServiceRecord>();
 
-    constructor(gamertag?: string, serviceRecord?: ServiceRecord, history?: ServiceRecord[], appearance?: Appearance, matches?: Match[], ranks?: CSRS[])
+    constructor(gamertag?: string, serviceRecord?: ServiceRecord, history?: ServiceRecord[], appearance?: Appearance, matches?: Match[], ranks?: CSRS[], campaignRecord?: CampaignRecord)
     {
         this.gamertag = gamertag ?? "";
         this.serviceRecord = serviceRecord ?? new ServiceRecord();
         this.historicStats = history;
         this.appearance = appearance ?? new Appearance();
         this.matches = matches ?? [];
-        this.placement = new ServiceRecord();
+        this.campaignRecord = campaignRecord;
         this.ranks = ranks ?? [];
     }
 

@@ -9,6 +9,7 @@ import { SpartanCompany, UID2Gamertag } from "../Objects/Model/SpartanCompany";
 import { ArrowheadUser } from "../Objects/Model/ArrowheadUser";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { CSRS } from "../Objects/Model/CSRS";
+import { CampaignRecord } from "../Objects/Model/CampaignRecord";
 
 export enum HaloMap
 {
@@ -65,7 +66,7 @@ export class ArrowheadFirebase
 	/** Turns on or off debugging mode */
 	private readonly IS_DEBUGGING = process.env.NODE_ENV !== "production";
 	/** The HaloDotAPI version */
-	private readonly AUTOCODE_VERSION = "0-3-9";
+	private readonly AUTOCODE_VERSION = "0-4-0";
 
 	/** The last time the Halo API was used */
 	public lastUpdate: Date | null = null;
@@ -227,6 +228,7 @@ export class ArrowheadFirebase
 	 */
 	public async GetPlayer(gamertag: string, getHistoricSR: boolean = false, matchesToGet: number = 0): Promise<Player>
 	{
+		// const campaignRecord = await this.GetCampaignRecord(gamertag);
 		const serviceRecord = await this.GetCurrentServiceRecord(gamertag);
 		const historicServiceRecords = getHistoricSR ? await this.GetHistoricServiceRecord(gamertag) : [];
 		const appearance = await this.GetAppearance(gamertag);
@@ -386,6 +388,72 @@ export class ArrowheadFirebase
 	{
 		const player = this.__allPlayers.get(gamertag) ?? new Player(gamertag);
 		player.appearance = appearance;
+		this.__allPlayers.set(gamertag, player);
+	}
+	//#endregion
+
+	//#region Campaign Record
+	/**
+	 * Gets the campaign record for a gamertag, checks locally before going to Firebase
+	 * @param gamertag the gamertag to get stats from
+	 * @returns The current campaign record for the gamertag
+	 */
+	public async GetCampaignRecord(gamertag: string): Promise<CampaignRecord | undefined>
+	{
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "GetCampaignRecord()", gamertag); }
+
+		// Try locally
+		let cr = this.__getCampaignRecordForGamertagLocally(gamertag);
+		if (cr)
+		{
+			if (this.IS_DEBUGGING) { Debugger.Continue("Locally"); }
+			return cr;
+		}
+
+		// Otherwise go to Firebase
+		// const reference = `campaign/${gamertag}`;
+		// const gamertagSnapshot = await get(child(ref(this.__database), reference));
+		// if (gamertagSnapshot?.exists())
+		// {
+		// 	if (this.IS_DEBUGGING) { Debugger.Continue("Firebase"); }
+		// 	const result = gamertagSnapshot.val();
+		// 	if (this.IS_DEBUGGING) { Debugger.Size(result, "service record"); }
+		// 	sr = new ServiceRecord(result);
+
+		// 	// Store locally for current pull
+		// 	this.__storeCampaignRecordLocally(gamertag, sr);
+		// 	return sr;
+		// }
+
+		// Otherwise go to HaloDotAPI
+		const crJSON = await this.__getSCampaignRecordFromHaloDotAPI(gamertag);
+		cr = new CampaignRecord(crJSON);
+		this.__storeCampaignRecordLocally(gamertag, cr);
+		if (this.IS_DEBUGGING) { Debugger.Continue("Autocode"); }
+
+		return cr;
+	}
+
+	/**
+	 * Gets the statistics for a user for the current pull
+	 * @param gamertag the gamertag to retrieve
+	 * @returns The Service Record for the current pull
+	 */
+	private __getCampaignRecordForGamertagLocally(gamertag: string): CampaignRecord | undefined
+	{
+		const player = this.__allPlayers.get(gamertag);
+		return player?.campaignRecord;
+	}
+
+	 /**
+	 * Stores the service record into the AllUserStatistics map if it's not already in there
+	 * @param serviceRecord The service record to push in
+	 * @param pull The pull to push in
+	 */
+	private __storeCampaignRecordLocally(gamertag: string, campaignRecord: CampaignRecord): void
+	{
+		const player = this.__allPlayers.get(gamertag) ?? new Player(gamertag);
+		player.campaignRecord = campaignRecord;
 		this.__allPlayers.set(gamertag, player);
 	}
 	//#endregion
@@ -764,6 +832,22 @@ export class ArrowheadFirebase
 	//#endregion
 
 	//#region Autocode
+	/**
+	 * Gets the campaign record from HaloDotAPI for a specific gamertag
+	 * @param gamertag the gamertag
+	 * @returns JSON result of the campaign record for a gamertag
+	 */
+	private async __getSCampaignRecordFromHaloDotAPI(gamertag: string): Promise<any>
+	{
+		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/campaign_record`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({gamertag: gamertag})
+		});
+
+		return await response.json();
+	}
+
 	/**
 	 * Gets the service record from HaloDotAPI for a specific gamertag
 	 * @param gamertag the gamertag

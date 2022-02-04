@@ -5,13 +5,23 @@ export function AssistBreakdown(props: BreakdownProps)
 {
 	const { serviceRecord, showPerMatch } = props;
 
+	let wingmanCount = 0;
+	const wingmanMedal = serviceRecord.medals.filter(medal => medal.id === 1284032216);
+	if (wingmanMedal.length === 1)
+	{
+		wingmanCount = wingmanMedal[0].count;
+	}
+
 	return (
 		<Box sx={{ backgroundColor: "divider", borderRadius: 3, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 			<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", width: "100%" }}>
-				<BreakdownTile title="Assists" value={showPerMatch ? serviceRecord.summary.assists / serviceRecord.matchesPlayed : serviceRecord.summary.assists} isMainStat />
-				<BreakdownTile title="EMP" value={showPerMatch ? serviceRecord.breakdowns.assists.emp / serviceRecord.matchesPlayed : serviceRecord.breakdowns.assists.emp} isMainStat />
-				<BreakdownTile title="Driver" value={showPerMatch ? serviceRecord.breakdowns.assists.driver / serviceRecord.matchesPlayed : serviceRecord.breakdowns.assists.driver} isMainStat />
-				<BreakdownTile title="Callouts" value={showPerMatch ? serviceRecord.breakdowns.assists.callouts / serviceRecord.matchesPlayed : serviceRecord.breakdowns.assists.callouts} isMainStat />
+				<BreakdownTile title="Assists" value={showPerMatch ? serviceRecord.summary.assists / serviceRecord.matchesPlayed : serviceRecord.summary.assists} isMainStat tooltip="Total assists" />
+				<BreakdownTile title="Wingman" value={showPerMatch ? wingmanCount / serviceRecord.matchesPlayed : wingmanCount} isMainStat tooltip="Games with 10+ assists" />
+			</Box>
+			<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", width: "100%" }}>
+				<BreakdownTile title="EMP" value={showPerMatch ? serviceRecord.breakdowns.assists.emp / serviceRecord.matchesPlayed : serviceRecord.breakdowns.assists.emp} isMainStat tooltip="EMP assists" />
+				<BreakdownTile title="Driver" value={showPerMatch ? serviceRecord.breakdowns.assists.driver / serviceRecord.matchesPlayed : serviceRecord.breakdowns.assists.driver} isMainStat tooltip="Assists earned as the driver of a vehicle" />
+				<BreakdownTile title="Callouts" value={showPerMatch ? serviceRecord.breakdowns.assists.callouts / serviceRecord.matchesPlayed : serviceRecord.breakdowns.assists.callouts} isMainStat tooltip="Callout assists" />
 			</Box>
 		</Box>
 	);

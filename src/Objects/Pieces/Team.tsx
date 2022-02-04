@@ -8,7 +8,7 @@ export class Team
     public statistics: ServiceRecord;
     public players: MatchPlayer[] = [];
 
-    constructor(teamData?: any, playersData?: any)
+    constructor(teamData?: any, playersData?: any, players?: MatchPlayer[])
     {
         this.details = new TeamDetails(teamData?.team);
         this.statistics = new ServiceRecord(teamData?.stats);
@@ -20,6 +20,10 @@ export class Team
             {
                 this.players = filtered.map((playerData: any) => new MatchPlayer(playerData));
             }
+        }
+        else if (players)
+        {
+            this.players = players;
         }
     }
 }

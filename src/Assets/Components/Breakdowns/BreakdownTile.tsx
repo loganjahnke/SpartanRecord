@@ -22,11 +22,12 @@ interface BreakdownTileProps
     isHeader?: boolean;
     backgroundColor?: string;
     small?: boolean;
+    tooltip?: string;
 }
 
 export function BreakdownTile(props: BreakdownTileProps)
 {
-	const { title, value, total, isMainStat, isPercent, isHeader, backgroundColor, small } = props;
+	const { title, value, total, isMainStat, isPercent, isHeader, backgroundColor, small, tooltip } = props;
 
     const background = backgroundColor ?? (isMainStat && !small ? ArrowheadTheme.box : ArrowheadTheme.secondary);
 
@@ -40,7 +41,7 @@ export function BreakdownTile(props: BreakdownTileProps)
     if (value === 0 && !isMainStat) { return <React.Fragment />; }
 
 	return (
-        <Tooltip title={title + ": " + (typeof value === "number" ? (Math.round(value * 100) / 100).toLocaleString() : value) + (isPercent ? "%" : "")}>
+        <Tooltip title={tooltip ?? (title + ": " + (typeof value === "number" ? (Math.round(value * 100) / 100).toLocaleString() : value) + (isPercent ? "%" : ""))}>
             <Box sx={{ 
                 backgroundColor: background, 
                 display: "flex", 

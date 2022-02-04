@@ -1,5 +1,8 @@
 import { Box } from "@mui/material";
+import { useState } from "react";
 import { HaloOutcome } from "../../../Database/ArrowheadFirebase";
+import { Appearance } from "../../../Objects/Model/Appearance";
+import { MatchPlayer } from "../../../Objects/Pieces/MatchPlayer";
 import { Team } from "../../../Objects/Pieces/Team";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { BreakdownProps, BreakdownTile } from "./BreakdownTile";
@@ -57,4 +60,16 @@ export function TeamResultBreakdown(props: TeamResultBreakdownProps)
                   </Box>
 		</Box>
 	);
+}
+
+export function FFAResultBreakdown(props: { winner: MatchPlayer })
+{
+	const { winner } = props;
+
+    const team = new Team();
+    team.details = winner.team;
+    team.details.name = winner.gamertag;
+    team.statistics = winner.stats;
+
+    return <TeamResultBreakdown team={team} />
 }

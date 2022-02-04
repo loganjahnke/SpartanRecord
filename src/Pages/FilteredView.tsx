@@ -17,6 +17,7 @@ import { LevelBreakdown } from "../Assets/Components/Breakdowns/LevelBreakdown";
 import { PlayerCard } from "../Assets/Components/Cards/PlayerCard";
 import { ServiceRecordFilters } from "./Subpage/ServiceRecordFilters";
 import { ViewProps } from "./Props/ViewProps";
+import { PercentageBreakdown } from "../Assets/Components/Breakdowns/PercentageBreakdown";
 
 export function FilteredView(props: ViewProps)
 {
@@ -104,6 +105,9 @@ export function FilteredView(props: ViewProps)
 						</Grid>
 						<Grid item xs={12}>
 							<MatchesBreakdown serviceRecord={sr} />
+						</Grid>
+						<Grid item xs={12}>
+							<PercentageBreakdown totalMatches={myPlayer.serviceRecord.matchesPlayed} filteredMatches={sr.matchesPlayed} />
 						</Grid>
 					</Grid>
 					{/* Middle 5 */}
