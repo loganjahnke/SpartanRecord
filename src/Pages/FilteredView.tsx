@@ -72,7 +72,31 @@ export function FilteredView(props: FilterViewProps & ViewProps)
 		{
 			setSR(await app.GetFilteredServiceRecord(gamertag, node as ServiceRecordFilter, selectedFilter));			
 			app.LogViewServiceRecord(gamertag, node as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome);
+
+			if (node === ServiceRecordFilter.Map)
+			{
+				const imageName = selectedFilter.toLowerCase().replace(" ", "-");
+				setImage(`https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/maps/${imageName}.jpg`)
+			}
+			else if (node === ServiceRecordFilter.Variant)
+			{
+				const f = selectedFilter.toLowerCase();
+				const imageName = f.includes("slayer") ? "slayer"
+					: f.includes("attrition") ? "attrition"
+					: f.includes("fiesta") ? "fiesta"
+					: f.includes("strongholds") ? "strongholds"
+					: f.includes("total control") ? "total-control"
+					: f.includes("ctf") ? "ctf"
+					: f.includes("oddball") ? "oddball"
+					: f.includes("stockpile") ? "stockpile" 
+					: f.includes("koth") ? "koth" 
+					: f.includes("king of the hill") ? "koth" 
+					: f.includes("land grab") ? "land-grab" 
+					: "slayer";
+				setImage(`https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/ugcgamevariants/${imageName}.jpg`)
+			}
 		}
+
 
 		setLoadingMessage("");
 	}, [app, gamertag, node, selectedFilter]);
