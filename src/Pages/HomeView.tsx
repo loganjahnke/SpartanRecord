@@ -35,6 +35,13 @@ export function HomeView(props: ViewProps & HomeViewProps)
 		navigate(`service_record/${localGamertag}`);
 	}
 
+	/** When the search button is pressed */
+	function openRecent(gamertag: string)
+	{
+		setGamertag(gamertag);
+		navigate(`service_record/${gamertag}`);
+	}
+
 	/** When enter is pressed */
 	function searchForGamertagViaEnter(event: React.KeyboardEvent<HTMLDivElement>)
 	{
@@ -48,7 +55,7 @@ export function HomeView(props: ViewProps & HomeViewProps)
 		<Box component="main" sx={{ flexGrow: 1, height: "calc(100% - 64px)" }}>
 			<Toolbar />
 			<Divider />
-			<GamertagSearch search={localGamertag} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} />
+			<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} />
 		</Box>
 	);
 }

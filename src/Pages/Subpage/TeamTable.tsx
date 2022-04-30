@@ -89,13 +89,13 @@ function Row(props: TeamTableRowProps)
 				<TableCell sx={{ pl: 2, pr: 2 }} width={"80px"} align="right">
 					<Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
 						{bestScore ? <StarIcon sx={{ color: ArrowheadTheme.good, mr: 1 }} /> : undefined}
-						{player.stats.totalScore}
+						{player.stats.totalScore.toLocaleString()}
 					</Box>
 				</TableCell>
 				<TableCell sx={{ pl: 2, pr: 2 }} width={"80px"} align="right">
 					<Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
 						{bestPoints ? <StarIcon sx={{ color: ArrowheadTheme.good, mr: 1 }} /> : undefined}
-						{player.stats.totalPoints}
+						{player.stats.totalPoints.toLocaleString()}
 					</Box>
 				</TableCell>
 				<TableCell sx={{ pl: 2, pr: 2 }} width={"80px"} align="right">
@@ -116,7 +116,7 @@ function Row(props: TeamTableRowProps)
 						{player.stats.summary.assists}
 					</Box>
 				</TableCell>
-				<TableCell sx={{ pr: 2 }} width={"80px"} align="right">{player.stats.kda}</TableCell>
+				<TableCell sx={{ pr: 2 }} width={"80px"} align="right">{player.stats.kda.toLocaleString()}</TableCell>
 			</TableRow>
 			<TableRow sx={{ width: "calc(100%-128px)"}}>
 				<TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={showRank ? 9 : 8}>

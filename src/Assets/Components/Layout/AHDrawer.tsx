@@ -1,5 +1,6 @@
 import { SyntheticEvent } from "react";
 import { Box, Button, Divider, Drawer, Tab, Tabs, Toolbar } from "@mui/material";
+import { ServiceRecordFilter } from "../../../Database/ArrowheadFirebase";
 
 import MapIcon from '@mui/icons-material/Map';
 import ListIcon from '@mui/icons-material/List';
@@ -9,7 +10,8 @@ import ModeStandbyIcon from '@mui/icons-material/ModeStandby';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
-import { ServiceRecordFilter } from "../../../Database/ArrowheadFirebase";
+import GroupsIcon from '@mui/icons-material/Groups';
+import StarIcon from '@mui/icons-material/Star';
 
 interface AHDrawerProps
 {
@@ -64,8 +66,11 @@ export function AHDrawer(props: AHDrawerProps)
 			case "Matches":
 				switchTab(`/matches/${gamertag}`, newTab);
 				break;
+			case "Best":
+				switchTab(`/best/matches/${gamertag}`, newTab);
+				break;
 			case "Company":
-				switchTab(`/company/search`, newTab);
+				switchTab(`/arrowhead`, newTab);
 				break;
 			default: 
 				console.log("Something unexpected was pressed in the tabs: " + newTab);
@@ -85,7 +90,7 @@ export function AHDrawer(props: AHDrawerProps)
 			<Toolbar><Button className="ahTab" onClick={goHome}>SpartanRecord.com</Button></Toolbar>
 			<Divider flexItem />
 				{gamertag ? 
-				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked} sx={{ mt: 5 }}>
+				<Tabs orientation="vertical" value={currentTab || "Search"} onChange={tabClicked} sx={{ mt: 5 }}>
 					<Tab className="ahTab" value="Search" label="Search" icon={<PersonSearchIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Service Record" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Maps" label="Maps" icon={<MapIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
@@ -94,14 +99,15 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab className="ahTab" value="Match Outcome" label="Match Outcome" icon={<EmojiEventsIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Medals" label="Medals" icon={<MilitaryTechIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Matches" label="Matches" icon={<SportsEsportsIcon />} iconPosition="start" />
-					{/* <Tab className="ahTab" value="Company" label={loggedInUser?.spartanCompany?.name ? loggedInUser.spartanCompany.name + " Company" : "Create or Join Spartan Company"} icon={<GroupsIcon />} iconPosition="start" /> */}
+					<Tab className="ahTab" value="Best" label="Best Matches" icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Company" label="Arrowhead Company" icon={<GroupsIcon />} iconPosition="start" />
 				</Tabs>
 				:
-				<Tabs orientation="vertical" value="Search" onChange={tabClicked} sx={{ mt: 5 }}>
+				<Tabs orientation="vertical" value={currentTab || "Search"} onChange={tabClicked} sx={{ mt: 5 }}>
 					<Tab className="ahTab" value="Search" label="Search" icon={<PersonSearchIcon />} iconPosition="start" />
+					<Tab className="ahTab" value="Company" label="Arrowhead Company" icon={<GroupsIcon />} iconPosition="start" />
 				</Tabs>
-				}	
-			<Box sx={{ flexGrow: 1 }}></Box>
+				}
 		</Box>
 	);
 	//#endregion

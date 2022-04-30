@@ -10,6 +10,7 @@ import { HaloMap, HaloMode, HaloOutcome, HaloRanked, ServiceRecordFilter } from 
 import { SCAutocode } from "./SCAutocode";
 import { SCFirebase } from "./SCFirebase";
 import { AutocodeMultiplayerServiceRecord } from "./Schemas/AutocodeMultiplayerServiceRecord";
+import { FirebaseBest } from "./Schemas/FirebaseBest";
 
 export class SCData
 {
@@ -78,10 +79,10 @@ export class SCData
      * @param gamertag the gamertag
      * @returns player object
      */
-    public async GetPlayerFromFirebase(gamertag: string): Promise<Player>
+    public async GetPlayerFromFirebase(gamertag: string, historic?: boolean): Promise<Player>
 	{
 		const player = new Player(gamertag);
-		await this.__firebase.GetPlayer(player);
+		await this.__firebase.GetPlayer(player, historic);
 		return player;
 	}
 
@@ -151,6 +152,8 @@ export class SCData
      */
     public async GetMatch(matchID: string): Promise<Match>
     {
+        if (!matchID) { return new Match(); }
+        
         // Check if available in firebase
         let match = await this.__firebase.GetMatch(matchID);
         if (match) { return match; }
@@ -163,6 +166,27 @@ export class SCData
         await this.__firebase.SetMatch(matchID, result);
 
         return new Match(result);
+    }
+
+    /**
+	 * The current best (or worst) values for the gamer
+	 * @param gamertag the gamertag
+	 * @returns the best values object
+	 */
+	public async GetBest(gamertag: string): Promise<FirebaseBest>
+    {
+        return await this.__firebase.GetBest(gamertag);
+    }
+
+    /**
+	 * The current best (or worst) values for the gamer
+	 * @param gamertag the gamertag
+	 * @param map the map name
+	 * @returns the best values object
+	 */
+	public async GetBestForMap(gamertag: string, map: string): Promise<FirebaseBest>
+    {
+        return await this.__firebase.GetBestForMap(gamertag, map);
     }
     //#endregion
 

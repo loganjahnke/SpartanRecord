@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, IconButton, Divider, Typography, CircularProgress } from "@mui/material";
+import { AppBar, Toolbar, IconButton, Divider, Typography, CircularProgress, Box } from "@mui/material";
 
 import MenuIcon from '@mui/icons-material/Menu';
 
@@ -21,8 +21,9 @@ export function AHAppBar(props: AHAppBarProps)
 					<MenuIcon />
 				</IconButton>
 				<Divider orientation="vertical" flexItem sx={{ display: { sm: "none" }}} />
+				<Box sx={{ flexGrow: 1 }}></Box>
 				{loadingFromAutocode ? <CircularProgress size={20} variant={loadingFromAutocode === -1 ? "indeterminate" : "determinate"} value={loadingFromAutocode} /> : undefined}
-				{loadingFromAutocode ? <Typography sx={{ ml: 2 }} variant="subtitle1">Getting latest data from 343i</Typography> : undefined}
+				{loadingFromAutocode ? <Typography sx={{ ml: 2 }} variant="subtitle1">Getting latest data from HaloDotAPI</Typography> : undefined}
 			</Toolbar>
 		</AppBar>
 	);

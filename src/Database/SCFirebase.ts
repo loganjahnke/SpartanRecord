@@ -9,8 +9,8 @@ import { ServiceRecordFilter } from "./ArrowheadFirebase";
 import { AutocodeAppearance } from "./Schemas/AutocodeAppearance";
 import { AutocodeMatch } from "./Schemas/AutocodeMatch";
 import { AutocodeMultiplayerServiceRecord } from "./Schemas/AutocodeMultiplayerServiceRecord";
+import { FirebaseBest } from "./Schemas/FirebaseBest";
 import { FirebaseHistoricServiceRecord } from "./Schemas/FirebaseHistoricServiceRecord";
-import { FirebaseSyncInfo } from "./Schemas/FirebaseSyncInfo";
 
 export class SCFirebase
 {
@@ -28,16 +28,28 @@ export class SCFirebase
 	/**
 	 * Gets the player's service record and appearance from firebase
 	 * @param player the player to update
+	 * @param historic get the historic stats?
 	 */
-	public async GetPlayer(player: Player): Promise<void>
+	public async GetPlayer(player: Player, historic?: boolean): Promise<void>
 	{
 		if (!player.gamertag) { return; }
 
-		[player.serviceRecord, player.appearance, player.historicStats] = await Promise.all([
-			this.GetServiceRecord(player.gamertag),
-			this.GetAppearance(player.gamertag),
-			this.GetHistoricStatistics(player.gamertag)
-		]);
+		if (historic)
+		{
+			[player.serviceRecord, player.appearance, player.historicStats] = await Promise.all([
+				this.GetServiceRecord(player.gamertag),
+				this.GetAppearance(player.gamertag),
+				this.GetHistoricStatistics(player.gamertag)
+			]);
+		}
+		else
+		{
+			[player.serviceRecord, player.appearance] = await Promise.all([
+				this.GetServiceRecord(player.gamertag),
+				this.GetAppearance(player.gamertag)
+			]);
+		}
+
 	}
 
 	//#region Appearance
@@ -303,6 +315,81 @@ export class SCFirebase
 	{
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetMatch()", matchID); }
 		await this.__update(`match/${matchID}`, match);
+	}
+	//#endregion
+
+	//#region Best Matches
+	/**
+	 * The current best (or worst) values for the gamer
+	 * @param gamertag the gamertag
+	 * @returns the best values object
+	 */
+	public async GetBest(gamertag: string): Promise<FirebaseBest>
+	{
+		const result = await this.__get(`best/${gamertag}/all`);
+		let best = result?.val();
+
+		if (!best)
+		{
+			best = {
+				match_ids: {
+					best_kda: "",
+					worst_kda: "",
+					most_kills: "",
+					most_deaths: "",
+					most_assists: "",
+					highest_kd_spread: "",
+					worst_kd_spread: ""
+				},
+				values: {
+					best_kda: undefined,
+					worst_kda: undefined,
+					most_kills: undefined,
+					most_deaths: undefined,
+					most_assists: undefined,
+					highest_kd_spread: undefined,
+					worst_kd_spread: undefined
+				}
+			}
+		}
+		return best;
+	}
+
+	/**
+	 * The current best (or worst) values for the gamer
+	 * @param gamertag the gamertag
+	 * @param map the map name
+	 * @returns the best values object
+	 */
+	public async GetBestForMap(gamertag: string, map: string): Promise<FirebaseBest>
+	{
+		const result = await this.__get(`best/${gamertag}/maps/${map}`);
+		let best = result?.val();
+
+		if (!best)
+		{
+			best = {
+				match_ids: {
+					best_kda: "",
+					worst_kda: "",
+					most_kills: "",
+					most_deaths: "",
+					most_assists: "",
+					highest_kd_spread: "",
+					worst_kd_spread: ""
+				},
+				values: {
+					best_kda: undefined,
+					worst_kda: undefined,
+					most_kills: undefined,
+					most_deaths: undefined,
+					most_assists: undefined,
+					highest_kd_spread: undefined,
+					worst_kd_spread: undefined
+				}
+			}
+		}
+		return best;
 	}
 	//#endregion
 

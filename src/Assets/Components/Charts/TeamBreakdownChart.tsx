@@ -14,7 +14,7 @@ import { Box } from "@mui/material";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { MatchPlayer } from "../../../Objects/Pieces/MatchPlayer";
 
-export const TeamBreakdownChart = (props: { players: MatchPlayer[] }) =>
+export const TeamBreakdownChart = (props: { players: MatchPlayer[], blue?: boolean }) =>
 {
 	ChartJS.defaults.color = "#DDDDDD";
 	ChartJS.defaults.font.family = "Roboto";
@@ -29,18 +29,29 @@ export const TeamBreakdownChart = (props: { players: MatchPlayer[] }) =>
 		LinearScale
 	);
 
-	const CHART_COLORS = {
-		red: "rgb(255, 99, 132)",
-		orange: "rgb(255, 159, 64)",
-		yellow: "rgb(255, 205, 86)",
-		green: "rgb(75, 192, 192)",
-		blue: "rgb(54, 162, 235)",
-		purple: "rgb(153, 102, 255)",
-		grey: "rgb(201, 203, 207)",
-		theme: ArrowheadTheme.cobra
-	};
+	const { players, blue } = props;
 
-	const { players } = props;
+	const CHART_COLORS = blue ? {
+		o1: "#028e9c",
+		o2: "#023e8a",
+		o3: "#0077b6",
+		o4: "#0096c7",
+		o5: "#00b4d8",
+		o6: "#48cae4",
+		o7: "#90e0ef",
+		o8: "#ade8f4",
+		o9: "#caf0f8"
+	} : {
+		o1: "#7a1600",
+		o2: "#8e1900",
+		o3: "#a31d00",
+		o4: "#b72100",
+		o5: ArrowheadTheme.cobra,
+		o6: "#d13a19",
+		o7: "#d65032",
+		o8: "#db664c",
+		o9: "#e07c66"
+	};
 	
 	const options = {
 		type: "bar",

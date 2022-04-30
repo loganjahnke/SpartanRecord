@@ -5,7 +5,9 @@ import {
 	Tooltip,
 	Legend,
 	BarController,
-	BarElement
+	BarElement,
+	CategoryScale,
+	LinearScale
   } from 'chart.js';
 
 import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
@@ -22,7 +24,9 @@ export const KillBreakdownChart = (props: { currentSR: ServiceRecord }) =>
 		Title,
 		Tooltip,
 		Legend,
-		BarElement
+		BarElement,
+		CategoryScale,
+		LinearScale
 	);
 
 	const CHART_COLORS = {

@@ -7,7 +7,7 @@ interface ServiceRecordFiltersProps
 	activeFilter: string;
 	filters: FilterCount[];
 	onFilterClick: (filter: string) => void;
-	areVariants: boolean;
+	areVariants?: boolean;
 }
 
 export function ChipFilters(props: ServiceRecordFiltersProps)

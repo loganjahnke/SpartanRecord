@@ -19,6 +19,7 @@ import { ServiceRecordFilters } from "./Subpage/ServiceRecordFilters";
 import { ViewProps } from "./Props/ViewProps";
 import { CampaignBreakdown } from "../Assets/Components/Breakdowns/CampaignBreakdown";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
+import { Cookie } from "../Objects/Helpers/Cookie";
 
 export function PlayerView(props: ViewProps)
 {
@@ -49,9 +50,10 @@ export function PlayerView(props: ViewProps)
 			// Set page gamertag and show loading message
 			setGamertag(gamertag);
 			setLoadingMessage("Loading " + gamertag);
+			Cookie.addRecent(gamertag);
 			
 			// Get the player from firebase
-			const player = await app.GetPlayerFromFirebase(gamertag);
+			const player = await app.GetPlayerFromFirebase(gamertag, true);
 
 			// Set player to show latest data in firebase
 			setMyPlayer(player);
@@ -109,6 +111,13 @@ export function PlayerView(props: ViewProps)
 			searchForGamertag();
 		}
 	};
+
+	/** When the search button is pressed */
+	function openRecent(gamertag: string)
+	{
+		setGamertag(gamertag);
+		navigate(`service_record/${gamertag}`);
+	}
 
 	return (
 		<Box component="main" sx={{ flexGrow: 1 }}>
@@ -168,7 +177,7 @@ export function PlayerView(props: ViewProps)
 							</Grid>
 						</Grid>
 					</Grid>
-				: <GamertagSearch search={search} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} />}
+				: <GamertagSearch search={search} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} />}
 			</Box>
 		</Box>
 	);

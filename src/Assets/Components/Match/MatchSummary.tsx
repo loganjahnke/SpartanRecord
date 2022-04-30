@@ -1,16 +1,18 @@
 import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from "@mui/material";
-import { PlayerMatch } from "../../../Objects/Model/PlayerMatch";
+import { Match } from "../../../Objects/Model/Match";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 
 interface MatchSummaryProps
 {
-	match: PlayerMatch;
+	match: Match;
+	category: string;
 	goToMatch: Function;
+	value: number;
 }
 
 export function MatchSummary(props: MatchSummaryProps)
 {
-	const { match, goToMatch } = props;
+	const { match, goToMatch, category, value } = props;
 
 	function onCardAreaClick()
 	{
@@ -26,27 +28,11 @@ export function MatchSummary(props: MatchSummaryProps)
 						<Typography gutterBottom variant="h5" component="div" sx={{ textAlign: "center" }}>{match.playlist.name}</Typography>
 						<Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
 							<Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-								<Typography variant="caption">Result</Typography>
-								<Typography variant="body1" sx={{ color: match.player.outcome === "win" ? ArrowheadTheme.good : match.player.outcome === "loss" ? ArrowheadTheme.bad : ArrowheadTheme.text_primary }}>
-									{match.player.outcome === "win" 
-										? "Win"
-										: match.player.outcome === "loss" 
-										? "Loss"
-										: match.player.outcome === "draw"
-										? "Tie"
-										: "Left Early" 
-									}
-								</Typography>
-							</Box>
-							<Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-								<Typography variant="caption">Kills</Typography>
-								<Typography variant="body1">{match.player.kills}</Typography>
-							</Box>
-							<Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-								<Typography variant="caption">Deaths</Typography>
-								<Typography variant="body1">{match.player.deaths}</Typography>
+								<Typography variant="caption">{category}</Typography>
+								<Typography variant="body1">{value.toLocaleString()}</Typography>
 							</Box>
 						</Box>
+						<Typography variant="body1" component="div" sx={{ mt: 2, mb: -1.5, textAlign: "center", color: "#666", fontSize: "0.6rem" }}>{match.date.toLocaleString()}</Typography>
 					</CardContent>
 				</CardActionArea>
 			</Card>

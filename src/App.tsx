@@ -20,6 +20,7 @@ import { AHLoading } from "./Assets/Components/Layout/AHLoading";
 import { SCConfigView } from "./Pages/Spartan Company/SCConfigView";
 import { UhOh } from "./Pages/UhOh";
 import { ServiceRecordFilter } from "./Database/ArrowheadFirebase";
+import { BestMatchesView } from "./Pages/BestMatchesView";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -77,7 +78,7 @@ const App = () =>
 
 	return (
 		<ThemeProvider theme={ArrowheadTheme.theme}>
-			<Box sx={{ display: "flex", backgroundColor: "background.paper", height: "100vh" }}>
+			<Box sx={{ display: "flex", backgroundColor: "background.paper", height: "calc(100vh - 34px)" }}>
 				<AHAppBar handleDrawerToggle={handleDrawerToggle} loadingFromAutocode={backgroundLoadingProgress} />
 				<AHDrawer gamertag={gamertag} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={switchTab} handleDrawerToggle={handleDrawerToggle} />
 				<AHLoading loadingMessage={loadingMessage} />
@@ -92,8 +93,8 @@ const App = () =>
 					<Route path={`/service_record/${ServiceRecordFilter.Variant}/:filter/:gamertag`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} node={ServiceRecordFilter.Variant} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
 					<Route path={`/service_record/${ServiceRecordFilter.Outcome}/:gamertag`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} node={ServiceRecordFilter.Outcome} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
 					<Route path={`/service_record/${ServiceRecordFilter.Outcome}/:filter/:gamertag`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} node={ServiceRecordFilter.Outcome} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
-					<Route path="/company/:company" element={<SpartanCompanyView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
-					<Route path="/company/:company/configure" element={<SCConfigView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
+					<Route path="/best/matches/:gamertag" element={<BestMatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
+					<Route path="/arrowhead" element={<SpartanCompanyView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
 					<Route path="/medals/:gamertag" element={<MedalsView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
 					<Route path="/matches/:gamertag" element={<MatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
 					<Route path="/match/:id" element={<SingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />

@@ -2,7 +2,7 @@ import { Box, Divider, Grid, Toolbar, Typography } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { MatchSummary } from "../Assets/Components/Match/MatchSummary";
+import { PlayerMatchSummary } from "../Assets/Components/Match/PlayerMatchSummary";
 import { ViewProps } from "./Props/ViewProps";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { MatchesBreakdown } from "../Assets/Components/Breakdowns/MatchesBreakdown";
@@ -98,7 +98,7 @@ export function MatchesView(props: ViewProps)
 					</Grid>
 				</Grid>
 				<Grid container spacing={2} sx={{ mt: 1 }}>
-					{matches?.length > 0 ? matches.map(match => <MatchSummary match={match} goToMatch={goToMatch} />) : undefined}
+					{matches?.length > 0 ? matches.map(match => <PlayerMatchSummary match={match} goToMatch={goToMatch} />) : undefined}
 				</Grid>
 			</Box>
 		</Box>
