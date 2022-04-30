@@ -25,6 +25,14 @@ class BreakdownKills
     public headshots: number;
     /** Big boy weapon kills */
     public powerWeapons: number;
+    /** Beat em from behind */
+    public assassinations: number = 0;
+    /** Splat */
+    public splatters: number = 0;
+    /** Backup please */
+    public repulsor: number = 0;
+    /** Kong */
+    public fusionCoil: number = 0;
 
     constructor()
     {

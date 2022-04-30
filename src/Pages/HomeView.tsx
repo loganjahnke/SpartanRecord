@@ -5,28 +5,34 @@ import { useNavigate } from "react-router-dom";
 import { GamertagSearch } from "./Subpage/GamertagSearch";
 import { ViewProps } from "./Props/ViewProps";
 
-export function HomeView(props: ViewProps)
+interface HomeViewProps
+{
+	setGamertag: (gamertag: string) => void;
+}
+
+export function HomeView(props: ViewProps & HomeViewProps)
 {
 	//#region Props and Navigate
-	const { app } = props;
+	const { setGamertag } = props;
 	const navigate = useNavigate();
 	//#endregion
 	
 	//#region State
- 	const [gamertag, setGamertag] = useState("");
+ 	const [localGamertag, setLocalGamertag] = useState("");
 	//#endregion
 
 	/** Controlled search component */
 	function onGamertagTextChange(event: React.ChangeEvent<HTMLInputElement>)
 	{
-		setGamertag(event.target.value);
+		setLocalGamertag(event.target.value);
 	};
 
 	/** When the search button is pressed */
 	function searchForGamertag()
 	{
-		if (gamertag === "") { return; }
-		navigate(`service_record/${gamertag}`);
+		if (localGamertag === "") { return; }
+		setGamertag(localGamertag);
+		navigate(`service_record/${localGamertag}`);
 	}
 
 	/** When enter is pressed */
@@ -42,7 +48,7 @@ export function HomeView(props: ViewProps)
 		<Box component="main" sx={{ flexGrow: 1, height: "calc(100% - 64px)" }}>
 			<Toolbar />
 			<Divider />
-			<GamertagSearch search={gamertag} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} />
+			<GamertagSearch search={localGamertag} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} />
 		</Box>
 	);
 }

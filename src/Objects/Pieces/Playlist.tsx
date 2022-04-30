@@ -1,3 +1,4 @@
+import { AutocodePlaylist } from "../../Database/Schemas/AutocodePlayerMatch";
 import { Asset } from "./Asset";
 
 export class Playlist
@@ -13,7 +14,7 @@ export class Playlist
     /** Was this a ranked playlist? */
     public ranked: boolean;
 
-    constructor(data?: any)
+    constructor(data?: AutocodePlaylist)
     {
         this.name = data?.name ?? "";
         this.asset = new Asset(data?.asset);

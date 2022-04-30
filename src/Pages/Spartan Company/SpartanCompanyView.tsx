@@ -50,32 +50,13 @@ export function SpartanCompanyView(props: ViewProps)
 		if (company && sc?.name !== company) { sc = new SpartanCompany(company); }
 		if (!sc) { return; }
 		
-		// Populate members and admin
-		await app.db.GetSpartanCompany(sc);
-		
 		// Check if we need to check Firebase or HaloDotAPI
 		setLoadingMessage("Loading Service Records");
-		
-        // Get last update instant
-        lastUpdate.current = await app.db.GetLastUpdate();
 		
 		// Get service records for all users
 		for (const member of sc.members)
 		{
 			setLoadingMessage("Loading " + member.gamertag);
-
-			const player = await app.db.GetPlayer(member.gamertag);
-			if (!player) { continue; }
-			
-			sc.AddPlayer(player);
-		}
-
-		// See if the logged in user is a member of this spartan company
-		if (app.arrowheadUser && app.arrowheadUser.spartanCompany)
-		{
-			const isMember = app.arrowheadUser.spartanCompany.name === sc.name;
-			setIsMember(isMember);
-			setIsOwner(isMember && app.arrowheadUser.user?.uid === sc.adminUID);
 		}
 
 		const sr = sc.GetServiceRecord();

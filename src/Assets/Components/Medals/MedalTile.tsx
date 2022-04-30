@@ -1,7 +1,5 @@
-import { Box, Divider, Tooltip, Typography } from "@mui/material";
-import React from "react";
+import { Box, Tooltip, Typography } from "@mui/material";
 import { Medal } from "../../../Objects/Pieces/Medal";
-import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 
 export function MedalTile(props: { medal: Medal, small?: boolean })
 {

@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { SpartanCompany } from "../../../Objects/Model/SpartanCompany";
 
 interface CompanyCardProps

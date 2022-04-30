@@ -1,4 +1,6 @@
 import { HaloOutcome } from "../../Database/ArrowheadFirebase";
+import { AutocodeHelpers } from "../../Database/Schemas/AutocodeHelpers";
+import { AutocodeMatchPlayer } from "../../Database/Schemas/AutocodeMatch";
 import { ServiceRecord } from "../Model/ServiceRecord";
 import { Progression } from "./Progression";
 import { TeamDetails } from "./TeamDetails";
@@ -22,15 +24,29 @@ export class MatchPlayer
     /** Progression */
     public progression: Progression;
 
-    constructor(data?: any)
+    constructor(data?: AutocodeMatchPlayer, isRanked: boolean = false, timePlayedInSeconds: number = 0)
     {
-        this.gamertag = data?.gamertag;
-        this.team = new TeamDetails(data?.team);
-        this.stats = new ServiceRecord(data?.stats);
-        this.rank = data?.rank ?? -1;
-        this.outcome = data?.outcome ?? "";
-        this.won = this.outcome === HaloOutcome.Win;
-        this.joinedInProgress = data?.participation?.joined_in_progress;
-        this.progression = new Progression(data?.progression);
+        this.gamertag = "";
+        this.team = new TeamDetails();
+        this.stats = new ServiceRecord();
+        this.rank = -1
+        this.outcome = HaloOutcome.Draw;
+        this.won = false;
+        this.joinedInProgress = false;
+        this.progression = new Progression();
+
+        if (!data) { return; }
+
+        this.gamertag = data.details.name;
+        this.team = new TeamDetails(data.team);
+        this.stats = new ServiceRecord(AutocodeHelpers.CreateServiceRecordFromMatch(this.gamertag, data, isRanked, timePlayedInSeconds));
+        this.rank = data.rank;
+        this.joinedInProgress = data.participation.joined_in_progress;
+        this.progression = new Progression(data.progression);
+        this.won = data?.outcome === "win" || data?.outcome === "won";
+        this.outcome = this.won ? HaloOutcome.Win
+			: data?.outcome === "left" ? HaloOutcome.Left
+			: data?.outcome === "loss" ? HaloOutcome.Loss
+			: HaloOutcome.Draw;
     }
 }

@@ -22,10 +22,6 @@ export function SingleMatchView(props: ViewProps)
 	const { id } = useParams();
 	const navigate = useNavigate();
 	//#endregion
-
-	//#region Refs
-	const lastUpdate = useRef<Date | null>(null);
-	//#endregion
 	
 	//#region State
     const [match, setMatch] = useState<Match | undefined>(new Match());
@@ -33,15 +29,12 @@ export function SingleMatchView(props: ViewProps)
 	//#endregion
 
 	const loadData = useCallback(async () => 
-	{		
-		// Get last update instant
-		lastUpdate.current = await app.db.GetLastUpdate();
-
+	{
 		// Get player's service record
 		if (id)
 		{
             setLoadingMessage("Loading match");
-			const match = await app.db.GetMatch(id);
+			const match = await app.GetMatch(id);
             setMatch(match);
 
 			if (match)
@@ -62,7 +55,7 @@ export function SingleMatchView(props: ViewProps)
 		}
 
 		setLoadingMessage("");
-	}, [lastUpdate, app, setMatch, setPlayers]);
+	}, [app, setMatch, setPlayers]);
 	
 	useEffect(() =>
 	{

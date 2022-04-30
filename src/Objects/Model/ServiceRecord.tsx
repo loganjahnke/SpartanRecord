@@ -1,4 +1,5 @@
 import { HaloOutcome } from "../../Database/ArrowheadFirebase";
+import { AutocodeMultiplayerServiceRecord } from "../../Database/Schemas/AutocodeMultiplayerServiceRecord";
 import { AllMedals } from "../Helpers/AllMedals";
 import { Breakdowns } from "../Pieces/Breakdowns";
 import { Damage } from "../Pieces/Damage";
@@ -6,6 +7,7 @@ import { Medal, MedalRarity, MedalType } from "../Pieces/Medal";
 import { Shots } from "../Pieces/Shots";
 import { Summary } from "../Pieces/Summary";
 import { TimePlayed } from "../Pieces/TimePlayed";
+import { PlayerMatch } from "./PlayerMatch";
 
 export class ServiceRecord
 {
@@ -24,6 +26,8 @@ export class ServiceRecord
     public timePlayed: TimePlayed;
     /** Contains all medals */
     public medals: Medal[];
+    /** Raw autocode and firebase JSON */
+    public raw?: AutocodeMultiplayerServiceRecord;
  
     /** The damage efficiency per kill */
     public get damageEfficiency(): number
@@ -56,13 +60,19 @@ export class ServiceRecord
 
     /**
      * Creates a Service Record object from the JSON response
-     * @param cryptum the JSON response from cryptum
+     * @param result the JSON response from cryptum
      */
-    constructor(cryptum?: any)
+    constructor(result?: AutocodeMultiplayerServiceRecord, key: string = "pvp")
     {
-        this.gamertag = cryptum?.additional?.gamertag;
-        const data = cryptum?.data;
-        const core = data?.core ?? cryptum?.core ?? data;
+        // Set raw result for future use
+        this.raw = result;
+
+        // Get stubs for easy access
+        this.gamertag = result?.additional?.parameters?.gamertag ?? "";
+        const record = result?.data?.records?.[key];
+        const core = record?.core;
+        const matches = record?.matches;
+        const timePlayed = record?.time_played;
 
         this.summary = 
         {
@@ -101,7 +111,11 @@ export class ServiceRecord
                 melee: core?.breakdowns?.kills?.melee ?? 0,
                 grenades: core?.breakdowns?.kills?.grenades ?? 0,
                 headshots: core?.breakdowns?.kills?.headshots ?? 0,
-                powerWeapons: core?.breakdowns?.kills?.power_weapons ?? 0
+                powerWeapons: core?.breakdowns?.kills?.power_weapons ?? 0,
+                assassinations: core?.breakdowns?.kills?.assassinations ?? 0,
+                splatters: core?.breakdowns?.kills?.vehicles?.splatters ?? 0,
+                repulsor: core?.breakdowns?.kills?.miscellaneous?.repulsor ?? 0,
+                fusionCoil: core?.breakdowns?.kills?.miscellaneous?.fusion_coils ?? 0
             },
             assists:
             {
@@ -111,17 +125,17 @@ export class ServiceRecord
             },
             matches:
             {
-                wins: core?.breakdowns?.matches?.wins ?? 0,
-                losses: core?.breakdowns?.matches?.losses ?? 0,
-                left: core?.breakdowns?.matches?.left ?? 0,
-                draws: core?.breakdowns?.matches?.draws ?? 0
+                wins: matches?.outcomes.wins ?? 0,
+                losses: matches?.outcomes.losses ?? 0,
+                left: matches?.outcomes.left ?? 0,
+                draws: matches?.outcomes.draws ?? 0
             }
         };
 
         this.timePlayed =
         {
-            seconds: data?.time_played?.seconds ?? 0,
-            human: data?.time_played?.human ?? ""
+            seconds: timePlayed?.seconds ?? 0,
+            human: timePlayed?.human ?? ""
         };
 
         this.medals = [];
@@ -147,10 +161,10 @@ export class ServiceRecord
 
         this.kda = core?.kda ?? 0;
         this.kdr = core?.kdr ?? 0;
-        this.totalScore = core?.total_score ?? core?.score ?? 0;
-        this.totalPoints = core?.total_points ?? core?.points ?? 0;
-        this.matchesPlayed = data?.matches_played ?? 0;
-        this.winRate = data?.win_rate ?? 0;
+        this.totalScore = core?.scores?.personal ?? 0;
+        this.totalPoints = core?.scores?.points ?? 0;
+        this.matchesPlayed = matches?.total ?? 0;
+        this.winRate = matches?.win_rate ?? 0;
     }
 
     /**
@@ -226,7 +240,11 @@ export class ServiceRecord
                 melee: sr.breakdowns.kills.melee + this.breakdowns.kills.melee,
                 grenades: sr.breakdowns.kills.grenades + this.breakdowns.kills.grenades,
                 headshots: sr.breakdowns.kills.headshots + this.breakdowns.kills.headshots,
-                powerWeapons: sr.breakdowns.kills.powerWeapons + this.breakdowns.kills.powerWeapons
+                powerWeapons: sr.breakdowns.kills.powerWeapons + this.breakdowns.kills.powerWeapons,
+                assassinations: sr.breakdowns.kills.assassinations + this.breakdowns.kills.assassinations,
+                splatters: sr.breakdowns.kills.splatters + this.breakdowns.kills.splatters,
+                repulsor: sr.breakdowns.kills.repulsor + this.breakdowns.kills.repulsor,
+                fusionCoil: sr.breakdowns.kills.fusionCoil + this.breakdowns.kills.fusionCoil
             },
             assists:
             {
@@ -262,6 +280,97 @@ export class ServiceRecord
 
         this.totalScore = sr.totalScore + this.totalScore;
         this.matchesPlayed = (sr.matchesPlayed === 0 ? 1 : sr.matchesPlayed) + this.matchesPlayed;
+        
+        if (this.summary.deaths !== 0)
+        {
+            this.kdr = this.summary.kills / this.summary.deaths;
+        }
+        
+        if (this.matchesPlayed !== 0)
+        {
+            this.winRate = (this.breakdowns.matches.wins / this.matchesPlayed) * 100;
+            this.kda = (this.summary.kills + (this.summary.assists / 3) - this.summary.deaths) / this.matchesPlayed;
+            this.damage.average = (this.damage.dealt / this.matchesPlayed) * 100;
+        }
+    }
+
+    /**
+     * Adds a player match to this and returns a new one
+     * @param match The service record to add
+     * @param outcome The outcome of the match
+     */
+    public AddPlayerMatch(match: PlayerMatch, outcome?: HaloOutcome): void
+    {
+        this.summary = 
+        {
+            kills: match.player.kills + this.summary.kills,
+            deaths: match.player.deaths + this.summary.deaths,
+            assists: match.player.assists + this.summary.assists,
+            betrayals: this.summary.betrayals,
+            suicides: this.summary.suicides,
+            vehicles:
+            {
+                destroys: this.summary.vehicles.destroys,
+                hijacks: this.summary.vehicles.hijacks
+            },
+            medals: this.summary.medals
+        };
+
+        this.damage =
+        {
+            taken: this.damage.taken,
+            dealt: this.damage.dealt,
+            average: 0
+        };
+
+        this.shots = 
+        {
+            fired: this.shots.fired,
+            landed: this.shots.landed,
+            missed: this.shots.missed,
+            accuracy: 0
+        };
+
+        if (this.shots.fired !== 0)
+        {
+            this.shots.accuracy = (this.shots.landed / this.shots.fired) * 100;
+        }
+
+        this.breakdowns =
+        {
+            kills: 
+            {
+                melee: this.breakdowns.kills.melee,
+                grenades: this.breakdowns.kills.grenades,
+                headshots: this.breakdowns.kills.headshots,
+                powerWeapons: this.breakdowns.kills.powerWeapons,
+                assassinations: this.breakdowns.kills.assassinations,
+                splatters: this.breakdowns.kills.splatters,
+                repulsor: this.breakdowns.kills.repulsor,
+                fusionCoil: this.breakdowns.kills.fusionCoil
+            },
+            assists:
+            {
+                emp: this.breakdowns.assists.emp,
+                driver: this.breakdowns.assists.driver,
+                callouts: this.breakdowns.assists.callouts
+            },
+            matches:
+            {
+                wins: this.breakdowns.matches.wins + (match.player.outcome === HaloOutcome.Win ? 1 : 0),
+                losses: this.breakdowns.matches.losses + (match.player.outcome === HaloOutcome.Loss ? 1 : 0),
+                left: this.breakdowns.matches.left + (match.player.outcome === HaloOutcome.Draw ? 1 : 0),
+                draws: this.breakdowns.matches.draws + (match.player.outcome === HaloOutcome.Left ? 1 : 0)
+            }
+        };
+
+        this.timePlayed =
+        {
+            seconds: this.timePlayed.seconds,
+            human: ""
+        };
+
+        this.matchesPlayed = 1 + this.matchesPlayed;
         
         if (this.summary.deaths !== 0)
         {

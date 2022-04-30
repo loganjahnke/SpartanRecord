@@ -1,4 +1,4 @@
-import { Box, Checkbox, Divider, FormControlLabel, FormGroup, Grid, Toolbar, Typography } from "@mui/material";
+import { Box, Checkbox, CircularProgress, Divider, FormControlLabel, FormGroup, Grid, Toolbar, Typography } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -18,11 +18,17 @@ import { VehicleBreakdown } from "../Assets/Components/Breakdowns/VehicleBreakdo
 import { ServiceRecordFilters } from "./Subpage/ServiceRecordFilters";
 import { ViewProps } from "./Props/ViewProps";
 import { CampaignBreakdown } from "../Assets/Components/Breakdowns/CampaignBreakdown";
+import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 
-export function PlayerView(props: ViewProps)
+interface PlayerViewProps
+{
+	setGamertag: (gamertag: string) => void;
+}
+
+export function PlayerView(props: ViewProps & PlayerViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage } = props;
+	const { app, setLoadingMessage, setBackgroundLoadingProgress, setGamertag } = props;
 	const { gamertag } = useParams();
 	const navigate = useNavigate();
 	//#endregion
@@ -32,7 +38,8 @@ export function PlayerView(props: ViewProps)
 	//#endregion
 	
 	//#region State
-	const [myPlayer, setMyPlayer] = useState(app.arrowheadUser?.player ?? new Player());
+	const [myPlayer, setMyPlayer] = useState(new Player());
+	const [historicStats, setHistoricStats] = useState<ServiceRecord[]>([]);
 	const [search, setSearch] = useState("");
 	const [showPerMatch, setShowPerMatch] = useState(false);
 	//#endregion
@@ -41,30 +48,44 @@ export function PlayerView(props: ViewProps)
 	{		
 		if (gamertag === "search") { return; }
 
-		// Check if we need to check Firebase or HaloDotAPI
-		setLoadingMessage("Loading Service Records");
-		
-		// Get last update instant
-		lastUpdate.current = await app.db.GetLastUpdate();
+		// Get service record of gamertag
+		if (gamertag)
+		{
+			// Set page gamertag and show loading message
+			setGamertag(gamertag);
+			setLoadingMessage("Loading " + gamertag);
+			
+			// Get the player from firebase
+			const player = await app.GetPlayerFromFirebase(gamertag);
 
-		// Get player's service record
-		if (gamertag && gamertag === app.arrowheadUser?.user?.displayName)
-		{
-			setLoadingMessage("Loading " + gamertag);
-			app.arrowheadUser.player = await app.db.GetPlayer(gamertag, true);
-			setMyPlayer(app.arrowheadUser.player);
-			app.LogViewServiceRecord(gamertag);
-		}
-		else if (gamertag)
-		{
-			setLoadingMessage("Loading " + gamertag);
-			const player = await app.db.GetPlayer(gamertag, true);
+			// Set player to show latest data in firebase
 			setMyPlayer(player);
-			app.LogViewServiceRecord(gamertag);
-		}
+			setHistoricStats(player.historicStats ?? []);
+			setLoadingMessage("");
+			setBackgroundLoadingProgress(-1);
 
-		setLoadingMessage("");
-	}, [lastUpdate, app, gamertag, setMyPlayer]);
+			// If they are, sync with autocode
+			if (!app.IsSyncing(gamertag))
+			{
+				app.AddToSyncing(gamertag);
+
+				// Sync into firebase
+				app.SyncPlayer(gamertag).then(async (result) =>
+				{
+					if (result)
+					{
+						setMyPlayer(await app.GetPlayerFromFirebase(gamertag));
+					}					
+				}).finally(() => 
+				{
+					app.RemoveFromSyncing(gamertag);
+					setBackgroundLoadingProgress(undefined);
+				});
+			}
+			else { setBackgroundLoadingProgress(undefined); }
+			
+		}
+	}, [lastUpdate, app, gamertag, setMyPlayer, historicStats, setBackgroundLoadingProgress, setHistoricStats]);
 	
 	useEffect(() =>
 	{
@@ -81,6 +102,7 @@ export function PlayerView(props: ViewProps)
 	function searchForGamertag()
 	{
 		if (search === "") { return; }
+		setGamertag(search);
 		navigate(`/service_record/${search}`);
 	}
 
@@ -126,7 +148,7 @@ export function PlayerView(props: ViewProps)
 								<TopMedals medals={myPlayer.serviceRecord.medals} matchesPlayed={myPlayer.serviceRecord.matchesPlayed} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
-								<ServiceRecordChart historicServiceRecords={myPlayer.historicStats ?? []} currentSR={myPlayer.serviceRecord} />
+								<ServiceRecordChart historicServiceRecords={historicStats} currentSR={myPlayer.serviceRecord} />
 							</Grid>
 							{/* <Grid item xs={12}>
 								<CampaignBreakdown campaignRecord={myPlayer.campaignRecord} />

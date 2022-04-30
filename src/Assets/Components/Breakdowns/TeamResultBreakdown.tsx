@@ -1,11 +1,9 @@
 import { Box } from "@mui/material";
-import { useState } from "react";
 import { HaloOutcome } from "../../../Database/ArrowheadFirebase";
-import { Appearance } from "../../../Objects/Model/Appearance";
 import { MatchPlayer } from "../../../Objects/Pieces/MatchPlayer";
 import { Team } from "../../../Objects/Pieces/Team";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
-import { BreakdownProps, BreakdownTile } from "./BreakdownTile";
+import { BreakdownTile } from "./BreakdownTile";
 
 interface TeamResultBreakdownProps
 {

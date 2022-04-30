@@ -1,3 +1,4 @@
+import { AutocodeGameMap } from "../../Database/Schemas/AutocodePlayerMatch";
 import { Asset } from "./Asset";
 
 export class Map
@@ -7,7 +8,7 @@ export class Map
     /** Map assets */
     public asset: Asset;
 
-    constructor(data?: any)
+    constructor(data?: AutocodeGameMap)
     {
         this.name = data?.name ?? "";
         this.asset = new Asset(data?.asset);

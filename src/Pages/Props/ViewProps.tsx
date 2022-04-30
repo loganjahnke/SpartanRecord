@@ -1,7 +1,8 @@
-import { Arrowhead } from "../../Database/Arrowhead";
+import { SCData } from "../../Database/SCData";
 
 export interface ViewProps
 {
-    app: Arrowhead;
+    app: SCData;
     setLoadingMessage: (message: string) => void;
+    setBackgroundLoadingProgress: (progress: number | undefined) => void;
 }

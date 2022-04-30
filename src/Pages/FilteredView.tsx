@@ -11,7 +11,6 @@ import { DamageBreakdown } from "../Assets/Components/Breakdowns/DamageBreakdown
 import { Player } from "../Objects/Model/Player";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { ImageCard } from "../Assets/Components/Cards/ImageCard";
-import { Match, MatchFilter } from "../Objects/Model/Match";
 import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
 import { LevelBreakdown } from "../Assets/Components/Breakdowns/LevelBreakdown";
 import { PlayerCard } from "../Assets/Components/Cards/PlayerCard";
@@ -32,7 +31,7 @@ export function FilteredView(props: ViewProps)
 	
 	//#region State
 	const [showPerMatch, setShowPerMatch] = useState(false);
-	const [myPlayer, setMyPlayer] = useState(app.arrowheadUser?.player ?? new Player());
+	const [myPlayer, setMyPlayer] = useState(new Player());
     const [sr, setSR] = useState(myPlayer.serviceRecord ?? new ServiceRecord());
     const [image, setImage] = useState("");
 	//#endregion
@@ -42,37 +41,17 @@ export function FilteredView(props: ViewProps)
 		// Check if we need to check Firebase or HaloDotAPI
 		setLoadingMessage("Loading Service Records");
 		
-		// Get last update instant
-		lastUpdate.current = await app.db.GetLastUpdate();
-		
 		// Get player's service record
 		if (gamertag && tree)
 		{
 			setLoadingMessage("Loading " + gamertag);
 
-			let player: Player = await app.db.GetPlayerFilter(gamertag, tree as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome);
-			const sr = player.GetFilteredServiceRecord(tree as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome) ?? new ServiceRecord();
+			// let player: Player = await app.GetPlayerFilter(gamertag, tree as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome);
+			// const sr = player.GetFilteredServiceRecord(tree as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome) ?? new ServiceRecord();
             
 			app.LogViewServiceRecord(gamertag, tree as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome);
-			setMyPlayer(player);
-            setSR(sr);
-		}
-
-		let image = "";
-		if (MatchFilter.IsMapFilter(filter))
-		{
-			image = `https://assets.halo.autocode.gg/static/infinite/images/multiplayer/maps/${filter?.toLowerCase().replace(/\s/g , "-")}.jpg`;
-		}
-		else if (MatchFilter.IsModeFilter(filter))
-		{
-			if (filter === HaloMode.FFASlayer || filter === HaloMode.TacticalSlayer)
-			{
-				image = `https://assets.halo.autocode.gg/static/infinite/images/multiplayer/playlists/${filter?.toLowerCase().replace(/\s/g , "-")}.jpg`;
-			}
-			else
-			{
-				image = `https://assets.halo.autocode.gg/static/infinite/images/multiplayer/ugcgamevariants/${filter?.toLowerCase().replace(/\s/g , "-")}.jpg`;
-			}
+			//setMyPlayer(player);
+            //setSR(sr);
 		}
 
 		setLoadingMessage("");
@@ -101,7 +80,7 @@ export function FilteredView(props: ViewProps)
 					{/* Far left */}
 					<Grid container item spacing={2} xs={12} md={4} xl={4} sx={{ alignContent: "flex-start" }}>
 						<Grid item xs={12}>
-							<ImageCard image={image} title={MatchFilter.GetFilterTitle(filter)} />
+							<ImageCard image={image} title={filter} />
 						</Grid>
 						<Grid item xs={12}>
 							<MatchesBreakdown serviceRecord={sr} />

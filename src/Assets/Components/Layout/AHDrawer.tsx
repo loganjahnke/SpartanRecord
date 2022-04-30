@@ -1,24 +1,21 @@
-import { SyntheticEvent, useEffect, useState } from "react";
-import { Box, Button, Collapse, Divider, Drawer, Tab, Tabs, Toolbar, Typography } from "@mui/material";
-import { ArrowheadUser } from "../../../Objects/Model/ArrowheadUser";
+import { SyntheticEvent } from "react";
+import { Box, Button, Divider, Drawer, Tab, Tabs, Toolbar } from "@mui/material";
 
-import GroupsIcon from '@mui/icons-material/Groups';
+import MapIcon from '@mui/icons-material/Map';
+import ListIcon from '@mui/icons-material/List';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import GamesIcon from '@mui/icons-material/Games';
 import ModeStandbyIcon from '@mui/icons-material/ModeStandby';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { HaloMode } from "../../../Database/ArrowheadFirebase";
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 
 interface AHDrawerProps
 {
-	/** The app containing the user and their spartan company */
-	loggedInUser?: ArrowheadUser;
+	/** The chosen gamertag */
+	gamertag: string;
 	/** Current tab */
 	currentTab: string;
-	/** Subtab */
-	subtab?: string;
 	/** Callback for when a tab button is pressed */
 	switchTab: ((url: string, tab?: string, subtab?: string) => void);
 	/** Callback for when the drawer is opened or closed */
@@ -27,18 +24,11 @@ interface AHDrawerProps
 	container?: Element | (() => HTMLElement);
 	/** Open on mobile? */
 	mobileOpen?: boolean;
-	/** What happens when logout is pressed? */
-	onLogout: Function;
 }
 
 export function AHDrawer(props: AHDrawerProps)
 {
-	const { currentTab, subtab, switchTab, handleDrawerToggle, container, mobileOpen, loggedInUser, onLogout } = props;
-
-	const [expandMaps, setExpandMaps] = useState(currentTab === "Maps");
-	const [expandModes, setExpandModes] = useState(currentTab === "Modes");
-	const [expandOutcome, setExpandOutcome] = useState(currentTab === "Match Outcome");
-	const [expandRanked, setExpandRanked] = useState(currentTab === "Ranked/Social");
+	const { gamertag, currentTab, switchTab, handleDrawerToggle, container, mobileOpen } = props;
 
 	/**
 	 * Triggered when a tab is clicked
@@ -47,132 +37,37 @@ export function AHDrawer(props: AHDrawerProps)
 	 */
 	function tabClicked(event: SyntheticEvent<Element, Event>, newTab: string)
 	{
-		const gamertag = loggedInUser?.user?.displayName;
 		switch (newTab)
 		{
+			case "Search":
+				switchTab("/", newTab);
+				break;
 			case "Service Record":
-				if (gamertag) { switchTab(`/service_record/${gamertag}`, newTab); }
-				else { switchTab("/service_record/search", newTab); }
+				switchTab(`/service_record/${gamertag}`, newTab);
 				break;
 			case "Maps":
-				setExpandMaps(!expandMaps);
-				setExpandModes(false);
-				setExpandOutcome(false);
-				setExpandRanked(false);
+				switchTab(`/maps/${gamertag}`, newTab);
 				break;
-			case "Modes":
-				setExpandMaps(false);
-				setExpandModes(!expandModes);
-				setExpandOutcome(false);
-				setExpandRanked(false);
+			case "Playlists":
+				switchTab(`/playlists/${gamertag}`, newTab);
+				break;
+			case "Variants":
+				switchTab(`/variants/${gamertag}`, newTab);
 				break;
 			case "Match Outcome":
-				setExpandMaps(false);
-				setExpandModes(false);
-				setExpandOutcome(!expandOutcome);
-				setExpandRanked(false);
-				break;
-			case "Ranked/Social":
-				setExpandMaps(false);
-				setExpandModes(false);
-				setExpandOutcome(false);
-				setExpandRanked(!expandRanked);
+				switchTab(`/outcome/${gamertag}`, newTab);
 				break;
 			case "Medals":
-				if (gamertag) { switchTab(`/medals/${gamertag}`, newTab); }
-				else { switchTab("/something_went_wrong"); }
+				switchTab(`/medals/${gamertag}`, newTab);
 				break;
 			case "Matches":
-				if (gamertag) { switchTab(`/matches/${gamertag}`, newTab); }
-				else { switchTab("/something_went_wrong"); }
+				switchTab(`/matches/${gamertag}`, newTab);
 				break;
 			case "Company":
-				switchTab(`/company/${loggedInUser?.spartanCompany?.name ?? "search"}`, newTab);
+				switchTab(`/company/search`, newTab);
 				break;
 			default: 
 				console.log("Something unexpected was pressed in the tabs: " + newTab);
-				break;
-		}
-	}
-
-	/**
-	 * Triggered when a tab is clicked
-	 * @param event 
-	 * @param newTab 
-	 */
-	function mapClicked(event: SyntheticEvent<Element, Event>, newTab: string)
-	{
-		const gamertag = loggedInUser?.user?.displayName;
-		if (gamertag) { switchTab(`/service_record/map/${newTab}/${gamertag}`, "Maps", newTab); }
-		else { switchTab("/something_went_wrong"); }
-	}
-
-	/**
-	 * Triggered when a tab is clicked
-	 * @param event 
-	 * @param newTab 
-	 */
-	function modeClicked(event: SyntheticEvent<Element, Event>, newTab: string)
-	{
-		const gamertag = loggedInUser?.user?.displayName;
-		if (gamertag) { switchTab(`/service_record/mode/${newTab}/${gamertag}`, "Modes", newTab); }
-		else { switchTab("/something_went_wrong"); }
-	}
-
-	 /**
-	 * Triggered when a tab is clicked
-	 * @param event 
-	 * @param newTab 
-	 */
-	function outcomeClicked(event: SyntheticEvent<Element, Event>, newTab: string)
-	{
-		const gamertag = loggedInUser?.user?.displayName;
-		if (!gamertag) 
-		{ 
-			switchTab("/something_went_wrong"); 
-			return;
-		}
-
-		switch (newTab)
-		{
-			case "Win":
-				switchTab(`/service_record/outcome/win/${gamertag}`, "Match Outcome", newTab);
-				break;
-			case "Loss":
-				switchTab(`/service_record/outcome/loss/${gamertag}`, "Match Outcome", newTab);
-				break;
-			case "Draw":
-				switchTab(`/service_record/outcome/draw/${gamertag}`, "Match Outcome", newTab);
-				break;
-			case "Left Early":
-				switchTab(`/service_record/outcome/left/${gamertag}`, "Match Outcome", newTab);
-				break;
-			default:
-				break;
-		}
-	}
-
-	/**
-	 * Triggered when a tab is clicked
-	 * @param event 
-	 * @param newTab 
-	 */
-	function rankedClicked(event: SyntheticEvent<Element, Event>, newTab: string)
-	{
-		const gamertag = loggedInUser?.user?.displayName;
-		if (!gamertag) 
-		{ 
-			switchTab("/something_went_wrong"); 
-			return;
-		}
-
-		switch (newTab)
-		{
-			case "Ranked":
-				switchTab(`/service_record/isRanked/true/${gamertag}`, "Ranked/Social", newTab);
-				break;
-			case "Social":
-				switchTab(`/service_record/isRanked/false/${gamertag}`, "Ranked/Social", newTab);
 				break;
 		}
 	}
@@ -188,56 +83,24 @@ export function AHDrawer(props: AHDrawerProps)
 		<Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
 			<Toolbar><Button className="ahTab" onClick={goHome}>SpartanRecord.com</Button></Toolbar>
 			<Divider flexItem />
-				{loggedInUser?.user ? 
-				<Tabs orientation="vertical" value={currentTab === "Maps" || currentTab === "Modes" || currentTab === "Match Outcome" || currentTab === "Ranked/Social" ? undefined : currentTab} onChange={tabClicked} sx={{ mt: 5 }}>
+				{gamertag ? 
+				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked} sx={{ mt: 5 }}>
+					<Tab className="ahTab" value="Search" label="Search" icon={<PersonSearchIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Service Record" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" />
-					<Tab className="ahTab" value="Maps" label="Maps" icon={expandMaps ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Collapse in={expandMaps} timeout="auto" unmountOnExit>
-						<Tabs orientation="vertical" value={currentTab === "Maps" ? subtab : undefined} onChange={mapClicked} sx={{ borderBottom: "0.5px solid", borderColor: "divider" }}>
-							<Tab className="ahTab" value="Aquarius" label="Aquarius" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Bazaar" label="Bazaar" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Behemoth" label="Behemoth" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Deadlock" label="Deadlock" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Fragmentation" label="Fragmentation" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Highpower" label="Highpower" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Launch Site" label="Launch Site" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Live Fire" label="Live Fire" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Recharge" label="Recharge" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Streets" label="Streets" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-						</Tabs>
-					</Collapse>
-					<Tab className="ahTab" value="Modes" label="Modes" icon={expandModes ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Collapse in={expandModes} timeout="auto" unmountOnExit>
-						<Tabs orientation="vertical" value={currentTab === "Modes" ? subtab : undefined} onChange={modeClicked} sx={{ borderBottom: "0.5px solid", borderColor: "divider" }}>
-							{(Object.values(HaloMode) as Array<keyof typeof HaloMode>).map((mode) => <Tab className="ahTab" value={mode} label={mode} sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />)}
-						</Tabs>
-					</Collapse>
-					<Tab className="ahTab" value="Match Outcome" label="Match Outcome" icon={expandOutcome ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Collapse in={expandOutcome} timeout="auto" unmountOnExit>
-						<Tabs orientation="vertical" value={currentTab === "Match Outcome" ? subtab : undefined} onChange={outcomeClicked} sx={{ borderBottom: "0.5px solid", borderColor: "divider" }}>
-							<Tab className="ahTab" value="Win" label="Win" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Loss" label="Loss" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Draw" label="Draw" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Left Early" label="Left Early" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-						</Tabs>
-					</Collapse>
-					<Tab className="ahTab" value="Ranked/Social" label="Ranked/Social" icon={expandRanked ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Collapse in={expandRanked} timeout="auto" unmountOnExit>
-						<Tabs orientation="vertical" value={currentTab === "Ranked/Social" ? subtab : undefined} onChange={rankedClicked} sx={{ borderBottom: "0.5px solid", borderColor: "divider" }}>
-							<Tab className="ahTab" value="Ranked" label="Ranked" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-							<Tab className="ahTab" value="Social" label="Social" sx={{ fontSize: "0.75rem", minHeight: 0, ml: 9 }} iconPosition="start" />
-						</Tabs>
-					</Collapse>
+					<Tab className="ahTab" value="Maps" label="Maps" icon={<MapIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Playlists" label="Playlists" icon={<ListIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Variants" label="Variants" icon={<GamesIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Match Outcome" label="Match Outcome" icon={<EmojiEventsIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Medals" label="Medals" icon={<MilitaryTechIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Matches" label="Matches" icon={<SportsEsportsIcon />} iconPosition="start" />
-					<Tab className="ahTab" value="Company" label={loggedInUser?.spartanCompany?.name ? loggedInUser.spartanCompany.name + " Company" : "Create or Join Spartan Company"} icon={<GroupsIcon />} iconPosition="start" />
-				</Tabs> 
-				: <Tabs orientation="vertical" value={currentTab} onChange={tabClicked} sx={{ mt: 5 }}>
-					<Tab className="ahTab" value="Service Record" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" />
-					<Tab className="ahTab" value="Company" label="Spartan Company" icon={<GroupsIcon />} iconPosition="start" />
-				</Tabs>}
+					{/* <Tab className="ahTab" value="Company" label={loggedInUser?.spartanCompany?.name ? loggedInUser.spartanCompany.name + " Company" : "Create or Join Spartan Company"} icon={<GroupsIcon />} iconPosition="start" /> */}
+				</Tabs>
+				:
+				<Tabs orientation="vertical" value="Search" onChange={tabClicked} sx={{ mt: 5 }}>
+					<Tab className="ahTab" value="Search" label="Search" icon={<PersonSearchIcon />} iconPosition="start" />
+				</Tabs>
+				}	
 			<Box sx={{ flexGrow: 1 }}></Box>
-			{loggedInUser?.user ? <Button sx={{ alignSelf: "flex-start", justifySelf: "flex-end", mb: 2, ml: 2 }} startIcon={<LogoutIcon />} onClick={() => onLogout()}>Log Out</Button> : undefined}
 		</Box>
 	);
 	//#endregion

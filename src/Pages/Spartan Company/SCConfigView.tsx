@@ -47,13 +47,8 @@ export function SCConfigView(props: ViewProps)
 		if (company === "search") { return; }
 		if (company && sc?.name !== company) { sc = new SpartanCompany(company); }
 		if (!sc) { return; }
-        if (!app.arrowheadUser || !app.arrowheadUser.user) { return; }
 
 		setLoadingMessage("Loading Spartan Company");
-
-		// Populate members and admin
-		await app.db.GetSpartanCompany(sc);
-        if (sc.adminUID !== app.arrowheadUser.user.uid) { return; }		
 		
 		// Get appearances for the members of the spartan company
         let members: Player[] = [];
@@ -62,7 +57,6 @@ export function SCConfigView(props: ViewProps)
 			setLoadingMessage("Loading " + member.gamertag);
 
             let player = new Player(member.gamertag);
-			player.appearance = await app.db.GetAppearance(member.gamertag) ?? new Appearance();
             members.push(player);
 
             sc.AddPlayer(player);

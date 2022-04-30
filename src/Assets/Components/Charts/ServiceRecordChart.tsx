@@ -104,7 +104,7 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 	useEffect(() => 
 	{
 		changeDataSet();
-	}, [historicServiceRecords, currentSR]);
+	}, [historicServiceRecords, currentSR, changeDataSet]);
 
 	/**
 	 * Changes the data set

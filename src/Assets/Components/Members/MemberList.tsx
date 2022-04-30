@@ -33,7 +33,7 @@ function MemberComponent(props: { player: Player, goToMember: Function })
 	return (
 		<Box sx={{ backgroundColor: "secondary.main", borderRadius: 3, display: "flex", flexDirection: "row", alignItems: "center", width: "90%", margin: 1, padding: 1 }}>
 			<Button onClick={setPlayerClick} sx={{ width: "100%", justifyContent: "flex-start", borderRadius: 2, textTransform: "none", textAlign: "left" }}>
-				<img src={player.appearance.emblemURL === "" ? ArrowheadImg : player.appearance.emblemURL} alt="emblem" height="48px" />
+				<img src={player.appearance.emblemURL === "" ? ArrowheadImg : player.appearance.emblemURL} alt="emblem" width="48px" />
 				<Box sx={{ ml: 1, flexGrow: 1, display: "flex", flexDirection: "column" }}>
 					<Typography variant="body1">{player.gamertag}</Typography>
 					<Typography variant="body2" sx={{ fontWeight: 100 }}>{Halo5Converter.GetLevelFromScore(player.serviceRecord.totalScore)}</Typography>

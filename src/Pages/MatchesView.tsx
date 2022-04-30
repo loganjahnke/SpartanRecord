@@ -2,7 +2,6 @@ import { Box, Divider, Grid, Toolbar, Typography } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { Player } from "../Objects/Model/Player";
 import { MatchSummary } from "../Assets/Components/Match/MatchSummary";
 import { ViewProps } from "./Props/ViewProps";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
@@ -10,6 +9,8 @@ import { MatchesBreakdown } from "../Assets/Components/Breakdowns/MatchesBreakdo
 import { KillBreakdown } from "../Assets/Components/Breakdowns/KillBreakdown";
 import { PlayerCard } from "../Assets/Components/Cards/PlayerCard";
 import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
+import { PlayerMatch } from "../Objects/Model/PlayerMatch";
+import { Player } from "../Objects/Model/Player";
 
 export function MatchesView(props: ViewProps)
 {
@@ -24,7 +25,8 @@ export function MatchesView(props: ViewProps)
 	//#endregion
 	
 	//#region State
-	const [myPlayer, setMyPlayer] = useState(app.arrowheadUser?.player ?? new Player());
+	const [player, setPlayer] = useState<Player>(new Player());
+	const [matches, setMatches] = useState<PlayerMatch[]>([]);
 	const [combinedSR, setCombinedSR] = useState(new ServiceRecord());
 	//#endregion
 
@@ -32,29 +34,34 @@ export function MatchesView(props: ViewProps)
 	{		
 		// Check if we need to check Firebase or HaloDotAPI
 		setLoadingMessage("Loading Matches");
-		
-		// Get last update instant
-		lastUpdate.current = await app.db.GetLastUpdate();
 
 		// Get player's service record
 		if (gamertag)
 		{
 			setLoadingMessage("Loading matches for " + gamertag);
-			const player = await app.db.GetPlayer(gamertag, false, 25);
-			setCombinedSR(player.GetServiceRecordOfMatches());
-			setMyPlayer(player);
+
+			const player = await app.GetPlayerAppearanceOnly(gamertag);
+			setPlayer(player);
+
+			const matches = await app.GetLast25PlayerMatches(gamertag);
+			setMatches(matches);
+
+			const serviceRecord = new ServiceRecord();
+			for (const match of matches) { serviceRecord.AddPlayerMatch(match); }
+
+			setCombinedSR(serviceRecord);
 			app.LogViewMatches(gamertag);
 		}
 
 		setLoadingMessage("");
-	}, [lastUpdate, app, gamertag, setMyPlayer, setCombinedSR]);
+	}, [lastUpdate, app, gamertag, setPlayer, setMatches, setCombinedSR]);
 	
 	useEffect(() =>
 	{
 		loadData();
 	}, [gamertag]);
 
-    function goToMatch(id: string)
+    function goToMatch(id: string): void
     {
         navigate(`/match/${id}`);
     }
@@ -68,7 +75,7 @@ export function MatchesView(props: ViewProps)
 					{/* Top */}
 					<Grid item xs={12}>
 						<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
-							<PlayerCard player={myPlayer} />
+							<PlayerCard player={player} />
 							<Box sx={{ flexGrow: 1 }}></Box>
 							<Typography sx={{ mr: 1 }}>Last 25 matches</Typography>
 						</Box>
@@ -84,7 +91,7 @@ export function MatchesView(props: ViewProps)
 					</Grid>
 				</Grid>
 				<Grid container spacing={2} sx={{ mt: 1 }}>
-					{myPlayer?.matches?.length > 0 ? myPlayer.matches.map(match => <MatchSummary match={match} goToMatch={goToMatch} />) : undefined}
+					{matches?.length > 0 ? matches.map(match => <MatchSummary match={match} goToMatch={goToMatch} />) : undefined}
 				</Grid>
 			</Box>
 		</Box>

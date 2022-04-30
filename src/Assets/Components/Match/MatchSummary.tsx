@@ -1,10 +1,10 @@
 import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from "@mui/material";
-import { Match } from "../../../Objects/Model/Match";
+import { PlayerMatch } from "../../../Objects/Model/PlayerMatch";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 
 interface MatchSummaryProps
 {
-	match: Match;
+	match: PlayerMatch;
 	goToMatch: Function;
 }
 
@@ -23,7 +23,7 @@ export function MatchSummary(props: MatchSummaryProps)
 				<CardActionArea onClick={onCardAreaClick}>
 					<CardMedia component="img" height="200" image={match.map.asset.thumbnail} alt={match.map.name} />
 					<CardContent>
-						<Typography gutterBottom variant="h5" component="div" sx={{ textAlign: "center" }}>{match.mode.name}</Typography>
+						<Typography gutterBottom variant="h5" component="div" sx={{ textAlign: "center" }}>{match.playlist.name}</Typography>
 						<Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
 							<Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 								<Typography variant="caption">Result</Typography>
@@ -40,11 +40,11 @@ export function MatchSummary(props: MatchSummaryProps)
 							</Box>
 							<Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 								<Typography variant="caption">Kills</Typography>
-								<Typography variant="body1">{match.player.stats.summary.kills}</Typography>
+								<Typography variant="body1">{match.player.kills}</Typography>
 							</Box>
 							<Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 								<Typography variant="caption">Deaths</Typography>
-								<Typography variant="body1">{match.player.stats.summary.deaths}</Typography>
+								<Typography variant="body1">{match.player.deaths}</Typography>
 							</Box>
 						</Box>
 					</CardContent>
