@@ -4,6 +4,7 @@ import { Appearance } from "../Objects/Model/Appearance";
 import { Match } from "../Objects/Model/Match";
 import { Player } from "../Objects/Model/Player";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
+import { FilterCount } from "../Objects/Pieces/FilterCounts";
 import { ServiceRecordFilter } from "./ArrowheadFirebase";
 import { AutocodeAppearance } from "./Schemas/AutocodeAppearance";
 import { AutocodeMatch } from "./Schemas/AutocodeMatch";
@@ -113,25 +114,22 @@ export class SCFirebase
 	 * @param gamertag the gamertag to get stats from
 	 * @returns A service record that represents the filter
 	 */
-	public async GetAvailableFilters(gamertag: string): Promise<Map<ServiceRecordFilter, string>>
+	public async GetAvailableFilters(gamertag: string, node: ServiceRecordFilter): Promise<FilterCount[]>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetAvailableFilters()", `${gamertag}`); }
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetAvailableFilters()", `${gamertag} - ${node}`); }
 
-		const map = new Map<ServiceRecordFilter, string>();
-		const snapshot = await this.__get(`filters/${gamertag}`);
+		const filters: FilterCount[] = [];
+		const snapshot = await this.__get(`filters/${gamertag}/${node}`);
 		if (snapshot)
 		{
-			for (const key in snapshot.val())
+			for (const name in snapshot.val())
 			{
-				const available = snapshot.val()[key];
-				for (const result of available)
-				{
-					map.set(key as ServiceRecordFilter, result);
-				}
+				const count = snapshot.val()[name];
+				filters.push(new FilterCount(name, count ?? 0));
 			}
 		}
 
-		return map;
+		return filters;
 	}
 
 	/**

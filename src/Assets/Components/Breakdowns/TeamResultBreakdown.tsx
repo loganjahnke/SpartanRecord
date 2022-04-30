@@ -3,6 +3,7 @@ import { HaloOutcome } from "../../../Database/ArrowheadFirebase";
 import { MatchPlayer } from "../../../Objects/Pieces/MatchPlayer";
 import { Team } from "../../../Objects/Pieces/Team";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
+import { TeamBreakdownChart } from "../Charts/TeamBreakdownChart";
 import { BreakdownTile } from "./BreakdownTile";
 
 interface TeamResultBreakdownProps
@@ -50,11 +51,8 @@ export function TeamResultBreakdown(props: TeamResultBreakdownProps)
                         <BreakdownTile title="Kills" value={serviceRecord.summary.kills} isMainStat />
                         <BreakdownTile title="Deaths" value={serviceRecord.summary.deaths} isMainStat />
                   </Box>
-                  <Box sx={{ display: "flex", flexDirection: "row", width: "95%", mb: 1,
-                    ".MuiBox-root:first-child": { borderRadius: "8px 0 0 8px", mr: "1px" }, 
-                    ".MuiBox-root:last-child": { borderRadius: "0 8px 8px 0", ml: "1px" },
-                    ".MuiBox-root:not(:first-child):not(:last-child)": { ml: "1px", mr: "1px" }}}>
-                        {filtered.length > 0 ? filtered.map(player => <BreakdownTile title={player.gamertag} value={player.stats.summary.kills} total={total} />) : undefined}
+                  <Box sx={{ height: "300px", width: "calc(100% - 16px)", m: "0 8px" }}>
+                    <TeamBreakdownChart players={filtered} />
                   </Box>
 		</Box>
 	);

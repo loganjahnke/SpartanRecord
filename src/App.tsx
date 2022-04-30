@@ -19,6 +19,7 @@ import { Box } from "@mui/material";
 import { AHLoading } from "./Assets/Components/Layout/AHLoading";
 import { SCConfigView } from "./Pages/Spartan Company/SCConfigView";
 import { UhOh } from "./Pages/UhOh";
+import { ServiceRecordFilter } from "./Database/ArrowheadFirebase";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -83,12 +84,20 @@ const App = () =>
 				<Routes>
 					<Route path="/" element={<HomeView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
 					<Route path="/service_record/:gamertag" element={<PlayerView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
-					<Route path="/service_record/:tree/:filter/:gamertag" element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} />} />
-					<Route path="/company/:company" element={<SpartanCompanyView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} />} />
-					<Route path="/company/:company/configure" element={<SCConfigView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} />} />
-					<Route path="/medals/:gamertag" element={<MedalsView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} />} />
-					<Route path="/matches/:gamertag" element={<MatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} />} />
-					<Route path="/match/:id" element={<SingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} />} />
+					<Route path={`/service_record/${ServiceRecordFilter.Map}/:gamertag`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} node={ServiceRecordFilter.Map} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
+					<Route path={`/service_record/${ServiceRecordFilter.Map}/:filter/:gamertag`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} node={ServiceRecordFilter.Map} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
+					<Route path={`/service_record/${ServiceRecordFilter.Playlist}/:gamertag`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} node={ServiceRecordFilter.Playlist} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
+					<Route path={`/service_record/${ServiceRecordFilter.Playlist}/:filter/:gamertag`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} node={ServiceRecordFilter.Playlist} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
+					<Route path={`/service_record/${ServiceRecordFilter.Variant}/:gamertag`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} node={ServiceRecordFilter.Variant} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
+					<Route path={`/service_record/${ServiceRecordFilter.Variant}/:filter/:gamertag`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} node={ServiceRecordFilter.Variant} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
+					<Route path={`/service_record/${ServiceRecordFilter.Outcome}/:gamertag`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} node={ServiceRecordFilter.Outcome} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
+					<Route path={`/service_record/${ServiceRecordFilter.Outcome}/:filter/:gamertag`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} node={ServiceRecordFilter.Outcome} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
+					<Route path="/company/:company" element={<SpartanCompanyView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
+					<Route path="/company/:company/configure" element={<SCConfigView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
+					<Route path="/medals/:gamertag" element={<MedalsView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
+					<Route path="/matches/:gamertag" element={<MatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
+					<Route path="/match/:id" element={<SingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
+					<Route path="/match/:id/:gamertag" element={<SingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
 					<Route path="*" element={<UhOh />} />
 				</Routes>
 			</Box>

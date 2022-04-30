@@ -10,7 +10,7 @@ import { ViewProps } from "./Props/ViewProps";
 export function MedalsView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage } = props;
+	const { app, setLoadingMessage, setGamertag } = props;
 	const { gamertag } = useParams();
 	//#endregion
 	
@@ -19,47 +19,27 @@ export function MedalsView(props: ViewProps)
 	const [serviceRecord, setServiceRecord] = useState(new ServiceRecord());
 	//#endregion
 
-	// const loadData = useCallback(async () => 
-	// {		
-	// 	// Check if we need to check Firebase or HaloDotAPI
-	// 	setLoadingMessage("Loading Service Records");
+	const loadData = useCallback(async () => 
+	{		
+		// Check if we need to check Firebase or HaloDotAPI
+		setLoadingMessage("Loading Medals");
 		
-	// 	// Get service record of gamertag
-	// 	if (gamertag)
-	// 	{
-	// 		// Set page gamertag and show loading message
-	// 		setGamertag(gamertag);
-	// 		setLoadingMessage("Loading " + gamertag);
-			
-	// 		// Get the player from firebase
-	// 		const player = await app.GetPlayerFromFirebase(gamertag);
-	// 		const oldRawSR = player.serviceRecord.raw;
+		// Get service record of gamertag
+		if (gamertag)
+		{
+			// Set page gamertag and show loading message
+			setGamertag(gamertag);
+			const player = await app.GetPlayerFromFirebase(gamertag);
+			setServiceRecord(player.serviceRecord);
+		}
 
-	// 		// Set player to show latest data in firebase
-	// 		setMyPlayer(player);
-	// 		setLoadingMessage("");
-	// 		setBackgroundLoadingProgress(-1);
-
-	// 		// Check if the player is out of date
-	// 		const numberOfGamesSinceSync = await app.GetPlayerFromAutocode(player);
-	// 		setMyPlayer(player);
-
-	// 		// If they are, sync with autocode
-	// 		if (numberOfGamesSinceSync > 0)
-	// 		{
-	// 			await app.SyncMatchesForPlayer(player, numberOfGamesSinceSync, historicStats, setBackgroundLoadingProgress, setHistoricStats, oldRawSR);
-	// 		}
-			
-	// 		setBackgroundLoadingProgress(undefined);
-	// 	}
-
-	// 	setLoadingMessage("");
-	// }, [lastUpdate, app, gamertag, setMySR]);
+		setLoadingMessage("");
+	}, [app, gamertag, setServiceRecord]);
 	
-	// useEffect(() =>
-	// {
-	// 	loadData();
-	// }, [gamertag]);
+	useEffect(() =>
+	{
+		loadData();
+	}, [gamertag]);
 
 	function onPressShowAll(event: React.ChangeEvent<HTMLInputElement>)
 	{
@@ -86,82 +66,82 @@ export function MedalsView(props: ViewProps)
 					<Grid item xs={12} sx={{ mt: 4 }}>
 						<Typography variant="h2">Classics</Typography>
 					</Grid>
-					<Grid item xs={12} md={6}>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Spree} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
-					<Grid item xs={12} md={6}>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.MultiKill} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
 					{/* Game Modes */}
 					<Grid item xs={12} sx={{ mt: 4 }}>
 						<Typography variant="h2">Game Modes</Typography>
 					</Grid>
-					<Grid item xs={12} lg={4}>
+					{/* <Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Assault} medals={serviceRecord.medals} showAll={showAll} />
-					</Grid>
-					<Grid item xs={12} lg={4}>
+					</Grid> */}
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.CTF} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
-					<Grid item xs={12} lg={4}>
+					{/* <Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Infection} medals={serviceRecord.medals} showAll={showAll} />
-					</Grid>
-					<Grid item xs={12} lg={4}>
+					</Grid> */}
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Elimination} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
-					<Grid item xs={12} lg={4}>
+					{/* <Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Extraction} medals={serviceRecord.medals} showAll={showAll} />
-					</Grid>
-					<Grid item xs={12} lg={4}>
+					</Grid> */}
+					{/* <Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Juggernaut} medals={serviceRecord.medals} showAll={showAll} />
-					</Grid>
-					<Grid item xs={12} lg={4}>
+					</Grid> */}
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.KingOfTheHill} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
-					<Grid item xs={12} lg={4}>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Oddball} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
-					<Grid item xs={12} lg={4}>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Stockpile} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
-					<Grid item xs={12} lg={4}>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Strongholds} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
-					<Grid item xs={12} lg={4}>
+					{/* <Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.VIP} medals={serviceRecord.medals} showAll={showAll} />
-					</Grid>
+					</Grid> */}
 					{/* Weapons and Equipment */}
 					<Grid item xs={12} sx={{ mt: 4 }}>
 						<Typography variant="h2">Weapons and Equipment</Typography>
 					</Grid>
-					<Grid item xs={12}>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Vehicles} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
-					<Grid item xs={12} lg={6}>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Sniper} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
-					<Grid item xs={12} lg={6}>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Melee} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
-					<Grid item xs={12}>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Weapons} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
-					<Grid item xs={12} xl={6}>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Boom} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
-					<Grid item xs={12} xl={6}>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Equipment} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
 					{/* Other Medals */}
 					<Grid item xs={12} sx={{ mt: 4 }}>
 						<Typography variant="h2">Other Medals</Typography>
 					</Grid>
-					<Grid item xs={12} xl={8}>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Skill} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
-					<Grid item xs={12} lg={4}>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.GameEnd} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
-					<Grid item xs={12} lg={4}>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Unknown} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
 				</Grid>

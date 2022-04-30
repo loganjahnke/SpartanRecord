@@ -20,12 +20,7 @@ import { ViewProps } from "./Props/ViewProps";
 import { CampaignBreakdown } from "../Assets/Components/Breakdowns/CampaignBreakdown";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 
-interface PlayerViewProps
-{
-	setGamertag: (gamertag: string) => void;
-}
-
-export function PlayerView(props: ViewProps & PlayerViewProps)
+export function PlayerView(props: ViewProps)
 {
 	//#region Props and Navigate
 	const { app, setLoadingMessage, setBackgroundLoadingProgress, setGamertag } = props;

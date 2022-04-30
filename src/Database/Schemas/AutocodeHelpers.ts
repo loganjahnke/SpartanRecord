@@ -1,4 +1,4 @@
-import { AutocodeMatch, AutocodeOutcome, AutocodeMatchPlayer } from "./AutocodeMatch";
+import { AutocodeMatch, AutocodeOutcome, AutocodeMatchPlayer, AutocodeMatchTeamDetails, AutocodeSRSummary, AutocodeSRDamage, AutocodeSRAccuracy, AutocodeSRRounds, AutocodeSRScore, AutocodeSRBreakdowns } from "./AutocodeMatch";
 import { AutocodeMultiplayerKey, AutocodeMultiplayerServiceRecord } from "./AutocodeMultiplayerServiceRecord";
 import { FirebaseHistoricServiceRecord } from "./FirebaseHistoricServiceRecord";
 
@@ -372,7 +372,232 @@ export class AutocodeHelpers
 		return sr;
 	}
 
+	/**
+	 * Creates a new service record from a player's match details
+	 * @param team the team
+	 * @param isRanked was this a ranked match?
+	 * @param secondsPlayed the number of seconds the match lasted
+	 * @returns a service record for the match
+	 */
+	public static CreateServiceRecordFromTeam(team: AutocodeMatchTeamDetails | undefined, isRanked: boolean, secondsPlayed: number): AutocodeMultiplayerServiceRecord
+	{
+		const sr = this.CreateEmptyServiceRecord("");
+		if (!team) { return sr; }
+		this.AddTeamToServiceRecord(sr, team, isRanked, secondsPlayed);
+		return sr;
+	}
+
 	//#region Adders
+	/**
+	 * Adds a player's details to an existing service record
+	 * @param serviceRecord the service record to add to
+	 * @param team the team
+	 * @param isRanked was this a ranked match?
+	 * @param secondsPlayed the number of seconds the match lasted
+	 */
+	public static AddTeamToServiceRecord(serviceRecord: AutocodeMultiplayerServiceRecord, team: AutocodeMatchTeamDetails, isRanked: boolean, secondsPlayed: number): void
+	{	
+		if (!serviceRecord.data) { return; }
+
+		// Parse out
+		const pvp = serviceRecord.data.records.pvp;
+
+		// PVP
+		pvp.time_played.seconds += secondsPlayed;
+		this.AddOutcome(pvp, team.outcome);
+		this.AddSummary(pvp, team.stats.core.summary);
+		this.AddDamage(pvp, team.stats.core.damage);
+		this.AddScore(pvp, team.stats.core.scores);
+		this.AddShots(pvp, team.stats.core.shots);
+		this.AddBreakdown(pvp, team.stats.core.breakdowns);
+		this.AddRounds(pvp, team.stats.core.rounds);
+		this.UpdateCalculatedProperties(pvp);
+		
+		// Put them back (I don't actually think I need to do this)
+		serviceRecord.data.records.pvp = pvp;
+	}
+
+	/**
+	 * Adds the outcome to the multiplayer service record key
+	 * @param key the multiplayer service record key
+	 * @param outcome the outcome
+	 */
+	private static AddOutcome(key: AutocodeMultiplayerKey, outcome: AutocodeOutcome): void
+	{
+		key.matches.outcomes.wins += outcome === "won" || outcome === "win" ? 1 : 0;
+		key.matches.outcomes.losses += outcome === "loss" ? 1 : 0;
+		key.matches.outcomes.left += outcome === "left" ? 1 : 0;
+
+		key.matches.total += 1;
+	}
+
+	/**
+	 * Adds the summary of the match to the service record
+	 * @param key the multiplayer service record key
+	 * @param summary the summary statistics
+	 */
+	private static AddSummary(key: AutocodeMultiplayerKey, summary: AutocodeSRSummary): void
+	{
+		key.core.summary.assists += summary.assists;
+		key.core.summary.betrayals += summary.betrayals;
+		key.core.summary.deaths += summary.deaths;
+		key.core.summary.kills += summary.kills;
+		key.core.summary.medals += summary.medals;
+		key.core.summary.suicides += summary.suicides;
+		key.core.summary.vehicles.destroys += summary.vehicles.destroys;
+		key.core.summary.vehicles.hijacks += summary.vehicles.hijacks;
+	}
+
+	/**
+	 * Adds the damage of the match to the service record
+	 * @param key the multiplayer service record key
+	 * @param damage the damage
+	 */
+	private static AddDamage(key: AutocodeMultiplayerKey, damage: AutocodeSRDamage): void
+	{
+		key.core.damage.dealt += damage.dealt;
+		key.core.damage.taken += damage.taken;
+	}
+
+	/**
+	 * Adds the shots of the match to the service record
+	 * @param key the multiplayer service record key
+	 * @param player the player details
+	 */
+	private static AddShots(key: AutocodeMultiplayerKey, shots: AutocodeSRAccuracy): void
+	{
+		key.core.shots.fired += shots.fired;
+		key.core.shots.missed += shots.missed;
+		key.core.shots.landed += shots.landed;
+	}
+
+	/**
+	 * Adds the rounds of the match to the service record
+	 * @param key the multiplayer service record key
+	 * @param player the player details
+	 */
+	private static AddRounds(key: AutocodeMultiplayerKey, rounds: AutocodeSRRounds): void
+	{
+		key.core.rounds.won += rounds.won;
+		key.core.rounds.lost += rounds.lost;
+		key.core.rounds.tied += rounds.tied;
+	}
+
+	/**
+	 * Adds the scores of the match to the service record
+	 * @param key the multiplayer service record key
+	 * @param player the player details
+	 */
+	private static AddScore(key: AutocodeMultiplayerKey, scores: AutocodeSRScore): void
+	{
+		key.core.scores.personal += scores.personal;
+		key.core.scores.points += scores.points;
+	}
+
+	/**
+	 * Adds the breakdowns of the match to the service record
+	 * @param key the multiplayer service record key
+	 * @param player the player details
+	 */
+	private static AddBreakdown(key: AutocodeMultiplayerKey, breakdowns: AutocodeSRBreakdowns): void
+	{
+		key.core.breakdowns.assists.callouts += breakdowns.assists.callouts;
+		key.core.breakdowns.assists.driver += breakdowns.assists.driver;
+		key.core.breakdowns.assists.emp += breakdowns.assists.emp;
+
+		key.core.breakdowns.kills.assassinations += breakdowns.kills.assassinations;
+		key.core.breakdowns.kills.grenades += breakdowns.kills.grenades;
+		key.core.breakdowns.kills.headshots += breakdowns.kills.headshots;
+		key.core.breakdowns.kills.melee += breakdowns.kills.melee;
+		key.core.breakdowns.kills.miscellaneous.repulsor += breakdowns.kills.miscellaneous.repulsor;
+		key.core.breakdowns.kills.miscellaneous.fusion_coils += breakdowns.kills.miscellaneous.fusion_coils;
+		key.core.breakdowns.kills.power_weapons += breakdowns.kills.power_weapons;
+		key.core.breakdowns.kills.vehicles.splatters += breakdowns.kills.vehicles.splatters;
+
+		const destroysArray: { value: string, count: number }[] = [];
+		const hijacksArray: { value: string, count: number }[] = [];
+		const medalsArray: { id: number, count: number }[] = [];
+
+		const destroys = new Map<string, number>();
+		const hijacks = new Map<string, number>();
+		const medals = new Map<number, number>();
+
+		// Loop through key first
+		if (key.core.breakdowns.vehicles)
+		{
+			if (key.core.breakdowns.vehicles.destroys && key.core.breakdowns.vehicles.destroys.length > 0) 
+			{ 
+				for (const i in key.core.breakdowns.vehicles.destroys) 
+				{ 
+					destroys.set(key.core.breakdowns.vehicles.destroys[i].value, key.core.breakdowns.vehicles.destroys[i].count); 
+				}
+			}
+			if (key.core.breakdowns.vehicles.hijacks && key.core.breakdowns.vehicles.hijacks.length > 0) 
+			{ 
+				for (const i in key.core.breakdowns.vehicles.hijacks) 
+				{ 
+					hijacks.set(key.core.breakdowns.vehicles.hijacks[i].value, key.core.breakdowns.vehicles.hijacks[i].count); 
+				}
+			}
+		}
+
+		if (key.core.breakdowns.medals)
+		{
+			if (key.core.breakdowns.medals && key.core.breakdowns.medals.length > 0) 
+			{ 
+				for (const i in key.core.breakdowns.medals) 
+				{ 
+					medals.set(key.core.breakdowns.medals[i].id, key.core.breakdowns.medals[i].count); 
+				}
+			}
+		}
+
+		// Now loop through player
+		if (breakdowns.vehicles)
+		{
+			if (breakdowns.vehicles.destroys && breakdowns.vehicles.destroys.length > 0)
+			{
+				for (const i in breakdowns.vehicles.destroys)
+				{
+					let count = destroys.get(breakdowns.vehicles.destroys[i].value) ?? 0;
+					count += breakdowns.vehicles.destroys[i].count;
+					destroys.set(breakdowns.vehicles.destroys[i].value, count);
+				}
+			}
+	
+			if (breakdowns.vehicles.hijacks && breakdowns.vehicles.hijacks.length > 0)
+			{
+				for (const i in breakdowns.vehicles.hijacks)
+				{
+					let count = hijacks.get(breakdowns.vehicles.hijacks[i].value) ?? 0;
+					count += breakdowns.vehicles.hijacks[i].count;
+					hijacks.set(breakdowns.vehicles.hijacks[i].value, count);
+				}
+			}
+		}
+
+		if (breakdowns.medals && breakdowns.medals.length > 0)
+		{
+			for (const i in breakdowns.medals)
+			{
+				let count = medals.get(breakdowns.medals[i].id) ?? 0;
+				count += breakdowns.medals[i].count;
+				medals.set(breakdowns.medals[i].id, count);
+			}
+		}
+
+		// Set into property
+		destroys.forEach((value: number, key: string) => destroysArray.push({ value: key, count: value }));
+		hijacks.forEach((value: number, key: string) => hijacksArray.push({ value: key, count: value }));
+		medals.forEach((value: number, key: number) => medalsArray.push({ id: key, count: value }));
+
+		key.core.breakdowns.medals = medalsArray;
+		key.core.breakdowns.vehicles = {
+			destroys: destroysArray,
+			hijacks: hijacksArray
+		};
+	}
+
 	/**
 	 * Adds a player's details to an existing service record
 	 * @param serviceRecord the service record to add to
@@ -393,12 +618,12 @@ export class AutocodeHelpers
 		// PVP
 		pvp.time_played.seconds += secondsPlayed;
 		this.AddOutcome(pvp, playerDetails.outcome);
-		this.AddSummary(pvp, playerDetails);
-		this.AddDamage(pvp, playerDetails);
-		this.AddScore(pvp, playerDetails);
-		this.AddShots(pvp, playerDetails);
-		this.AddBreakdown(pvp, playerDetails);
-		this.AddRounds(pvp, playerDetails);
+		this.AddSummary(pvp, playerDetails.stats.core.summary);
+		this.AddDamage(pvp, playerDetails.stats.core.damage);
+		this.AddScore(pvp, playerDetails.stats.core.scores);
+		this.AddShots(pvp, playerDetails.stats.core.shots);
+		this.AddBreakdown(pvp, playerDetails.stats.core.breakdowns);
+		this.AddRounds(pvp, playerDetails.stats.core.rounds);
 		this.UpdateCalculatedProperties(pvp);
 		
 		// Put them back (I don't actually think I need to do this)
@@ -409,12 +634,12 @@ export class AutocodeHelpers
 		{
 			key.time_played.seconds += secondsPlayed;
 			this.AddOutcome(key, playerDetails.outcome);
-			this.AddSummary(key, playerDetails);
-			this.AddDamage(key, playerDetails);
-			this.AddScore(key, playerDetails);
-			this.AddShots(key, playerDetails);
-			this.AddBreakdown(key, playerDetails);
-			this.AddRounds(key, playerDetails);
+			this.AddSummary(key, playerDetails.stats.core.summary);
+			this.AddDamage(key, playerDetails.stats.core.damage);
+			this.AddScore(key, playerDetails.stats.core.scores);
+			this.AddShots(key, playerDetails.stats.core.shots);
+			this.AddBreakdown(key, playerDetails.stats.core.breakdowns);
+			this.AddRounds(key, playerDetails.stats.core.rounds);
 			this.UpdateCalculatedProperties(key);
 			
 			// Put them back (I don't actually think I need to do this)
@@ -423,163 +648,6 @@ export class AutocodeHelpers
 			serviceRecord.data.records.social = social;
 			serviceRecord.data.records.ranked = ranked;
 		}
-	}
-
-	/**
-	 * Adds the outcome to the multiplayer service record key
-	 * @param key the multiplayer service record key
-	 * @param outcome the outcome
-	 */
-	private static AddOutcome(key: AutocodeMultiplayerKey, outcome: AutocodeOutcome): void
-	{
-		key.matches.outcomes.wins += outcome === "won" || outcome === "win" ? 1 : 0;
-		key.matches.outcomes.losses += outcome === "loss" ? 1 : 0;
-		key.matches.outcomes.left += outcome === "left" ? 1 : 0;
-
-		key.matches.total += 1;
-	}
-
-	/**
-	 * Adds the summary of the match to the service record
-	 * @param key the multiplayer service record key
-	 * @param player the player details
-	 */
-	private static AddSummary(key: AutocodeMultiplayerKey, player: AutocodeMatchPlayer): void
-	{
-		key.core.summary.assists += player.stats.core.summary.assists;
-		key.core.summary.betrayals += player.stats.core.summary.betrayals;
-		key.core.summary.deaths += player.stats.core.summary.deaths;
-		key.core.summary.kills += player.stats.core.summary.kills;
-		key.core.summary.medals += player.stats.core.summary.medals;
-		key.core.summary.suicides += player.stats.core.summary.suicides;
-		key.core.summary.vehicles.destroys += player.stats.core.summary.vehicles.destroys;
-		key.core.summary.vehicles.hijacks += player.stats.core.summary.vehicles.hijacks;
-	}
-
-	/**
-	 * Adds the damage of the match to the service record
-	 * @param key the multiplayer service record key
-	 * @param player the player details
-	 */
-	private static AddDamage(key: AutocodeMultiplayerKey, player: AutocodeMatchPlayer): void
-	{
-		key.core.damage.dealt += player.stats.core.damage.dealt;
-		key.core.damage.taken += player.stats.core.damage.taken;
-	}
-
-	/**
-	 * Adds the shots of the match to the service record
-	 * @param key the multiplayer service record key
-	 * @param player the player details
-	 */
-	private static AddShots(key: AutocodeMultiplayerKey, player: AutocodeMatchPlayer): void
-	{
-		key.core.shots.fired += player.stats.core.shots.fired;
-		key.core.shots.missed += player.stats.core.shots.missed;
-		key.core.shots.landed += player.stats.core.shots.landed;
-	}
-
-	/**
-	 * Adds the rounds of the match to the service record
-	 * @param key the multiplayer service record key
-	 * @param player the player details
-	 */
-	private static AddRounds(key: AutocodeMultiplayerKey, player: AutocodeMatchPlayer): void
-	{
-		key.core.rounds.won += player.stats.core.rounds.won;
-		key.core.rounds.lost += player.stats.core.rounds.lost;
-		key.core.rounds.tied += player.stats.core.rounds.tied;
-	}
-
-	/**
-	 * Adds the scores of the match to the service record
-	 * @param key the multiplayer service record key
-	 * @param player the player details
-	 */
-	private static AddScore(key: AutocodeMultiplayerKey, player: AutocodeMatchPlayer): void
-	{
-		key.core.scores.personal += player.stats.core.scores.personal;
-		key.core.scores.points += player.stats.core.scores.points;
-	}
-
-	/**
-	 * Adds the breakdowns of the match to the service record
-	 * @param key the multiplayer service record key
-	 * @param player the player details
-	 */
-	private static AddBreakdown(key: AutocodeMultiplayerKey, player: AutocodeMatchPlayer): void
-	{
-		key.core.breakdowns.assists.callouts += player.stats.core.breakdowns.assists.callouts;
-		key.core.breakdowns.assists.driver += player.stats.core.breakdowns.assists.driver;
-		key.core.breakdowns.assists.emp += player.stats.core.breakdowns.assists.emp;
-
-		key.core.breakdowns.kills.assassinations += player.stats.core.breakdowns.kills.assassinations;
-		key.core.breakdowns.kills.grenades += player.stats.core.breakdowns.kills.grenades;
-		key.core.breakdowns.kills.headshots += player.stats.core.breakdowns.kills.headshots;
-		key.core.breakdowns.kills.melee += player.stats.core.breakdowns.kills.melee;
-		key.core.breakdowns.kills.miscellaneous.repulsor += player.stats.core.breakdowns.kills.miscellaneous.repulsor;
-		key.core.breakdowns.kills.miscellaneous.fusion_coils += player.stats.core.breakdowns.kills.miscellaneous.fusion_coils;
-		key.core.breakdowns.kills.power_weapons += player.stats.core.breakdowns.kills.power_weapons;
-		key.core.breakdowns.kills.vehicles.splatters += player.stats.core.breakdowns.kills.vehicles.splatters;
-
-		const destroysArray: { value: string, count: number }[] = [];
-		const hijacksArray: { value: string, count: number }[] = [];
-		const medalsArray: { id: number, count: number }[] = [];
-
-		const destroys = new Map<string, number>();
-		const hijacks = new Map<string, number>();
-		const medals = new Map<number, number>();
-
-		// Loop through key first
-		if (key.core.breakdowns.vehicles)
-		{
-			if (key.core.breakdowns.vehicles.destroys && key.core.breakdowns.vehicles.destroys.length > 0) { for (const vehicle of key.core.breakdowns.vehicles.destroys) { destroys.set(vehicle.value, vehicle.count); }}
-			if (key.core.breakdowns.vehicles.hijacks && key.core.breakdowns.vehicles.hijacks.length > 0) { for (const vehicle of key.core.breakdowns.vehicles.hijacks) { hijacks.set(vehicle.value, vehicle.count); }}
-		}
-
-		if (key.core.breakdowns.medals)
-		{
-			if (key.core.breakdowns.medals && key.core.breakdowns.medals.length > 0) { for (const medal of key.core.breakdowns.medals) { medals.set(medal.id, medal.count); }}
-		}
-
-		// Now loop through player
-		if (player.stats.core.breakdowns.vehicles)
-		{
-			for (const vehicle of player.stats.core.breakdowns.vehicles.destroys)
-			{
-				let count = destroys.get(vehicle.value) ?? 0;
-				count += vehicle.count;
-				destroys.set(vehicle.value, count);
-			}
-	
-			for (const vehicle of player.stats.core.breakdowns.vehicles.hijacks)
-			{
-				let count = hijacks.get(vehicle.value) ?? 0;
-				count += vehicle.count;
-				hijacks.set(vehicle.value, count);
-			}
-		}
-
-		if (player.stats.core.breakdowns.medals)
-		{
-			for (const medal of player.stats.core.breakdowns.medals)
-			{
-				let count = medals.get(medal.id) ?? 0;
-				count += medal.count;
-				medals.set(medal.id, count);
-			}
-		}
-
-		// Set into property
-		destroys.forEach((value: number, key: string) => destroysArray.push({ value: key, count: value }));
-		hijacks.forEach((value: number, key: string) => hijacksArray.push({ value: key, count: value }));
-		medals.forEach((value: number, key: number) => medalsArray.push({ id: key, count: value }));
-
-		key.core.breakdowns.medals = medalsArray;
-		key.core.breakdowns.vehicles = {
-			destroys: destroysArray,
-			hijacks: hijacksArray
-		};
 	}
 
 	/**
@@ -780,40 +848,64 @@ export class AutocodeHelpers
 		// Loop through key first
 		if (key.core.breakdowns.vehicles)
 		{
-			if (key.core.breakdowns.vehicles.destroys && key.core.breakdowns.vehicles.destroys.length > 0) { for (const vehicle of key.core.breakdowns.vehicles.destroys) { destroys.set(vehicle.value, vehicle.count); }}
-			if (key.core.breakdowns.vehicles.hijacks && key.core.breakdowns.vehicles.hijacks.length > 0) { for (const vehicle of key.core.breakdowns.vehicles.hijacks) { hijacks.set(vehicle.value, vehicle.count); }}
+			if (key.core.breakdowns.vehicles.destroys && key.core.breakdowns.vehicles.destroys.length > 0) 
+			{ 
+				for (const i in key.core.breakdowns.vehicles.destroys) 
+				{ 
+					destroys.set(key.core.breakdowns.vehicles.destroys[i].value, key.core.breakdowns.vehicles.destroys[i].count); 
+				}
+			}
+			if (key.core.breakdowns.vehicles.hijacks && key.core.breakdowns.vehicles.hijacks.length > 0) 
+			{ 
+				for (const i in key.core.breakdowns.vehicles.hijacks) 
+				{ 
+					hijacks.set(key.core.breakdowns.vehicles.hijacks[i].value, key.core.breakdowns.vehicles.hijacks[i].count); 
+				}
+			}
 		}
 
 		if (key.core.breakdowns.medals)
 		{
-			if (key.core.breakdowns.medals && key.core.breakdowns.medals.length > 0) { for (const medal of key.core.breakdowns.medals) { medals.set(medal.id, medal.count); }}
+			if (key.core.breakdowns.medals && key.core.breakdowns.medals.length > 0) 
+			{ 
+				for (const i in key.core.breakdowns.medals) 
+				{ 
+					medals.set(key.core.breakdowns.medals[i].id, key.core.breakdowns.medals[i].count); 
+				}
+			}
 		}
 
 		// Now loop through player
 		if (player.stats.core.breakdowns.vehicles)
 		{
-			for (const vehicle of player.stats.core.breakdowns.vehicles.destroys)
+			if (player.stats.core.breakdowns.vehicles.destroys && player.stats.core.breakdowns.vehicles.destroys.length > 0)
 			{
-				let count = destroys.get(vehicle.value) ?? 0;
-				count -= vehicle.count;
-				destroys.set(vehicle.value, count);
+				for (const i in player.stats.core.breakdowns.vehicles.destroys)
+				{
+					let count = destroys.get(player.stats.core.breakdowns.vehicles.destroys[i].value) ?? 0;
+					count -= player.stats.core.breakdowns.vehicles.destroys[i].count;
+					destroys.set(player.stats.core.breakdowns.vehicles.destroys[i].value, count);
+				}
 			}
 	
-			for (const vehicle of player.stats.core.breakdowns.vehicles.hijacks)
+			if (player.stats.core.breakdowns.vehicles.hijacks && player.stats.core.breakdowns.vehicles.hijacks.length > 0)
 			{
-				let count = hijacks.get(vehicle.value) ?? 0;
-				count -= vehicle.count;
-				hijacks.set(vehicle.value, count);
+				for (const i in player.stats.core.breakdowns.vehicles.hijacks)
+				{
+					let count = hijacks.get(player.stats.core.breakdowns.vehicles.hijacks[i].value) ?? 0;
+					count -= player.stats.core.breakdowns.vehicles.hijacks[i].count;
+					hijacks.set(player.stats.core.breakdowns.vehicles.hijacks[i].value, count);
+				}
 			}
 		}
 
-		if (player.stats.core.breakdowns.medals)
+		if (player.stats.core.breakdowns.medals && player.stats.core.breakdowns.medals.length > 0)
 		{
-			for (const medal of player.stats.core.breakdowns.medals)
+			for (const i in player.stats.core.breakdowns.medals)
 			{
-				let count = medals.get(medal.id) ?? 0;
-				count -= medal.count;
-				medals.set(medal.id, count);
+				let count = medals.get(player.stats.core.breakdowns.medals[i].id) ?? 0;
+				count -= player.stats.core.breakdowns.medals[i].count;
+				medals.set(player.stats.core.breakdowns.medals[i].id, count);
 			}
 		}
 

@@ -1,3 +1,5 @@
+import { AutocodeHelpers } from "../../Database/Schemas/AutocodeHelpers";
+import { AutocodeMatchPlayer, AutocodeMatchTeamDetails } from "../../Database/Schemas/AutocodeMatch";
 import { ServiceRecord } from "../Model/ServiceRecord";
 import { MatchPlayer } from "./MatchPlayer";
 import { TeamDetails } from "./TeamDetails";
@@ -8,10 +10,10 @@ export class Team
     public statistics: ServiceRecord;
     public players: MatchPlayer[] = [];
 
-    constructor(teamData?: any, playersData?: any, players?: MatchPlayer[])
+    constructor(teamData?: AutocodeMatchTeamDetails | undefined, playersData?: AutocodeMatchPlayer[] | undefined, players?: MatchPlayer[])
     {
         this.details = new TeamDetails(teamData?.team);
-        this.statistics = new ServiceRecord(teamData?.stats);
+        this.statistics = new ServiceRecord(AutocodeHelpers.CreateServiceRecordFromTeam(teamData, true, 0));
 
         if (playersData)
         {

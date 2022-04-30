@@ -1,5 +1,5 @@
 import { Box, Divider, Grid, Toolbar } from "@mui/material";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { ServiceRecordFilter, HaloMap, HaloMode, HaloRanked, HaloOutcome } from "../Database/ArrowheadFirebase";
@@ -17,51 +17,83 @@ import { PlayerCard } from "../Assets/Components/Cards/PlayerCard";
 import { ServiceRecordFilters } from "./Subpage/ServiceRecordFilters";
 import { ViewProps } from "./Props/ViewProps";
 import { PercentageBreakdown } from "../Assets/Components/Breakdowns/PercentageBreakdown";
+import { FilterCount } from "../Objects/Pieces/FilterCounts";
+import { ChipFilters } from "./Subpage/ChipFilters";
 
-export function FilteredView(props: ViewProps)
+interface FilterViewProps
+{
+	node: string;
+}
+
+export function FilteredView(props: FilterViewProps & ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage } = props;
-	const { tree, filter, gamertag } = useParams();
-	//#endregion
-
-	//#region Refs
-	const lastUpdate = useRef<Date | null>(null);
+	const { app, setLoadingMessage, node, setGamertag } = props;
+	const { filter, gamertag } = useParams();
 	//#endregion
 	
 	//#region State
 	const [showPerMatch, setShowPerMatch] = useState(false);
 	const [myPlayer, setMyPlayer] = useState(new Player());
-    const [sr, setSR] = useState(myPlayer.serviceRecord ?? new ServiceRecord());
+    const [sr, setSR] = useState<ServiceRecord | undefined>();
     const [image, setImage] = useState("");
+	const [availableFilters, setAvailableFilters] = useState<FilterCount[]>([]);
+	const [selectedFilter, setSelectedFilter] = useState(filter);
 	//#endregion
 
 	const loadData = useCallback(async () => 
 	{		
 		// Check if we need to check Firebase or HaloDotAPI
-		setLoadingMessage("Loading Service Records");
+		setLoadingMessage("Loading Filters");
 		
 		// Get player's service record
-		if (gamertag && tree)
+		if (gamertag && node)
 		{
 			setLoadingMessage("Loading " + gamertag);
 
-			// let player: Player = await app.GetPlayerFilter(gamertag, tree as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome);
-			// const sr = player.GetFilteredServiceRecord(tree as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome) ?? new ServiceRecord();
+			const player = await app.GetPlayerAppearanceOnly(gamertag);
+			setAvailableFilters(await app.GetAvailableFilters(gamertag, node as ServiceRecordFilter));
+			setMyPlayer(player);
+			setGamertag(gamertag);
             
-			app.LogViewServiceRecord(gamertag, tree as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome);
-			//setMyPlayer(player);
-            //setSR(sr);
+			app.LogViewServiceRecord(gamertag, node as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome);
 		}
 
 		setLoadingMessage("");
-        setImage(image);
-	}, [lastUpdate, app, gamertag, setMyPlayer, tree, filter, setImage]);
+	}, [app, gamertag, setMyPlayer, node, filter]);
+
+	const loadFilteredSR = useCallback(async () => 
+	{		
+		// Check if we need to check Firebase or HaloDotAPI
+		setLoadingMessage("Loading " + selectedFilter + " Service Record");
+		
+		// Get player's service record
+		if (gamertag && node && selectedFilter)
+		{
+			setSR(await app.GetFilteredServiceRecord(gamertag, node as ServiceRecordFilter, selectedFilter));			
+			app.LogViewServiceRecord(gamertag, node as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome);
+		}
+
+		setLoadingMessage("");
+	}, [app, gamertag, node, selectedFilter]);
+
+	const onFilterSelected = useCallback((filter: string) =>
+	{
+		setSelectedFilter(filter);
+	}, []);
 
     useEffect(() =>
     {
         loadData();
-    }, [filter, tree, gamertag]);
+    }, [node, gamertag]);
+
+	useEffect(() =>
+	{
+		if (selectedFilter)
+		{
+			loadFilteredSR();
+		}
+	}, [selectedFilter]);
 
 	return (
 		<Box component="main" sx={{ flexGrow: 1 }}>
@@ -77,42 +109,51 @@ export function FilteredView(props: ViewProps)
 							<ServiceRecordFilters setPerMatch={setShowPerMatch} />
 						</Box>
 					</Grid>
-					{/* Far left */}
-					<Grid container item spacing={2} xs={12} md={4} xl={4} sx={{ alignContent: "flex-start" }}>
-						<Grid item xs={12}>
-							<ImageCard image={image} title={filter} />
-						</Grid>
-						<Grid item xs={12}>
-							<MatchesBreakdown serviceRecord={sr} />
-						</Grid>
-						<Grid item xs={12}>
-							<PercentageBreakdown totalMatches={myPlayer.serviceRecord.matchesPlayed} filteredMatches={sr.matchesPlayed} />
-						</Grid>
+					{/* Still top but less so*/}
+					<Grid item xs={12}>
+						<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
+							<ChipFilters activeFilter={selectedFilter ?? ""} filters={availableFilters} onFilterClick={onFilterSelected} areVariants={node === ServiceRecordFilter.Variant} />
+						</Box>
 					</Grid>
-					{/* Middle 5 */}
-					<Grid container item spacing={2} xs={12} md={4} xl={5} sx={{ alignContent: "flex-start" }}>
-						<Grid item xs={12}>
-							<KillBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
+					{!sr ? undefined :
+					<>
+						{/* Far left */}
+						<Grid container item spacing={2} xs={12} md={4} xl={4} sx={{ alignContent: "flex-start" }}>
+							<Grid item xs={12}>
+								<ImageCard image={image} title={selectedFilter} />
+							</Grid>
+							<Grid item xs={12}>
+								<MatchesBreakdown serviceRecord={sr} />
+							</Grid>
+							<Grid item xs={12}>
+								<PercentageBreakdown totalMatches={availableFilters.map(avail => avail.count).reduce((a, b) => a + b)} filteredMatches={sr.matchesPlayed} />
+							</Grid>
 						</Grid>
-						<Grid item xs={12}>
-							<ShotsBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
+						{/* Middle 5 */}
+						<Grid container item spacing={2} xs={12} md={4} xl={5} sx={{ alignContent: "flex-start" }}>
+							<Grid item xs={12}>
+								<KillBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
+							</Grid>
+							<Grid item xs={12}>
+								<ShotsBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
+							</Grid>
 						</Grid>
-					</Grid>
-					{/* Far right */}
-					<Grid container item spacing={2} xs={12} md={4} xl={3} sx={{ alignContent: "flex-start" }}>
-						<Grid item xs={12}>
-							<KDABreakdown serviceRecord={sr} />
+						{/* Far right */}
+						<Grid container item spacing={2} xs={12} md={4} xl={3} sx={{ alignContent: "flex-start" }}>
+							<Grid item xs={12}>
+								<KDABreakdown serviceRecord={sr} />
+							</Grid>
+							<Grid item xs={12}>
+								<LevelBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
+							</Grid>
+							<Grid item xs={12}>
+								<AssistBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
+							</Grid>
+							<Grid item xs={12}>
+								<DamageBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
+							</Grid>
 						</Grid>
-						<Grid item xs={12}>
-							<LevelBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
-						</Grid>
-						<Grid item xs={12}>
-							<AssistBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
-						</Grid>
-						<Grid item xs={12}>
-							<DamageBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
-						</Grid>
-					</Grid>
+					</>}
 				</Grid>
 			</Box>
 		</Box>

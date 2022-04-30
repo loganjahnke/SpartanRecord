@@ -63,7 +63,14 @@ export function MatchesView(props: ViewProps)
 
     function goToMatch(id: string): void
     {
-        navigate(`/match/${id}`);
+		if (gamertag)
+		{
+			navigate(`/match/${id}/${gamertag}`);
+		}
+		else 
+		{
+			navigate(`/match/${id}`);
+		}
     }
 
 	return (
@@ -87,7 +94,7 @@ export function MatchesView(props: ViewProps)
 						<MatchesBreakdown serviceRecord={combinedSR} />
 					</Grid>
 					<Grid item xs={12} lg={4}>
-						<KillBreakdown serviceRecord={combinedSR} />
+						<KillBreakdown serviceRecord={combinedSR} hideBreakdown />
 					</Grid>
 				</Grid>
 				<Grid container spacing={2} sx={{ mt: 1 }}>

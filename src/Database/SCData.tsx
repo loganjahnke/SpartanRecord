@@ -5,6 +5,7 @@ import { Match } from "../Objects/Model/Match";
 import { Player } from "../Objects/Model/Player";
 import { PlayerMatch } from "../Objects/Model/PlayerMatch";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
+import { FilterCount } from "../Objects/Pieces/FilterCounts";
 import { HaloMap, HaloMode, HaloOutcome, HaloRanked, ServiceRecordFilter } from "./ArrowheadFirebase";
 import { SCAutocode } from "./SCAutocode";
 import { SCFirebase } from "./SCFirebase";
@@ -107,6 +108,28 @@ export class SCData
     }
 
     /**
+     * Gets the available filters for a node
+     * @param gamertag the gamertag
+     * @param node the game number
+     * @returns the available filters
+     */
+    public async GetFilteredServiceRecord(gamertag: string, node: ServiceRecordFilter, filter: string): Promise<ServiceRecord | undefined>
+    {
+        return await this.__firebase.GetFilteredServiceRecord(gamertag, node, filter);
+    }
+
+    /**
+     * Gets the available filters for a node
+     * @param gamertag the gamertag
+     * @param node the game number
+     * @returns the available filters
+     */
+    public async GetAvailableFilters(gamertag: string, node: ServiceRecordFilter): Promise<FilterCount[]>
+    {
+        return await this.__firebase.GetAvailableFilters(gamertag, node);
+    }
+
+    /**
      * Gets the last 25 player matches for a gamertag
      * @param gamertag the gamertag
      * @returns the array of player matches
@@ -122,9 +145,9 @@ export class SCData
     }
 
     /**
-     * Gets the last 25 player matches for a gamertag
-     * @param gamertag the gamertag
-     * @returns the array of player matches
+     * Gets the match
+     * @param matchID the match ID
+     * @returns the match details and statistics
      */
     public async GetMatch(matchID: string): Promise<Match>
     {

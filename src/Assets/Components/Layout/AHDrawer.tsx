@@ -9,6 +9,7 @@ import ModeStandbyIcon from '@mui/icons-material/ModeStandby';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
+import { ServiceRecordFilter } from "../../../Database/ArrowheadFirebase";
 
 interface AHDrawerProps
 {
@@ -46,16 +47,16 @@ export function AHDrawer(props: AHDrawerProps)
 				switchTab(`/service_record/${gamertag}`, newTab);
 				break;
 			case "Maps":
-				switchTab(`/maps/${gamertag}`, newTab);
+				switchTab(`/service_record/${ServiceRecordFilter.Map}/${gamertag}`, newTab);
 				break;
 			case "Playlists":
-				switchTab(`/playlists/${gamertag}`, newTab);
+				switchTab(`/service_record/${ServiceRecordFilter.Playlist}/${gamertag}`, newTab);
 				break;
 			case "Variants":
-				switchTab(`/variants/${gamertag}`, newTab);
+				switchTab(`/service_record/${ServiceRecordFilter.Variant}/${gamertag}`, newTab);
 				break;
 			case "Match Outcome":
-				switchTab(`/outcome/${gamertag}`, newTab);
+				switchTab(`/service_record/${ServiceRecordFilter.Outcome}/${gamertag}`, newTab);
 				break;
 			case "Medals":
 				switchTab(`/medals/${gamertag}`, newTab);

@@ -5,14 +5,16 @@ import {
 	Tooltip,
 	Legend,
 	BarController,
-	BarElement
+	BarElement,
+	CategoryScale,
+	LinearScale
   } from 'chart.js';
 
-import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import { Box } from "@mui/material";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
+import { MatchPlayer } from "../../../Objects/Pieces/MatchPlayer";
 
-export const KillBreakdownChart = (props: { currentSR: ServiceRecord }) =>
+export const TeamBreakdownChart = (props: { players: MatchPlayer[] }) =>
 {
 	ChartJS.defaults.color = "#DDDDDD";
 	ChartJS.defaults.font.family = "Roboto";
@@ -22,7 +24,9 @@ export const KillBreakdownChart = (props: { currentSR: ServiceRecord }) =>
 		Title,
 		Tooltip,
 		Legend,
-		BarElement
+		BarElement,
+		CategoryScale,
+		LinearScale
 	);
 
 	const CHART_COLORS = {
@@ -36,12 +40,12 @@ export const KillBreakdownChart = (props: { currentSR: ServiceRecord }) =>
 		theme: ArrowheadTheme.cobra
 	};
 
-	const { currentSR } = props;
+	const { players } = props;
 	
 	const options = {
 		type: "bar",
 		responsive: true,
-		indexAxis: "y" as const,
+		indexAxis: "x" as const,
 		// minBarLength: 5,
 		maintainAspectRatio: false,
 		plugins: {
@@ -52,7 +56,7 @@ export const KillBreakdownChart = (props: { currentSR: ServiceRecord }) =>
 			},
 			title: {
 				display: true,
-				text: "Kills Breakdown",
+				text: "Points",
 			}
 		},
 		elements: {
@@ -86,43 +90,25 @@ export const KillBreakdownChart = (props: { currentSR: ServiceRecord }) =>
 				},
 				title: {
 					display: true,
-					text: "Kills"
+					text: "Points"
 				},
 			}
 		}
 	};
 	
 	const chartData = {
-		labels: [
-			"Assassinations", //: " + currentSR.breakdowns.kills.assassinations.toLocaleString(),
-			"Fusion Coil", //: " + currentSR.breakdowns.kills.fusionCoil.toLocaleString(),
-			"Grenades", //: " + currentSR.breakdowns.kills.grenades.toLocaleString(),
-			"Headshots", //: " + currentSR.breakdowns.kills.headshots.toLocaleString(),
-			"Melee", //: " + currentSR.breakdowns.kills.melee.toLocaleString(),
-			"Power Weapons", //: " + currentSR.breakdowns.kills.powerWeapons.toLocaleString(),
-			"Repulsor", //: " + currentSR.breakdowns.kills.repulsor.toLocaleString(),
-			"Splatters", //: " + currentSR.breakdowns.kills.splatters.toLocaleString(),
-		],
+		labels: players.map(player => player.gamertag),
 		datasets: [
 			{
 				backgroundColor: Object.values(CHART_COLORS),
 				borderColor: ArrowheadTheme.box,
-				data: [
-					currentSR.breakdowns.kills.assassinations,
-					currentSR.breakdowns.kills.fusionCoil,
-					currentSR.breakdowns.kills.grenades,
-					currentSR.breakdowns.kills.headshots,
-					currentSR.breakdowns.kills.melee,
-					currentSR.breakdowns.kills.powerWeapons,
-					currentSR.breakdowns.kills.repulsor,
-					currentSR.breakdowns.kills.splatters
-				]
+				data: players.map(player => player.stats.totalPoints)
 			}
 		]
 	};
 	
 	return (
-		<Box sx={{ backgroundColor: "divider", minHeight: "300px" }}>
+		<Box sx={{ backgroundColor: "divider", width: "100%", minHeight: "300px" }}>
 			<Bar options={options} data={chartData} />
 		</Box>
 	);

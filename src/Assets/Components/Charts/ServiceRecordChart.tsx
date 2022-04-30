@@ -13,7 +13,7 @@ import {
 import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 enum HistoricDataSets
 {
@@ -101,16 +101,11 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 		]
 	});
 
-	useEffect(() => 
-	{
-		changeDataSet();
-	}, [historicServiceRecords, currentSR, changeDataSet]);
-
 	/**
 	 * Changes the data set
 	 * @param event the event containing the new data set
 	 */
-	function changeDataSet(event?: SelectChangeEvent): void
+	const changeDataSet = useCallback((event?: SelectChangeEvent): void =>
 	{
 		const newDataSet = event?.target.value as HistoricDataSets ?? HistoricDataSets.WinRate;
 		if (event && dataSet.current === newDataSet) { return; }
@@ -118,6 +113,7 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 
 		setOptions({
 			responsive: true,
+			maintainAspectRatio: false,
 			plugins: {
 				legend: {
 					display: false,
@@ -186,7 +182,7 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 				}
 			]
 		});
-	}
+	}, [allSRs]);
 
 	const initialChartData = {
 		labels: historicServiceRecords.map(sr => sr.matchesPlayed),
@@ -198,6 +194,11 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 			}
 		]
 	};
+
+	useEffect(() => 
+	{
+		changeDataSet();
+	}, [historicServiceRecords]);
 	
 	return (
 		allSRs.length > 2 
@@ -218,7 +219,9 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 						</Select>
 					</FormControl>
 				</Box>
-				<Line options={options} data={chartData.labels.length === 0 ? initialChartData : chartData} />
+				<Box sx={{ height: "300px" }}>
+					<Line options={options} data={chartData.labels.length === 0 ? initialChartData : chartData} />
+				</Box>
 			</Box>
 			: 
 			<Box sx={{ p: 2, backgroundColor: "divider", borderRadius: 3, display: "flex", justifyContent: "center", alignItems: "center" }}>

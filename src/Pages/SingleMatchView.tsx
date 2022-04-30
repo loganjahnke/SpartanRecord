@@ -18,8 +18,8 @@ import { TeamTable } from "./Subpage/TeamTable";
 export function SingleMatchView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage } = props;
-	const { id } = useParams();
+	const { app, setLoadingMessage, setGamertag } = props;
+	const { id, gamertag } = useParams();
 	const navigate = useNavigate();
 	//#endregion
 	
@@ -34,6 +34,7 @@ export function SingleMatchView(props: ViewProps)
 		if (id)
 		{
             setLoadingMessage("Loading match");
+			if (gamertag) { setGamertag(gamertag); }
 			const match = await app.GetMatch(id);
             setMatch(match);
 
@@ -55,7 +56,7 @@ export function SingleMatchView(props: ViewProps)
 		}
 
 		setLoadingMessage("");
-	}, [app, setMatch, setPlayers]);
+	}, [app, setMatch, setPlayers, setGamertag, gamertag]);
 	
 	useEffect(() =>
 	{
@@ -66,11 +67,11 @@ export function SingleMatchView(props: ViewProps)
 	 * Navigates the service record for the gamertag
 	 * @param gamertag the gamertag
 	 */
-	function onGamertagClick(gamertag: string): void
+	function onGamertagClick(tag: string): void
 	{
-		if (gamertag && gamertag.indexOf("343 Bot") !== 0)
+		if (tag && tag.indexOf("343 Bot") !== 0)
 		{
-			navigate("/service_record/" + gamertag);
+			navigate("/service_record/" + tag);
 		}
 	}
 
@@ -81,11 +82,11 @@ export function SingleMatchView(props: ViewProps)
 			<Box sx={{ p: 2 }}>
 				{/* Description of the game (map, mode, playlist) */}
 				<Grid container spacing={2} sx={{ alignItems: "flex-start", justifyContent: "flex-start" }}>
-					<Grid container item spacing={2} xs={12} lg={4}>
+					<Grid container item spacing={2} xs={12} xl={4}>
 						<Grid item xs={12}>
 							<ImageCard image={match?.map?.asset.thumbnail} 
 								titles={[match?.map?.name ?? "", match?.mode?.name ?? "", match?.playlist?.name ?? ""]} 
-								headers={["Map", "Mode", "Playlist"]} />
+								headers={["Map", "Variant", "Playlist"]} />
 						</Grid>
 						{match?.teams && match.teams.length > 0 
 							? match?.teams?.map(team => <Grid item xs={12}><TeamResultBreakdown team={team} /></Grid>) 
@@ -93,12 +94,12 @@ export function SingleMatchView(props: ViewProps)
 								? <Grid item xs={12}><FFAResultBreakdown winner={match.players[0]} /></Grid>
 								: undefined}
 					</Grid>
-					<Grid container item spacing={2} xs={12} lg={8}>
+					<Grid container item spacing={2} xs={12} xl={8}>
 						{match?.teams && match.teams.length > 0 ? (
 							match.teams.map(team => <Grid item xs={12}><TeamTable mode={match.mode.name as HaloMode} team={team} best={match.best} onGamertagClick={onGamertagClick} ranked={match.playlist.ranked} /></Grid>)
 						) : match?.players && match.players.length > 0 ? (
 							<Grid item xs={12}>
-								<TeamTable mode={match.mode.name as HaloMode} team={new Team(null, null, match.players)} best={match.best} onGamertagClick={onGamertagClick} ranked={match.playlist.ranked} />
+								<TeamTable mode={match.mode.name as HaloMode} team={new Team(undefined, undefined, match.players)} best={match.best} onGamertagClick={onGamertagClick} ranked={match.playlist.ranked} />
 							</Grid>
 						) : undefined}
 						<Grid item xs={12} lg={6} xl={4}>
