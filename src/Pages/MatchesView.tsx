@@ -6,7 +6,7 @@ import { PlayerMatchSummary } from "../Assets/Components/Match/PlayerMatchSummar
 import { ViewProps } from "./Props/ViewProps";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { MatchesBreakdown } from "../Assets/Components/Breakdowns/MatchesBreakdown";
-import { KillBreakdown } from "../Assets/Components/Breakdowns/KillBreakdown";
+import { KillDeathCard } from "../Assets/Components/Breakdowns/KillDeathCard";
 import { PlayerCard } from "../Assets/Components/Cards/PlayerCard";
 import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
 import { PlayerMatch } from "../Objects/Model/PlayerMatch";
@@ -94,7 +94,7 @@ export function MatchesView(props: ViewProps)
 						<MatchesBreakdown serviceRecord={combinedSR} />
 					</Grid>
 					<Grid item xs={12} lg={4}>
-						<KillBreakdown serviceRecord={combinedSR} hideBreakdown />
+						<KillDeathCard serviceRecord={combinedSR} />
 					</Grid>
 				</Grid>
 				<Grid container spacing={2} sx={{ mt: 1 }}>

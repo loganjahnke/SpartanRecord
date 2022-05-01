@@ -10,7 +10,7 @@ import { MatchesBreakdown } from "../../Assets/Components/Breakdowns/MatchesBrea
 import { KDARanks } from "../../Assets/Components/Ranks/KDARanks";
 import { WinRateRanks } from "../../Assets/Components/Ranks/WinRateRanks";
 import { AccuracyRanks } from "../../Assets/Components/Ranks/AccuracyRanks";
-import { KillBreakdown } from "../../Assets/Components/Breakdowns/KillBreakdown";
+import { KillDeathCard } from "../../Assets/Components/Breakdowns/KillDeathCard";
 import { ViewProps } from "../Props/ViewProps";
 import { CompanyCard } from "../../Assets/Components/Cards/CompanyCard";
 
@@ -89,7 +89,7 @@ export function SpartanCompanyView(props: ViewProps)
 							<TopMedals medals={sharedSR.medals} />
 						</Grid>
 						<Grid item xs={12}>
-							<KillBreakdown serviceRecord={sharedSR} />
+							<KillDeathCard serviceRecord={sharedSR} />
 						</Grid>
 						<Grid item xs={12}>
 							<MatchesBreakdown serviceRecord={sharedSR} />

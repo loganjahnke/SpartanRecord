@@ -1,9 +1,9 @@
-import { Box, Checkbox, CircularProgress, Divider, FormControlLabel, FormGroup, Grid, Toolbar, Typography } from "@mui/material";
+import { Box, Divider, Grid, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { TopMedals } from "../Assets/Components/Medals/TopMedals";
-import { KillBreakdown } from "../Assets/Components/Breakdowns/KillBreakdown";
+import { KillDeathCard } from "../Assets/Components/Breakdowns/KillDeathCard";
 import { AssistBreakdown } from "../Assets/Components/Breakdowns/AssistBreakdown";
 import { MatchesBreakdown } from "../Assets/Components/Breakdowns/MatchesBreakdown";
 import { ShotsBreakdown } from "../Assets/Components/Breakdowns/ShotsBreakdown";
@@ -17,9 +17,9 @@ import { GamertagSearch } from "./Subpage/GamertagSearch";
 import { VehicleBreakdown } from "../Assets/Components/Breakdowns/VehicleBreakdown";
 import { ServiceRecordFilters } from "./Subpage/ServiceRecordFilters";
 import { ViewProps } from "./Props/ViewProps";
-import { CampaignBreakdown } from "../Assets/Components/Breakdowns/CampaignBreakdown";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { Cookie } from "../Objects/Helpers/Cookie";
+import { KillBreakdownCard } from "../Assets/Components/Breakdowns/KillBreakdownCard";
 
 export function PlayerView(props: ViewProps)
 {
@@ -135,19 +135,40 @@ export function PlayerView(props: ViewProps)
 							</Box>
 						</Grid>
 						{/* Far left */}
-						<Grid container item spacing={2} xs={12} md={4} xl={4} sx={{ alignContent: "flex-start" }}>
+						<Grid container item spacing={2} md={12} lg={6} xl={4} sx={{ alignContent: "flex-start" }}>
 							<Grid item xs={12}>
 								<MatchesBreakdown serviceRecord={myPlayer.serviceRecord} />
 							</Grid>
 							<Grid item xs={12}>
-								<KillBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+								<KillDeathCard serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+							</Grid>
+							<Grid item xs={12}>
+								<KDABreakdown serviceRecord={myPlayer.serviceRecord} />
 							</Grid>
 							<Grid item xs={12}>
 								<ShotsBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
+							<Grid item xs={12}>
+								<AssistBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+							</Grid>
 						</Grid>
 						{/* Middle 6 */}
-						<Grid container item spacing={2} xs={12} md={4} xl={5} sx={{ alignContent: "flex-start" }}>
+						<Grid container item spacing={2} sm={12} md={6} lg={6} xl={3} sx={{ alignContent: "flex-start" }}>
+							<Grid item xs={12}>
+								<KillBreakdownCard serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+							</Grid>
+							<Grid item xs={12}>
+								<LevelBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+							</Grid>
+							<Grid item xs={12}>
+								<DamageBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+							</Grid>
+							<Grid item xs={12}>
+								<VehicleBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+							</Grid>
+						</Grid>
+						{/* Far right */}
+						<Grid container item spacing={2} sm={12} md={6} lg={12} xl={5} sx={{ alignContent: "flex-start" }}>
 							<Grid item xs={12}>
 								<TopMedals medals={myPlayer.serviceRecord.medals} matchesPlayed={myPlayer.serviceRecord.matchesPlayed} showPerMatch={showPerMatch} />
 							</Grid>
@@ -158,24 +179,7 @@ export function PlayerView(props: ViewProps)
 								<CampaignBreakdown campaignRecord={myPlayer.campaignRecord} />
 							</Grid> */}
 						</Grid>
-						{/* Far right */}
-						<Grid container item spacing={2} xs={12} md={4} xl={3} sx={{ alignContent: "flex-start" }}>
-							<Grid item xs={12}>
-								<KDABreakdown serviceRecord={myPlayer.serviceRecord} />
-							</Grid>
-							<Grid item xs={12}>
-								<LevelBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
-							</Grid>
-							<Grid item xs={12}>
-								<AssistBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
-							</Grid>
-							<Grid item xs={12}>
-								<DamageBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
-							</Grid>
-							<Grid item xs={12}>
-								<VehicleBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
-							</Grid>
-						</Grid>
+						
 					</Grid>
 				: <GamertagSearch search={search} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} />}
 			</Box>

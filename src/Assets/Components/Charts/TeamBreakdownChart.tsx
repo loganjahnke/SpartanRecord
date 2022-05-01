@@ -1,13 +1,13 @@
-import { Bar } from "react-chartjs-2";
+import { Doughnut } from "react-chartjs-2";
 import {
 	Chart as ChartJS,
 	Title,
 	Tooltip,
 	Legend,
-	BarController,
-	BarElement,
-	CategoryScale,
-	LinearScale
+	DoughnutController,
+	ArcElement,
+	LinearScale,
+	CategoryScale
   } from 'chart.js';
 
 import { Box } from "@mui/material";
@@ -20,37 +20,35 @@ export const TeamBreakdownChart = (props: { players: MatchPlayer[], blue?: boole
 	ChartJS.defaults.font.family = "Roboto";
 	ChartJS.defaults.font.weight = "100";
 	ChartJS.register(
-		BarController,
+		DoughnutController,
 		Title,
 		Tooltip,
 		Legend,
-		BarElement,
-		CategoryScale,
-		LinearScale
+		ArcElement,
+		LinearScale,
+		CategoryScale
 	);
 
 	const { players, blue } = props;
 
 	const CHART_COLORS = blue ? {
-		o1: "#028e9c",
-		o2: "#023e8a",
-		o3: "#0077b6",
-		o4: "#0096c7",
-		o5: "#00b4d8",
-		o6: "#48cae4",
-		o7: "#90e0ef",
-		o8: "#ade8f4",
-		o9: "#caf0f8"
+		red: "rgb(255, 99, 132)",
+		blue: "rgb(54, 162, 235)",
+		orange: "rgb(255, 159, 64)",
+		grey: "rgb(201, 203, 207)",
+		yellow: "rgb(255, 205, 86)",
+		green: "rgb(75, 192, 192)",
+		purple: "rgb(153, 102, 255)",
+		theme: ArrowheadTheme.cobra
 	} : {
-		o1: "#7a1600",
-		o2: "#8e1900",
-		o3: "#a31d00",
-		o4: "#b72100",
-		o5: ArrowheadTheme.cobra,
-		o6: "#d13a19",
-		o7: "#d65032",
-		o8: "#db664c",
-		o9: "#e07c66"
+		theme: ArrowheadTheme.cobra,
+		purple: "rgb(153, 102, 255)",
+		green: "rgb(75, 192, 192)",
+		yellow: "rgb(255, 205, 86)",
+		grey: "rgb(201, 203, 207)",
+		orange: "rgb(255, 159, 64)",
+		blue: "rgb(54, 162, 235)",
+		red: "rgb(255, 99, 132)"
 	};
 	
 	const options = {
@@ -61,7 +59,7 @@ export const TeamBreakdownChart = (props: { players: MatchPlayer[], blue?: boole
 		maintainAspectRatio: false,
 		plugins: {
 			legend: {
-				display: false,
+				display: true,
 				position: "top" as const,
 				color: "#FFFFFF"
 			},
@@ -80,7 +78,7 @@ export const TeamBreakdownChart = (props: { players: MatchPlayer[], blue?: boole
 		},
 		scales: {
 			yAxis: {
-				display: true,
+				display: false,
 				grid: {
 					display: false,
 					drawTicks: false,
@@ -91,16 +89,17 @@ export const TeamBreakdownChart = (props: { players: MatchPlayer[], blue?: boole
 				}
 			},
 			xAxis: {
+				display: false,
 				grid: {
-					display: true,
-					drawTicks: true,
-					drawBorder: true
+					display: false,
+					drawTicks: false,
+					drawBorder: false
 				},
 				ticks: {
 					padding: 5
 				},
 				title: {
-					display: true,
+					display: false,
 					text: "Points"
 				},
 			}
@@ -120,7 +119,7 @@ export const TeamBreakdownChart = (props: { players: MatchPlayer[], blue?: boole
 	
 	return (
 		<Box sx={{ backgroundColor: "divider", width: "100%", minHeight: "300px" }}>
-			<Bar options={options} data={chartData} />
+			<Doughnut options={options} data={chartData} />
 		</Box>
 	);
 }

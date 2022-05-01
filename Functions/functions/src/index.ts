@@ -244,8 +244,9 @@ const LoopThroughMatches = async (app: admin.app.App, gamertag: string, lastMatc
 	const outcomeSRs = new Map<string, AutocodeMultiplayerServiceRecord>();
 	
 	// Get previous filtered SRs and best matches
-	const [filteredSRs, bestMatches, bestMatchesPerMap] = await Promise.all([
+	const [filteredSRs, availableFilters, bestMatches, bestMatchesPerMap] = await Promise.all([
 		firebase.GetAllFilteredServiceRecordsInRawJSON(app, gamertag),
+		firebase.GetAvailableFilters(app, gamertag),
 		firebase.GetBest(app, gamertag),
 		firebase.GetBestForMaps(app, gamertag)
 	]);
@@ -262,10 +263,10 @@ const LoopThroughMatches = async (app: admin.app.App, gamertag: string, lastMatc
 	const playlistFilters = new Map<string, number>();
 	const outcomeFilters = new Map<string, number>();
 
-	PopulateFilterMap(filteredSRs, firebase.ServiceRecordFilter.Map, mapFilters);
-	PopulateFilterMap(filteredSRs, firebase.ServiceRecordFilter.Variant, variantFilters);
-	PopulateFilterMap(filteredSRs, firebase.ServiceRecordFilter.Playlist, playlistFilters);
-	PopulateFilterMap(filteredSRs, firebase.ServiceRecordFilter.Outcome, outcomeFilters);
+	PopulateFilterMap(availableFilters, firebase.ServiceRecordFilter.Map, mapFilters);
+	PopulateFilterMap(availableFilters, firebase.ServiceRecordFilter.Variant, variantFilters);
+	PopulateFilterMap(availableFilters, firebase.ServiceRecordFilter.Playlist, playlistFilters);
+	PopulateFilterMap(availableFilters, firebase.ServiceRecordFilter.Outcome, outcomeFilters);
 
 	// Get latest SR over time
 	const overtimeSR = startingServiceRecord;

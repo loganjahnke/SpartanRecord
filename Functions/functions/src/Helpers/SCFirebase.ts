@@ -55,23 +55,9 @@ export const SetServiceRecord = async (app: admin.app.App, gamertag: string, dat
  * @param gamertag the gamertag to get stats from
  * @returns A service record that represents the filter
  */
-export const GetAvailableFilters = async (app: admin.app.App, gamertag: string): Promise<Map<ServiceRecordFilter, string>> =>
+export const GetAvailableFilters = async (app: admin.app.App, gamertag: string): Promise<any> =>
 {
-	const map = new Map<ServiceRecordFilter, string>();
-	const snapshot = await get(app, `filters/${gamertag}`);
-	if (snapshot)
-	{
-		for (const key in snapshot.val())
-		{
-			const available = snapshot.val()[key];
-			for (const result of available)
-			{
-				map.set(key as ServiceRecordFilter, result);
-			}
-		}
-	}
-
-	return map;
+	return await get(app, `filters/${gamertag}`);
 }
 
 /**
