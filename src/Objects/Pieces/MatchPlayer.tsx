@@ -23,6 +23,8 @@ export class MatchPlayer
     public joinedInProgress: boolean;
     /** Progression */
     public progression: Progression;
+    /** MMR */
+    public mmr: number = 0;
 
     constructor(data?: AutocodeMatchPlayer, isRanked: boolean = false, timePlayedInSeconds: number = 0)
     {
@@ -34,19 +36,20 @@ export class MatchPlayer
         this.won = false;
         this.joinedInProgress = false;
         this.progression = new Progression();
-
+        
         if (!data) { return; }
-
+        
         this.gamertag = data.details.name;
         this.team = new TeamDetails(data.team);
         this.stats = new ServiceRecord(AutocodeHelpers.CreateServiceRecordFromMatch(this.gamertag, data, isRanked, timePlayedInSeconds));
         this.rank = data.rank;
         this.joinedInProgress = data.participation.joined_in_progress;
         this.progression = new Progression(data.progression);
-        this.won = data?.outcome === "win" || data?.outcome === "won";
+        this.mmr = data.stats.mmr ?? 0;
+        this.won = data.outcome === "win" || data.outcome === "won";
         this.outcome = this.won ? HaloOutcome.Win
-			: data?.outcome === "left" ? HaloOutcome.Left
-			: data?.outcome === "loss" ? HaloOutcome.Loss
-			: HaloOutcome.Draw;
+        : data?.outcome === "left" ? HaloOutcome.Left
+        : data?.outcome === "loss" ? HaloOutcome.Loss
+        : HaloOutcome.Draw;
     }
 }

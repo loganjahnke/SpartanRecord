@@ -15,11 +15,11 @@ import StarIcon from '@mui/icons-material/Star';
 
 interface TeamTableProps
 {
-	mode: HaloMode;
 	ranked?: boolean;
 	team: Team;
 	best: { score: number, points: number, kills: number, deaths: number, assists: number };
 	onGamertagClick: (gamertag: string) => void;
+	ffa?: boolean;
 }
 
 interface TeamTableRowProps
@@ -29,11 +29,12 @@ interface TeamTableRowProps
 	topSR: { score: number, points: number, kills: number, deaths: number, assists: number };
 	showRank?: boolean;
 	showPoints?: boolean;
+	ffa?: boolean;
 }
 
 export function TeamTable(props: TeamTableProps)
 {
-	const { mode, ranked, team, best, onGamertagClick } = props;
+	const { ranked, team, best, onGamertagClick, ffa } = props;
 
 	return (
 		<TableContainer component={Box} sx={{ backgroundColor: ArrowheadTheme.box, borderRadius: 3 }}>
@@ -49,11 +50,12 @@ export function TeamTable(props: TeamTableProps)
 						<TableCell sx={{ pl: 2, pr: 2 }} align="right">Deaths</TableCell>
 						<TableCell sx={{ pl: 2, pr: 2 }} align="right">Assists</TableCell>
 						<TableCell sx={{ pl: 2, pr: 2 }} align="right">KDA</TableCell>
+						{ffa ? <TableCell sx={{ pl: 2, pr: 2 }} align="right">MMR</TableCell> : undefined}
 					</TableRow>
 				</TableHead>
 				<TableBody>
 					{team.players.sort((a, b) => b.stats.totalScore - a.stats.totalScore).map((player, index) => (
-						<Row key={index} player={player} topSR={best} showRank={ranked} onGamertagClick={onGamertagClick} />
+						<Row key={index} player={player} topSR={best} showRank={ranked} onGamertagClick={onGamertagClick} ffa={ffa} />
 					))}
 				</TableBody>
 			</Table>
@@ -63,7 +65,7 @@ export function TeamTable(props: TeamTableProps)
 
 function Row(props: TeamTableRowProps)
 {
-	const { onGamertagClick, player, topSR, showRank } = props;
+	const { onGamertagClick, player, topSR, showRank, ffa } = props;
 	const [expanded, setExpanded] = useState(false);
 
 	const bestScore = player.stats.totalScore === topSR?.score;
@@ -117,9 +119,16 @@ function Row(props: TeamTableRowProps)
 					</Box>
 				</TableCell>
 				<TableCell sx={{ pr: 2 }} width={"80px"} align="right">{player.stats.kda.toLocaleString()}</TableCell>
+				{ffa ? 
+					<TableCell sx={{ pl: 2, pr: 2, pt: 0, pb: 0 }} align="right" width={"64px"}>
+						<Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+							{player.mmr.toLocaleString()}
+						</Box>
+					</TableCell> 
+				: undefined}
 			</TableRow>
 			<TableRow sx={{ width: "calc(100%-128px)"}}>
-				<TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={showRank ? 9 : 8}>
+				<TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={showRank && ffa ? 10 : showRank || ffa ? 9 : 8}>
 					<Collapse in={expanded} timeout="auto" unmountOnExit sx={{ width: "auto" }}>
 						<Grid container spacing={1}>
 							<Grid item xs={6} xl={8}>

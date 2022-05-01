@@ -50,6 +50,7 @@ export function TeamResultBreakdown(props: TeamResultBreakdownProps)
                         <BreakdownTile title="Points" value={serviceRecord.totalPoints} isMainStat />
                         <BreakdownTile title="Kills" value={serviceRecord.summary.kills} isMainStat />
                         <BreakdownTile title="Deaths" value={serviceRecord.summary.deaths} isMainStat />
+                        <BreakdownTile title="MMR" value={team.mmr} isMainStat />
                   </Box>
                   <Box sx={{ height: "300px", width: "calc(100% - 16px)", m: "0 8px" }}>
                     {filtered && filtered.length > 0 ? <TeamBreakdownChart players={filtered} blue={team.details.name === "Eagle"} /> : undefined}

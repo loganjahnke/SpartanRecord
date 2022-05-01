@@ -90,16 +90,14 @@ export function SingleMatchView(props: ViewProps)
 						</Grid>
 						{match?.teams && match.teams.length > 0 
 							? match?.teams?.map(team => <Grid item xs={12}><TeamResultBreakdown team={team} /></Grid>) 
-							: match?.players && match.players.length > 0 
-								? <Grid item xs={12}><FFAResultBreakdown winner={match.players[0]} /></Grid>
-								: undefined}
+							: undefined}
 					</Grid>
 					<Grid container item spacing={2} xs={12} xl={8}>
 						{match?.teams && match.teams.length > 0 ? (
-							match.teams.map(team => <Grid item xs={12}><TeamTable mode={match.mode.name as HaloMode} team={team} best={match.best} onGamertagClick={onGamertagClick} ranked={match.playlist.ranked} /></Grid>)
+							match.teams.map(team => <Grid item xs={12}><TeamTable team={team} best={match.best} onGamertagClick={onGamertagClick} ranked={match.playlist.ranked} /></Grid>)
 						) : match?.players && match.players.length > 0 ? (
 							<Grid item xs={12}>
-								<TeamTable mode={match.mode.name as HaloMode} team={new Team(undefined, undefined, match.players)} best={match.best} onGamertagClick={onGamertagClick} ranked={match.playlist.ranked} />
+								<TeamTable team={new Team(undefined, undefined, match.players)} best={match.best} onGamertagClick={onGamertagClick} ranked={match.playlist.ranked} ffa />
 							</Grid>
 						) : undefined}
 						<Grid item xs={12} lg={6} xl={4}>
