@@ -373,6 +373,470 @@ export class AutocodeHelpers
 		return sr;
 	}
 
+	//#region SR Addition
+	/**
+	 * Adds a player's details to an existing service record
+	 * @param sr1 1st SR
+	 * @param sr2 2nd SR
+	 */
+	public static AddSRtoSR(sr1: AutocodeMultiplayerServiceRecord, sr2: AutocodeMultiplayerServiceRecord): void
+	{	
+		if (!sr1.data || !sr2.data) { return; }
+
+		sr1.data.records.pvp.time_played.seconds += sr2.data.records.pvp.time_played.seconds;
+		sr1.data.records.social.time_played.seconds += sr2.data.records.social.time_played.seconds;
+		sr1.data.records.ranked.time_played.seconds += sr2.data.records.ranked.time_played.seconds;
+
+		// Let's add everything
+		this.AddSROutcome(sr1, sr2);
+		this.AddSRSummary(sr1, sr2);
+		this.AddSRDamage(sr1, sr2);
+		this.AddSRScore(sr1, sr2);
+		this.AddSRShots(sr1, sr2);
+		this.AddSRRounds(sr1, sr2);
+		this.AddSRBreakdown(sr1, sr2);
+
+		this.UpdateCalculatedProperties(sr1.data.records.pvp);
+		this.UpdateCalculatedProperties(sr1.data.records.social);
+		this.UpdateCalculatedProperties(sr1.data.records.ranked);
+	}
+ 
+	/**
+	 * Adds the outcome to the multiplayer service record key
+	 * @param sr1 1st SR
+	 * @param sr2 2nd SR
+	 */
+	private static AddSROutcome(sr1: AutocodeMultiplayerServiceRecord, sr2: AutocodeMultiplayerServiceRecord): void
+	{
+		sr1.data.records.pvp.matches.outcomes.wins += sr2.data.records.pvp.matches.outcomes.wins;
+		sr1.data.records.social.matches.outcomes.wins += sr2.data.records.social.matches.outcomes.wins;
+		sr1.data.records.ranked.matches.outcomes.wins += sr2.data.records.ranked.matches.outcomes.wins;
+
+		sr1.data.records.pvp.matches.outcomes.losses += sr2.data.records.pvp.matches.outcomes.losses;
+		sr1.data.records.social.matches.outcomes.losses += sr2.data.records.social.matches.outcomes.losses;
+		sr1.data.records.ranked.matches.outcomes.losses += sr2.data.records.ranked.matches.outcomes.losses;
+
+		sr1.data.records.pvp.matches.outcomes.draws += sr2.data.records.pvp.matches.outcomes.draws;
+		sr1.data.records.social.matches.outcomes.draws += sr2.data.records.social.matches.outcomes.draws;
+		sr1.data.records.ranked.matches.outcomes.draws += sr2.data.records.ranked.matches.outcomes.draws;
+
+		sr1.data.records.pvp.matches.outcomes.left += sr2.data.records.pvp.matches.outcomes.left;
+		sr1.data.records.social.matches.outcomes.left += sr2.data.records.social.matches.outcomes.left;
+		sr1.data.records.ranked.matches.outcomes.left += sr2.data.records.ranked.matches.outcomes.left;
+
+		sr1.data.records.pvp.matches.total += sr2.data.records.pvp.matches.total;
+		sr1.data.records.social.matches.total += sr2.data.records.social.matches.total;
+		sr1.data.records.ranked.matches.total += sr2.data.records.ranked.matches.total;
+	}
+ 
+	/**
+	 * Adds an SR summary to an SR summary
+	 * @param sr1 1st SR
+	 * @param sr2 2nd SR
+	 */
+	private static AddSRSummary(sr1: AutocodeMultiplayerServiceRecord, sr2: AutocodeMultiplayerServiceRecord): void
+	{
+		sr1.data.records.pvp.core.summary.assists += sr2.data.records.pvp.core.summary.assists;
+		sr1.data.records.pvp.core.summary.betrayals += sr2.data.records.pvp.core.summary.betrayals;
+		sr1.data.records.pvp.core.summary.deaths += sr2.data.records.pvp.core.summary.deaths;
+		sr1.data.records.pvp.core.summary.kills += sr2.data.records.pvp.core.summary.kills;
+		sr1.data.records.pvp.core.summary.medals += sr2.data.records.pvp.core.summary.medals;
+		sr1.data.records.pvp.core.summary.suicides += sr2.data.records.pvp.core.summary.suicides;
+		sr1.data.records.pvp.core.summary.vehicles.destroys += sr2.data.records.pvp.core.summary.vehicles.destroys;
+		sr1.data.records.pvp.core.summary.vehicles.hijacks += sr2.data.records.pvp.core.summary.vehicles.hijacks;
+
+		sr1.data.records.social.core.summary.assists += sr2.data.records.social.core.summary.assists;
+		sr1.data.records.social.core.summary.betrayals += sr2.data.records.social.core.summary.betrayals;
+		sr1.data.records.social.core.summary.deaths += sr2.data.records.social.core.summary.deaths;
+		sr1.data.records.social.core.summary.kills += sr2.data.records.social.core.summary.kills;
+		sr1.data.records.social.core.summary.medals += sr2.data.records.social.core.summary.medals;
+		sr1.data.records.social.core.summary.suicides += sr2.data.records.social.core.summary.suicides;
+		sr1.data.records.social.core.summary.vehicles.destroys += sr2.data.records.social.core.summary.vehicles.destroys;
+		sr1.data.records.social.core.summary.vehicles.hijacks += sr2.data.records.social.core.summary.vehicles.hijacks;
+
+		sr1.data.records.ranked.core.summary.assists += sr2.data.records.ranked.core.summary.assists;
+		sr1.data.records.ranked.core.summary.betrayals += sr2.data.records.ranked.core.summary.betrayals;
+		sr1.data.records.ranked.core.summary.deaths += sr2.data.records.ranked.core.summary.deaths;
+		sr1.data.records.ranked.core.summary.kills += sr2.data.records.ranked.core.summary.kills;
+		sr1.data.records.ranked.core.summary.medals += sr2.data.records.ranked.core.summary.medals;
+		sr1.data.records.ranked.core.summary.suicides += sr2.data.records.ranked.core.summary.suicides;
+		sr1.data.records.ranked.core.summary.vehicles.destroys += sr2.data.records.ranked.core.summary.vehicles.destroys;
+		sr1.data.records.ranked.core.summary.vehicles.hijacks += sr2.data.records.ranked.core.summary.vehicles.hijacks;
+	}
+ 
+	/**
+	 * Adds the damage of the match to the service record
+	 * @param sr1 1st SR
+	 * @param sr2 2nd SR
+	 */
+	private static AddSRDamage(sr1: AutocodeMultiplayerServiceRecord, sr2: AutocodeMultiplayerServiceRecord): void
+	{
+		sr1.data.records.pvp.core.damage.dealt += sr2.data.records.pvp.core.damage.dealt;
+		sr1.data.records.pvp.core.damage.taken += sr2.data.records.pvp.core.damage.taken;
+
+		sr1.data.records.social.core.damage.dealt += sr2.data.records.social.core.damage.dealt;
+		sr1.data.records.social.core.damage.taken += sr2.data.records.social.core.damage.taken;
+
+		sr1.data.records.ranked.core.damage.dealt += sr2.data.records.ranked.core.damage.dealt;
+		sr1.data.records.ranked.core.damage.taken += sr2.data.records.ranked.core.damage.taken;
+	}
+ 
+	/**
+	 * Adds the shots of the match to the service record
+	 * @param sr1 1st SR
+	 * @param sr2 2nd SR
+	 */
+	private static AddSRShots(sr1: AutocodeMultiplayerServiceRecord, sr2: AutocodeMultiplayerServiceRecord): void
+	{
+		sr1.data.records.pvp.core.shots.fired += sr2.data.records.pvp.core.shots.fired;
+		sr1.data.records.pvp.core.shots.landed += sr2.data.records.pvp.core.shots.landed;
+		sr1.data.records.pvp.core.shots.missed += sr2.data.records.pvp.core.shots.missed;
+
+		sr1.data.records.social.core.shots.fired += sr2.data.records.social.core.shots.fired;
+		sr1.data.records.social.core.shots.landed += sr2.data.records.social.core.shots.landed;
+		sr1.data.records.social.core.shots.missed += sr2.data.records.social.core.shots.missed;
+
+		sr1.data.records.ranked.core.shots.fired += sr2.data.records.ranked.core.shots.fired;
+		sr1.data.records.ranked.core.shots.landed += sr2.data.records.ranked.core.shots.landed;
+		sr1.data.records.ranked.core.shots.missed += sr2.data.records.ranked.core.shots.missed;
+	}
+ 
+	/**
+	 * Adds the rounds of the match to the service record
+	 * @param sr1 1st SR
+	 * @param sr2 2nd SR
+	 */
+	private static AddSRRounds(sr1: AutocodeMultiplayerServiceRecord, sr2: AutocodeMultiplayerServiceRecord): void
+	{
+		sr1.data.records.pvp.core.rounds.won += sr2.data.records.pvp.core.rounds.won;
+		sr1.data.records.pvp.core.rounds.lost += sr2.data.records.pvp.core.rounds.lost;
+		sr1.data.records.pvp.core.rounds.tied += sr2.data.records.pvp.core.rounds.tied;
+
+		sr1.data.records.social.core.rounds.won += sr2.data.records.social.core.rounds.won;
+		sr1.data.records.social.core.rounds.lost += sr2.data.records.social.core.rounds.lost;
+		sr1.data.records.social.core.rounds.tied += sr2.data.records.social.core.rounds.tied;
+
+		sr1.data.records.ranked.core.rounds.won += sr2.data.records.ranked.core.rounds.won;
+		sr1.data.records.ranked.core.rounds.lost += sr2.data.records.ranked.core.rounds.lost;
+		sr1.data.records.ranked.core.rounds.tied += sr2.data.records.ranked.core.rounds.tied;
+	}
+ 
+	/**
+	 * Adds the scores of the match to the service record
+	 * @param sr1 1st SR
+	 * @param sr2 2nd SR
+	 */
+	private static AddSRScore(sr1: AutocodeMultiplayerServiceRecord, sr2: AutocodeMultiplayerServiceRecord): void
+	{
+		sr1.data.records.pvp.core.scores.personal += sr2.data.records.pvp.core.scores.personal;
+		sr1.data.records.pvp.core.scores.points += sr2.data.records.pvp.core.scores.points;
+
+		sr1.data.records.social.core.scores.personal += sr2.data.records.social.core.scores.personal;
+		sr1.data.records.social.core.scores.points += sr2.data.records.social.core.scores.points;
+
+		sr1.data.records.ranked.core.scores.personal += sr2.data.records.ranked.core.scores.personal;
+		sr1.data.records.ranked.core.scores.points += sr2.data.records.ranked.core.scores.points;
+	}
+ 
+	/**
+	 * Adds the breakdowns of the match to the service record
+	 * @param sr1 1st SR
+	 * @param sr2 2nd SR
+	 */
+	private static AddSRBreakdown(sr1: AutocodeMultiplayerServiceRecord, sr2: AutocodeMultiplayerServiceRecord): void
+	{
+		sr1.data.records.pvp.core.breakdowns.assists.callouts += sr2.data.records.pvp.core.breakdowns.assists.callouts;
+		sr1.data.records.pvp.core.breakdowns.assists.driver += sr2.data.records.pvp.core.breakdowns.assists.driver;
+		sr1.data.records.pvp.core.breakdowns.assists.emp += sr2.data.records.pvp.core.breakdowns.assists.emp;
+
+		sr1.data.records.pvp.core.breakdowns.kills.assassinations += sr2.data.records.pvp.core.breakdowns.kills.assassinations;
+		sr1.data.records.pvp.core.breakdowns.kills.grenades += sr2.data.records.pvp.core.breakdowns.kills.grenades;
+		sr1.data.records.pvp.core.breakdowns.kills.headshots += sr2.data.records.pvp.core.breakdowns.kills.headshots;
+		sr1.data.records.pvp.core.breakdowns.kills.melee += sr2.data.records.pvp.core.breakdowns.kills.melee;
+		sr1.data.records.pvp.core.breakdowns.kills.miscellaneous.repulsor += sr2.data.records.pvp.core.breakdowns.kills.miscellaneous.repulsor;
+		sr1.data.records.pvp.core.breakdowns.kills.miscellaneous.fusion_coils += sr2.data.records.pvp.core.breakdowns.kills.miscellaneous.fusion_coils;
+		sr1.data.records.pvp.core.breakdowns.kills.power_weapons += sr2.data.records.pvp.core.breakdowns.kills.power_weapons;
+		sr1.data.records.pvp.core.breakdowns.kills.vehicles.splatters += sr2.data.records.pvp.core.breakdowns.kills.vehicles.splatters;
+
+		const pvpDestroysArray: { value: string, count: number }[] = [];
+		const pvpHijacksArray: { value: string, count: number }[] = [];
+		const pvpMedalsArray: { id: number, count: number }[] = [];
+
+		const pvpDestroys = new Map<string, number>();
+		const pvpHijacks = new Map<string, number>();
+		const pvpMedals = new Map<number, number>();
+
+		// Loop through key first
+		if (sr1.data.records.pvp.core.breakdowns.vehicles)
+		{
+			if (sr1.data.records.pvp.core.breakdowns.vehicles.destroys && sr1.data.records.pvp.core.breakdowns.vehicles.destroys.length > 0) 
+			{ 
+				for (const i in sr1.data.records.pvp.core.breakdowns.vehicles.destroys) 
+				{ 
+					pvpDestroys.set(sr1.data.records.pvp.core.breakdowns.vehicles.destroys[i].value, sr1.data.records.pvp.core.breakdowns.vehicles.destroys[i].count); 
+				}
+			}
+			if (sr1.data.records.pvp.core.breakdowns.vehicles.hijacks && sr1.data.records.pvp.core.breakdowns.vehicles.hijacks.length > 0) 
+			{ 
+				for (const i in sr1.data.records.pvp.core.breakdowns.vehicles.hijacks) 
+				{ 
+					pvpHijacks.set(sr1.data.records.pvp.core.breakdowns.vehicles.hijacks[i].value, sr1.data.records.pvp.core.breakdowns.vehicles.hijacks[i].count); 
+				}
+			}
+		}
+
+		if (sr1.data.records.pvp.core.breakdowns.medals)
+		{
+			if (sr1.data.records.pvp.core.breakdowns.medals && sr1.data.records.pvp.core.breakdowns.medals.length > 0) 
+			{ 
+				for (const i in sr1.data.records.pvp.core.breakdowns.medals) 
+				{ 
+					pvpMedals.set(sr1.data.records.pvp.core.breakdowns.medals[i].id, sr1.data.records.pvp.core.breakdowns.medals[i].count); 
+				}
+			}
+		}
+
+		// Now loop through player
+		if (sr2.data.records.pvp.core.breakdowns.vehicles)
+		{
+			if (sr2.data.records.pvp.core.breakdowns.vehicles.destroys && sr2.data.records.pvp.core.breakdowns.vehicles.destroys.length > 0)
+			{
+				for (const i in sr2.data.records.pvp.core.breakdowns.vehicles.destroys)
+				{
+					let count = pvpDestroys.get(sr2.data.records.pvp.core.breakdowns.vehicles.destroys[i].value) ?? 0;
+					count += sr2.data.records.pvp.core.breakdowns.vehicles.destroys[i].count;
+					pvpDestroys.set(sr2.data.records.pvp.core.breakdowns.vehicles.destroys[i].value, count);
+				}
+			}
+	
+			if (sr2.data.records.pvp.core.breakdowns.vehicles.hijacks && sr2.data.records.pvp.core.breakdowns.vehicles.hijacks.length > 0)
+			{
+				for (const i in sr2.data.records.pvp.core.breakdowns.vehicles.hijacks)
+				{
+					let count = pvpHijacks.get(sr2.data.records.pvp.core.breakdowns.vehicles.hijacks[i].value) ?? 0;
+					count += sr2.data.records.pvp.core.breakdowns.vehicles.hijacks[i].count;
+					pvpHijacks.set(sr2.data.records.pvp.core.breakdowns.vehicles.hijacks[i].value, count);
+				}
+			}
+		}
+
+		if (sr2.data.records.pvp.core.breakdowns.medals && sr2.data.records.pvp.core.breakdowns.medals.length > 0)
+		{
+			for (const i in sr2.data.records.pvp.core.breakdowns.medals)
+			{
+				let count = pvpMedals.get(sr2.data.records.pvp.core.breakdowns.medals[i].id) ?? 0;
+				count += sr2.data.records.pvp.core.breakdowns.medals[i].count;
+				pvpMedals.set(sr2.data.records.pvp.core.breakdowns.medals[i].id, count);
+			}
+		}
+
+		// Set into property
+		pvpDestroys.forEach((value: number, key: string) => pvpDestroysArray.push({ value: key, count: value }));
+		pvpHijacks.forEach((value: number, key: string) => pvpHijacksArray.push({ value: key, count: value }));
+		pvpMedals.forEach((value: number, key: number) => pvpMedalsArray.push({ id: key, count: value }));
+
+		sr1.data.records.pvp.core.breakdowns.medals = pvpMedalsArray;
+		sr1.data.records.pvp.core.breakdowns.vehicles = {
+			destroys: pvpDestroysArray,
+			hijacks: pvpHijacksArray
+		};
+
+		// Social
+		sr1.data.records.social.core.breakdowns.assists.callouts += sr2.data.records.social.core.breakdowns.assists.callouts;
+		sr1.data.records.social.core.breakdowns.assists.driver += sr2.data.records.social.core.breakdowns.assists.driver;
+		sr1.data.records.social.core.breakdowns.assists.emp += sr2.data.records.social.core.breakdowns.assists.emp;
+
+		sr1.data.records.social.core.breakdowns.kills.assassinations += sr2.data.records.social.core.breakdowns.kills.assassinations;
+		sr1.data.records.social.core.breakdowns.kills.grenades += sr2.data.records.social.core.breakdowns.kills.grenades;
+		sr1.data.records.social.core.breakdowns.kills.headshots += sr2.data.records.social.core.breakdowns.kills.headshots;
+		sr1.data.records.social.core.breakdowns.kills.melee += sr2.data.records.social.core.breakdowns.kills.melee;
+		sr1.data.records.social.core.breakdowns.kills.miscellaneous.repulsor += sr2.data.records.social.core.breakdowns.kills.miscellaneous.repulsor;
+		sr1.data.records.social.core.breakdowns.kills.miscellaneous.fusion_coils += sr2.data.records.social.core.breakdowns.kills.miscellaneous.fusion_coils;
+		sr1.data.records.social.core.breakdowns.kills.power_weapons += sr2.data.records.social.core.breakdowns.kills.power_weapons;
+		sr1.data.records.social.core.breakdowns.kills.vehicles.splatters += sr2.data.records.social.core.breakdowns.kills.vehicles.splatters;
+
+		const socialDestroysArray: { value: string, count: number }[] = [];
+		const socialHijacksArray: { value: string, count: number }[] = [];
+		const socialMedalsArray: { id: number, count: number }[] = [];
+
+		const socialDestroys = new Map<string, number>();
+		const socialHijacks = new Map<string, number>();
+		const socialMedals = new Map<number, number>();
+
+		// Loop through key first
+		if (sr1.data.records.social.core.breakdowns.vehicles)
+		{
+			if (sr1.data.records.social.core.breakdowns.vehicles.destroys && sr1.data.records.social.core.breakdowns.vehicles.destroys.length > 0) 
+			{ 
+				for (const i in sr1.data.records.social.core.breakdowns.vehicles.destroys) 
+				{ 
+					socialDestroys.set(sr1.data.records.social.core.breakdowns.vehicles.destroys[i].value, sr1.data.records.social.core.breakdowns.vehicles.destroys[i].count); 
+				}
+			}
+			if (sr1.data.records.social.core.breakdowns.vehicles.hijacks && sr1.data.records.social.core.breakdowns.vehicles.hijacks.length > 0) 
+			{ 
+				for (const i in sr1.data.records.social.core.breakdowns.vehicles.hijacks) 
+				{ 
+					socialHijacks.set(sr1.data.records.social.core.breakdowns.vehicles.hijacks[i].value, sr1.data.records.social.core.breakdowns.vehicles.hijacks[i].count); 
+				}
+			}
+		}
+
+		if (sr1.data.records.social.core.breakdowns.medals)
+		{
+			if (sr1.data.records.social.core.breakdowns.medals && sr1.data.records.social.core.breakdowns.medals.length > 0) 
+			{ 
+				for (const i in sr1.data.records.social.core.breakdowns.medals) 
+				{ 
+					socialMedals.set(sr1.data.records.social.core.breakdowns.medals[i].id, sr1.data.records.social.core.breakdowns.medals[i].count); 
+				}
+			}
+		}
+
+		// Now loop through player
+		if (sr2.data.records.social.core.breakdowns.vehicles)
+		{
+			if (sr2.data.records.social.core.breakdowns.vehicles.destroys && sr2.data.records.social.core.breakdowns.vehicles.destroys.length > 0)
+			{
+				for (const i in sr2.data.records.social.core.breakdowns.vehicles.destroys)
+				{
+					let count = socialDestroys.get(sr2.data.records.social.core.breakdowns.vehicles.destroys[i].value) ?? 0;
+					count += sr2.data.records.social.core.breakdowns.vehicles.destroys[i].count;
+					socialDestroys.set(sr2.data.records.social.core.breakdowns.vehicles.destroys[i].value, count);
+				}
+			}
+	
+			if (sr2.data.records.social.core.breakdowns.vehicles.hijacks && sr2.data.records.social.core.breakdowns.vehicles.hijacks.length > 0)
+			{
+				for (const i in sr2.data.records.social.core.breakdowns.vehicles.hijacks)
+				{
+					let count = socialHijacks.get(sr2.data.records.social.core.breakdowns.vehicles.hijacks[i].value) ?? 0;
+					count += sr2.data.records.social.core.breakdowns.vehicles.hijacks[i].count;
+					socialHijacks.set(sr2.data.records.social.core.breakdowns.vehicles.hijacks[i].value, count);
+				}
+			}
+		}
+
+		if (sr2.data.records.social.core.breakdowns.medals && sr2.data.records.social.core.breakdowns.medals.length > 0)
+		{
+			for (const i in sr2.data.records.social.core.breakdowns.medals)
+			{
+				let count = socialMedals.get(sr2.data.records.social.core.breakdowns.medals[i].id) ?? 0;
+				count += sr2.data.records.social.core.breakdowns.medals[i].count;
+				socialMedals.set(sr2.data.records.social.core.breakdowns.medals[i].id, count);
+			}
+		}
+
+		// Set into property
+		socialDestroys.forEach((value: number, key: string) => socialDestroysArray.push({ value: key, count: value }));
+		socialHijacks.forEach((value: number, key: string) => socialHijacksArray.push({ value: key, count: value }));
+		socialMedals.forEach((value: number, key: number) => socialMedalsArray.push({ id: key, count: value }));
+
+		sr1.data.records.social.core.breakdowns.medals = socialMedalsArray;
+		sr1.data.records.social.core.breakdowns.vehicles = {
+			destroys: socialDestroysArray,
+			hijacks: socialHijacksArray
+		};
+
+		// Ranked
+		sr1.data.records.ranked.core.breakdowns.assists.callouts += sr2.data.records.ranked.core.breakdowns.assists.callouts;
+		sr1.data.records.ranked.core.breakdowns.assists.driver += sr2.data.records.ranked.core.breakdowns.assists.driver;
+		sr1.data.records.ranked.core.breakdowns.assists.emp += sr2.data.records.ranked.core.breakdowns.assists.emp;
+
+		sr1.data.records.ranked.core.breakdowns.kills.assassinations += sr2.data.records.ranked.core.breakdowns.kills.assassinations;
+		sr1.data.records.ranked.core.breakdowns.kills.grenades += sr2.data.records.ranked.core.breakdowns.kills.grenades;
+		sr1.data.records.ranked.core.breakdowns.kills.headshots += sr2.data.records.ranked.core.breakdowns.kills.headshots;
+		sr1.data.records.ranked.core.breakdowns.kills.melee += sr2.data.records.ranked.core.breakdowns.kills.melee;
+		sr1.data.records.ranked.core.breakdowns.kills.miscellaneous.repulsor += sr2.data.records.ranked.core.breakdowns.kills.miscellaneous.repulsor;
+		sr1.data.records.ranked.core.breakdowns.kills.miscellaneous.fusion_coils += sr2.data.records.ranked.core.breakdowns.kills.miscellaneous.fusion_coils;
+		sr1.data.records.ranked.core.breakdowns.kills.power_weapons += sr2.data.records.ranked.core.breakdowns.kills.power_weapons;
+		sr1.data.records.ranked.core.breakdowns.kills.vehicles.splatters += sr2.data.records.ranked.core.breakdowns.kills.vehicles.splatters;
+
+		const rankedDestroysArray: { value: string, count: number }[] = [];
+		const rankedHijacksArray: { value: string, count: number }[] = [];
+		const rankedMedalsArray: { id: number, count: number }[] = [];
+
+		const rankedDestroys = new Map<string, number>();
+		const rankedHijacks = new Map<string, number>();
+		const rankedMedals = new Map<number, number>();
+
+		// Loop through key first
+		if (sr1.data.records.ranked.core.breakdowns.vehicles)
+		{
+			if (sr1.data.records.ranked.core.breakdowns.vehicles.destroys && sr1.data.records.ranked.core.breakdowns.vehicles.destroys.length > 0) 
+			{ 
+				for (const i in sr1.data.records.ranked.core.breakdowns.vehicles.destroys) 
+				{ 
+					rankedDestroys.set(sr1.data.records.ranked.core.breakdowns.vehicles.destroys[i].value, sr1.data.records.ranked.core.breakdowns.vehicles.destroys[i].count); 
+				}
+			}
+			if (sr1.data.records.ranked.core.breakdowns.vehicles.hijacks && sr1.data.records.ranked.core.breakdowns.vehicles.hijacks.length > 0) 
+			{ 
+				for (const i in sr1.data.records.ranked.core.breakdowns.vehicles.hijacks) 
+				{ 
+					rankedHijacks.set(sr1.data.records.ranked.core.breakdowns.vehicles.hijacks[i].value, sr1.data.records.ranked.core.breakdowns.vehicles.hijacks[i].count); 
+				}
+			}
+		}
+
+		if (sr1.data.records.ranked.core.breakdowns.medals)
+		{
+			if (sr1.data.records.ranked.core.breakdowns.medals && sr1.data.records.ranked.core.breakdowns.medals.length > 0) 
+			{ 
+				for (const i in sr1.data.records.ranked.core.breakdowns.medals) 
+				{ 
+					pvpMedals.set(sr1.data.records.ranked.core.breakdowns.medals[i].id, sr1.data.records.ranked.core.breakdowns.medals[i].count); 
+				}
+			}
+		}
+
+		// Now loop through player
+		if (sr2.data.records.ranked.core.breakdowns.vehicles)
+		{
+			if (sr2.data.records.ranked.core.breakdowns.vehicles.destroys && sr2.data.records.ranked.core.breakdowns.vehicles.destroys.length > 0)
+			{
+				for (const i in sr2.data.records.ranked.core.breakdowns.vehicles.destroys)
+				{
+					let count = rankedDestroys.get(sr2.data.records.ranked.core.breakdowns.vehicles.destroys[i].value) ?? 0;
+					count += sr2.data.records.ranked.core.breakdowns.vehicles.destroys[i].count;
+					rankedDestroys.set(sr2.data.records.ranked.core.breakdowns.vehicles.destroys[i].value, count);
+				}
+			}
+	
+			if (sr2.data.records.ranked.core.breakdowns.vehicles.hijacks && sr2.data.records.ranked.core.breakdowns.vehicles.hijacks.length > 0)
+			{
+				for (const i in sr2.data.records.ranked.core.breakdowns.vehicles.hijacks)
+				{
+					let count = rankedHijacks.get(sr2.data.records.ranked.core.breakdowns.vehicles.hijacks[i].value) ?? 0;
+					count += sr2.data.records.ranked.core.breakdowns.vehicles.hijacks[i].count;
+					rankedHijacks.set(sr2.data.records.ranked.core.breakdowns.vehicles.hijacks[i].value, count);
+				}
+			}
+		}
+
+		if (sr2.data.records.ranked.core.breakdowns.medals && sr2.data.records.ranked.core.breakdowns.medals.length > 0)
+		{
+			for (const i in sr2.data.records.ranked.core.breakdowns.medals)
+			{
+				let count = rankedMedals.get(sr2.data.records.ranked.core.breakdowns.medals[i].id) ?? 0;
+				count += sr2.data.records.ranked.core.breakdowns.medals[i].count;
+				rankedMedals.set(sr2.data.records.ranked.core.breakdowns.medals[i].id, count);
+			}
+		}
+
+		// Set into property
+		rankedDestroys.forEach((value: number, key: string) => rankedDestroysArray.push({ value: key, count: value }));
+		rankedHijacks.forEach((value: number, key: string) => rankedHijacksArray.push({ value: key, count: value }));
+		rankedMedals.forEach((value: number, key: number) => rankedMedalsArray.push({ id: key, count: value }));
+
+		sr1.data.records.ranked.core.breakdowns.medals = rankedMedalsArray;
+		sr1.data.records.ranked.core.breakdowns.vehicles = {
+			destroys: rankedDestroysArray,
+			hijacks: rankedHijacksArray
+		};
+	}
+	//#endregion
+
 	//#region Adders
 	/**
 	 * Adds a player's details to an existing service record

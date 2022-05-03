@@ -11,7 +11,9 @@ export class SCAutocode
 	/** Turns on or off debugging mode */
 	private readonly IS_DEBUGGING = process.env.NODE_ENV !== "production";
 	/** The HaloDotAPI version */
-	private readonly AUTOCODE_VERSION = "1-2-2";
+	private readonly AUTOCODE_VERSION = "1-3-1";
+	/** The HaloDotAPI version */
+	private readonly SEASON = 2;
 
 	constructor() {}
 
@@ -57,10 +59,10 @@ export class SCAutocode
 	 * @param gamertag the gamertag to get the service record of
 	 * @returns the service record for the gamertag
 	 */
-	public async GetServiceRecord(gamertag: string): Promise<ServiceRecord>
+	public async GetServiceRecord(gamertag: string, season: number = this.SEASON): Promise<ServiceRecord>
 	{
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCAutocode.GetServiceRecord()", gamertag); }
-		return new ServiceRecord(await this.__getServiceRecordFromHaloDotAPI(gamertag));
+		return new ServiceRecord(await this.__getServiceRecordFromHaloDotAPI(gamertag, season));
 	}
  
 	/**
@@ -177,12 +179,12 @@ export class SCAutocode
 	 * @param gamertag the gamertag
 	 * @returns JSON result of the service record for a gamertag
 	 */
-	private async __getServiceRecordFromHaloDotAPI(gamertag: string): Promise<AutocodeMultiplayerServiceRecord>
+	private async __getServiceRecordFromHaloDotAPI(gamertag: string, season: number): Promise<AutocodeMultiplayerServiceRecord>
 	{
 		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/service_record`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({gamertag: gamertag})
+			body: JSON.stringify({gamertag: gamertag, season: season})
 		});
 
 		return await response.json() as AutocodeMultiplayerServiceRecord;

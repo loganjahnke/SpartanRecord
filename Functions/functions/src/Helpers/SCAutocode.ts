@@ -6,7 +6,7 @@ import { AutocodePlayerMatchResults } from "./Schemas/AutocodePlayerMatch";
 import fetch from "node-fetch";
 
 /** The HaloDotAPI version */
-const AUTOCODE_VERSION = "1-2-2";
+const AUTOCODE_VERSION = "1-3-1";
 
 //#region Appearance
 /**
@@ -30,14 +30,15 @@ export const GetAppearance = async (gamertag: string): Promise<AutocodeAppearanc
 /**
  * Gets the service record for the gamertag from Firebase
  * @param gamertag the gamertag to get the service record of
+ * @param season the season number
  * @returns the service record for the gamertag
  */
-export const GetServiceRecord = async (gamertag: string): Promise<AutocodeMultiplayerServiceRecord> =>
+export const GetServiceRecord = async (gamertag: string, season: number): Promise<AutocodeMultiplayerServiceRecord> =>
 {
 	const response = await fetch(`https://${AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/service_record`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({gamertag: gamertag})
+		body: JSON.stringify({gamertag: gamertag, season: season})
 	});
 
 	return await response.json() as AutocodeMultiplayerServiceRecord;

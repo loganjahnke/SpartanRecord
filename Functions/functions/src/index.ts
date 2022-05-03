@@ -7,6 +7,7 @@ import { AutocodeMatch, AutocodeMatchPlayer } from "./Helpers/Schemas/AutocodeMa
 import { AutocodeMultiplayerServiceRecord } from "./Helpers/Schemas/AutocodeMultiplayerServiceRecord";
 import { AutocodePlayerMatch } from "./Helpers/Schemas/AutocodePlayerMatch";
 import { FirebaseBest, FirebaseMatchesBest } from "./Helpers/Schemas/FirebaseBest";
+import { AutocodeAppearance } from "./Helpers/Schemas/AutocodeAppearance";
 
 //#region Helpers
 /**
@@ -434,7 +435,7 @@ export const GetLatestStatistics = functions
 	if (await firebase.GetIsSyncing(app, gamertag)) 
 	{
 		await app.delete();
-		return true;
+		return false;
 	}
 
 	// Check if we need to sync at all
@@ -448,37 +449,70 @@ export const GetLatestStatistics = functions
 	{ 
 		await app.delete();
 		console.log(gamertag + " has not played any matches.");
-		return true; 
+		return false; 
 	}
 
 	// Check if the last synced match is the same as the current last match
 	if (lastPlayedMatchID === lastSyncedMatchID) 
 	{ 
 		await app.delete();
-		return true; 
-	}
-
-	// Get service record
-	const [serviceRecord, appearance] = await Promise.all([
-		autocode.GetServiceRecord(gamertag),
-		autocode.GetAppearance(gamertag),
-		firebase.SetIsSyncing(app, gamertag, true)
-	]);
-
-	// Check if there was an error
-	if ((serviceRecord as any)?.error)
-	{
-		await firebase.SetIsSyncing(app, gamertag, false);
-		await app.delete();
-		console.error((serviceRecord as any).error.message);
 		return false; 
 	}
 
+	// Get service record
+	let [season1, season2, appearance] = await Promise.all([
+		autocode.GetServiceRecord(gamertag, 1),
+		autocode.GetServiceRecord(gamertag, 2),
+		autocode.GetAppearance(gamertag),
+		firebase.SetIsSyncing(app, gamertag, true)
+	]).catch(() => 
+	{
+		return [false, false, false]; 
+	});
+
+	// Uh oh
+	if (season1 === false || season2 === false || appearance === false)
+	{
+		await firebase.SetIsSyncing(app, gamertag, false);
+		await app.delete();
+		console.error("Something went wrong, check autocode logs.");
+		return false; 
+	}
+
+	// Check if they don't have either of these seasons
+	if (((season1 as any)?.error?.message?.includes("Specified season does not exist")))
+	{
+		season1 = AutocodeHelpers.CreateEmptyServiceRecord(gamertag);
+	}
+	else if ((season1 as any)?.error)
+	{
+		await firebase.SetIsSyncing(app, gamertag, false);
+		await app.delete();
+		console.error((season1 as any).error.message);
+		return false; 
+	}
+
+	// Check if they don't have either of these seasons
+	if (((season2 as any)?.error?.message?.includes("Specified season does not exist")))
+	{
+		season2 = AutocodeHelpers.CreateEmptyServiceRecord(gamertag);
+	}
+	else if ((season2 as any)?.error)
+	{
+		await firebase.SetIsSyncing(app, gamertag, false);
+		await app.delete();
+		console.error((season2 as any).error.message);
+		return false; 
+	}
+
+	// Add service records together to get the total SR
+	AutocodeHelpers.AddSRtoSR(season1 as AutocodeMultiplayerServiceRecord, season2 as AutocodeMultiplayerServiceRecord);
+
 	// Otherwise update the current service record, appearance, and historic service record
 	await Promise.all([
-		firebase.SetServiceRecord(app, gamertag, serviceRecord),
-		firebase.SetAppearance(app, gamertag, appearance),
-		LoopThroughMatches(app, gamertag, lastSyncedMatchID, serviceRecord)
+		firebase.SetServiceRecord(app, gamertag, season1 as AutocodeMultiplayerServiceRecord),
+		firebase.SetAppearance(app, gamertag, appearance as AutocodeAppearance),
+		LoopThroughMatches(app, gamertag, lastSyncedMatchID, season1 as AutocodeMultiplayerServiceRecord)
 	]).finally(async () =>
 	{
 		// No longer syncing
