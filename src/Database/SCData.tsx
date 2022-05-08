@@ -188,6 +188,16 @@ export class SCData
     {
         return await this.__firebase.GetBestForMap(gamertag, map);
     }
+
+    /**
+	 * Sees if this gamertag is allowed to see filters
+	 * @param gamertag the gamertag to check the permissions of
+	 * @returns true if allowed to see filters
+	 */
+	public async GetIsAllowed(gamertag: string): Promise<boolean>
+    {
+        return await this.__firebase.GetIsAllowed(gamertag);
+    }
     //#endregion
 
     //#region Event logging

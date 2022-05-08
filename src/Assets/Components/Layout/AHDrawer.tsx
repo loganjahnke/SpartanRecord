@@ -1,4 +1,4 @@
-import { SyntheticEvent } from "react";
+import { SyntheticEvent, useEffect } from "react";
 import { Box, Button, Divider, Drawer, Tab, Tabs, Toolbar } from "@mui/material";
 import { ServiceRecordFilter } from "../../../Database/ArrowheadFirebase";
 
@@ -27,11 +27,13 @@ interface AHDrawerProps
 	container?: Element | (() => HTMLElement);
 	/** Open on mobile? */
 	mobileOpen?: boolean;
+	/** Does this gamertag have access to filters? */
+	isAllowed?: boolean;
 }
 
 export function AHDrawer(props: AHDrawerProps)
 {
-	const { gamertag, currentTab, switchTab, handleDrawerToggle, container, mobileOpen } = props;
+	const { gamertag, currentTab, switchTab, handleDrawerToggle, container, mobileOpen, isAllowed } = props;
 
 	/**
 	 * Triggered when a tab is clicked
@@ -89,7 +91,7 @@ export function AHDrawer(props: AHDrawerProps)
 		<Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
 			<Toolbar><Button className="ahTab" onClick={goHome}>SpartanRecord.com</Button></Toolbar>
 			<Divider flexItem />
-				{gamertag ? 
+				{gamertag && isAllowed ? 
 				<Tabs orientation="vertical" value={currentTab || "Search"} onChange={tabClicked} sx={{ mt: 5 }}>
 					<Tab className="ahTab" value="Search" label="Search" icon={<PersonSearchIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Service Record" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" />
@@ -100,6 +102,14 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab className="ahTab" value="Medals" label="Medals" icon={<MilitaryTechIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Matches" label="Matches" icon={<SportsEsportsIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Best" label="Best Matches" icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Company" label="Arrowhead Company" icon={<GroupsIcon />} iconPosition="start" />
+				</Tabs>
+				: gamertag ?
+				<Tabs orientation="vertical" value={currentTab || "Search"} onChange={tabClicked} sx={{ mt: 5 }}>
+					<Tab className="ahTab" value="Search" label="Search" icon={<PersonSearchIcon />} iconPosition="start" />
+					<Tab className="ahTab" value="Service Record" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" />
+					<Tab className="ahTab" value="Medals" label="Medals" icon={<MilitaryTechIcon />} iconPosition="start" />
+					<Tab className="ahTab" value="Matches" label="Matches" icon={<SportsEsportsIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Company" label="Arrowhead Company" icon={<GroupsIcon />} iconPosition="start" />
 				</Tabs>
 				:

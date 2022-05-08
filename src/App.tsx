@@ -7,7 +7,7 @@ import { SpartanCompanyView } from "./Pages/Spartan Company/SpartanCompanyView";
 import { ArrowheadTheme } from "./Assets/Theme/ArrowheadTheme";
 import { PlayerView } from "./Pages/PlayerView";
 import { MedalsView } from "./Pages/MedalsView";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { MatchesView } from "./Pages/MatchesView";
 import { SingleMatchView } from "./Pages/SingleMatchView";
 import { FilteredView } from "./Pages/FilteredView";
@@ -51,8 +51,13 @@ const App = () =>
 	const navigate = useNavigate();
 	//#endregion
 
-	//#region Gamertag from cookie
-	useEffect(() => setGamertag(sessionStorage.getItem("Gamertag") ?? ""), []);
+	//#region Callback and Effect
+	const updateIsAllowed = useCallback(async () =>
+	{
+		setIsAllowed(await arrowhead.GetIsAllowed(gamertag));
+	}, [gamertag]);
+
+	useEffect(() => { updateIsAllowed() }, [gamertag]);
 	//#endregion
 
 	//#region App Bar and Drawer
@@ -60,6 +65,7 @@ const App = () =>
 	const [tab, setTab] = useState("");
 	const [loadingMessage, setLoadingMessage] = useState("");
 	const [backgroundLoadingProgress, setBackgroundLoadingProgress] = useState<number | undefined>(undefined);
+	const [isAllowed, setIsAllowed] = useState(true);
 
 	/** Opens or closes the drawer */
 	const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
@@ -80,10 +86,10 @@ const App = () =>
 		<ThemeProvider theme={ArrowheadTheme.theme}>
 			<Box sx={{ display: "flex", backgroundColor: "background.paper", height: "calc(100vh - 34px)" }}>
 				<AHAppBar handleDrawerToggle={handleDrawerToggle} loadingFromAutocode={backgroundLoadingProgress} />
-				<AHDrawer gamertag={gamertag} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={switchTab} handleDrawerToggle={handleDrawerToggle} />
+				<AHDrawer gamertag={gamertag} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={switchTab} handleDrawerToggle={handleDrawerToggle} isAllowed={isAllowed} />
 				<AHLoading loadingMessage={loadingMessage} />
 				<Routes>
-					<Route path="/" element={<HomeView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
+					<Route path="/" element={<HomeView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} switchTab={switchTab} />} />
 					<Route path="/service_record/:gamertag" element={<PlayerView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
 					<Route path={`/service_record/${ServiceRecordFilter.Map}/:gamertag`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} node={ServiceRecordFilter.Map} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
 					<Route path={`/service_record/${ServiceRecordFilter.Map}/:filter/:gamertag`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} node={ServiceRecordFilter.Map} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />

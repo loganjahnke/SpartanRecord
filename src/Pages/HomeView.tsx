@@ -8,13 +8,13 @@ import { ViewProps } from "./Props/ViewProps";
 interface HomeViewProps
 {
 	setGamertag: (gamertag: string) => void;
+	switchTab: (url: string, tab?: string) => void;
 }
 
 export function HomeView(props: ViewProps & HomeViewProps)
 {
 	//#region Props and Navigate
-	const { setGamertag } = props;
-	const navigate = useNavigate();
+	const { setGamertag, switchTab } = props;
 	//#endregion
 	
 	//#region State
@@ -32,14 +32,14 @@ export function HomeView(props: ViewProps & HomeViewProps)
 	{
 		if (localGamertag === "") { return; }
 		setGamertag(localGamertag);
-		navigate(`service_record/${localGamertag}`);
+		switchTab(`service_record/${localGamertag}`, "Service Record");
 	}
 
 	/** When the search button is pressed */
 	function openRecent(gamertag: string)
 	{
 		setGamertag(gamertag);
-		navigate(`service_record/${gamertag}`);
+		switchTab(`service_record/${gamertag}`, "Service Record");
 	}
 
 	/** When enter is pressed */

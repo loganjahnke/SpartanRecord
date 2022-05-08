@@ -278,6 +278,19 @@ export class SCFirebase
 
 	//#region Sync Match Information
 	/**
+	 * Sees if this gamertag is allowed to see filters
+	 * @param gamertag the gamertag to check the permissions of
+	 * @returns true if allowed to see filters
+	 */
+	public async GetIsAllowed(gamertag: string): Promise<boolean>
+	{
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetIsAllowed()", gamertag); }
+
+		const snapshot = await this.__get(`allowed/${gamertag}`);
+		return snapshot?.val() ?? false;
+	}
+
+	/**
 	 * Gets the latest match ID and number that has been synced into firebase
 	 * @param gamertag the gamertag to get the last match ID of
 	 * @returns the latest match ID and match number synced into firebase
