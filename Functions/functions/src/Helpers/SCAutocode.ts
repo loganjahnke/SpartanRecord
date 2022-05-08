@@ -6,7 +6,7 @@ import { AutocodePlayerMatchResults } from "./Schemas/AutocodePlayerMatch";
 import fetch from "node-fetch";
 
 /** The HaloDotAPI version */
-const AUTOCODE_VERSION = "1-3-1";
+const AUTOCODE_VERSION = "1-3-2";
 
 //#region Appearance
 /**

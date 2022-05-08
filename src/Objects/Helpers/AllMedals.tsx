@@ -1777,5 +1777,27 @@ export const AllMedals = {
 			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/fastball.png",
 			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/fastball.png"
 		}
-	}
+	},
+	1477806194: {
+		name: "Counter-Snipe",
+		description: "Headshot an enemy while you both are zoomed with Power sniper rifles",
+		type: MedalRarity.Heoric,
+		category: MedalType.Sniper,
+		image_urls: {
+		  small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/counter-snipe.png",
+		  medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/counter-snipe.png",
+		  large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/counter-snipe.png"
+		}
+	  },
+	  580478179: {
+		name: "Hill Guardian",
+		description: "Occupy the zone for 30 seconds without leaving in King of the Hill",
+		type: MedalRarity.Heoric,
+		category: MedalType.KingOfTheHill,
+		image_urls: {
+		  small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/hill-guardian.png",
+		  medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/hill-guardian.png",
+		  large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/hill-guardian.png"
+		}
+	  }
   };

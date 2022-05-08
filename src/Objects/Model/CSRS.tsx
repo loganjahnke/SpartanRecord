@@ -39,7 +39,10 @@ export class Rank
         this.nextTierStart = data?.next_tier_start;
         this.nextSubTier = data?.next_sub_tier;
         this.initialMeasurementMatches = data?.initial_measurement_matches;
-        this.tierImageUrl = data?.tier_image_url;
+
+        let tierImageSuffix = this.tier?.toLowerCase();
+        if (tierImageSuffix !== "unranked") { tierImageSuffix += "-" + this.subTier; }
+        this.tierImageUrl = data?.tier_image_url || "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/playlist-csrs/" + tierImageSuffix + ".png";
     }
 }
 

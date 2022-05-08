@@ -2,6 +2,7 @@ import { HaloOutcome } from "../../Database/ArrowheadFirebase";
 import { AutocodeHelpers } from "../../Database/Schemas/AutocodeHelpers";
 import { AutocodeMatchPlayer } from "../../Database/Schemas/AutocodeMatch";
 import { ServiceRecord } from "../Model/ServiceRecord";
+import { Expectation } from "./Expectation";
 import { Progression } from "./Progression";
 import { TeamDetails } from "./TeamDetails";
 
@@ -25,6 +26,10 @@ export class MatchPlayer
     public progression: Progression;
     /** MMR */
     public mmr: number = 0;
+    /** Expected kill performance */
+    public killExpectations: Expectation;
+    /** Expected death performance */
+    public deathExpectations: Expectation;
 
     constructor(data?: AutocodeMatchPlayer, isRanked: boolean = false, timePlayedInSeconds: number = 0)
     {
@@ -36,6 +41,8 @@ export class MatchPlayer
         this.won = false;
         this.joinedInProgress = false;
         this.progression = new Progression();
+        this.killExpectations = new Expectation();
+        this.deathExpectations = new Expectation();
         
         if (!data) { return; }
         
@@ -45,6 +52,8 @@ export class MatchPlayer
         this.rank = data.rank;
         this.joinedInProgress = data.participation.joined_in_progress;
         this.progression = new Progression(data.progression);
+        this.killExpectations = new Expectation(data.performances?.kills);
+        this.deathExpectations = new Expectation(data.performances?.deaths);
         this.mmr = data.stats.mmr ?? 0;
         this.won = data.outcome === "win" || data.outcome === "won";
         this.outcome = this.won ? HaloOutcome.Win

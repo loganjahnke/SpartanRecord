@@ -23,11 +23,12 @@ interface BreakdownTileProps
     backgroundColor?: string;
     small?: boolean;
     tooltip?: string;
+    icon?: JSX.Element;
 }
 
 export function BreakdownTile(props: BreakdownTileProps)
 {
-	const { title, value, total, isMainStat, isPercent, isHeader, backgroundColor, small, tooltip } = props;
+	const { title, value, total, isMainStat, isPercent, isHeader, backgroundColor, small, tooltip, icon } = props;
 
     const background = backgroundColor ?? (isMainStat && !small ? ArrowheadTheme.box : ArrowheadTheme.secondary);
 
@@ -63,16 +64,18 @@ export function BreakdownTile(props: BreakdownTileProps)
                     mt: 0.5, 
                     ml: isMainStat ? 0 : 0.5, 
                     color: isMainStat ? "" : ArrowheadTheme.text_primary }}>{title}</Typography>
-                <Typography variant={"h4"} sx={{ 
-                    fontSize: isMainStat && !small ? "2.02rem" : "1.2rem !important", 
-                    width: isMainStat ? "auto" : "100%",
-                    textAlign: "left", 
-                    flexWrap: "nowrap", 
-                    whiteSpace: "nowrap", 
-                    overflow: "hidden", 
-                    textOverflow: "ellipsis", 
-                    mb: 0.5, 
-                    ml: isMainStat ? 0 : 0.5 }}>{typeof value === "number" ? (Math.round(value * 100) / 100).toLocaleString() : value}{isPercent ? "%" : ""}</Typography>
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 0.5 }}>
+                    {icon}
+                    <Typography variant={"h4"} sx={{ 
+                        fontSize: isMainStat && !small ? "2.02rem" : "1.2rem !important", 
+                        width: isMainStat ? "auto" : "100%",
+                        textAlign: "left", 
+                        flexWrap: "nowrap", 
+                        whiteSpace: "nowrap", 
+                        overflow: "hidden", 
+                        textOverflow: "ellipsis", 
+                        ml: isMainStat ? 0 : 0.5 }}>{typeof value === "number" ? (Math.round(value * 100) / 100).toLocaleString() : value}{isPercent ? "%" : ""}</Typography>
+                </Box>
 		    </Box>
         </Tooltip>
 	);

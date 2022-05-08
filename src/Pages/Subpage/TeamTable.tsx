@@ -12,6 +12,7 @@ import { DamageBreakdown } from "../../Assets/Components/Breakdowns/DamageBreakd
 import { ShotsBreakdown } from "../../Assets/Components/Breakdowns/ShotsBreakdown";
 
 import StarIcon from '@mui/icons-material/Star';
+import { ExpectationBreakdown } from "../../Assets/Components/Breakdowns/ExpectationBreakdown";
 
 interface TeamTableProps
 {
@@ -84,7 +85,7 @@ function Row(props: TeamTableRowProps)
 				</TableCell>
 				{showRank ? 
 					<TableCell sx={{ pl: 2, pr: 2, pt: 0, pb: 0 }} align="right" width={"64px"}>
-						<img src={player.progression.post.tierImageUrl} alt={player.progression.post.tier + " " + (player.progression.post.subTier + 1)} title={player.progression.post.tier + " " + (player.progression.post.subTier + 1)} height="32px" />
+						<img src={player.progression.post.tierImageUrl} alt={player.progression.post.tier + " " + (player.progression.post.subTier)} title={player.progression.post.tier + " " + (player.progression.post.subTier)} height="32px" />
 					</TableCell> 
 				: undefined}
 				<TableCell sx={{ pl: 2, pr: 2, position: "sticky", left: 0, backgroundColor: ArrowheadTheme.box }} component="th" scope="row" onClick={() => onGamertagClick(player.gamertag)} width={"150px"}>{player.gamertag}</TableCell>
@@ -134,7 +135,9 @@ function Row(props: TeamTableRowProps)
 							<Grid item xs={6} xl={8}>
 								<ShotsBreakdown serviceRecord={player.stats} small />
 								<Box sx={{ m: 1 }}></Box>
-								<DamageBreakdown serviceRecord={player.stats} small />								
+								<DamageBreakdown serviceRecord={player.stats} small />
+								<Box sx={{ m: 1 }}></Box>
+								<ExpectationBreakdown kills={player.killExpectations} deaths={player.deathExpectations} small />						
 							</Grid>
 							<Grid item xs={6} xl={4}>
 								<Box sx={{ borderRadius: 3, padding: 1, display: "flex", alignItems: "flex-start", flexDirection: "column", maxWidth: "auto", backgroundColor: ArrowheadTheme.secondary }}>

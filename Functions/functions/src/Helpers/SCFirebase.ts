@@ -106,6 +106,16 @@ export const SetHistoricStatistics = async (app: admin.app.App, gamertag: string
 
 //#region Sync
 /**
+ * Is this gamertag allowed to sync all stats?
+ * @param gamertag the gamertag
+ * @returns true if allowed to sync all stats
+ */
+export const GetIsAllowed = async (app: admin.app.App, gamertag: string): Promise<boolean> =>
+{
+	return await get(app, `allowed/${gamertag}`) ?? false;
+}
+
+/**
  * Gets the last synced match ID
  * @param gamertag the gamertag
  * @returns the match ID

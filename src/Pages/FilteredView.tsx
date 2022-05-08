@@ -21,6 +21,8 @@ import { FilterCount } from "../Objects/Pieces/FilterCounts";
 import { ChipFilters } from "./Subpage/ChipFilters";
 import { KillBreakdownCard } from "../Assets/Components/Breakdowns/KillBreakdownCard";
 import { TopMedals } from "../Assets/Components/Medals/TopMedals";
+import { AllPlaylists } from "../Objects/Helpers/AllPlaylists";
+import { AllMaps } from "../Objects/Helpers/AllMaps";
 
 interface FilterViewProps
 {
@@ -77,8 +79,12 @@ export function FilteredView(props: FilterViewProps & ViewProps)
 
 			if (node === ServiceRecordFilter.Map)
 			{
-				const imageName = selectedFilter.toLowerCase().replace(" ", "-");
-				setImage(`https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/maps/${imageName}.jpg`)
+				const mapMetadata = (AllMaps as any)[selectedFilter];
+				if (mapMetadata && mapMetadata.thumbnail_url)
+				{
+					setImage(mapMetadata.thumbnail_url);
+				}
+				else { setImage(""); }
 			}
 			else if (node === ServiceRecordFilter.Variant)
 			{
@@ -94,8 +100,17 @@ export function FilteredView(props: FilterViewProps & ViewProps)
 					: f.includes("koth") ? "koth" 
 					: f.includes("king of the hill") ? "koth" 
 					: f.includes("land grab") ? "land-grab" 
-					: "slayer";
+					: "unknown";
 				setImage(`https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/ugcgamevariants/${imageName}.jpg`)
+			}
+			else if (node === ServiceRecordFilter.Playlist)
+			{
+				const playlistMetadata = (AllPlaylists as any)[selectedFilter];
+				if (playlistMetadata && playlistMetadata.asset && playlistMetadata.asset.thumbnail_url)
+				{
+					setImage(playlistMetadata.asset.thumbnail_url);
+				}
+				else { setImage(""); }
 			}
 		}
 
@@ -147,7 +162,7 @@ export function FilteredView(props: FilterViewProps & ViewProps)
 					<>
 						{/* Far left */}
 						<Grid container item spacing={2} md={12} lg={4} xl={4} sx={{ alignContent: "flex-start" }}>
-							{node === ServiceRecordFilter.Outcome ||  node === ServiceRecordFilter.Playlist ? undefined :
+							{!image ? undefined :
 								<Grid item xs={12}>
 									<ImageCard image={image} title={selectedFilter} />
 								</Grid>

@@ -228,6 +228,10 @@ const PopulateFilterMap = (data: any, key: keyof any, map: Map<string, number>):
  */
 const LoopThroughMatches = async (app: admin.app.App, gamertag: string, lastMatchID: string, startingServiceRecord: AutocodeMultiplayerServiceRecord): Promise<void> =>
 {
+	// Should we loop?
+	const isAllowed = await firebase.GetIsAllowed(app, gamertag);
+	if (!isAllowed) { return; }
+
 	// Get current game count from the service record that was passed in
 	const currGameCount = startingServiceRecord.data?.records?.pvp?.matches?.total ?? 0;
 	if (currGameCount === 0) { return; }
