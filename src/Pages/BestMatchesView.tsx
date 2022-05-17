@@ -47,7 +47,7 @@ export function BestMatchesView(props: ViewProps)
 
 			const player = await app.GetPlayerAppearanceOnly(gamertag);
 			const [filters, bests] = await Promise.all([
-				await app.GetAvailableFilters(gamertag, ServiceRecordFilter.Map),
+				await app.GetAvailableFilters(gamertag, ServiceRecordFilter.Social),
 				await app.GetBest(gamertag)
 			]);
 			

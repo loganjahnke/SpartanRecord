@@ -16,14 +16,12 @@ import { LevelBreakdown } from "../Assets/Components/Breakdowns/LevelBreakdown";
 import { PlayerCard } from "../Assets/Components/Cards/PlayerCard";
 import { ServiceRecordFilters } from "./Subpage/ServiceRecordFilters";
 import { ViewProps } from "./Props/ViewProps";
-import { PercentageBreakdown } from "../Assets/Components/Breakdowns/PercentageBreakdown";
-import { SRFilter } from "../Objects/Pieces/SRFilter";
 import { ChipFilters } from "./Subpage/ChipFilters";
 import { KillBreakdownCard } from "../Assets/Components/Breakdowns/KillBreakdownCard";
 import { TopMedals } from "../Assets/Components/Medals/TopMedals";
-import { AllPlaylists } from "../Objects/Helpers/AllPlaylists";
-import { AllMaps } from "../Objects/Helpers/AllMaps";
 import { AutocodePlaylist, AutocodeVariant } from "../Database/Schemas/AutocodeMetadata";
+import { ServiceRecordType } from "../Database/SCAutocode";
+import { TitleCard } from "../Assets/Components/Cards/TitleCard";
 
 export function FilteredView(props: ViewProps)
 {
@@ -41,6 +39,8 @@ export function FilteredView(props: ViewProps)
 	const [playlists, setPlaylists] = useState<AutocodePlaylist[] | undefined>([]);
 	const [selectedVariant, setSelectedVariant] = useState<AutocodeVariant | undefined>();
 	const [variants, setVariants] = useState<AutocodeVariant[] | undefined>([]);
+	const [selectedRank, setSelectedRank] = useState<string | undefined>();
+	const [ranks, setRanks] = useState<string[] | undefined>([]);
 	//#endregion
 
 	const loadData = useCallback(async () => 
@@ -67,6 +67,28 @@ export function FilteredView(props: ViewProps)
 				const variants = await app.GetVariants();
 				setVariants(variants.filter(variant => !notAllowed.includes(variant.name.toLowerCase())));
 				setPlaylists(undefined);
+			}
+			else if (node === ServiceRecordFilter.Ranked)
+			{
+				const CURRENT_SEASON = 2;
+				setSR(await app.GetServiceRecordFromAutocode(gamertag, CURRENT_SEASON, undefined, undefined, ServiceRecordType.ranked));
+				//setRanks(["Solo-Duo MnK", "Solo-Duo Controller", "Open Crossplay"]);
+				setRanks(undefined);
+				setVariants(undefined);
+				setPlaylists(undefined);
+				setSelectedVariant(undefined);
+				setSelectedRank(undefined);
+				setSelectedPlaylist(undefined);
+			}
+			else if (node === ServiceRecordFilter.Social)
+			{
+				setSR(await app.GetServiceRecordFromAutocode(gamertag, undefined, undefined, undefined, ServiceRecordType.social));
+				setRanks(undefined);
+				setVariants(undefined);
+				setPlaylists(undefined);
+				setSelectedVariant(undefined);
+				setSelectedRank(undefined);
+				setSelectedPlaylist(undefined);
 			}
 
 			setGamertag(gamertag);
@@ -137,16 +159,18 @@ export function FilteredView(props: ViewProps)
 					{/* Still top but less so*/}
 					<Grid item xs={12}>
 						<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
-							<ChipFilters activeFilter={filter ?? ""} filters={playlists ?? variants ?? []} onFilterClick={onFilterSelected} />
+							<ChipFilters activeFilter={filter ?? ""} filters={playlists ?? variants ?? ranks ?? []} onFilterClick={onFilterSelected} />
 						</Box>
 					</Grid>
 					{!sr ? undefined :
 					<>
 						{/* Far left */}
 						<Grid container item spacing={2} md={12} lg={4} xl={4} sx={{ alignContent: "flex-start" }}>
-							<Grid item xs={12}>
+							{node !== ServiceRecordFilter.Social && node !== ServiceRecordFilter.Ranked && <Grid item xs={12}>
 								<ImageCard image={selectedPlaylist?.asset?.thumbnail_url ?? selectedVariant?.thumbnail_url} title={selectedPlaylist?.name ?? selectedVariant?.name} />
-							</Grid>
+							</Grid>}
+							{node === ServiceRecordFilter.Ranked && <Grid item xs={12}><TitleCard title="Ranked - Season 2"></TitleCard></Grid>}
+							{node === ServiceRecordFilter.Social && <Grid item xs={12}><TitleCard title="Social"></TitleCard></Grid>}
 							<Grid item xs={12}>
 								<MatchesBreakdown serviceRecord={sr} />
 							</Grid>

@@ -50,17 +50,17 @@ export function AHDrawer(props: AHDrawerProps)
 			case "Service Record":
 				switchTab(`/service_record/${gamertag}`, newTab);
 				break;
-			case "Maps":
-				switchTab(`/service_record/${ServiceRecordFilter.Map}/${gamertag}`, newTab);
-				break;
 			case "Playlists":
 				switchTab(`/service_record/${ServiceRecordFilter.Playlist}/${gamertag}`, newTab);
 				break;
 			case "Variants":
 				switchTab(`/service_record/${ServiceRecordFilter.Variant}/${gamertag}`, newTab);
 				break;
-			case "Match Outcome":
-				switchTab(`/service_record/${ServiceRecordFilter.Outcome}/${gamertag}`, newTab);
+			case "Social":
+				switchTab(`/service_record/${ServiceRecordFilter.Social}/${gamertag}`, newTab);
+				break;
+			case "Ranked":
+				switchTab(`/service_record/${ServiceRecordFilter.Ranked}/${gamertag}`, newTab);
 				break;
 			case "Medals":
 				switchTab(`/medals/${gamertag}`, newTab);
@@ -100,6 +100,8 @@ export function AHDrawer(props: AHDrawerProps)
 					{/* <Tab className="ahTab" value="Maps" label="Maps" icon={<MapIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
 					<Tab className="ahTab" value="Playlists" label="Playlists" icon={<ListIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Variants" label="Variants" icon={<GamesIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Social" label="Social" icon={<GroupsIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Ranked" label="Ranked" icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					{/* <Tab className="ahTab" value="Match Outcome" label="Match Outcome" icon={<EmojiEventsIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
 					<Tab className="ahTab" value="Medals" label="Medals" icon={<MilitaryTechIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Matches" label="Matches" icon={<SportsEsportsIcon />} iconPosition="start" />
@@ -112,6 +114,8 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab className="ahTab" value="Service Record" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Playlists" label="Playlists" icon={<ListIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Variants" label="Variants" icon={<GamesIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Social" label="Social" icon={<GroupsIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Ranked" label="Ranked" icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Medals" label="Medals" icon={<MilitaryTechIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Matches" label="Matches" icon={<SportsEsportsIcon />} iconPosition="start" />
 					{/* <Tab className="ahTab" value="Company" label="Spartan Company" icon={<GroupsIcon />} iconPosition="start" /> */}

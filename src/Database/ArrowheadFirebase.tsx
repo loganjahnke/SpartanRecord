@@ -42,8 +42,8 @@ export enum HaloOutcome
 
 export enum ServiceRecordFilter
 {
-	Map = "map",
-	Outcome = "outcome",
+	Social = "social",
+	Ranked = "ranked",
 	Variant = "variant",
 	Playlist = "playlist"
 }

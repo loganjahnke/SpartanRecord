@@ -5,7 +5,7 @@ import { AutocodePlaylist, AutocodeVariant } from "../../Database/Schemas/Autoco
 interface ServiceRecordFiltersProps
 {
 	activeFilter: string;
-	filters: AutocodePlaylist[] | AutocodeVariant[];
+	filters: AutocodePlaylist[] | AutocodeVariant[] | string[];
 	onFilterClick: (filter: string) => void;
 }
 
@@ -24,7 +24,16 @@ export function ChipFilters(props: ServiceRecordFiltersProps)
 	
 	return (
 		<Box sx={{ textAlign: "center", flexGrow: 1 }}>
-			{filters.map(filter => <Chip sx={{ margin: "4px 4px" }} label={filter.name} variant={activeFilter === ((((filter as any)?.category_id) ?? (filter as any)?.asset?.id) + "") ? "filled" : "outlined"} onClick={() => onChipClick((filter as any)?.category_id ?? (filter as any)?.asset?.id)} />)}
+			{filters.map(filter => {
+				if (typeof(filter) === "string")
+				{
+					return <Chip sx={{ margin: "4px 4px" }} label={filter} variant={activeFilter === filter ? "filled" : "outlined"} onClick={() => onChipClick(filter)} />;
+				}
+				else
+				{
+					return <Chip sx={{ margin: "4px 4px" }} label={filter.name} variant={activeFilter === ((((filter as any)?.category_id) ?? (filter as any)?.asset?.id) + "") ? "filled" : "outlined"} onClick={() => onChipClick((filter as any)?.category_id ?? (filter as any)?.asset?.id)} />;
+				}
+			})}
 		</Box>
 	);
 }
