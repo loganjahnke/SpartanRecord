@@ -1,3 +1,5 @@
+import { AutocodeAppearance } from "../../Database/Schemas/AutocodeAppearance";
+import { AutocodeMultiplayerServiceRecord } from "../../Database/Schemas/AutocodeMultiplayerServiceRecord";
 import { Appearance } from "./Appearance";
 import { CampaignRecord } from "./CampaignRecord";
 import { ServiceRecord } from "./ServiceRecord";
@@ -16,6 +18,9 @@ export class Player
     public appearance: Appearance;
     /** Last match ID */
     public lastMatchID: string;
+
+    public appearanceData?: AutocodeAppearance;
+    public serviceRecordData?: AutocodeMultiplayerServiceRecord;
 
     constructor(gamertag?: string, serviceRecord?: ServiceRecord, history?: ServiceRecord[], appearance?: Appearance, campaignRecord?: CampaignRecord)
     {

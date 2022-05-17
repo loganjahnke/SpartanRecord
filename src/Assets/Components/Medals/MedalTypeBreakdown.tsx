@@ -30,7 +30,7 @@ export function MedalTypeBreakdown(props: MedalTypeBreakdownProps)
 				</Box>
 				<Box sx={{width: "100%" }}>
 					{filtered.length > 0 
-						? filtered.map(medal => <MedalTile medal={medal} />) 
+						? filtered.sort((a, b) => a.sort > b.sort ? 1 : -1).map(medal => <MedalTile medal={medal} />) 
 						: <Typography variant="body1" sx={{ mt: 4, mb: 4, width: "100%", textAlign: "center" }}>No medals earned.</Typography>}
 				</Box>
 				{showAll 

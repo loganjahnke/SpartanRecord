@@ -233,7 +233,7 @@ const LoopThroughMatches = async (app: admin.app.App, gamertag: string, lastMatc
 	if (!isAllowed) { return; }
 
 	// Get current game count from the service record that was passed in
-	const currGameCount = startingServiceRecord.data?.records?.pvp?.matches?.total ?? 0;
+	const currGameCount = startingServiceRecord.data?.matches?.total ?? 0;
 	if (currGameCount === 0) { return; }
 	
 	let offset = 0;
@@ -288,7 +288,7 @@ const LoopThroughMatches = async (app: admin.app.App, gamertag: string, lastMatc
 		if (lastMatchID)
 		{
 			indexOfLastMatchID = playerMatchResults.findIndex((match: AutocodePlayerMatch) => match.id === lastMatchID);
-			if (indexOfLastMatchID === 0) { return; }
+			if (indexOfLastMatchID === 0) { break; }
 			if (indexOfLastMatchID !== -1)
 			{
 				playerMatchResults = playerMatchResults.slice(0, indexOfLastMatchID);
@@ -464,18 +464,17 @@ export const GetLatestStatistics = functions
 	}
 
 	// Get service record
-	let [season1, season2, appearance] = await Promise.all([
-		autocode.GetServiceRecord(gamertag, 1),
-		autocode.GetServiceRecord(gamertag, 2),
+	let [serviceRecord, appearance] = await Promise.all([
+		autocode.GetServiceRecord(gamertag),
 		autocode.GetAppearance(gamertag),
 		firebase.SetIsSyncing(app, gamertag, true)
 	]).catch(() => 
 	{
-		return [false, false, false]; 
+		return [false, false]; 
 	});
 
 	// Uh oh
-	if (season1 === false || season2 === false || appearance === false)
+	if (serviceRecord === false || appearance === false)
 	{
 		await firebase.SetIsSyncing(app, gamertag, false);
 		await app.delete();
@@ -483,40 +482,20 @@ export const GetLatestStatistics = functions
 		return false; 
 	}
 
-	// Check if they don't have either of these seasons
-	if (((season1 as any)?.error?.message?.includes("Specified season does not exist")))
-	{
-		season1 = AutocodeHelpers.CreateEmptyServiceRecord(gamertag);
-	}
-	else if ((season1 as any)?.error)
+	// Check if something went wrong
+	if ((serviceRecord as any)?.error)
 	{
 		await firebase.SetIsSyncing(app, gamertag, false);
 		await app.delete();
-		console.error((season1 as any).error.message);
+		console.error((serviceRecord as any).error.message);
 		return false; 
 	}
-
-	// Check if they don't have either of these seasons
-	if (((season2 as any)?.error?.message?.includes("Specified season does not exist")))
-	{
-		season2 = AutocodeHelpers.CreateEmptyServiceRecord(gamertag);
-	}
-	else if ((season2 as any)?.error)
-	{
-		await firebase.SetIsSyncing(app, gamertag, false);
-		await app.delete();
-		console.error((season2 as any).error.message);
-		return false; 
-	}
-
-	// Add service records together to get the total SR
-	AutocodeHelpers.AddSRtoSR(season1 as AutocodeMultiplayerServiceRecord, season2 as AutocodeMultiplayerServiceRecord);
 
 	// Otherwise update the current service record, appearance, and historic service record
 	await Promise.all([
-		firebase.SetServiceRecord(app, gamertag, season1 as AutocodeMultiplayerServiceRecord),
+		firebase.SetServiceRecord(app, gamertag, serviceRecord as AutocodeMultiplayerServiceRecord),
 		firebase.SetAppearance(app, gamertag, appearance as AutocodeAppearance),
-		LoopThroughMatches(app, gamertag, lastSyncedMatchID, season1 as AutocodeMultiplayerServiceRecord)
+		LoopThroughMatches(app, gamertag, lastSyncedMatchID, serviceRecord as AutocodeMultiplayerServiceRecord)
 	]).finally(async () =>
 	{
 		// No longer syncing

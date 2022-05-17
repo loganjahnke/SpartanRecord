@@ -1,18 +1,18 @@
-export class FilterCount
+export class SRFilter
 {
 	/** The name of the filter */
 	public name: string;
 	/** The number to show next to it */
-	public count: number;
+	public id: string;
 
 	/**
 	 * Creates a filter count
 	 * @param filter the filter
-	 * @param count the count
+	 * @param id the id
 	 */
-	constructor(filter: string, count: number)
+	constructor(filter: string, id: string)
 	{
 		this.name = filter;
-		this.count = count;
+		this.id = id;
 	}
 }

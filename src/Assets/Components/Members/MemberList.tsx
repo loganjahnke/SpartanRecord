@@ -1,10 +1,11 @@
-import { Box, Button, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, CardMedia, IconButton, Typography } from "@mui/material";
 import { SpartanCompany } from "../../../Objects/Model/SpartanCompany";
 
 import { Player } from "../../../Objects/Model/Player";
 import { Halo5Converter } from "../../../Objects/Helpers/Halo5Converter";
 
 import ArrowheadImg from "../../Images/arrowhead.png";
+import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 
 export function MemberList(props: { company: SpartanCompany, goToMember: Function })
 {
@@ -32,13 +33,13 @@ function MemberComponent(props: { player: Player, goToMember: Function })
 
 	return (
 		<Box sx={{ backgroundColor: "secondary.main", borderRadius: 3, display: "flex", flexDirection: "row", alignItems: "center", width: "90%", margin: 1, padding: 1 }}>
-			<Button onClick={setPlayerClick} sx={{ width: "100%", justifyContent: "flex-start", borderRadius: 2, textTransform: "none", textAlign: "left" }}>
-				<img src={player.appearance.emblemURL === "" ? ArrowheadImg : player.appearance.emblemURL} alt="emblem" width="48px" />
-				<Box sx={{ ml: 1, flexGrow: 1, display: "flex", flexDirection: "column" }}>
-					<Typography variant="body1">{player.gamertag}</Typography>
-					<Typography variant="body2" sx={{ fontWeight: 100 }}>{Halo5Converter.GetLevelFromScore(player.serviceRecord.totalScore)}</Typography>
-				</Box>
-			</Button>
+			<img src={player.appearance.emblemURL === "" ? ArrowheadImg : player.appearance.emblemURL} alt="emblem" width="48px" />
+			<Box sx={{ ml: 1, flexGrow: 1, display: "flex", flexDirection: "column" }}>
+				<Typography variant="body1">{player.gamertag}</Typography>
+				<Typography variant="body2" sx={{ fontWeight: 100 }}>{Halo5Converter.GetLevelFromScore(player.serviceRecord.totalScore)}</Typography>
+			</Box>
+			{/* <IconButton sx={{ color: ArrowheadTheme.text_primary }} onClick={() => deleteMember(member.gamertag)}><ClearIcon /></IconButton>
+			<IconButton sx={{ color: ArrowheadTheme.text_primary }} onClick={() => deleteMember(member.gamertag)}><ClearIcon /></IconButton> */}
 		</Box>
 	);
 }

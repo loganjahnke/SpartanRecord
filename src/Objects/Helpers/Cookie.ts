@@ -10,8 +10,8 @@ export class Cookie
         const date = new Date();
         const value = val;
     
-        // Set it expire in 28 days
-        date.setTime(date.getTime() + (28 * 24 * 60 * 60 * 1000));
+        // Set it expire in 365 days
+        date.setTime(date.getTime() + (365 * 24 * 60 * 60 * 1000));
     
         // Set it
         document.cookie = name+"="+value+"; expires="+date.toUTCString()+"; path=/";
@@ -86,6 +86,56 @@ export class Cookie
         if (recentsAsString)
         {
             const split = recentsAsString.split("|");
+            if (split && split.length > 0)
+            {
+                return split;
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * Adds a gamertag to the spartan company
+     * @param gamertag the gamertag to add
+     */
+    public static addGamertagToCompany(gamertag: string): void
+    {
+        const members = this.getCompany();
+        if (members.includes(gamertag))
+        {
+            return;
+        }
+
+        members.push(gamertag);
+        this.set("sc-company", members.join("|"));
+    }
+
+    /**
+     * Removes a gamertag to the spartan company
+     * @param gamertag the gamertag to remove
+     */
+    public static removeGamertagToCompany(gamertag: string): void
+    {
+        const members = this.getCompany();
+        if (!members.includes(gamertag))
+        {
+            return;
+        }
+        
+        this.set("sc-company", members.filter(member => member !== gamertag).join("|"));
+    }
+
+    /**
+     * Gets the gamertags in the spartan company
+     * @returns the gamertags in the spartan company
+     */
+    public static getCompany(): string[]
+    {
+        const spartanCompany = this.get("sc-company");
+        if (spartanCompany)
+        {
+            const split = spartanCompany.split("|");
             if (split && split.length > 0)
             {
                 return split;

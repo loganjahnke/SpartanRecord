@@ -104,7 +104,7 @@ export function MedalsView(props: ViewProps)
 						<MedalTypeBreakdown type={MedalType.Stockpile} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
 					<Grid item xs={12} md={6} xl={4}>
-						<MedalTypeBreakdown type={MedalType.Strongholds} medals={serviceRecord.medals} showAll={showAll} />
+						<MedalTypeBreakdown type={MedalType.Zone} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
 					{/* <Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.VIP} medals={serviceRecord.medals} showAll={showAll} />

@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import { TitleCard } from "../Cards/TitleCard";
 import { KillBreakdownChart } from "../Charts/KillBreakdownChart";
 import { BreakdownProps, BreakdownTile } from "./BreakdownTile";
 
@@ -7,7 +8,7 @@ export function KillBreakdownCard(props: BreakdownProps)
 	const { serviceRecord, showPerMatch } = props;
 
 	return (
-		<Box sx={{ backgroundColor: "divider", borderRadius: 3, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+		<TitleCard title="Kills">
 			<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", flexWrap: "wrap", justifyContent: "space-evenly", width: "100%" }}>
 					<BreakdownTile title="Melee" value={showPerMatch ? serviceRecord.breakdowns.kills.melee / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.melee} isMainStat />
 					<BreakdownTile title="Headshots" value={showPerMatch ? serviceRecord.breakdowns.kills.headshots / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.headshots} isMainStat />
@@ -21,6 +22,6 @@ export function KillBreakdownCard(props: BreakdownProps)
 			<Box sx={{ width: "100%", pb: 1 }}>
 					<KillBreakdownChart currentSR={serviceRecord} />
 			</Box>
-		</Box>
+		</TitleCard>
 	);
 }

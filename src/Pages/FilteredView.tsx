@@ -1,6 +1,6 @@
 import { Box, Divider, Grid, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { ServiceRecordFilter, HaloMap, HaloMode, HaloRanked, HaloOutcome } from "../Database/ArrowheadFirebase";
 import { KillDeathCard } from "../Assets/Components/Breakdowns/KillDeathCard";
@@ -17,32 +17,30 @@ import { PlayerCard } from "../Assets/Components/Cards/PlayerCard";
 import { ServiceRecordFilters } from "./Subpage/ServiceRecordFilters";
 import { ViewProps } from "./Props/ViewProps";
 import { PercentageBreakdown } from "../Assets/Components/Breakdowns/PercentageBreakdown";
-import { FilterCount } from "../Objects/Pieces/FilterCounts";
+import { SRFilter } from "../Objects/Pieces/SRFilter";
 import { ChipFilters } from "./Subpage/ChipFilters";
 import { KillBreakdownCard } from "../Assets/Components/Breakdowns/KillBreakdownCard";
 import { TopMedals } from "../Assets/Components/Medals/TopMedals";
 import { AllPlaylists } from "../Objects/Helpers/AllPlaylists";
 import { AllMaps } from "../Objects/Helpers/AllMaps";
+import { AutocodePlaylist, AutocodeVariant } from "../Database/Schemas/AutocodeMetadata";
 
-interface FilterViewProps
-{
-	node: string;
-}
-
-export function FilteredView(props: FilterViewProps & ViewProps)
+export function FilteredView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, node, setGamertag } = props;
-	const { filter, gamertag } = useParams();
+	const { app, setLoadingMessage, setGamertag } = props;
+	const { node, filter, gamertag } = useParams();
+	const navigate = useNavigate();
 	//#endregion
 	
 	//#region State
 	const [showPerMatch, setShowPerMatch] = useState(false);
 	const [myPlayer, setMyPlayer] = useState(new Player());
     const [sr, setSR] = useState<ServiceRecord | undefined>();
-    const [image, setImage] = useState("");
-	const [availableFilters, setAvailableFilters] = useState<FilterCount[]>([]);
-	const [selectedFilter, setSelectedFilter] = useState(filter);
+    const [selectedPlaylist, setSelectedPlaylist] = useState<AutocodePlaylist | undefined>();
+	const [playlists, setPlaylists] = useState<AutocodePlaylist[] | undefined>([]);
+	const [selectedVariant, setSelectedVariant] = useState<AutocodeVariant | undefined>();
+	const [variants, setVariants] = useState<AutocodeVariant[] | undefined>([]);
 	//#endregion
 
 	const loadData = useCallback(async () => 
@@ -56,11 +54,24 @@ export function FilteredView(props: FilterViewProps & ViewProps)
 			setLoadingMessage("Loading " + gamertag);
 
 			const player = await app.GetPlayerAppearanceOnly(gamertag);
-			setAvailableFilters(await app.GetAvailableFilters(gamertag, node as ServiceRecordFilter));
 			setMyPlayer(player);
+
+			if (node === ServiceRecordFilter.Playlist)
+			{
+				setPlaylists(await app.GetPlaylists());
+				setVariants(undefined);
+			}
+			else if (node === ServiceRecordFilter.Variant)
+			{
+				const notAllowed = ["unknown", "campaign", "extraction", "juggernaut", "vip", "escalation", "grifball", "assault"];
+				const variants = await app.GetVariants();
+				setVariants(variants.filter(variant => !notAllowed.includes(variant.name.toLowerCase())));
+				setPlaylists(undefined);
+			}
+
 			setGamertag(gamertag);
             
-			app.LogViewServiceRecord(gamertag, node as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome);
+			app.LogViewServiceRecord(gamertag, node as ServiceRecordFilter, node);
 		}
 
 		setLoadingMessage("");
@@ -68,75 +79,46 @@ export function FilteredView(props: FilterViewProps & ViewProps)
 
 	const loadFilteredSR = useCallback(async () => 
 	{		
-		// Check if we need to check Firebase or HaloDotAPI
-		setLoadingMessage("Loading " + selectedFilter + " Service Record");
-		
 		// Get player's service record
-		if (gamertag && node && selectedFilter)
+		if (gamertag && node && filter)
 		{
-			setSR(await app.GetFilteredServiceRecord(gamertag, node as ServiceRecordFilter, selectedFilter));			
-			app.LogViewServiceRecord(gamertag, node as ServiceRecordFilter, filter as HaloMap | HaloMode | HaloRanked | HaloOutcome);
+			setLoadingMessage("Loading Filtered Service Record");
 
-			if (node === ServiceRecordFilter.Map)
+			if (node === ServiceRecordFilter.Playlist)
 			{
-				const mapMetadata = (AllMaps as any)[selectedFilter];
-				if (mapMetadata && mapMetadata.thumbnail_url)
-				{
-					setImage(mapMetadata.thumbnail_url);
-				}
-				else { setImage(""); }
+				setSR(await app.GetServiceRecordFromAutocode(gamertag, undefined, filter));
+				setSelectedPlaylist(playlists?.filter(playlist => playlist.asset.id === filter)[0]);
+				setSelectedVariant(undefined);
 			}
 			else if (node === ServiceRecordFilter.Variant)
 			{
-				const f = selectedFilter.toLowerCase();
-				const imageName = f.includes("slayer") ? "slayer"
-					: f.includes("attrition") ? "attrition"
-					: f.includes("fiesta") ? "fiesta"
-					: f.includes("strongholds") ? "strongholds"
-					: f.includes("total control") ? "total-control"
-					: f.includes("ctf") ? "ctf"
-					: f.includes("oddball") ? "oddball"
-					: f.includes("stockpile") ? "stockpile" 
-					: f.includes("koth") ? "koth" 
-					: f.includes("king of the hill") ? "koth" 
-					: f.includes("land grab") ? "land-grab" 
-					: "unknown";
-				setImage(`https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/ugcgamevariants/${imageName}.jpg`)
+				setSR(await app.GetServiceRecordFromAutocode(gamertag, undefined, undefined, filter));
+				setSelectedVariant(variants?.filter(variant => variant.category_id === +filter)[0]);
+				setSelectedPlaylist(undefined);
 			}
-			else if (node === ServiceRecordFilter.Playlist)
-			{
-				const playlistMetadata = (AllPlaylists as any)[selectedFilter];
-				if (playlistMetadata && playlistMetadata.asset && playlistMetadata.asset.thumbnail_url)
-				{
-					setImage(playlistMetadata.asset.thumbnail_url);
-				}
-				else { setImage(""); }
-			}
+
+			setLoadingMessage("");
 		}
-
-
-		setLoadingMessage("");
-	}, [app, gamertag, node, selectedFilter]);
+	}, [app, gamertag, node, filter, setSR, setSelectedPlaylist, setSelectedVariant, setLoadingMessage]);
 
 	const onFilterSelected = useCallback((filter: string) =>
 	{
-		setSelectedFilter(filter);
-	}, []);
+		navigate(`/service_record/${node}/${gamertag}/${filter}`)
+	}, [navigate]);
 
     useEffect(() =>
     {
         loadData();
-		setSelectedFilter("");
 		setSR(undefined);
     }, [node, gamertag]);
 
 	useEffect(() =>
 	{
-		if (selectedFilter)
+		if (filter)
 		{
 			loadFilteredSR();
 		}
-	}, [selectedFilter]);
+	}, [filter]);
 
 	return (
 		<Box component="main" sx={{ flexGrow: 1 }}>
@@ -155,27 +137,25 @@ export function FilteredView(props: FilterViewProps & ViewProps)
 					{/* Still top but less so*/}
 					<Grid item xs={12}>
 						<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
-							<ChipFilters activeFilter={selectedFilter ?? ""} filters={availableFilters} onFilterClick={onFilterSelected} areVariants={node === ServiceRecordFilter.Variant} />
+							<ChipFilters activeFilter={filter ?? ""} filters={playlists ?? variants ?? []} onFilterClick={onFilterSelected} />
 						</Box>
 					</Grid>
 					{!sr ? undefined :
 					<>
 						{/* Far left */}
 						<Grid container item spacing={2} md={12} lg={4} xl={4} sx={{ alignContent: "flex-start" }}>
-							{!image ? undefined :
-								<Grid item xs={12}>
-									<ImageCard image={image} title={selectedFilter} />
-								</Grid>
-							}
+							<Grid item xs={12}>
+								<ImageCard image={selectedPlaylist?.asset?.thumbnail_url ?? selectedVariant?.thumbnail_url} title={selectedPlaylist?.name ?? selectedVariant?.name} />
+							</Grid>
 							<Grid item xs={12}>
 								<MatchesBreakdown serviceRecord={sr} />
 							</Grid>
 							<Grid item xs={12}>
 								<LevelBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
 							</Grid>
-							<Grid item xs={12}>
+							{/* <Grid item xs={12}>
 								<PercentageBreakdown totalMatches={availableFilters.map(avail => avail.count).reduce((a, b) => a + b)} filteredMatches={sr.matchesPlayed} />
-							</Grid>
+							</Grid> */}
 						</Grid>
 						{/* Middle 5 */}
 						<Grid container item spacing={2} md={12} lg={4} xl={3} sx={{ alignContent: "flex-start" }}>

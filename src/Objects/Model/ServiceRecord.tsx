@@ -1,5 +1,5 @@
 import { HaloOutcome } from "../../Database/ArrowheadFirebase";
-import { AutocodeMultiplayerServiceRecord } from "../../Database/Schemas/AutocodeMultiplayerServiceRecord";
+import { AutocodeMultiplayerServiceRecord, AutocodeServiceRecordData } from "../../Database/Schemas/AutocodeMultiplayerServiceRecord";
 import { AllMedals } from "../Helpers/AllMedals";
 import { Breakdowns } from "../Pieces/Breakdowns";
 import { Damage } from "../Pieces/Damage";
@@ -27,7 +27,7 @@ export class ServiceRecord
     /** Contains all medals */
     public medals: Medal[];
     /** Raw autocode and firebase JSON */
-    public raw?: AutocodeMultiplayerServiceRecord;
+    public data?: AutocodeServiceRecordData;
  
     /** The damage efficiency per kill */
     public get damageEfficiency(): number
@@ -62,14 +62,14 @@ export class ServiceRecord
      * Creates a Service Record object from the JSON response
      * @param result the JSON response from cryptum
      */
-    constructor(result?: AutocodeMultiplayerServiceRecord, key: string = "pvp")
+    constructor(result?: AutocodeMultiplayerServiceRecord)
     {
         // Set raw result for future use
-        this.raw = result;
+        this.data = result?.data;
 
         // Get stubs for easy access
         this.gamertag = result?.additional?.parameters?.gamertag ?? "";
-        const record = result?.data?.records?.[key];
+        const record = result?.data;
         const core = record?.core;
         const matches = record?.matches;
         const timePlayed = record?.time_played;

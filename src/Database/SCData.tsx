@@ -5,10 +5,11 @@ import { Match } from "../Objects/Model/Match";
 import { Player } from "../Objects/Model/Player";
 import { PlayerMatch } from "../Objects/Model/PlayerMatch";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
-import { FilterCount } from "../Objects/Pieces/FilterCounts";
+import { SRFilter } from "../Objects/Pieces/SRFilter";
 import { HaloMap, HaloMode, HaloOutcome, HaloRanked, ServiceRecordFilter } from "./ArrowheadFirebase";
-import { SCAutocode } from "./SCAutocode";
+import { SCAutocode, ServiceRecordType } from "./SCAutocode";
 import { SCFirebase } from "./SCFirebase";
+import { AutocodeMap, AutocodeMedal, AutocodePlaylist, AutocodeTeam, AutocodeVariant } from "./Schemas/AutocodeMetadata";
 import { AutocodeMultiplayerServiceRecord } from "./Schemas/AutocodeMultiplayerServiceRecord";
 import { FirebaseBest } from "./Schemas/FirebaseBest";
 
@@ -87,15 +88,39 @@ export class SCData
 	}
 
     /**
-     * Updates the player from autocode, if needed
-     * @param player the player object
-     * @param lastMatchNumber the last match number we have stored
-     * @returns the number of matches since the last autocode to firebase sync
+     * Sets a player into firebase
+     * @param player the player
      */
-	public async GetPlayerFromAutocode(player: Player, lastMatchNumber: number): Promise<number>
+    public async SetPlayerIntoFirebase(player: Player): Promise<void>
 	{
-		return await this.__autocode.GetPlayerIfNeeded(player, lastMatchNumber);
+        if (!player.gamertag) { return; }
+		await Promise.all([
+            this.__firebase.SetAppearance(player.gamertag, player.appearanceData),
+            this.__firebase.SetServiceRecord(player.gamertag, player.serviceRecordData)
+        ]);
 	}
+
+    /**
+     * Gets the player from Autocode
+     * @param gamertag the gamertag
+     */
+	public GetPlayerFromAutocode = async (gamertag: string): Promise<Player> => this.__autocode.GetPlayer(gamertag);
+
+    /**
+	 * Gets the service record for the gamertag from Autocode
+	 * @param player the gamertag to get the service record of
+	 * @param season the season number
+	 * @param playlistId the playlist ID
+	 * @param categoryId the category ID
+	 * @param type the type of service record to get
+	 * @returns the service record for the gamertag
+	 */
+	public async GetServiceRecordFromAutocode(gamertag: string, season?: number, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<ServiceRecord> 
+    {
+        const player = new Player(gamertag);
+        await this.__autocode.GetServiceRecord(player, season, playlistId, categoryId, type);
+        return player.serviceRecord;
+    }
 
     /**
      * Gets a historic service record for a specific game number
@@ -117,17 +142,6 @@ export class SCData
     public async GetFilteredServiceRecord(gamertag: string, node: ServiceRecordFilter, filter: string): Promise<ServiceRecord | undefined>
     {
         return await this.__firebase.GetFilteredServiceRecord(gamertag, node, filter);
-    }
-
-    /**
-     * Gets the available filters for a node
-     * @param gamertag the gamertag
-     * @param node the game number
-     * @returns the available filters
-     */
-    public async GetAvailableFilters(gamertag: string, node: ServiceRecordFilter): Promise<FilterCount[]>
-    {
-        return await this.__firebase.GetAvailableFilters(gamertag, node);
     }
 
     /**
@@ -200,6 +214,26 @@ export class SCData
     }
     //#endregion
 
+    //#region Filters
+    /**
+     * Gets the available filters for a node
+     * @param gamertag the gamertag
+     * @param node the game number
+     * @returns the available filters
+     */
+     public GetAvailableFilters = async (gamertag: string, node: ServiceRecordFilter): Promise<SRFilter[]> => this.__firebase.GetAvailableFilters(gamertag, node);
+    /** Gets the maps */
+	public GetMaps = async (): Promise<AutocodeMap[]> => this.__autocode.GetMaps();
+	/** Gets the playlists */
+	public GetPlaylists = async (): Promise<AutocodePlaylist[]> => this.__autocode.GetPlaylists();
+	/** Gets the game variants */
+	public GetVariants = async (): Promise<AutocodeVariant[]> => this.__autocode.GetVariants();
+	/** Gets the medals */
+	public GetMedals = async (ids: string[] = []): Promise<AutocodeMedal[]> => this.__autocode.GetMedals(ids);
+	/** Gets the teams */
+	public GetTeams = async (): Promise<AutocodeTeam[]> => this.__autocode.GetTeams();
+    //#endregion
+
     //#region Event logging
     /**
      * Logs an event in Firebase analytics for viewing the gamertag's medals
@@ -223,7 +257,7 @@ export class SCData
      * Logs an event in Firebase analytics for viewing the gamertag's service record
      * @param gamertag the gamertag
      */
-    public LogViewServiceRecord(gamertag: string, filter?: ServiceRecordFilter, param?: HaloMap | HaloMode | HaloOutcome | HaloRanked): void
+    public LogViewServiceRecord(gamertag: string, filter?: ServiceRecordFilter, param?: string): void
     {
         if (filter && param)
         {

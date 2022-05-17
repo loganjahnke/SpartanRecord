@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
+import { TitleCard } from "../Cards/TitleCard";
 import { BreakdownProps, BreakdownTile } from "./BreakdownTile";
 
 export function MatchesBreakdown(props: BreakdownProps)
@@ -9,7 +10,7 @@ export function MatchesBreakdown(props: BreakdownProps)
 	const total = serviceRecord.matchesPlayed - serviceRecord.breakdowns.matches.left - serviceRecord.breakdowns.matches.draws;
 
 	return (
-		<Box sx={{ backgroundColor: "divider", borderRadius: 3, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+		<TitleCard title="Matches">
 			<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", width: "100%" }}>
 				<BreakdownTile title="Matches Played" value={serviceRecord.matchesPlayed} isMainStat />
 				<BreakdownTile title="Win Rate" value={serviceRecord.winRate} isMainStat isPercent />
@@ -21,6 +22,6 @@ export function MatchesBreakdown(props: BreakdownProps)
 				<BreakdownTile title="Wins" value={serviceRecord.breakdowns.matches.wins} total={total} backgroundColor={ArrowheadTheme.good} />
 				<BreakdownTile title="Losses" value={serviceRecord.breakdowns.matches.losses} total={total} backgroundColor={ArrowheadTheme.bad} />
 			</Box>
-		</Box>
+		</TitleCard>
 	);
 }

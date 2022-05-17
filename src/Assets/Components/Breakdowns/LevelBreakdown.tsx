@@ -1,6 +1,7 @@
 import { Box, LinearProgress, linearProgressClasses, styled, Tooltip, Typography } from "@mui/material";
 import { Halo5Converter } from "../../../Objects/Helpers/Halo5Converter";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
+import { TitleCard } from "../Cards/TitleCard";
 import { BreakdownProps, BreakdownTile } from "./BreakdownTile";
 
 export function LevelBreakdown(props: BreakdownProps)
@@ -27,7 +28,7 @@ export function LevelBreakdown(props: BreakdownProps)
 	const xpNeeded = nextXP - serviceRecord.totalScore;
 
 	return (
-		<Box sx={{ backgroundColor: "divider", borderRadius: 3, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+		<TitleCard title="Spartan Rank">
             <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "space-evenly", width: "100%" }}>
                 <BreakdownTile title="Total Score" value={showPerMatch ? serviceRecord.totalScore / serviceRecord.matchesPlayed : serviceRecord.totalScore} isMainStat />
                 <BreakdownTile title="Spartan Rank" value={Halo5Converter.GetLevelFromScore(serviceRecord.totalScore)} isMainStat />
@@ -39,6 +40,6 @@ export function LevelBreakdown(props: BreakdownProps)
 				</Tooltip>
 				<Typography variant="caption" sx={{ flexBasis: "12.5%", textAlign: "center" }}>{`SR${nextLvl}`}</Typography>
 			</Box>
-		</Box>
+		</TitleCard>
 	);
 }

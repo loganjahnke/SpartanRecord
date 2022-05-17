@@ -6,7 +6,7 @@ import { ServiceRecordFilter } from "../Database/ArrowheadFirebase";
 import { Player } from "../Objects/Model/Player";
 import { PlayerCard } from "../Assets/Components/Cards/PlayerCard";
 import { ViewProps } from "./Props/ViewProps";
-import { FilterCount } from "../Objects/Pieces/FilterCounts";
+import { SRFilter } from "../Objects/Pieces/SRFilter";
 import { ChipFilters } from "./Subpage/ChipFilters";
 import { Match } from "../Objects/Model/Match";
 import { MatchSummary } from "../Assets/Components/Match/MatchSummary";
@@ -31,7 +31,7 @@ export function BestMatchesView(props: ViewProps)
 	const [highestKDSpread, setHighestKDSpread] = useState<Match>();
 	const [lowestKDSpread, setLowestKDSpread] = useState<Match>();
     const [image, setImage] = useState("");
-	const [availableFilters, setAvailableFilters] = useState<FilterCount[]>([]);
+	const [availableFilters, setAvailableFilters] = useState<SRFilter[]>([]);
 	const [selectedFilter, setSelectedFilter] = useState(filter);
 	//#endregion
 
@@ -187,7 +187,7 @@ export function BestMatchesView(props: ViewProps)
 					{/* Still top but less so*/}
 					<Grid item xs={12}>
 						<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
-							<ChipFilters activeFilter={selectedFilter ?? ""} filters={availableFilters} onFilterClick={onFilterSelected} />
+							<ChipFilters activeFilter={selectedFilter ?? ""} filters={[]} onFilterClick={onFilterSelected} />
 						</Box>
 					</Grid>
 				</Grid>

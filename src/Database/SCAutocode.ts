@@ -3,66 +3,69 @@ import { Appearance } from "../Objects/Model/Appearance";
 import { Player } from "../Objects/Model/Player";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { AutocodeMatch, AutocodeMatchResults } from "./Schemas/AutocodeMatch";
+import { AutocodeMap, AutocodeMedal, AutocodePlaylist, AutocodeTeam, AutocodeVariant } from "./Schemas/AutocodeMetadata";
 import { AutocodeMultiplayerServiceRecord } from "./Schemas/AutocodeMultiplayerServiceRecord";
 import { AutocodePlayerMatchResults } from "./Schemas/AutocodePlayerMatch";
+
+export enum ServiceRecordType
+{
+	all = "ALL",
+	ranked = "RANKED",
+	social = "SOCIAL",
+	local = "LOCAL",
+	custom = "CUSTOM"
+}
 
 export class SCAutocode
 {
 	/** Turns on or off debugging mode */
 	private readonly IS_DEBUGGING = process.env.NODE_ENV !== "production";
 	/** The HaloDotAPI version */
-	private readonly AUTOCODE_VERSION = "1-3-2";
-	/** The HaloDotAPI version */
-	private readonly SEASON = 2;
+	private readonly AUTOCODE_VERSION = "1-3-11";
 
 	constructor() {}
 
 	/**
-	 * Gets the player from autocode if needed
+	 * Gets the player from autocode
 	 * @param player the player
-	 * @param matchCount the match count stored in firebase
 	 * @returns 
 	 */
-	public async GetPlayerIfNeeded(player: Player, matchCount: number): Promise<number>
+	public async GetPlayer(gamertag: string): Promise<Player>
 	{
-		// Check if we need to update the service record
-		if (player.gamertag && player.lastMatchID !== await this.GetLastMatchID(player.gamertag))
-		{
-			let newSR: ServiceRecord;
-			[player.appearance, newSR] = await Promise.all([this.GetAppearance(player.gamertag), this.GetServiceRecord(player.gamertag)]);
-
-			const gameDifference = newSR.matchesPlayed - matchCount;
-			player.serviceRecord = newSR;
-			
-			return gameDifference;
-		}
-
-		return 0;
+		const player = new Player(gamertag);
+		await Promise.all([this.GetAppearance(player), this.GetServiceRecord(player)]);
+		return player;
 	}
 
 	//#region Appearance
 	/**
 	 * Gets the gamertag's appearance from Firebase
-	 * @param gamertag the gamertag to get the appearance of
+	 * @param player the player to set the appearance of
 	 * @returns the appearance
 	 */
-	public async GetAppearance(gamertag: string): Promise<Appearance>
+	public async GetAppearance(player: Player): Promise<void>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCAutocode.GetAppearance()", gamertag); }
-		return new Appearance(await this.__getPlayerAppearanceFromHaloDotAPI(gamertag));
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCAutocode.GetAppearance()", player.gamertag); }
+		player.appearanceData = await this.__getPlayerAppearanceFromHaloDotAPI(player.gamertag);
+		player.appearance = new Appearance(player.appearanceData);
 	}
 	//#endregion
  
 	//#region Service Record
 	/**
-	 * Gets the service record for the gamertag from Firebase
-	 * @param gamertag the gamertag to get the service record of
+	 * Gets the service record for the gamertag from Autocode
+	 * @param player the gamertag to get the service record of
+	 * @param season the season number
+	 * @param playlistId the playlist ID
+	 * @param categoryId the category ID
+	 * @param type the type of service record to get
 	 * @returns the service record for the gamertag
 	 */
-	public async GetServiceRecord(gamertag: string, season: number = this.SEASON): Promise<ServiceRecord>
+	public async GetServiceRecord(player: Player, season?: number, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<void>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCAutocode.GetServiceRecord()", gamertag); }
-		return new ServiceRecord(await this.__getServiceRecordFromHaloDotAPI(gamertag, season));
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCAutocode.GetServiceRecord()", player.gamertag); }
+		player.serviceRecordData = await this.__getServiceRecordFromHaloDotAPI(player.gamertag, season, playlistId, categoryId, type);
+		player.serviceRecord = new ServiceRecord(player.serviceRecordData);
 	}
  
 	/**
@@ -76,6 +79,90 @@ export class SCAutocode
 	}
 	//#endregion
  
+	//#region Filters
+	/**
+	 * Gets the maps
+	 */
+	public async GetMaps(): Promise<AutocodeMap[]>
+	{
+		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/metadata/maps`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				ids: []
+			})
+		});
+
+		return await response.json() as AutocodeMap[];
+	}
+
+	/**
+	 * Gets the maps
+	 */
+	public async GetPlaylists(): Promise<AutocodePlaylist[]>
+	{
+		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/metadata/playlists`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				ids: []
+			})
+		});
+
+		const data = await response.json();
+
+		return data as AutocodePlaylist[];
+	}
+
+	/**
+	 * Gets the game variants
+	 */
+	public async GetVariants(): Promise<AutocodeVariant[]>
+	{
+		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/metadata/variants`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				ids: []
+			})
+		});
+
+		return await response.json() as AutocodeVariant[];
+	}
+
+	/**
+	 * Gets the medals
+	 */
+	public async GetMedals(ids: string[] = []): Promise<AutocodeMedal[]>
+	{
+		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/metadata/medals`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				ids: ids
+			})
+		});
+
+		return await response.json() as AutocodeMedal[];
+	}
+
+	/**
+	 * Gets the teams
+	 */
+	public async GetTeams(): Promise<AutocodeTeam[]>
+	{
+		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/metadata/teams`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				ids: []
+			})
+		});
+
+		return await response.json() as AutocodeTeam[];
+	}
+	//#endregion
+
 	 //#region Last Match
 	/**
 	 * Gets the last stored match ID in firebase
@@ -175,16 +262,26 @@ export class SCAutocode
 	}
 
 	/**
-	 * Gets the service record from HaloDotAPI for a specific gamertag
-	 * @param gamertag the gamertag
-	 * @returns JSON result of the service record for a gamertag
+	 * Gets the service record for the gamertag from Autocode
+	 * @param gamertag the gamertag to get the service record of
+	 * @param season the season number
+	 * @param playlistId the playlist ID
+	 * @param categoryId the category ID
+	 * @param type the type of service record to get
+	 * @returns the service record for the gamertag
 	 */
-	private async __getServiceRecordFromHaloDotAPI(gamertag: string, season: number): Promise<AutocodeMultiplayerServiceRecord>
+	private async __getServiceRecordFromHaloDotAPI(gamertag: string, season?: number, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<AutocodeMultiplayerServiceRecord>
 	{
 		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/service_record`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({gamertag: gamertag, season: season})
+			body: JSON.stringify({
+				gamertag: gamertag, 
+				season: season ?? null,
+				playlistId: playlistId ?? null,
+				categoryId: categoryId ? +categoryId : null,
+				type: type ?? ServiceRecordType.all
+			})
 		});
 
 		return await response.json() as AutocodeMultiplayerServiceRecord;

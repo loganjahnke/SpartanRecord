@@ -176,7 +176,7 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 							case HistoricDataSets.DeathsPerGame: return sr.summary.deaths / sr.matchesPlayed;
 							case HistoricDataSets.AssistsPerGame: return sr.summary.assists / sr.matchesPlayed;
 							case HistoricDataSets.DamagePerGame: return sr.damage.dealt / sr.matchesPlayed;
-							default: return sr.damage.average;
+							default: return sr.kda;
 						}
 					}),
 				}

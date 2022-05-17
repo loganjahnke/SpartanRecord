@@ -701,7 +701,7 @@ export const AllMedals = {
 		name: "Always Rotating",
 		description: "Capture all zones in a single life",
 		type: MedalRarity.Normal,
-		category: MedalType.Strongholds,
+		category: MedalType.Zone,
 		sort: 0,
 		image_urls: {
 			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/always-rotating.png",
@@ -725,7 +725,7 @@ export const AllMedals = {
 		name: "Clock Stop",
 		description: "Stop the enemy from scoring their final points by capturing a zone in Strongholds",
 		type: MedalRarity.Heoric,
-		category: MedalType.Strongholds,
+		category: MedalType.Zone,
 		sort: 1,
 		image_urls: {
 			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/clock-stop.png",
@@ -1799,5 +1799,16 @@ export const AllMedals = {
 		  medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/hill-guardian.png",
 		  large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/hill-guardian.png"
 		}
-	  }
+	  },
+	  1090931685: {
+		name: "Monopoly",
+		description: "Capture all zones in a set of 3+ without dying in Land Grab",
+		type: MedalRarity.Heoric,
+		category: MedalType.Zone,
+		image_urls: {
+		  small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/monopoly.png",
+		  medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/monopoly.png",
+		  large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/monopoly.png"
+		}
+	}
   };

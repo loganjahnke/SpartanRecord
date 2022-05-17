@@ -131,25 +131,31 @@ function Row(props: TeamTableRowProps)
 			<TableRow sx={{ width: "calc(100%-128px)"}}>
 				<TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={showRank && ffa ? 10 : showRank || ffa ? 9 : 8}>
 					<Collapse in={expanded} timeout="auto" unmountOnExit sx={{ width: "auto" }}>
-						<Grid container spacing={1}>
-							<Grid item xs={6} xl={8}>
-								<ShotsBreakdown serviceRecord={player.stats} small />
-								<Box sx={{ m: 1 }}></Box>
-								<DamageBreakdown serviceRecord={player.stats} small />
-								<Box sx={{ m: 1 }}></Box>
-								<ExpectationBreakdown kills={player.killExpectations} deaths={player.deathExpectations} small />						
-							</Grid>
-							<Grid item xs={6} xl={4}>
-								<Box sx={{ borderRadius: 3, padding: 1, display: "flex", alignItems: "flex-start", flexDirection: "column", maxWidth: "auto", backgroundColor: ArrowheadTheme.secondary }}>
-									<Typography variant="h5" sx={{ width: "auto", textAlign: "left", ml: 2, mt: 1, fontSize: "0.95rem !important" }}>Medals</Typography>
-									<Box sx={{ margin: 1 }}>
-										{player.stats.medals.length > 0 
-											? player.stats.medals.sort((a, b) => b.RarityValue() - a.RarityValue()).map(medal => <MedalTile medal={medal} />) 
-											: <Typography variant="body1" sx={{ m: 4 }}>No medals earned.</Typography>}
+						<Box sx={{ p: 1 }}>
+							<Grid container spacing={1}>
+								<Grid item xs={6}>
+									<ShotsBreakdown serviceRecord={player.stats} small />
+									<Box sx={{ m: 1 }}></Box>
+									<DamageBreakdown serviceRecord={player.stats} small />
+									<Box sx={{ m: 1 }}></Box>
+									<ExpectationBreakdown kills={player.killExpectations} deaths={player.deathExpectations} small />						
+								</Grid>
+								<Grid item xs={6}>
+									<Box sx={{ display: "flex", 
+										flexDirection: "column", 
+										justifyContent: "center", 
+										clear: "both", 
+										borderRadius: 3,
+										backgroundColor: ArrowheadTheme.secondary }}>
+										<Box sx={{ margin: 1 }}>
+											{player.stats.medals.length > 0 
+												? player.stats.medals.sort((a, b) => b.RarityValue() - a.RarityValue()).map(medal => <MedalTile medal={medal} />) 
+												: <Typography variant="body1" sx={{ m: 4 }}>No medals earned.</Typography>}
+										</Box>
 									</Box>
-								</Box>
+								</Grid>
 							</Grid>
-						</Grid>
+						</Box>
 					</Collapse>
 				</TableCell>
 			</TableRow>

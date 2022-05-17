@@ -1,5 +1,5 @@
 import { SyntheticEvent, useEffect } from "react";
-import { Box, Button, Divider, Drawer, Tab, Tabs, Toolbar } from "@mui/material";
+import { Box, Button, Divider, Drawer, Link, Tab, Tabs, Toolbar, Typography } from "@mui/material";
 import { ServiceRecordFilter } from "../../../Database/ArrowheadFirebase";
 
 import MapIcon from '@mui/icons-material/Map';
@@ -89,35 +89,44 @@ export function AHDrawer(props: AHDrawerProps)
 	//#region Drawer
 	const drawer = (
 		<Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
-			<Toolbar><Button className="ahTab" onClick={goHome}>SpartanRecord.com</Button></Toolbar>
+			<Toolbar>
+				<Button className="ahTab" onClick={goHome}>SpartanRecord.com</Button>
+			</Toolbar>
 			<Divider flexItem />
 				{gamertag && isAllowed ? 
 				<Tabs orientation="vertical" value={currentTab || "Search"} onChange={tabClicked} sx={{ mt: 5 }}>
 					<Tab className="ahTab" value="Search" label="Search" icon={<PersonSearchIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Service Record" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" />
-					<Tab className="ahTab" value="Maps" label="Maps" icon={<MapIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					{/* <Tab className="ahTab" value="Maps" label="Maps" icon={<MapIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
 					<Tab className="ahTab" value="Playlists" label="Playlists" icon={<ListIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Variants" label="Variants" icon={<GamesIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab className="ahTab" value="Match Outcome" label="Match Outcome" icon={<EmojiEventsIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					{/* <Tab className="ahTab" value="Match Outcome" label="Match Outcome" icon={<EmojiEventsIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
 					<Tab className="ahTab" value="Medals" label="Medals" icon={<MilitaryTechIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Matches" label="Matches" icon={<SportsEsportsIcon />} iconPosition="start" />
-					<Tab className="ahTab" value="Best" label="Best Matches" icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab className="ahTab" value="Company" label="Arrowhead Company" icon={<GroupsIcon />} iconPosition="start" />
+					{/* <Tab className="ahTab" value="Best" label="Best Matches" icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
+					{/* <Tab className="ahTab" value="Company" label="Spartan Company" icon={<GroupsIcon />} iconPosition="start" /> */}
 				</Tabs>
 				: gamertag ?
 				<Tabs orientation="vertical" value={currentTab || "Search"} onChange={tabClicked} sx={{ mt: 5 }}>
 					<Tab className="ahTab" value="Search" label="Search" icon={<PersonSearchIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Service Record" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" />
+					<Tab className="ahTab" value="Playlists" label="Playlists" icon={<ListIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Variants" label="Variants" icon={<GamesIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Medals" label="Medals" icon={<MilitaryTechIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Matches" label="Matches" icon={<SportsEsportsIcon />} iconPosition="start" />
-					<Tab className="ahTab" value="Company" label="Arrowhead Company" icon={<GroupsIcon />} iconPosition="start" />
+					{/* <Tab className="ahTab" value="Company" label="Spartan Company" icon={<GroupsIcon />} iconPosition="start" /> */}
 				</Tabs>
 				:
 				<Tabs orientation="vertical" value={currentTab || "Search"} onChange={tabClicked} sx={{ mt: 5 }}>
 					<Tab className="ahTab" value="Search" label="Search" icon={<PersonSearchIcon />} iconPosition="start" />
-					<Tab className="ahTab" value="Company" label="Arrowhead Company" icon={<GroupsIcon />} iconPosition="start" />
+					{/* <Tab className="ahTab" value="Company" label="Spartan Company" icon={<GroupsIcon />} iconPosition="start" /> */}
 				</Tabs>
 				}
+			<Divider flexItem sx={{ flexGrow: 1 }} />
+			<Box sx={{ display: "flex", flexDirection: "column", p: 1 }}>
+				<Typography variant="subtitle1">Powered by <Link href="https://twitter.com/halodotapi">HaloDotAPI</Link></Typography>
+				<Typography variant="subtitle1">Made by <Link href="https://twitter.com/Logan_Jahnke">Logan Jahnke</Link></Typography>
+			</Box>
 		</Box>
 	);
 	//#endregion

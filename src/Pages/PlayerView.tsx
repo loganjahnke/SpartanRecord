@@ -52,12 +52,14 @@ export function PlayerView(props: ViewProps)
 			setLoadingMessage("Loading " + gamertag);
 			Cookie.addRecent(gamertag);
 			
-			// Get the player from firebase
-			const player = await app.GetPlayerFromFirebase(gamertag, true);
+			// Get the player from firebase and show on screen
+			const player = await app.GetPlayerFromFirebase(gamertag, false);
 
-			// Set player to show latest data in firebase
+			// Set player
 			setMyPlayer(player);
-			setHistoricStats(player.historicStats ?? []);
+			//setHistoricStats(player.historicStats ?? []);
+
+			// Set loading message to nada, start background load
 			setLoadingMessage("");
 			setBackgroundLoadingProgress(-1);
 
@@ -67,22 +69,37 @@ export function PlayerView(props: ViewProps)
 				app.AddToSyncing(gamertag);
 
 				// Sync into firebase
-				app.SyncPlayer(gamertag).then(async (result) =>
+				app.GetPlayerFromAutocode(gamertag).then(async (result) =>
 				{
 					if (result)
 					{
-						setMyPlayer(await app.GetPlayerFromFirebase(gamertag));
+						setMyPlayer(result);
+						await app.SetPlayerIntoFirebase(result);
 					}					
 				}).finally(() => 
 				{
 					app.RemoveFromSyncing(gamertag);
 					setBackgroundLoadingProgress(undefined);
 				});
+
+				// app.SyncPlayer(gamertag).then(async (result) =>
+				// {
+				// 	if (result)
+				// 	{
+				// 		const player = await app.GetPlayerFromFirebase(gamertag, true);
+				// 		setMyPlayer(player);
+				// 		setHistoricStats(player.historicStats ?? []);
+				// 	}					
+				// }).finally(() => 
+				// {
+				// 	app.RemoveFromSyncing(gamertag);
+				// 	setBackgroundLoadingProgress(undefined);
+				// });
 			}
 			else { setBackgroundLoadingProgress(undefined); }
 			
 		}
-	}, [lastUpdate, app, gamertag, setMyPlayer, historicStats, setBackgroundLoadingProgress, setHistoricStats]);
+	}, [lastUpdate, app, gamertag, setMyPlayer, setBackgroundLoadingProgress]);
 	
 	useEffect(() =>
 	{
@@ -148,9 +165,6 @@ export function PlayerView(props: ViewProps)
 							<Grid item xs={12}>
 								<ShotsBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
-							<Grid item xs={12}>
-								<AssistBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
-							</Grid>
 						</Grid>
 						{/* Middle 6 */}
 						<Grid container item spacing={2} sm={12} md={6} lg={6} xl={3} sx={{ alignContent: "flex-start" }}>
@@ -159,9 +173,6 @@ export function PlayerView(props: ViewProps)
 							</Grid>
 							<Grid item xs={12}>
 								<LevelBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
-							</Grid>
-							<Grid item xs={12}>
-								<DamageBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
 								<VehicleBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
@@ -173,8 +184,14 @@ export function PlayerView(props: ViewProps)
 								<TopMedals medals={myPlayer.serviceRecord.medals} matchesPlayed={myPlayer.serviceRecord.matchesPlayed} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
-								<ServiceRecordChart historicServiceRecords={historicStats} currentSR={myPlayer.serviceRecord} />
+								<AssistBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
+							<Grid item xs={12}>
+								<DamageBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+							</Grid>
+							{/* <Grid item xs={12}>
+								<ServiceRecordChart historicServiceRecords={historicStats} currentSR={myPlayer.serviceRecord} />
+							</Grid> */}
 							{/* <Grid item xs={12}>
 								<CampaignBreakdown campaignRecord={myPlayer.campaignRecord} />
 							</Grid> */}

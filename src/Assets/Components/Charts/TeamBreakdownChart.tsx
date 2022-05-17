@@ -100,7 +100,7 @@ export const TeamBreakdownChart = (props: { players: MatchPlayer[], blue?: boole
 				},
 				title: {
 					display: false,
-					text: "Points"
+					text: "Kills"
 				},
 			}
 		}
@@ -112,7 +112,7 @@ export const TeamBreakdownChart = (props: { players: MatchPlayer[], blue?: boole
 			{
 				backgroundColor: Object.values(CHART_COLORS),
 				borderColor: ArrowheadTheme.box,
-				data: players.map(player => player.stats.totalPoints)
+				data: players.map(player => player.stats.summary.kills)
 			}
 		]
 	};

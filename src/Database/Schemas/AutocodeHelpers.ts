@@ -1,5 +1,5 @@
 import { AutocodeMatch, AutocodeOutcome, AutocodeMatchPlayer, AutocodeMatchTeamDetails, AutocodeSRSummary, AutocodeSRDamage, AutocodeSRAccuracy, AutocodeSRRounds, AutocodeSRScore, AutocodeSRBreakdowns } from "./AutocodeMatch";
-import { AutocodeMultiplayerKey, AutocodeMultiplayerServiceRecord } from "./AutocodeMultiplayerServiceRecord";
+import { AutocodeServiceRecordData, AutocodeMultiplayerServiceRecord } from "./AutocodeMultiplayerServiceRecord";
 import { FirebaseHistoricServiceRecord } from "./FirebaseHistoricServiceRecord";
 
 export class AutocodeHelpers
@@ -24,244 +24,149 @@ export class AutocodeHelpers
 	{
 		return {
 			data: {
-				records: {
-					pvp: {
-						core: {
-							summary: {
-								kills: 0,
-								deaths: 0,
-								assists: 0,
-								betrayals: 0,
-								suicides: 0,
-								vehicles: {
-									destroys: 0,
-									hijacks: 0,
-								},
-								medals: 0,
-							},
-							damage: {
-								taken: 0,
-								dealt: 0,
-								average: 0,
-							},
-							shots: {
-								fired: 0,
-								landed: 0,
-								missed: 0,
-								accuracy: 0,
-							},
-							rounds: {
-								won: 0,
-								lost: 0,
-								tied: 0,
-							},
-							breakdowns: {
-								kills: {
-									melee: 0,
-									grenades: 0,
-									headshots: 0,
-									power_weapons: 0,
-									assassinations: 0,
-									vehicles: {
-										splatters: 0,
-									},
-									miscellaneous: {
-										repulsor: 0,
-										fusion_coils: 0,
-									},
-								},
-								assists: {
-									emp: 0,
-									driver: 0,
-									callouts: 0,
-								},
-								vehicles: {
-									destroys: [],
-									hijacks: [],
-								},
-								medals: [],
-							},
-							kda: 0,
-							kdr: 0,
-							scores: {
-								personal: 0,
-								points: 0,
-							},
+				core: {
+					summary: {
+						kills: 0,
+						deaths: 0,
+						assists: 0,
+						betrayals: 0,
+						suicides: 0,
+						vehicles: {
+							destroys: 0,
+							hijacks: 0,
 						},
-						matches: {
-							outcomes: {
-								wins: 0,
-								draws: 0,
-								losses: 0,
-								left: 0,
-							},
-							total: 0,
-							win_rate: 0,
-						},
-						time_played: {
-							seconds: 0,
-							human: "",
-						},
+						medals: 0,
 					},
-					social: {
-						core: {
-							summary: {
-								kills: 0,
-								deaths: 0,
-								assists: 0,
-								betrayals: 0,
-								suicides: 0,
-								vehicles: {
-									destroys: 0,
-									hijacks: 0,
-								},
-								medals: 0,
-							},
-							damage: {
-								taken: 0,
-								dealt: 0,
-								average: 0,
-							},
-							shots: {
-								fired: 0,
-								landed: 0,
-								missed: 0,
-								accuracy: 0,
-							},
-							rounds: {
-								won: 0,
-								lost: 0,
-								tied: 0,
-							},
-							breakdowns: {
-								kills: {
-									melee: 0,
-									grenades: 0,
-									headshots: 0,
-									power_weapons: 0,
-									assassinations: 0,
-									vehicles: {
-										splatters: 0,
-									},
-									miscellaneous: {
-										repulsor: 0,
-										fusion_coils: 0,
-									},
-								},
-								assists: {
-									emp: 0,
-									driver: 0,
-									callouts: 0,
-								},
-								vehicles: {
-									destroys: [],
-									hijacks: [],
-								},
-								medals: [],
-							},
-							kda: 0,
-							kdr: 0,
-							scores: {
-								personal: 0,
-								points: 0,
-							},
-						},
-						matches: {
-							outcomes: {
-								wins: 0,
-								draws: 0,
-								losses: 0,
-								left: 0,
-							},
-							total: 0,
-							win_rate: 0,
-						},
-						time_played: {
-							seconds: 0,
-							human: "",
-						},
+					damage: {
+						taken: 0,
+						dealt: 0,
+						average: 0,
 					},
-					ranked: {
-						core: {
-							summary: {
-								kills: 0,
-								deaths: 0,
-								assists: 0,
-								betrayals: 0,
-								suicides: 0,
-								vehicles: {
-									destroys: 0,
-									hijacks: 0,
-								},
-								medals: 0,
+					shots: {
+						fired: 0,
+						landed: 0,
+						missed: 0,
+						accuracy: 0,
+					},
+					rounds: {
+						won: 0,
+						lost: 0,
+						tied: 0,
+					},
+					breakdowns: {
+						kills: {
+							melee: 0,
+							grenades: 0,
+							headshots: 0,
+							power_weapons: 0,
+							assassinations: 0,
+							vehicles: {
+								splatters: 0,
 							},
-							damage: {
-								taken: 0,
-								dealt: 0,
-								average: 0,
-							},
-							shots: {
-								fired: 0,
-								landed: 0,
-								missed: 0,
-								accuracy: 0,
-							},
-							rounds: {
-								won: 0,
-								lost: 0,
-								tied: 0,
-							},
-							breakdowns: {
-								kills: {
-									melee: 0,
-									grenades: 0,
-									headshots: 0,
-									power_weapons: 0,
-									assassinations: 0,
-									vehicles: {
-										splatters: 0,
-									},
-									miscellaneous: {
-										repulsor: 0,
-										fusion_coils: 0,
-									},
-								},
-								assists: {
-									emp: 0,
-									driver: 0,
-									callouts: 0,
-								},
-								vehicles: {
-									destroys: [],
-									hijacks: [],
-								},
-								medals: [],
-							},
-							kda: 0,
-							kdr: 0,
-							scores: {
-								personal: 0,
-								points: 0,
+							miscellaneous: {
+								repulsor: 0,
+								fusion_coils: 0,
 							},
 						},
-						matches: {
-							outcomes: {
-								wins: 0,
-								draws: 0,
-								losses: 0,
-								left: 0,
-							},
-							total: 0,
-							win_rate: 0,
+						assists: {
+							emp: 0,
+							driver: 0,
+							callouts: 0,
 						},
-						time_played: {
-							seconds: 0,
-							human: "",
+						vehicles: {
+							destroys: [],
+							hijacks: [],
 						},
+						medals: [],
+					},
+					kda: 0,
+					kdr: 0,
+					scores: {
+						personal: 0,
+						points: 0,
 					},
 				},
-				privacy: {
-					public: true,
+				matches: {
+					outcomes: {
+						wins: 0,
+						draws: 0,
+						losses: 0,
+						left: 0,
+					},
+					total: 0,
+					win_rate: 0,
+				},
+				modes: {
+					capture_the_flag: {
+						flag_capture_assists: 0,
+						flag_captures: 0,
+						flag_carriers_killed: 0,
+						flag_grabs: 0,
+						flag_returners_killed: 0,
+						flag_returns: 0,
+						flag_secures: 0,
+						flag_steals: 0,
+						kills_as_flag_carrier: 0,
+						kills_as_flag_returner: 0,
+						time_as_flag_carrier: {
+							seconds: 0,
+							human: ""
+						}
+					},
+					elimination: {
+						allies_revived: 0,
+						elimination_assists: 0,
+						eliminations: 0,
+						enemy_revives_denied: 0,
+						executions: 0,
+						kills_as_last_player_standing: 0,
+						last_players_standing_killed: 0,
+						rounds_survived: 0,
+						times_revived_by_ally: 0,
+					},
+					oddball: {
+						kills_as_skull_carrier: 0,
+						longest_time_as_skull_carrier: {
+							seconds: 0,
+							human: "",
+						},
+						skull_carriers_killed: 0,
+						skull_grabs: 0,
+						skull_scoring_ticks: 0,
+						time_as_skull_carrier: {
+							seconds: 0,
+							human: "",
+						}
+					},
+					zones: {
+						total_zone_occupation_time: {
+							seconds: 0,
+							human: "",
+						},
+						zone_captures: 0,
+						zone_defensive_kills: 0,
+						zone_offensive_kills: 0,
+						zone_scoring_ticks: 0,
+						zone_secures: 0,
+					},
+					stockpile: {
+						kills_as_power_seed_carrier: 0,
+						power_seed_carriers_killed: 0,
+						power_seeds_deposited: 0,
+						power_seeds_stolen: 0,
+						time_as_power_seed_carrier: {
+							seconds: 0,
+							human: "",
+						},
+						time_as_power_seed_driver: {
+							seconds: 0,
+							human: "",
+						},
+					}
+				},
+				time_played: {
+					seconds: 0,
+					human: "",
 				},
 			},
 			additional: {
@@ -274,87 +179,6 @@ export class AutocodeHelpers
 				}
 			}
 		}
-	}
-
-	/**
-	 * Trims the historic service record
-	 * @param historicSR the historic service record
-	 * @returns the trimmed service record
-	 */
-	public static TrimHistoricServiceRecord(historicSR: AutocodeMultiplayerServiceRecord): FirebaseHistoricServiceRecord
-	{
-		return { 
-			core: {
-				summary: {
-					kills: historicSR.data.records.pvp.core.summary.kills,
-					deaths: historicSR.data.records.pvp.core.summary.deaths,
-					assists: historicSR.data.records.pvp.core.summary.assists,
-					betrayals: historicSR.data.records.pvp.core.summary.betrayals,
-					suicides: historicSR.data.records.pvp.core.summary.suicides,
-					vehicles: {
-						destroys: historicSR.data.records.pvp.core.summary.vehicles.destroys,
-						hijacks: historicSR.data.records.pvp.core.summary.vehicles.hijacks,
-					},
-					medals: historicSR.data.records.pvp.core.summary.medals,
-				},
-				damage: {
-					taken: historicSR.data.records.pvp.core.damage.taken,
-					dealt: historicSR.data.records.pvp.core.damage.dealt,
-					average: historicSR.data.records.pvp.core.damage.average,
-				},
-				shots: {
-					fired: historicSR.data.records.pvp.core.shots.fired,
-					landed: historicSR.data.records.pvp.core.shots.landed,
-					missed: historicSR.data.records.pvp.core.shots.missed,
-					accuracy: historicSR.data.records.pvp.core.shots.accuracy,
-				},
-				rounds: {
-					won: historicSR.data.records.pvp.core.rounds.won,
-					lost: historicSR.data.records.pvp.core.rounds.lost,
-					tied: historicSR.data.records.pvp.core.rounds.tied,
-				},
-				breakdowns: {
-					kills: {
-						melee: historicSR.data.records.pvp.core.breakdowns.kills.melee,
-						grenades: historicSR.data.records.pvp.core.breakdowns.kills.grenades,
-						headshots: historicSR.data.records.pvp.core.breakdowns.kills.headshots,
-						power_weapons: historicSR.data.records.pvp.core.breakdowns.kills.power_weapons,
-						assassinations: historicSR.data.records.pvp.core.breakdowns.kills.assassinations,
-						vehicles: {
-							splatters: historicSR.data.records.pvp.core.breakdowns.kills.vehicles.splatters,
-						},
-						miscellaneous: {
-							repulsor: historicSR.data.records.pvp.core.breakdowns.kills.miscellaneous.repulsor,
-							fusion_coils: historicSR.data.records.pvp.core.breakdowns.kills.miscellaneous.fusion_coils,
-						},
-					},
-					assists: {
-						emp: historicSR.data.records.pvp.core.breakdowns.assists.emp,
-						driver: historicSR.data.records.pvp.core.breakdowns.assists.driver,
-						callouts: historicSR.data.records.pvp.core.breakdowns.assists.callouts,
-					}
-				},
-				kda: historicSR.data.records.pvp.core.kda,
-				kdr: historicSR.data.records.pvp.core.kdr,
-				scores: {
-					personal: historicSR.data.records.pvp.core.scores.personal,
-					points: historicSR.data.records.pvp.core.scores.points,
-				},
-			},
-			matches: {
-				outcomes: {
-					wins: historicSR.data.records.pvp.matches.outcomes.wins,
-					draws: historicSR.data.records.pvp.matches.outcomes.draws,
-					losses: historicSR.data.records.pvp.matches.outcomes.losses,
-					left: historicSR.data.records.pvp.matches.outcomes.left,
-				},
-				total: historicSR.data.records.pvp.matches.total,
-				win_rate: historicSR.data.records.pvp.matches.win_rate,
-			},
-			time_played: {
-				seconds: historicSR.data.records.pvp.time_played.seconds
-			},
-		};
 	}
 
 	/**
@@ -400,21 +224,21 @@ export class AutocodeHelpers
 		if (!serviceRecord.data) { return; }
 
 		// Parse out
-		const pvp = serviceRecord.data.records.pvp;
+		const data = serviceRecord.data;
 
-		// PVP
-		pvp.time_played.seconds += secondsPlayed;
-		this.AddOutcome(pvp, team.outcome);
-		this.AddSummary(pvp, team.stats.core.summary);
-		this.AddDamage(pvp, team.stats.core.damage);
-		this.AddScore(pvp, team.stats.core.scores);
-		this.AddShots(pvp, team.stats.core.shots);
-		this.AddBreakdown(pvp, team.stats.core.breakdowns);
-		this.AddRounds(pvp, team.stats.core.rounds);
-		this.UpdateCalculatedProperties(pvp);
+		// Add
+		data.time_played.seconds += secondsPlayed;
+		this.AddOutcome(data, team.outcome);
+		this.AddSummary(data, team.stats.core.summary);
+		this.AddDamage(data, team.stats.core.damage);
+		this.AddScore(data, team.stats.core.scores);
+		this.AddShots(data, team.stats.core.shots);
+		this.AddBreakdown(data, team.stats.core.breakdowns);
+		this.AddRounds(data, team.stats.core.rounds);
+		this.UpdateCalculatedProperties(data);
 		
 		// Put them back (I don't actually think I need to do this)
-		serviceRecord.data.records.pvp = pvp;
+		serviceRecord.data = data;
 	}
 
 	/**
@@ -422,7 +246,7 @@ export class AutocodeHelpers
 	 * @param key the multiplayer service record key
 	 * @param outcome the outcome
 	 */
-	private static AddOutcome(key: AutocodeMultiplayerKey, outcome: AutocodeOutcome): void
+	private static AddOutcome(key: AutocodeServiceRecordData, outcome: AutocodeOutcome): void
 	{
 		key.matches.outcomes.wins += outcome === "won" || outcome === "win" ? 1 : 0;
 		key.matches.outcomes.losses += outcome === "loss" ? 1 : 0;
@@ -436,7 +260,7 @@ export class AutocodeHelpers
 	 * @param key the multiplayer service record key
 	 * @param summary the summary statistics
 	 */
-	private static AddSummary(key: AutocodeMultiplayerKey, summary: AutocodeSRSummary): void
+	private static AddSummary(key: AutocodeServiceRecordData, summary: AutocodeSRSummary): void
 	{
 		key.core.summary.assists += summary.assists;
 		key.core.summary.betrayals += summary.betrayals;
@@ -453,7 +277,7 @@ export class AutocodeHelpers
 	 * @param key the multiplayer service record key
 	 * @param damage the damage
 	 */
-	private static AddDamage(key: AutocodeMultiplayerKey, damage: AutocodeSRDamage): void
+	private static AddDamage(key: AutocodeServiceRecordData, damage: AutocodeSRDamage): void
 	{
 		key.core.damage.dealt += damage.dealt;
 		key.core.damage.taken += damage.taken;
@@ -464,7 +288,7 @@ export class AutocodeHelpers
 	 * @param key the multiplayer service record key
 	 * @param player the player details
 	 */
-	private static AddShots(key: AutocodeMultiplayerKey, shots: AutocodeSRAccuracy): void
+	private static AddShots(key: AutocodeServiceRecordData, shots: AutocodeSRAccuracy): void
 	{
 		key.core.shots.fired += shots.fired;
 		key.core.shots.missed += shots.missed;
@@ -476,7 +300,7 @@ export class AutocodeHelpers
 	 * @param key the multiplayer service record key
 	 * @param player the player details
 	 */
-	private static AddRounds(key: AutocodeMultiplayerKey, rounds: AutocodeSRRounds): void
+	private static AddRounds(key: AutocodeServiceRecordData, rounds: AutocodeSRRounds): void
 	{
 		key.core.rounds.won += rounds.won;
 		key.core.rounds.lost += rounds.lost;
@@ -488,7 +312,7 @@ export class AutocodeHelpers
 	 * @param key the multiplayer service record key
 	 * @param player the player details
 	 */
-	private static AddScore(key: AutocodeMultiplayerKey, scores: AutocodeSRScore): void
+	private static AddScore(key: AutocodeServiceRecordData, scores: AutocodeSRScore): void
 	{
 		key.core.scores.personal += scores.personal;
 		key.core.scores.points += scores.points;
@@ -499,7 +323,7 @@ export class AutocodeHelpers
 	 * @param key the multiplayer service record key
 	 * @param player the player details
 	 */
-	private static AddBreakdown(key: AutocodeMultiplayerKey, breakdowns: AutocodeSRBreakdowns): void
+	private static AddBreakdown(key: AutocodeServiceRecordData, breakdowns: AutocodeSRBreakdowns): void
 	{
 		key.core.breakdowns.assists.callouts += breakdowns.assists.callouts;
 		key.core.breakdowns.assists.driver += breakdowns.assists.driver;
@@ -610,51 +434,28 @@ export class AutocodeHelpers
 		if (!serviceRecord.data) { return; }
 
 		// Parse out
-		const pvp = serviceRecord.data.records.pvp;
-		let social = serviceRecord.data.records.social;
-		let ranked = serviceRecord.data.records.ranked;
-		const key = isRanked ? ranked : social;
+		const data = serviceRecord.data;
 
-		// PVP
-		pvp.time_played.seconds += secondsPlayed;
-		this.AddOutcome(pvp, playerDetails.outcome);
-		this.AddSummary(pvp, playerDetails.stats.core.summary);
-		this.AddDamage(pvp, playerDetails.stats.core.damage);
-		this.AddScore(pvp, playerDetails.stats.core.scores);
-		this.AddShots(pvp, playerDetails.stats.core.shots);
-		this.AddBreakdown(pvp, playerDetails.stats.core.breakdowns);
-		this.AddRounds(pvp, playerDetails.stats.core.rounds);
-		this.UpdateCalculatedProperties(pvp);
+		// Add
+		data.time_played.seconds += secondsPlayed;
+		this.AddOutcome(data, playerDetails.outcome);
+		this.AddSummary(data, playerDetails.stats.core.summary);
+		this.AddDamage(data, playerDetails.stats.core.damage);
+		this.AddScore(data, playerDetails.stats.core.scores);
+		this.AddShots(data, playerDetails.stats.core.shots);
+		this.AddBreakdown(data, playerDetails.stats.core.breakdowns);
+		this.AddRounds(data, playerDetails.stats.core.rounds);
+		this.UpdateCalculatedProperties(data);
 		
 		// Put them back (I don't actually think I need to do this)
-		serviceRecord.data.records.pvp = pvp;
-
-		// Social/Ranked
-		if (key)
-		{
-			key.time_played.seconds += secondsPlayed;
-			this.AddOutcome(key, playerDetails.outcome);
-			this.AddSummary(key, playerDetails.stats.core.summary);
-			this.AddDamage(key, playerDetails.stats.core.damage);
-			this.AddScore(key, playerDetails.stats.core.scores);
-			this.AddShots(key, playerDetails.stats.core.shots);
-			this.AddBreakdown(key, playerDetails.stats.core.breakdowns);
-			this.AddRounds(key, playerDetails.stats.core.rounds);
-			this.UpdateCalculatedProperties(key);
-			
-			// Put them back (I don't actually think I need to do this)
-			if (isRanked) { ranked = key; }
-			else { social = key; }
-			serviceRecord.data.records.social = social;
-			serviceRecord.data.records.ranked = ranked;
-		}
+		serviceRecord.data = data;
 	}
 
 	/**
 	 * Calculates KDA, KDR, accuracy, and win rate
 	 * @param key the service record to update
 	 */
-	private static UpdateCalculatedProperties(key: AutocodeMultiplayerKey): void
+	private static UpdateCalculatedProperties(key: AutocodeServiceRecordData): void
 	{
 		const kills = key.core?.summary?.kills ?? 0;
 		const assists = key.core?.summary?.assists ?? 0;
@@ -700,44 +501,21 @@ export class AutocodeHelpers
 		if (!serviceRecord.data) { return; }
 
 		// Parse out
-		const pvp = serviceRecord.data.records.pvp;
-		let social = serviceRecord.data.records.social;
-		let ranked = serviceRecord.data.records.ranked;
-		const key = isRanked ? ranked : social;
+		const data = serviceRecord.data;
 
 		// PVP
-		pvp.time_played.seconds -= secondsPlayed;
-		this.SubtractOutcome(pvp, playerDetails.outcome);
-		this.SubtractSummary(pvp, playerDetails);
-		this.SubtractDamage(pvp, playerDetails);
-		this.SubtractScore(pvp, playerDetails);
-		this.SubtractShots(pvp, playerDetails);
-		this.SubtractBreakdown(pvp, playerDetails);
-		this.SubtractRounds(pvp, playerDetails);
-		this.UpdateCalculatedProperties(pvp);
+		data.time_played.seconds -= secondsPlayed;
+		this.SubtractOutcome(data, playerDetails.outcome);
+		this.SubtractSummary(data, playerDetails);
+		this.SubtractDamage(data, playerDetails);
+		this.SubtractScore(data, playerDetails);
+		this.SubtractShots(data, playerDetails);
+		this.SubtractBreakdown(data, playerDetails);
+		this.SubtractRounds(data, playerDetails);
+		this.UpdateCalculatedProperties(data);
 		
 		// Put them back (I don't actually think I need to do this)
-		serviceRecord.data.records.pvp = pvp;
-
-		// Social/Ranked
-		if (key)
-		{
-			key.time_played.seconds -= secondsPlayed;
-			this.SubtractOutcome(key, playerDetails.outcome);
-			this.SubtractSummary(key, playerDetails);
-			this.SubtractDamage(key, playerDetails);
-			this.SubtractScore(key, playerDetails);
-			this.SubtractShots(key, playerDetails);
-			this.SubtractBreakdown(key, playerDetails);
-			this.SubtractRounds(key, playerDetails);
-			this.UpdateCalculatedProperties(key);
-			
-			// Put them back (I don't actually think I need to do this)
-			if (isRanked) { ranked = key; }
-			else { social = key; }
-			serviceRecord.data.records.social = social;
-			serviceRecord.data.records.ranked = ranked;
-		}
+		serviceRecord.data = data;
 	}
  
 	 /**
@@ -745,7 +523,7 @@ export class AutocodeHelpers
 	  * @param key the multiplayer service record key
 	  * @param outcome the outcome
 	  */
-	private static SubtractOutcome(key: AutocodeMultiplayerKey, outcome: AutocodeOutcome): void
+	private static SubtractOutcome(key: AutocodeServiceRecordData, outcome: AutocodeOutcome): void
 	{
 		key.matches.outcomes.wins -= outcome === "won" || outcome === "win" ? 1 : 0;
 		key.matches.outcomes.losses -= outcome === "loss" ? 1 : 0;
@@ -759,7 +537,7 @@ export class AutocodeHelpers
 	  * @param key the multiplayer service record key
 	  * @param player the player details
 	  */
-	private static SubtractSummary(key: AutocodeMultiplayerKey, player: AutocodeMatchPlayer): void
+	private static SubtractSummary(key: AutocodeServiceRecordData, player: AutocodeMatchPlayer): void
 	{
 		key.core.summary.assists -= player.stats.core.summary.assists;
 		key.core.summary.betrayals -= player.stats.core.summary.betrayals;
@@ -776,7 +554,7 @@ export class AutocodeHelpers
 	  * @param key the multiplayer service record key
 	  * @param player the player details
 	  */
-	private static SubtractDamage(key: AutocodeMultiplayerKey, player: AutocodeMatchPlayer): void
+	private static SubtractDamage(key: AutocodeServiceRecordData, player: AutocodeMatchPlayer): void
 	{
 		key.core.damage.dealt -= player.stats.core.damage.dealt;
 		key.core.damage.taken -= player.stats.core.damage.taken;
@@ -787,7 +565,7 @@ export class AutocodeHelpers
 	  * @param key the multiplayer service record key
 	  * @param player the player details
 	  */
-	private static SubtractShots(key: AutocodeMultiplayerKey, player: AutocodeMatchPlayer): void
+	private static SubtractShots(key: AutocodeServiceRecordData, player: AutocodeMatchPlayer): void
 	{
 		key.core.shots.fired -= player.stats.core.shots.fired;
 		key.core.shots.missed -= player.stats.core.shots.missed;
@@ -799,7 +577,7 @@ export class AutocodeHelpers
 	  * @param key the multiplayer service record key
 	  * @param player the player details
 	  */
-	private static SubtractRounds(key: AutocodeMultiplayerKey, player: AutocodeMatchPlayer): void
+	private static SubtractRounds(key: AutocodeServiceRecordData, player: AutocodeMatchPlayer): void
 	{
 		key.core.rounds.won -= player.stats.core.rounds.won;
 		key.core.rounds.lost -= player.stats.core.rounds.lost;
@@ -811,7 +589,7 @@ export class AutocodeHelpers
 	  * @param key the multiplayer service record key
 	  * @param player the player details
 	  */
-	private static SubtractScore(key: AutocodeMultiplayerKey, player: AutocodeMatchPlayer): void
+	private static SubtractScore(key: AutocodeServiceRecordData, player: AutocodeMatchPlayer): void
 	{
 		key.core.scores.personal -= player.stats.core.scores.personal;
 		key.core.scores.points -= player.stats.core.scores.points;
@@ -822,7 +600,7 @@ export class AutocodeHelpers
 	  * @param key the multiplayer service record key
 	  * @param player the player details
 	  */
-	private static SubtractBreakdown(key: AutocodeMultiplayerKey, player: AutocodeMatchPlayer): void
+	private static SubtractBreakdown(key: AutocodeServiceRecordData, player: AutocodeMatchPlayer): void
 	{
 		key.core.breakdowns.assists.callouts -= player.stats.core.breakdowns.assists.callouts;
 		key.core.breakdowns.assists.driver -= player.stats.core.breakdowns.assists.driver;

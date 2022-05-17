@@ -6,7 +6,17 @@ import { AutocodePlayerMatchResults } from "./Schemas/AutocodePlayerMatch";
 import fetch from "node-fetch";
 
 /** The HaloDotAPI version */
-const AUTOCODE_VERSION = "1-3-2";
+const AUTOCODE_VERSION = "1-3-11";
+
+/** The types of service records */
+export enum ServiceRecordType
+{
+	all = "ALL",
+	ranked = "RANKED",
+	social = "SOCIAL",
+	local = "LOCAL",
+	custom = "CUSTOM"
+}
 
 //#region Appearance
 /**
@@ -28,17 +38,26 @@ export const GetAppearance = async (gamertag: string): Promise<AutocodeAppearanc
 
 //#region Service Record
 /**
- * Gets the service record for the gamertag from Firebase
+ * Gets the service record for the gamertag from Autocode
  * @param gamertag the gamertag to get the service record of
  * @param season the season number
+ * @param playlistId the playlist ID
+ * @param categoryId the category ID
+ * @param type the type of service record to get
  * @returns the service record for the gamertag
  */
-export const GetServiceRecord = async (gamertag: string, season: number): Promise<AutocodeMultiplayerServiceRecord> =>
+export const GetServiceRecord = async (gamertag: string, season?: number, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<AutocodeMultiplayerServiceRecord> =>
 {
 	const response = await fetch(`https://${AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/service_record`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({gamertag: gamertag, season: season})
+		body: JSON.stringify({
+			gamertag: gamertag, 
+			season: season ?? null,
+			playlistId: playlistId ?? null,
+			categoryId: categoryId ? +categoryId : null,
+			type: type ?? ServiceRecordType.all
+		})
 	});
 
 	return await response.json() as AutocodeMultiplayerServiceRecord;

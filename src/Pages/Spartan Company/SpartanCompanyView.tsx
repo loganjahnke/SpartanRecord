@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Grid, Toolbar } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Grid, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -16,6 +16,10 @@ import { CompanyCard } from "../../Assets/Components/Cards/CompanyCard";
 
 import { DamageBreakdown } from "../../Assets/Components/Breakdowns/DamageBreakdown";
 import { ShotsBreakdown } from "../../Assets/Components/Breakdowns/ShotsBreakdown";
+import { Cookie } from "../../Objects/Helpers/Cookie";
+import { AddGamertag } from "./AddGamertag";
+import { ArrowheadTheme } from "../../Assets/Theme/ArrowheadTheme";
+import { SCMembersAdmin } from "../../Assets/Components/Members/SCMembersAdmin";
 
 export function SpartanCompanyView(props: ViewProps)
 {
@@ -25,21 +29,28 @@ export function SpartanCompanyView(props: ViewProps)
 	//#endregion
 	
 	//#region State
-	const [spartanCompany, setSpartanCompany] = useState(new SpartanCompany("Arrowhead"));
+	const [spartanCompany, setSpartanCompany] = useState(new SpartanCompany("Spartan"));
 	const [sharedSR, setSharedSR] = useState(new ServiceRecord());
-	const [isMember, setIsMember] = useState(false);
-	const [isOwner, setIsOwner] = useState(false);
+	const [gamertagToAdd, setGamertagToAdd] = useState("");
+	const [addGamertagDialog, setAddGamertagDialog] = useState("");
+	const [removeGamertagDialog, setRemoveGamertagDialog] = useState("");
 	//#endregion
 
     const loadData = useCallback(async () => 
     {
+		const members = Cookie.getCompany();
+		if (!members || members.length === 0)
+		{
+			return;
+		}
+
 		let sc = spartanCompany;
 		
 		// Check if we need to check Firebase or HaloDotAPI
 		setLoadingMessage("Loading Service Records");
 		
 		// Get service records for all users
-		for (const gamertag of ["BoundlessEcho", "Homestarr", "Jahnkers TTV", "G 2da Rant", "SilentHawk07", "CheezyBadger", "CrankyStankyLeg"])
+		for (const gamertag of members)
 		{
 			setLoadingMessage("Loading " + gamertag);
 			const player = await app.GetPlayerFromFirebase(gamertag);
@@ -52,7 +63,7 @@ export function SpartanCompanyView(props: ViewProps)
 		setSpartanCompany(sc);
 		setSharedSR(sr);
 		setLoadingMessage("");
-    }, [app, spartanCompany, setSpartanCompany, setSharedSR, setIsMember, setIsOwner]);
+    }, [app, spartanCompany, setSpartanCompany, setSharedSR]);
     
     useEffect(() =>
     {
@@ -67,10 +78,60 @@ export function SpartanCompanyView(props: ViewProps)
 		navigate("/service_record/" + gamertag);
 	}, [navigate, app]);
 
+	/** Controlled search component */
+	function onGamertagTextChange(event: React.ChangeEvent<HTMLInputElement>)
+	{
+		setGamertagToAdd(event.target.value);
+	};
+
+	/** When the search button is pressed */
+	function searchForGamertag()
+	{
+		if (gamertagToAdd === "") { return; }
+		Cookie.addGamertagToCompany(gamertagToAdd);
+		loadData();
+	}
+
+	/** When enter is pressed */
+	function searchForGamertagViaEnter(event: React.KeyboardEvent<HTMLDivElement>)
+	{
+		if (event.key === "Enter")
+		{
+			searchForGamertag();
+		}
+	}
+
+	/** Cancels the close */
+	function cancelRemoveGamertagDialog()
+	{
+		setRemoveGamertagDialog("");
+	}
+	
+	/** Removes the gamertag from the company */
+	function closeRemoveGamertagDialog()
+	{
+		Cookie.removeGamertagToCompany(removeGamertagDialog);
+		cancelRemoveGamertagDialog();
+		loadData();
+	}
+
 	return (
-		<Box component="main">
+		<Box component="main" sx={{ flexGrow: 1, height: "calc(100% - 64px)" }}>
 			<Toolbar />
 			<Divider />
+			<Dialog open={!!removeGamertagDialog} onClose={closeRemoveGamertagDialog}>
+                <DialogTitle sx={{ color: ArrowheadTheme.text_secondary }}>Remove {removeGamertagDialog}?</DialogTitle>
+                <DialogContent>
+                    <DialogContentText variant="body2" sx={{ color: "primary.main" }}>
+                        Are you sure you want to remove {removeGamertagDialog} from your Spartan Company?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeRemoveGamertagDialog}>Cancel</Button>
+                    <Button onClick={closeRemoveGamertagDialog} autoFocus>Remove</Button>
+                </DialogActions>
+            </Dialog>
+			{ spartanCompany.players && spartanCompany.players.length > 0 ?
 			<Box sx={{ p: 2 }}>
 				<Grid container spacing={2}>
 					{/* Top */}
@@ -114,6 +175,9 @@ export function SpartanCompanyView(props: ViewProps)
 					</Grid>
 				</Grid>
 			</Box>
+			: 
+			<AddGamertag search={gamertagToAdd} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} onValueChanged={onGamertagTextChange} />
+			}
 		</Box>
 	);
 }

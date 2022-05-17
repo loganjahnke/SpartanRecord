@@ -35,8 +35,8 @@ export enum MedalType
 	KingOfTheHill = "King of the Hill",
 	Oddball = "Oddball",
 	Stockpile = "Stockpile",
-	Strongholds = "Strongholds",
 	VIP = "VIP",
+    Zone = "Zone",
 
 	// Unknown
 	Unknown = "Other"

@@ -33,11 +33,11 @@ export function ImageCard(props: ImageCardProps)
     }
 
 	return (
-        <Card sx={{ height: "100%", maxHeight: "310px", borderRadius: 3 }}>
+        <Card sx={{ height: "100%", borderRadius: 3 }}>
             {image ? <CardMedia component="img" height="225px" image={image} alt="card media" /> : undefined}
-            <CardContent sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly" }}>
+            <CardContent sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", flexWrap: "wrap" }}>
                 {allHeaderTitles.map(ht => (
-                    <Box>
+                    <Box sx={{ m: 2 }}>
                         {ht.header ? <Typography variant="caption" component="div" sx={{ textAlign: "center" }}>{ht.header}</Typography> : undefined}
                         <Typography variant="h5" component="div" sx={{ textAlign: "center" }}>{ht.title}</Typography>
                     </Box>

@@ -8,7 +8,7 @@ export interface SearchProps
     onValueChanged: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onKeyPress: (event: React.KeyboardEvent<HTMLDivElement>) => void;
     onSearch: React.MouseEventHandler<HTMLButtonElement>;
-    openRecent: (gamertag: string) => void;
+    openRecent?: (gamertag: string) => void;
 }
 
 export function GamertagSearch(props: SearchProps)
@@ -28,7 +28,7 @@ export function GamertagSearch(props: SearchProps)
             {recents.length === 0 ? undefined :
                 <Box sx={{ mt: 1 }}>
                     <Typography variant="caption" sx={{ color: "white" }}>Recents: </Typography>
-                    {recents.map(gamertag => <Chip sx={{ margin: "4px 4px" }} label={gamertag} onClick={() => openRecent(gamertag)} />)}
+                    {recents.map(gamertag => <Chip sx={{ margin: "4px 4px" }} label={gamertag} onClick={openRecent ? () => openRecent(gamertag) : undefined} />)}
                 </Box>
             }
         </Box>

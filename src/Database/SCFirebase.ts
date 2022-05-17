@@ -4,7 +4,7 @@ import { Appearance } from "../Objects/Model/Appearance";
 import { Match } from "../Objects/Model/Match";
 import { Player } from "../Objects/Model/Player";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
-import { FilterCount } from "../Objects/Pieces/FilterCounts";
+import { SRFilter } from "../Objects/Pieces/SRFilter";
 import { ServiceRecordFilter } from "./ArrowheadFirebase";
 import { AutocodeAppearance } from "./Schemas/AutocodeAppearance";
 import { AutocodeMatch } from "./Schemas/AutocodeMatch";
@@ -126,18 +126,18 @@ export class SCFirebase
 	 * @param gamertag the gamertag to get stats from
 	 * @returns A service record that represents the filter
 	 */
-	public async GetAvailableFilters(gamertag: string, node: ServiceRecordFilter): Promise<FilterCount[]>
+	public async GetAvailableFilters(gamertag: string, node: ServiceRecordFilter): Promise<SRFilter[]>
 	{
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetAvailableFilters()", `${gamertag} - ${node}`); }
 
-		const filters: FilterCount[] = [];
+		const filters: SRFilter[] = [];
 		const snapshot = await this.__get(`filters/${gamertag}/${node}`);
 		if (snapshot)
 		{
 			for (const name in snapshot.val())
 			{
 				const count = snapshot.val()[name];
-				filters.push(new FilterCount(name, count ?? 0));
+				filters.push(new SRFilter(name, count ?? 0));
 			}
 		}
 
