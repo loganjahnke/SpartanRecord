@@ -78,12 +78,14 @@ export class SCData
     /**
      * Gets a player from firebase
      * @param gamertag the gamertag
+     * @param season the season
+     * @param historic the historic SRs
      * @returns player object
      */
-    public async GetPlayerFromFirebase(gamertag: string, historic?: boolean): Promise<Player>
+    public async GetPlayerFromFirebase(gamertag: string, season?: number, historic?: boolean): Promise<Player>
 	{
 		const player = new Player(gamertag);
-		await this.__firebase.GetPlayer(player, historic);
+		await this.__firebase.GetPlayer(player, season, historic);
 		return player;
 	}
 
@@ -91,12 +93,12 @@ export class SCData
      * Sets a player into firebase
      * @param player the player
      */
-    public async SetPlayerIntoFirebase(player: Player): Promise<void>
+    public async SetPlayerIntoFirebase(player: Player, season?: number): Promise<void>
 	{
         if (!player.gamertag) { return; }
 		await Promise.all([
             this.__firebase.SetAppearance(player.gamertag, player.appearanceData),
-            this.__firebase.SetServiceRecord(player.gamertag, player.serviceRecordData)
+            this.__firebase.SetServiceRecord(player.gamertag, player.serviceRecordData, season)
         ]);
 	}
 
@@ -104,7 +106,7 @@ export class SCData
      * Gets the player from Autocode
      * @param gamertag the gamertag
      */
-	public GetPlayerFromAutocode = async (gamertag: string): Promise<Player> => this.__autocode.GetPlayer(gamertag);
+	public GetPlayerFromAutocode = async (gamertag: string, season: number): Promise<Player> => this.__autocode.GetPlayer(gamertag, season);
 
     /**
 	 * Gets the service record for the gamertag from Autocode
@@ -152,6 +154,22 @@ export class SCData
     public async GetLast25PlayerMatches(gamertag: string): Promise<PlayerMatch[]>
     {
         const result = await this.__autocode.GetPlayerMatches(gamertag, 25, 0);
+        
+        let playerMatches: PlayerMatch[] = [];
+        for (const match of result.data.matches) { playerMatches.push(new PlayerMatch(match)); }
+
+        return playerMatches;
+    }
+
+    /**
+     * Gets the last 25 player matches for a gamertag
+     * @param gamertag the gamertag
+     * @param offset the number of matches to get
+     * @returns the array of player matches
+     */
+    public async GetPlayerMatches(gamertag: string, offset: number): Promise<PlayerMatch[]>
+    {
+        const result = await this.__autocode.GetPlayerMatches(gamertag, 25, offset);
         
         let playerMatches: PlayerMatch[] = [];
         for (const match of result.data.matches) { playerMatches.push(new PlayerMatch(match)); }

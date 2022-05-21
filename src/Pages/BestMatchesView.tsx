@@ -15,7 +15,7 @@ import { FirebaseBest } from "../Database/Schemas/FirebaseBest";
 export function BestMatchesView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setGamertag } = props;
+	const { app, setLoadingMessage, updatePlayer: setGamertag } = props;
 	const { filter, gamertag } = useParams();
 	const navigate = useNavigate();
 	//#endregion

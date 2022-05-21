@@ -24,9 +24,16 @@ export function KDARanks(props: { company: SpartanCompany, sharedSR: ServiceReco
 	);
 }
 
-export function KDAMatchRanks(props: { players: MatchPlayer[], goToMember: Function })
+export interface MatchRanksProps 
 {
-	const { players, goToMember } = props;
+    players: MatchPlayer[];
+    myGamertag?: string;
+    goToMember: Function;
+}
+
+export function KDAMatchRanks(props: MatchRanksProps)
+{
+	const { players, myGamertag, goToMember } = props;
 
 	return (
         <Box sx={{ backgroundColor: "divider", borderRadius: 3, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
@@ -37,7 +44,7 @@ export function KDAMatchRanks(props: { players: MatchPlayer[], goToMember: Funct
                 {[...players]
                     .sort((a, b) => b.stats.kda - a.stats.kda)
                     .slice(0, 3)
-                    .map((player, index) => <MatchRankTile player={player} value={player.stats.kda} rank={index + 1} goToMember={goToMember} />)}
+                    .map((player) => <MatchRankTile player={player} value={player.stats.kda} myGamertag={myGamertag} goToMember={goToMember} />)}
             </Box>
 		</Box>
 	);

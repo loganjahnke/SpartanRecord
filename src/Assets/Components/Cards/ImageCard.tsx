@@ -34,7 +34,7 @@ export function ImageCard(props: ImageCardProps)
 
 	return (
         <Card sx={{ height: "100%", borderRadius: 3 }}>
-            {image ? <CardMedia component="img" height="225px" image={image} alt="card media" /> : undefined}
+            {image ? <CardMedia sx={{ backgroundPosition: "center" }} component="img" image={image} alt="card media" /> : undefined}
             <CardContent sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", flexWrap: "wrap" }}>
                 {allHeaderTitles.map(ht => (
                     <Box sx={{ m: 2 }}>

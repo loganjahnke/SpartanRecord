@@ -19,6 +19,8 @@ export class Player
     /** Last match ID */
     public lastMatchID: string;
 
+    public season: number = -1;
+
     public appearanceData?: AutocodeAppearance;
     public serviceRecordData?: AutocodeMultiplayerServiceRecord;
 

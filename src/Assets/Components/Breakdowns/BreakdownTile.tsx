@@ -12,7 +12,7 @@ export interface BreakdownProps
     small?: boolean;
 }
 
-interface BreakdownTileProps
+export interface BreakdownTileProps
 {
     title: string;
     value: number | string;

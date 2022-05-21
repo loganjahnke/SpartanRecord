@@ -12,11 +12,12 @@ import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import GroupsIcon from '@mui/icons-material/Groups';
 import StarIcon from '@mui/icons-material/Star';
+import { Player } from "../../../Objects/Model/Player";
 
 interface AHDrawerProps
 {
 	/** The chosen gamertag */
-	gamertag: string;
+	player: Player;
 	/** Current tab */
 	currentTab: string;
 	/** Callback for when a tab button is pressed */
@@ -33,7 +34,7 @@ interface AHDrawerProps
 
 export function AHDrawer(props: AHDrawerProps)
 {
-	const { gamertag, currentTab, switchTab, handleDrawerToggle, container, mobileOpen, isAllowed } = props;
+	const { player, currentTab, switchTab, handleDrawerToggle, container, mobileOpen, isAllowed } = props;
 
 	/**
 	 * Triggered when a tab is clicked
@@ -48,28 +49,28 @@ export function AHDrawer(props: AHDrawerProps)
 				switchTab("/", newTab);
 				break;
 			case "Service Record":
-				switchTab(`/service_record/${gamertag}`, newTab);
+				switchTab(`/service_record/${player.gamertag}`, newTab);
 				break;
 			case "Playlists":
-				switchTab(`/service_record/${ServiceRecordFilter.Playlist}/${gamertag}`, newTab);
+				switchTab(`/service_record/${ServiceRecordFilter.Playlist}/${player.gamertag}`, newTab);
 				break;
 			case "Variants":
-				switchTab(`/service_record/${ServiceRecordFilter.Variant}/${gamertag}`, newTab);
+				switchTab(`/service_record/${ServiceRecordFilter.Variant}/${player.gamertag}`, newTab);
 				break;
 			case "Social":
-				switchTab(`/service_record/${ServiceRecordFilter.Social}/${gamertag}`, newTab);
+				switchTab(`/service_record/${ServiceRecordFilter.Social}/${player.gamertag}`, newTab);
 				break;
 			case "Ranked":
-				switchTab(`/service_record/${ServiceRecordFilter.Ranked}/${gamertag}`, newTab);
+				switchTab(`/service_record/${ServiceRecordFilter.Ranked}/${player.gamertag}`, newTab);
 				break;
 			case "Medals":
-				switchTab(`/medals/${gamertag}`, newTab);
+				switchTab(`/medals/${player.gamertag}`, newTab);
 				break;
 			case "Matches":
-				switchTab(`/matches/${gamertag}`, newTab);
+				switchTab(`/matches/${player.gamertag}`, newTab);
 				break;
 			case "Best":
-				switchTab(`/best/matches/${gamertag}`, newTab);
+				switchTab(`/best/matches/${player.gamertag}`, newTab);
 				break;
 			case "Company":
 				switchTab(`/arrowhead`, newTab);
@@ -93,7 +94,7 @@ export function AHDrawer(props: AHDrawerProps)
 				<Button className="ahTab" onClick={goHome}>SpartanRecord.com</Button>
 			</Toolbar>
 			<Divider flexItem />
-				{gamertag && isAllowed ? 
+				{player && player.gamertag && isAllowed ? 
 				<Tabs orientation="vertical" value={currentTab || "Search"} onChange={tabClicked} sx={{ mt: 5 }}>
 					<Tab className="ahTab" value="Search" label="Search" icon={<PersonSearchIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Service Record" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" />
@@ -108,7 +109,7 @@ export function AHDrawer(props: AHDrawerProps)
 					{/* <Tab className="ahTab" value="Best" label="Best Matches" icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
 					{/* <Tab className="ahTab" value="Company" label="Spartan Company" icon={<GroupsIcon />} iconPosition="start" /> */}
 				</Tabs>
-				: gamertag ?
+				: player && player.gamertag ?
 				<Tabs orientation="vertical" value={currentTab || "Search"} onChange={tabClicked} sx={{ mt: 5 }}>
 					<Tab className="ahTab" value="Search" label="Search" icon={<PersonSearchIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Service Record" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" />

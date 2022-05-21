@@ -21,6 +21,9 @@ import { SCConfigView } from "./Pages/Spartan Company/SCConfigView";
 import { UhOh } from "./Pages/UhOh";
 import { ServiceRecordFilter } from "./Database/ArrowheadFirebase";
 import { BestMatchesView } from "./Pages/BestMatchesView";
+import { Player } from "./Objects/Model/Player";
+import { Appearance } from "./Objects/Model/Appearance";
+import { ServiceRecord } from "./Objects/Model/ServiceRecord";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -44,7 +47,7 @@ const App = () =>
 	//#endregion
 
 	//#region State
-	const [gamertag, setGamertag] = useState<string>("");
+	const [player, setPlayer] = useState<Player>(new Player());
 	//#endregion
 
 	//#region Navigate
@@ -54,10 +57,35 @@ const App = () =>
 	//#region Callback and Effect
 	const updateIsAllowed = useCallback(async () =>
 	{
-		setIsAllowed(await arrowhead.GetIsAllowed(gamertag));
-	}, [gamertag]);
+		setIsAllowed(await arrowhead.GetIsAllowed(player.gamertag));
+	}, [player]);
 
-	useEffect(() => { updateIsAllowed() }, [gamertag]);
+	/**
+	 * Updates the player
+	 * @param gamertag the new gamertag of the player
+	 * @param appearance the new appearance of the player
+	 * @param serviceRecord the new service record for the player
+	 */
+	const updatePlayer = useCallback((gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, season?: number) =>
+	{
+		if (gamertag && gamertag !== player.gamertag)
+		{
+			player.gamertag = gamertag;
+			player.appearance = appearance ?? new Appearance();
+			player.serviceRecord = serviceRecord ?? new ServiceRecord();
+			player.season = season ?? -1;
+		}
+		else
+		{
+			if (appearance) { player.appearance = appearance; }
+			if (serviceRecord) { player.serviceRecord = serviceRecord; }
+			player.season = season ?? -1;
+		}
+
+		setPlayer(player);
+	}, [player, setPlayer]);
+
+	useEffect(() => { updateIsAllowed() }, [player]);
 	//#endregion
 
 	//#region App Bar and Drawer
@@ -85,20 +113,20 @@ const App = () =>
 	return (
 		<ThemeProvider theme={ArrowheadTheme.theme}>
 			<Box sx={{ display: "flex", backgroundColor: "background.paper", height: "calc(100vh - 34px)" }}>
-				<AHAppBar handleDrawerToggle={handleDrawerToggle} loadingFromAutocode={backgroundLoadingProgress} />
-				<AHDrawer gamertag={gamertag} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={switchTab} handleDrawerToggle={handleDrawerToggle} isAllowed={isAllowed} />
+				<AHAppBar player={player} handleDrawerToggle={handleDrawerToggle} loadingFromAutocode={backgroundLoadingProgress} />
+				<AHDrawer player={player} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={switchTab} handleDrawerToggle={handleDrawerToggle} isAllowed={isAllowed} />
 				<AHLoading loadingMessage={loadingMessage} />
 				<Routes>
-					<Route path="/" element={<HomeView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} switchTab={switchTab} />} />
-					<Route path="/service_record/:gamertag" element={<PlayerView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
-					<Route path={`/service_record/:node/:gamertag`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
-					<Route path={`/service_record/:node/:gamertag/:filter`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
-					<Route path="/best/matches/:gamertag" element={<BestMatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
-					<Route path="/arrowhead" element={<SpartanCompanyView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
-					<Route path="/medals/:gamertag" element={<MedalsView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
-					<Route path="/matches/:gamertag" element={<MatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
-					<Route path="/match/:id" element={<SingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
-					<Route path="/match/:id/:gamertag" element={<SingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} setGamertag={setGamertag} />} />
+					<Route path="/" element={<HomeView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
+					<Route path="/service_record/:gamertag" element={<PlayerView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} />} />
+					<Route path={`/service_record/:node/:gamertag`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} />} />
+					<Route path={`/service_record/:node/:gamertag/:filter`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} />} />
+					<Route path="/best/matches/:gamertag" element={<BestMatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} />} />
+					<Route path="/arrowhead" element={<SpartanCompanyView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} />} />
+					<Route path="/medals/:gamertag" element={<MedalsView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} />} />
+					<Route path="/matches/:gamertag" element={<MatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} />} />
+					<Route path="/match/:id" element={<SingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} />} />
+					<Route path="/match/:id/:gamertag" element={<SingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} />} />
 					<Route path="*" element={<UhOh />} />
 				</Routes>
 			</Box>

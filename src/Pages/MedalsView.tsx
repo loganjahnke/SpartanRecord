@@ -10,7 +10,7 @@ import { ViewProps } from "./Props/ViewProps";
 export function MedalsView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setGamertag } = props;
+	const { app, setLoadingMessage, updatePlayer: setGamertag } = props;
 	const { gamertag } = useParams();
 	//#endregion
 	

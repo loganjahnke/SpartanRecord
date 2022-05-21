@@ -46,7 +46,7 @@ export function MedalTile(props: { medal: Medal, small?: boolean, matchesPlayed?
 				<Typography variant="subtitle1" sx={{ fontSize: "0.8rem", ml:1 }}>{medal.name}</Typography>
 				<Typography variant="caption" sx={{ display: "block", fontSize: "0.8rem", ml:1 }}>{medal.description}</Typography>
 			</Box>
-			{medal.count <= 0 ? undefined : <Typography variant={"h5"} sx={{ textAlign: "right", mr: 2 }}>{(matchesPlayed ? medal.count / matchesPlayed : medal.count).toLocaleString()}</Typography>}
+			{medal.count > 0 && <Typography variant={"h5"} sx={{ textAlign: "right", mr: 2 }}>{(matchesPlayed ? medal.count / matchesPlayed : medal.count).toLocaleString()}</Typography>}
 		</Box>
 
 	);

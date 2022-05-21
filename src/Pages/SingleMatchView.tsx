@@ -18,7 +18,7 @@ import { TeamTable } from "./Subpage/TeamTable";
 export function SingleMatchView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setGamertag } = props;
+	const { app, setLoadingMessage, updatePlayer: setGamertag } = props;
 	const { id, gamertag } = useParams();
 	const navigate = useNavigate();
 	//#endregion
@@ -88,27 +88,33 @@ export function SingleMatchView(props: ViewProps)
 								titles={[match?.map?.name ?? "", match?.mode ? match.mode.name.slice(match.mode.name.indexOf(": ") + 2) : "", match?.playlist?.name ?? ""]} 
 								headers={["Map", "Variant", "Playlist"]} />
 						</Grid>
-						{match?.teams && match.teams.length > 0 
-							? match?.teams?.map(team => <Grid item xs={12}><TeamResultBreakdown team={team} /></Grid>) 
-							: undefined}
+						<Grid item xs={12}>
+							<KDAMatchRanks players={players} myGamertag={gamertag} goToMember={onGamertagClick} />
+						</Grid>
+						<Grid item xs={12}>
+							<AccuracyMatchRanks players={players} myGamertag={gamertag} goToMember={onGamertagClick} />
+						</Grid>
+						<Grid item xs={12}>
+							<DamageMatchRanks players={players} myGamertag={gamertag} goToMember={onGamertagClick} />
+						</Grid>
 					</Grid>
 					<Grid container item spacing={2} xs={12} xl={8}>
-						{match?.teams && match.teams.length > 0 ? (
-							match.teams.map(team => <Grid item xs={12}><TeamTable team={team} best={match.best} onGamertagClick={onGamertagClick} ranked={match.playlist.ranked} /></Grid>)
-						) : match?.players && match.players.length > 0 ? (
-							<Grid item xs={12}>
-								<TeamTable team={new Team(undefined, undefined, match.players)} best={match.best} onGamertagClick={onGamertagClick} ranked={match.playlist.ranked} ffa />
-							</Grid>
-						) : undefined}
-						<Grid item xs={12} lg={6} xl={4}>
-							<KDAMatchRanks players={players} goToMember={onGamertagClick} />
-						</Grid>
-						<Grid item xs={12} lg={6} xl={4}>
-							<AccuracyMatchRanks players={players} goToMember={onGamertagClick} />
-						</Grid>
-						<Grid item xs={12} lg={6} xl={4}>
-							<DamageMatchRanks players={players} goToMember={onGamertagClick} />
-						</Grid>
+						{match?.teams && match.teams.length > 0 
+								? match?.teams?.map(team => (
+									<>
+										<Grid item xs={12}>
+											<TeamResultBreakdown team={team} />
+										</Grid>
+										<Grid item xs={12}>
+											<TeamTable team={team} best={match.best} variant={match.mode.name} onGamertagClick={onGamertagClick} ranked={match.playlist.ranked} />
+										</Grid>
+									</>
+								))
+								: match?.players && match.players.length > 0 && (
+									<Grid item xs={12}>
+										<TeamTable team={new Team(undefined, undefined, match.players)} variant={match.mode.name} best={match.best} onGamertagClick={onGamertagClick} ranked={match.playlist.ranked} ffa />
+									</Grid>
+							)}
 					</Grid>
 				</Grid>
 			</Box>

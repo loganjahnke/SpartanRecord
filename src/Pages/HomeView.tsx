@@ -1,20 +1,18 @@
 import { Box, Divider, Toolbar } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 import { GamertagSearch } from "./Subpage/GamertagSearch";
 import { ViewProps } from "./Props/ViewProps";
 
 interface HomeViewProps
 {
-	setGamertag: (gamertag: string) => void;
 	switchTab: (url: string, tab?: string) => void;
 }
 
 export function HomeView(props: ViewProps & HomeViewProps)
 {
 	//#region Props and Navigate
-	const { setGamertag, switchTab } = props;
+	const { updatePlayer, switchTab } = props;
 	//#endregion
 	
 	//#region State
@@ -31,14 +29,14 @@ export function HomeView(props: ViewProps & HomeViewProps)
 	function searchForGamertag()
 	{
 		if (localGamertag === "") { return; }
-		setGamertag(localGamertag);
+		updatePlayer(localGamertag);
 		switchTab(`service_record/${localGamertag}`, "Service Record");
 	}
 
 	/** When the search button is pressed */
 	function openRecent(gamertag: string)
 	{
-		setGamertag(gamertag);
+		updatePlayer(localGamertag);
 		switchTab(`service_record/${gamertag}`, "Service Record");
 	}
 

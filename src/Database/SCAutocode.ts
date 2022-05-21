@@ -21,7 +21,7 @@ export class SCAutocode
 	/** Turns on or off debugging mode */
 	private readonly IS_DEBUGGING = process.env.NODE_ENV !== "production";
 	/** The HaloDotAPI version */
-	private readonly AUTOCODE_VERSION = "1-3-11";
+	private readonly AUTOCODE_VERSION = "1-4-2";
 
 	constructor() {}
 
@@ -30,10 +30,10 @@ export class SCAutocode
 	 * @param player the player
 	 * @returns 
 	 */
-	public async GetPlayer(gamertag: string): Promise<Player>
+	public async GetPlayer(gamertag: string, season: number): Promise<Player>
 	{
 		const player = new Player(gamertag);
-		await Promise.all([this.GetAppearance(player), this.GetServiceRecord(player)]);
+		await Promise.all([this.GetAppearance(player), this.GetServiceRecord(player, season)]);
 		return player;
 	}
 
@@ -64,7 +64,7 @@ export class SCAutocode
 	public async GetServiceRecord(player: Player, season?: number, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<void>
 	{
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCAutocode.GetServiceRecord()", player.gamertag); }
-		player.serviceRecordData = await this.__getServiceRecordFromHaloDotAPI(player.gamertag, season, playlistId, categoryId, type);
+		player.serviceRecordData = await this.__getServiceRecordFromHaloDotAPI(player.gamertag, season === -1 ? undefined : season, playlistId, categoryId, type);
 		player.serviceRecord = new ServiceRecord(player.serviceRecordData);
 	}
  

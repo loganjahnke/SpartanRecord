@@ -26,18 +26,20 @@ export class SCFirebase
 	}
 
 	/**
-	 * Gets the player's service record and appearance from firebase
-	 * @param player the player to update
-	 * @param historic get the historic stats?
-	 */
-	public async GetPlayer(player: Player, historic?: boolean): Promise<void>
+     * Gets a player from firebase
+     * @param gamertag the gamertag
+     * @param season the season
+     * @param historic the historic SRs
+     * @returns player object
+     */
+	public async GetPlayer(player: Player, season?: number, historic?: boolean): Promise<void>
 	{
 		if (!player.gamertag) { return; }
 
 		if (historic)
 		{
 			[player.serviceRecord, player.appearance, player.historicStats] = await Promise.all([
-				this.GetServiceRecord(player.gamertag),
+				this.GetServiceRecord(player.gamertag, season),
 				this.GetAppearance(player.gamertag),
 				this.GetHistoricStatistics(player.gamertag)
 			]);
@@ -45,7 +47,7 @@ export class SCFirebase
 		else
 		{
 			[player.serviceRecord, player.appearance] = await Promise.all([
-				this.GetServiceRecord(player.gamertag),
+				this.GetServiceRecord(player.gamertag, season),
 				this.GetAppearance(player.gamertag)
 			]);
 		}
@@ -83,13 +85,23 @@ export class SCFirebase
 	/**
 	 * Gets the service record for the gamertag from Firebase
 	 * @param gamertag the gamertag to get the service record of
+	 * @param season the season
 	 * @returns the service record for the gamertag
 	 */
-	public async GetServiceRecord(gamertag: string): Promise<ServiceRecord>
+	public async GetServiceRecord(gamertag: string, season?: number): Promise<ServiceRecord>
 	{
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetServiceRecord()", gamertag); }
 
-		const snapshot = await this.__get(`service_record/multiplayer/${gamertag}`);
+		let snapshot: DataSnapshot | undefined;
+		if (!season || season === -1)
+		{
+			snapshot = await this.__get(`service_record/multiplayer/${gamertag}`);
+		}
+		else
+		{
+			snapshot = await this.__get(`service_record/season/${season}/${gamertag}`);
+		}
+
 		return new ServiceRecord(snapshot?.val());
 	}
 
@@ -97,12 +109,21 @@ export class SCFirebase
 	 * Sets the appearance for the gamertag into Firebase
 	 * @param gamertag the gamertag
 	 * @param data the service record JSON
+	 * @param season the season
 	 */
-	public async SetServiceRecord(gamertag: string, data?: AutocodeMultiplayerServiceRecord): Promise<void>
+	public async SetServiceRecord(gamertag: string, data?: AutocodeMultiplayerServiceRecord, season?: number): Promise<void>
 	{
 		if (!data) { return; }
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetAppearance()", gamertag); }
-		await this.__set(`service_record/multiplayer/${gamertag}`, data);
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetServiceRecord()", gamertag); }
+
+		if (!season || season === -1)
+		{
+			await this.__set(`service_record/multiplayer/${gamertag}`, data);
+		}
+		else
+		{
+			await this.__set(`service_record/season/${season}/${gamertag}`, data);
+		}		
 	}
 
 	/**

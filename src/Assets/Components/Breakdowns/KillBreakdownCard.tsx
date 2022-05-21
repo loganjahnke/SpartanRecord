@@ -1,7 +1,8 @@
 import { Box } from "@mui/material";
 import { TitleCard } from "../Cards/TitleCard";
 import { KillBreakdownChart } from "../Charts/KillBreakdownChart";
-import { BreakdownProps, BreakdownTile } from "./BreakdownTile";
+import { BreakdownRowTile } from "./BreakdownRowTile";
+import { BreakdownProps } from "./BreakdownTile";
 
 export function KillBreakdownCard(props: BreakdownProps)
 {
@@ -9,18 +10,18 @@ export function KillBreakdownCard(props: BreakdownProps)
 
 	return (
 		<TitleCard title="Kills">
-			<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", flexWrap: "wrap", justifyContent: "space-evenly", width: "100%" }}>
-					<BreakdownTile title="Melee" value={showPerMatch ? serviceRecord.breakdowns.kills.melee / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.melee} isMainStat />
-					<BreakdownTile title="Headshots" value={showPerMatch ? serviceRecord.breakdowns.kills.headshots / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.headshots} isMainStat />
-					<BreakdownTile title="Power Weapons" value={showPerMatch ? serviceRecord.breakdowns.kills.powerWeapons / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.powerWeapons} isMainStat />
-					<BreakdownTile title="Grenades" value={showPerMatch ? serviceRecord.breakdowns.kills.grenades / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.grenades} isMainStat />
-					<BreakdownTile title="Fusion Coils" value={showPerMatch ? serviceRecord.breakdowns.kills.fusionCoil / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.fusionCoil} isMainStat />
-					<BreakdownTile title="Assassinations" value={showPerMatch ? serviceRecord.breakdowns.kills.assassinations / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.assassinations} isMainStat />
-					<BreakdownTile title="Splatters" value={showPerMatch ? serviceRecord.breakdowns.kills.splatters / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.splatters} isMainStat />
-					<BreakdownTile title="Repulsor" value={showPerMatch ? serviceRecord.breakdowns.kills.repulsor / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.repulsor} isMainStat />
-			</Box>
 			<Box sx={{ width: "100%", pb: 1 }}>
-					<KillBreakdownChart currentSR={serviceRecord} />
+				<KillBreakdownChart currentSR={serviceRecord} />
+			</Box>
+			<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", flexWrap: "wrap", justifyContent: "space-evenly", width: "100%" }}>
+				<BreakdownRowTile title="Melee" tooltip="Melee kills, swords, hammers, assassinations" value={showPerMatch ? serviceRecord.breakdowns.kills.melee / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.melee} isMainStat />
+				<BreakdownRowTile title="Headshots" tooltip="Last shot to the head" value={showPerMatch ? serviceRecord.breakdowns.kills.headshots / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.headshots} isMainStat />
+				<BreakdownRowTile title="Power Weapons" tooltip="Rockets, snipers, swords, and other power weapons" value={showPerMatch ? serviceRecord.breakdowns.kills.powerWeapons / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.powerWeapons} isMainStat />
+				<BreakdownRowTile title="Grenades" tooltip="Sticks and bounces, all thrown explosives" value={showPerMatch ? serviceRecord.breakdowns.kills.grenades / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.grenades} isMainStat />
+				<BreakdownRowTile title="Fusion Coils" tooltip="Kong!" value={showPerMatch ? serviceRecord.breakdowns.kills.fusionCoil / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.fusionCoil} isMainStat />
+				<BreakdownRowTile title="Assassinations" tooltip="Melee kill in the back" value={showPerMatch ? serviceRecord.breakdowns.kills.assassinations / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.assassinations} isMainStat />
+				<BreakdownRowTile title="Splatters" tooltip="Vroom!" value={showPerMatch ? serviceRecord.breakdowns.kills.splatters / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.splatters} isMainStat />
+				<BreakdownRowTile title="Repulsor" tooltip="Mind the Gap and Pancake" value={showPerMatch ? serviceRecord.breakdowns.kills.repulsor / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.repulsor} isMainStat />
 			</Box>
 		</TitleCard>
 	);

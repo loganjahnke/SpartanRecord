@@ -1,6 +1,8 @@
 import { AppBar, Toolbar, IconButton, Divider, Typography, CircularProgress, Box } from "@mui/material";
 
 import MenuIcon from '@mui/icons-material/Menu';
+import { Player } from "../../../Objects/Model/Player";
+import { PlayerCard } from "../Cards/PlayerCard";
 
 interface AHAppBarProps
 {
@@ -8,11 +10,13 @@ interface AHAppBarProps
 	handleDrawerToggle?: any;
 	/** Is someone doing a load in the background? */
 	loadingFromAutocode?: number;
+	/** The player */
+	player?: Player;
 }
 
 export function AHAppBar(props: AHAppBarProps)
 {
-	const { handleDrawerToggle, loadingFromAutocode } = props;
+	const { handleDrawerToggle, loadingFromAutocode, player } = props;
 
 	return (
 		<AppBar position="fixed" sx={{ width: { sm: `calc(100% - 240px)` }, ml: { sm: `240px` }}}>
@@ -21,9 +25,12 @@ export function AHAppBar(props: AHAppBarProps)
 					<MenuIcon />
 				</IconButton>
 				<Divider orientation="vertical" flexItem sx={{ display: { sm: "none" }}} />
+				{loadingFromAutocode && <>
+				<CircularProgress size={20} variant={loadingFromAutocode === -1 ? "indeterminate" : "determinate"} value={loadingFromAutocode} />
+				<Typography sx={{ ml: 2 }} variant="subtitle1">Getting latest data from HaloDotAPI</Typography>
+				</>}
 				<Box sx={{ flexGrow: 1 }}></Box>
-				{loadingFromAutocode ? <CircularProgress size={20} variant={loadingFromAutocode === -1 ? "indeterminate" : "determinate"} value={loadingFromAutocode} /> : undefined}
-				{loadingFromAutocode ? <Typography sx={{ ml: 2 }} variant="subtitle1">Getting latest data from HaloDotAPI</Typography> : undefined}
+				{player && <PlayerCard player={player} rightAlign />}
 			</Toolbar>
 		</AppBar>
 	);

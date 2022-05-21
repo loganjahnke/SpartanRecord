@@ -65,7 +65,7 @@ export const TeamBreakdownChart = (props: { players: MatchPlayer[], blue?: boole
 			},
 			title: {
 				display: true,
-				text: "Points",
+				text: "Kills",
 			}
 		},
 		elements: {

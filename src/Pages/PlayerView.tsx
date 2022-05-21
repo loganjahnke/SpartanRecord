@@ -12,19 +12,18 @@ import { Player } from "../Objects/Model/Player";
 import { ServiceRecordChart } from "../Assets/Components/Charts/ServiceRecordChart";
 import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
 import { LevelBreakdown } from "../Assets/Components/Breakdowns/LevelBreakdown";
-import { PlayerCard } from "../Assets/Components/Cards/PlayerCard";
-import { GamertagSearch } from "./Subpage/GamertagSearch";
 import { VehicleBreakdown } from "../Assets/Components/Breakdowns/VehicleBreakdown";
 import { ServiceRecordFilters } from "./Subpage/ServiceRecordFilters";
 import { ViewProps } from "./Props/ViewProps";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { Cookie } from "../Objects/Helpers/Cookie";
 import { KillBreakdownCard } from "../Assets/Components/Breakdowns/KillBreakdownCard";
+import { SeasonChooser } from "./Subpage/SeasonChooser";
 
 export function PlayerView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setBackgroundLoadingProgress, setGamertag } = props;
+	const { app, setLoadingMessage, setBackgroundLoadingProgress, player, updatePlayer } = props;
 	const { gamertag } = useParams();
 	const navigate = useNavigate();
 	//#endregion
@@ -34,119 +33,86 @@ export function PlayerView(props: ViewProps)
 	//#endregion
 	
 	//#region State
-	const [myPlayer, setMyPlayer] = useState(new Player());
 	const [historicStats, setHistoricStats] = useState<ServiceRecord[]>([]);
-	const [search, setSearch] = useState("");
 	const [showPerMatch, setShowPerMatch] = useState(false);
+	const [season, setSeason] = useState(-1);
 	//#endregion
 
 	const loadData = useCallback(async () => 
 	{		
-		if (gamertag === "search") { return; }
+		if (!gamertag) { navigate("/"); return; }
 
-		// Get service record of gamertag
-		if (gamertag)
+		// Set page gamertag and show loading message
+		setLoadingMessage("Loading " + gamertag);
+		Cookie.addRecent(gamertag);
+		
+		// Get the player from firebase and show on screen
+		const player = await app.GetPlayerFromFirebase(gamertag, season, false);
+		//setHistoricStats(player.historicStats ?? []);
+		updatePlayer(player.gamertag, player.appearance, player.serviceRecord);
+		
+		// Set loading message to nada, start background load
+		setLoadingMessage("");
+		setBackgroundLoadingProgress(-1);
+
+		// If they are, sync with autocode
+		if (!app.IsSyncing(gamertag))
 		{
-			// Set page gamertag and show loading message
-			setGamertag(gamertag);
-			setLoadingMessage("Loading " + gamertag);
-			Cookie.addRecent(gamertag);
-			
-			// Get the player from firebase and show on screen
-			const player = await app.GetPlayerFromFirebase(gamertag, false);
+			app.AddToSyncing(gamertag);
 
-			// Set player
-			setMyPlayer(player);
-			//setHistoricStats(player.historicStats ?? []);
-
-			// Set loading message to nada, start background load
-			setLoadingMessage("");
-			setBackgroundLoadingProgress(-1);
-
-			// If they are, sync with autocode
-			if (!app.IsSyncing(gamertag))
+			// Sync into firebase
+			app.GetPlayerFromAutocode(gamertag, season).then(async (result) =>
 			{
-				app.AddToSyncing(gamertag);
-
-				// Sync into firebase
-				app.GetPlayerFromAutocode(gamertag).then(async (result) =>
+				if (result)
 				{
-					if (result)
-					{
-						setMyPlayer(result);
-						await app.SetPlayerIntoFirebase(result);
-					}					
-				}).finally(() => 
-				{
-					app.RemoveFromSyncing(gamertag);
-					setBackgroundLoadingProgress(undefined);
-				});
+					updatePlayer(result.gamertag, result.appearance, result.serviceRecord);
+					await app.SetPlayerIntoFirebase(result, season);
+				}					
+			}).finally(() => 
+			{
+				setLoadingMessage("");
+				app.RemoveFromSyncing(gamertag);
+				setBackgroundLoadingProgress(undefined);
+			});
 
-				// app.SyncPlayer(gamertag).then(async (result) =>
-				// {
-				// 	if (result)
-				// 	{
-				// 		const player = await app.GetPlayerFromFirebase(gamertag, true);
-				// 		setMyPlayer(player);
-				// 		setHistoricStats(player.historicStats ?? []);
-				// 	}					
-				// }).finally(() => 
-				// {
-				// 	app.RemoveFromSyncing(gamertag);
-				// 	setBackgroundLoadingProgress(undefined);
-				// });
-			}
-			else { setBackgroundLoadingProgress(undefined); }
-			
+			// app.SyncPlayer(gamertag).then(async (result) =>
+			// {
+			// 	if (result)
+			// 	{
+			// 		const player = await app.GetPlayerFromFirebase(gamertag, true);
+			// 		setMyPlayer(player);
+			// 		setHistoricStats(player.historicStats ?? []);
+			// 	}					
+			// }).finally(() => 
+			// {
+			// 	app.RemoveFromSyncing(gamertag);
+			// 	setBackgroundLoadingProgress(undefined);
+			// });
 		}
-	}, [lastUpdate, app, gamertag, setMyPlayer, setBackgroundLoadingProgress]);
+		else { setBackgroundLoadingProgress(undefined); }
+	}, [lastUpdate, app, gamertag, updatePlayer, setBackgroundLoadingProgress, season, setSeason]);
 	
 	useEffect(() =>
 	{
 		loadData();
 	}, [gamertag]);
 
-	/** Controlled search component */
-	function onGamertagTextChange(event: React.ChangeEvent<HTMLInputElement>)
+	useEffect(() =>
 	{
-		setSearch(event.target.value);
-	};
-
-	/** When the search button is pressed */
-	function searchForGamertag()
-	{
-		if (search === "") { return; }
-		setGamertag(search);
-		navigate(`/service_record/${search}`);
-	}
-
-	/** When enter is pressed */
-	function searchForGamertagViaEnter(event: React.KeyboardEvent<HTMLDivElement>)
-	{
-		if (event.key === "Enter")
-		{
-			searchForGamertag();
-		}
-	};
-
-	/** When the search button is pressed */
-	function openRecent(gamertag: string)
-	{
-		setGamertag(gamertag);
-		navigate(`service_record/${gamertag}`);
-	}
+		loadData();
+	}, [season]);
 
 	return (
 		<Box component="main" sx={{ flexGrow: 1 }}>
 			<Toolbar />
 			<Divider />
-			<Box sx={{ p: gamertag !== "search" && gamertag !== undefined ? 2 : 0, height: "calc(100% - 64px)" }}>
-				{gamertag !== "search" && gamertag !== undefined ? 
+			<Box sx={{ p: player ? 2 : 0, height: "calc(100% - 64px)" }}>
+				{player && 
 					<Grid container spacing={2}>
 						{/* Top */}
 						<Grid item xs={12}>
 							<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
-								<PlayerCard player={myPlayer} />
+								<SeasonChooser setSeason={setSeason} />
 								<Box sx={{ flexGrow: 1 }}></Box>
 								<ServiceRecordFilters setPerMatch={setShowPerMatch} />
 							</Box>
@@ -154,51 +120,50 @@ export function PlayerView(props: ViewProps)
 						{/* Far left */}
 						<Grid container item spacing={2} md={12} lg={6} xl={4} sx={{ alignContent: "flex-start" }}>
 							<Grid item xs={12}>
-								<MatchesBreakdown serviceRecord={myPlayer.serviceRecord} />
+								<MatchesBreakdown serviceRecord={player.serviceRecord} />
 							</Grid>
 							<Grid item xs={12}>
-								<KillDeathCard serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+								<KillDeathCard serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
-								<KDABreakdown serviceRecord={myPlayer.serviceRecord} />
+								<KDABreakdown serviceRecord={player.serviceRecord} />
 							</Grid>
 							<Grid item xs={12}>
-								<ShotsBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+								<ShotsBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 						</Grid>
 						{/* Middle 6 */}
 						<Grid container item spacing={2} sm={12} md={6} lg={6} xl={3} sx={{ alignContent: "flex-start" }}>
 							<Grid item xs={12}>
-								<KillBreakdownCard serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+								<KillBreakdownCard serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
-								<LevelBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+								<LevelBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
-								<VehicleBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+								<VehicleBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 						</Grid>
 						{/* Far right */}
 						<Grid container item spacing={2} sm={12} md={6} lg={12} xl={5} sx={{ alignContent: "flex-start" }}>
 							<Grid item xs={12}>
-								<TopMedals medals={myPlayer.serviceRecord.medals} matchesPlayed={myPlayer.serviceRecord.matchesPlayed} showPerMatch={showPerMatch} />
+								<TopMedals medals={player.serviceRecord.medals} matchesPlayed={player.serviceRecord.matchesPlayed} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
-								<AssistBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+								<AssistBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
-								<DamageBreakdown serviceRecord={myPlayer.serviceRecord} showPerMatch={showPerMatch} />
+								<DamageBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 							{/* <Grid item xs={12}>
-								<ServiceRecordChart historicServiceRecords={historicStats} currentSR={myPlayer.serviceRecord} />
+								<ServiceRecordChart historicServiceRecords={historicStats} currentSR={player.serviceRecord} />
 							</Grid> */}
 							{/* <Grid item xs={12}>
-								<CampaignBreakdown campaignRecord={myPlayer.campaignRecord} />
+								<CampaignBreakdown campaignRecord={player.campaignRecord} />
 							</Grid> */}
 						</Grid>
 						
-					</Grid>
-				: <GamertagSearch search={search} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} />}
+					</Grid>}
 			</Box>
 		</Box>
 	);

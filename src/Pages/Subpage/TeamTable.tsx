@@ -18,6 +18,7 @@ interface TeamTableProps
 {
 	ranked?: boolean;
 	team: Team;
+	variant?: string;
 	best: { score: number, points: number, kills: number, deaths: number, assists: number };
 	onGamertagClick: (gamertag: string) => void;
 	ffa?: boolean;
@@ -35,7 +36,9 @@ interface TeamTableRowProps
 
 export function TeamTable(props: TeamTableProps)
 {
-	const { ranked, team, best, onGamertagClick, ffa } = props;
+	const { ranked, team, best, variant, onGamertagClick, ffa } = props;
+
+	const showPoints = !!variant && (variant.includes("CTF") || variant.includes("Oddball"));
 
 	return (
 		<TableContainer component={Box} sx={{ backgroundColor: ArrowheadTheme.box, borderRadius: 3 }}>
@@ -43,20 +46,20 @@ export function TeamTable(props: TeamTableProps)
 				<TableHead sx={{ backgroundColor: team.details.name === "Cobra" ? ArrowheadTheme.cobra : ArrowheadTheme.eagle }}>
 					<TableRow>
 						<TableCell />
-						{ranked ? <TableCell sx={{ pr: 2 }} align="right">Rank</TableCell> : undefined}
+						{ranked && <TableCell sx={{ pr: 2 }} align="right">Rank</TableCell>}
 						<TableCell sx={{ pl: 2, pr: 2, position: "sticky", left: 0, backgroundColor: team.details.name === "Cobra" ? ArrowheadTheme.cobra : ArrowheadTheme.eagle }}>Gamertag</TableCell>
 						<TableCell sx={{ pl: 2, pr: 2 }} align="right">Total Score</TableCell>
-						<TableCell sx={{ pl: 2, pr: 2 }} align="right">Points</TableCell>
+						{showPoints &&  <TableCell sx={{ pl: 2, pr: 2 }} align="right">Points</TableCell>}
 						<TableCell sx={{ pl: 2, pr: 2 }} align="right">Kills</TableCell>
 						<TableCell sx={{ pl: 2, pr: 2 }} align="right">Deaths</TableCell>
 						<TableCell sx={{ pl: 2, pr: 2 }} align="right">Assists</TableCell>
 						<TableCell sx={{ pl: 2, pr: 2 }} align="right">KDA</TableCell>
-						{ffa ? <TableCell sx={{ pl: 2, pr: 2 }} align="right">MMR</TableCell> : undefined}
+						{ffa && <TableCell sx={{ pl: 2, pr: 2 }} align="right">MMR</TableCell>}
 					</TableRow>
 				</TableHead>
 				<TableBody>
 					{team.players.sort((a, b) => b.stats.totalScore - a.stats.totalScore).map((player, index) => (
-						<Row key={index} player={player} topSR={best} showRank={ranked} onGamertagClick={onGamertagClick} ffa={ffa} />
+						<Row key={index} player={player} topSR={best} showPoints={showPoints} showRank={ranked} onGamertagClick={onGamertagClick} ffa={ffa} />
 					))}
 				</TableBody>
 			</Table>
@@ -66,7 +69,7 @@ export function TeamTable(props: TeamTableProps)
 
 function Row(props: TeamTableRowProps)
 {
-	const { onGamertagClick, player, topSR, showRank, ffa } = props;
+	const { onGamertagClick, player, topSR, showRank, showPoints, ffa } = props;
 	const [expanded, setExpanded] = useState(false);
 
 	const bestScore = player.stats.totalScore === topSR?.score;
@@ -83,11 +86,11 @@ function Row(props: TeamTableRowProps)
 						{expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
 					</IconButton>
 				</TableCell>
-				{showRank ? 
+				{showRank && 
 					<TableCell sx={{ pl: 2, pr: 2, pt: 0, pb: 0 }} align="right" width={"64px"}>
 						<img src={player.progression.post.tierImageUrl} alt={player.progression.post.tier + " " + (player.progression.post.subTier)} title={player.progression.post.tier + " " + (player.progression.post.subTier)} height="32px" />
 					</TableCell> 
-				: undefined}
+				}
 				<TableCell sx={{ pl: 2, pr: 2, position: "sticky", left: 0, backgroundColor: ArrowheadTheme.box }} component="th" scope="row" onClick={() => onGamertagClick(player.gamertag)} width={"150px"}>{player.gamertag}</TableCell>
 				<TableCell sx={{ pl: 2, pr: 2 }} width={"80px"} align="right">
 					<Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
@@ -95,12 +98,13 @@ function Row(props: TeamTableRowProps)
 						{player.stats.totalScore.toLocaleString()}
 					</Box>
 				</TableCell>
-				<TableCell sx={{ pl: 2, pr: 2 }} width={"80px"} align="right">
+				{showPoints && <TableCell sx={{ pl: 2, pr: 2 }} width={"80px"} align="right">
 					<Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
 						{bestPoints ? <StarIcon sx={{ color: ArrowheadTheme.good, mr: 1 }} /> : undefined}
 						{player.stats.totalPoints.toLocaleString()}
 					</Box>
 				</TableCell>
+				}
 				<TableCell sx={{ pl: 2, pr: 2 }} width={"80px"} align="right">
 					<Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
 						{bestKills ? <StarIcon sx={{ color: ArrowheadTheme.good, mr: 1 }} /> : undefined}
@@ -120,16 +124,16 @@ function Row(props: TeamTableRowProps)
 					</Box>
 				</TableCell>
 				<TableCell sx={{ pr: 2 }} width={"80px"} align="right">{player.stats.kda.toLocaleString()}</TableCell>
-				{ffa ? 
+				{ffa && 
 					<TableCell sx={{ pl: 2, pr: 2, pt: 0, pb: 0 }} align="right" width={"64px"}>
 						<Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
 							{player.mmr.toLocaleString()}
 						</Box>
 					</TableCell> 
-				: undefined}
+				}
 			</TableRow>
 			<TableRow sx={{ width: "calc(100%-128px)"}}>
-				<TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={showRank && ffa ? 10 : showRank || ffa ? 9 : 8}>
+				<TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8 + +(showPoints ?? 0) + +(showRank ?? 0) + +(ffa ?? 0)}>
 					<Collapse in={expanded} timeout="auto" unmountOnExit sx={{ width: "auto" }}>
 						<Box sx={{ p: 1 }}>
 							<Grid container spacing={1}>

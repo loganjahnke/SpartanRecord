@@ -3,7 +3,7 @@ import { SpartanCompany } from "../../../Objects/Model/SpartanCompany";
 import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import { BreakdownTile } from "../Breakdowns/BreakdownTile";
 import { MatchRankTile, RankTile } from "./RankTile";
-import { MatchPlayer } from "../../../Objects/Pieces/MatchPlayer";
+import { MatchRanksProps } from "./KDARanks";
 
 export function AccuracyRanks(props: { company: SpartanCompany, sharedSR: ServiceRecord, goToMember: Function })
 {
@@ -24,9 +24,9 @@ export function AccuracyRanks(props: { company: SpartanCompany, sharedSR: Servic
 	);
 }
 
-export function AccuracyMatchRanks(props: { players: MatchPlayer[], goToMember: Function })
+export function AccuracyMatchRanks(props: MatchRanksProps)
 {
-	const { players, goToMember } = props;
+	const { players, myGamertag, goToMember } = props;
 
 	return (
         <Box sx={{ backgroundColor: "divider", borderRadius: 3, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
@@ -37,7 +37,7 @@ export function AccuracyMatchRanks(props: { players: MatchPlayer[], goToMember: 
                 {[...players]
                     .sort((a, b) => b.stats.shots.accuracy - a.stats.shots.accuracy)
                     .slice(0, 3)
-                    .map((player, index) => <MatchRankTile player={player} value={player.stats.shots.accuracy} rank={index + 1} goToMember={goToMember} isPercent />)}
+                    .map((player) => <MatchRankTile player={player} value={player.stats.shots.accuracy} myGamertag={myGamertag} goToMember={goToMember} isPercent />)}
             </Box>
 		</Box>
 	);
