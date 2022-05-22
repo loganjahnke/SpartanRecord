@@ -11,8 +11,7 @@ export enum ServiceRecordFilter
 {
 	Map = "map",
 	Outcome = "outcome",
-	Variant = "variant",
-	Playlist = "playlist"
+	Mode = "mode"
 }
 
 //#region Appearance
@@ -30,13 +29,23 @@ export const SetAppearance = async (app: admin.app.App, gamertag: string, data?:
 
 //#region Service Record
 /**
+ * Gets the total number of bot games from the last sync
+ * @param gamertag the gamertag to get the service record of
+ * @returns the total number of bot games
+ */
+export const GetTotalBotGames = async (app: admin.app.App, gamertag: string): Promise<number> =>
+{
+	return await get(app, `bots/${gamertag}`) ?? 0;
+}
+
+/**
  * Gets the service record for the gamertag from Firebase
  * @param gamertag the gamertag to get the service record of
  * @returns the service record for the gamertag
  */
 export const GetServiceRecord = async (app: admin.app.App, gamertag: string): Promise<AutocodeMultiplayerServiceRecord | undefined> =>
 {
-	return await get(app, `service_record/multiplayer/${gamertag}`);
+	return await get(app, `service_record/current/${gamertag}`);
 }
 
 /**
@@ -47,7 +56,10 @@ export const GetServiceRecord = async (app: admin.app.App, gamertag: string): Pr
 export const SetServiceRecord = async (app: admin.app.App, gamertag: string, data?: AutocodeMultiplayerServiceRecord): Promise<void> =>
 {
 	if (!data) { return; }
-	await set(app, `service_record/multiplayer/${gamertag}`, data);
+	await Promise.all([
+		set(app, `service_record/current/${gamertag}`, data),
+		set(app, `service_record/multiplayer/${gamertag}`, data)
+	]);
 }
 
 /**
@@ -105,6 +117,18 @@ export const SetHistoricStatistics = async (app: admin.app.App, gamertag: string
 //#endregion
 
 //#region Sync
+/**
+ * Is this gamertag allowed to sync all stats?
+ * @param gamertag the gamertag
+ * @returns true if allowed to sync all stats
+ */
+export const GetAllAllowed = async (app: admin.app.App): Promise<string[]> =>
+{
+	const allowed = await get(app, `allowed`);
+	if (!allowed) { return []; }
+	return Object.keys(allowed);
+}
+
 /**
  * Is this gamertag allowed to sync all stats?
  * @param gamertag the gamertag

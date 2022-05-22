@@ -5,9 +5,7 @@ import * as autocode from "./Helpers/SCAutocode";
 import { AutocodeHelpers } from "./Helpers/Schemas/AutocodeHelpers";
 import { AutocodeMatch, AutocodeMatchPlayer } from "./Helpers/Schemas/AutocodeMatch";
 import { AutocodeMultiplayerServiceRecord } from "./Helpers/Schemas/AutocodeMultiplayerServiceRecord";
-import { AutocodePlayerMatch } from "./Helpers/Schemas/AutocodePlayerMatch";
 import { FirebaseBest, FirebaseMatchesBest } from "./Helpers/Schemas/FirebaseBest";
-import { AutocodeAppearance } from "./Helpers/Schemas/AutocodeAppearance";
 
 //#region Helpers
 /**
@@ -19,7 +17,7 @@ import { AutocodeAppearance } from "./Helpers/Schemas/AutocodeAppearance";
  * @param isRanked was the match ranked?
  * @param secondsPlayed how many seconds was the match?
  */
-const UpdateMap = (srMap: Map<string, AutocodeMultiplayerServiceRecord>, filterMap: Map<string, number>, key: string | undefined, playerDetails: AutocodeMatchPlayer, isRanked: boolean, secondsPlayed: number): void =>
+const UpdateMap = (srMap: Map<string, AutocodeMultiplayerServiceRecord>, filterMap: Map<string, number>, key: string | undefined, playerDetails: AutocodeMatchPlayer, secondsPlayed: number): void =>
 {
 	if (!key) { return; }
 	
@@ -28,10 +26,10 @@ const UpdateMap = (srMap: Map<string, AutocodeMultiplayerServiceRecord>, filterM
 
 	// Get service record if possible, and then subtract match and add back to map
 	let sr = srMap.get(key);
-	if (sr) { AutocodeHelpers.AddMatchToServiceRecord(sr, playerDetails, isRanked, secondsPlayed); }
+	if (sr) { AutocodeHelpers.AddMatchToServiceRecord(sr, playerDetails, secondsPlayed); }
 	else
 	{ 
-		sr = AutocodeHelpers.CreateServiceRecordFromMatch(playerDetails.details.name, playerDetails, isRanked, secondsPlayed); 
+		sr = AutocodeHelpers.CreateServiceRecordFromMatch(playerDetails.details.name, playerDetails, secondsPlayed); 
 		srMap.set(key, sr);
 	}
 }
@@ -222,31 +220,46 @@ const PopulateFilterMap = (data: any, key: keyof any, map: Map<string, number>):
  * Loops through all matches until we hit the last match ID
  * @param app the firebase app
  * @param gamertag the gamertag
- * @param lastMatchID the last match ID
- * @param startingServiceRecord the starting service record
  * @returns nothing but love
  */
-const LoopThroughMatches = async (app: admin.app.App, gamertag: string, lastMatchID: string, startingServiceRecord: AutocodeMultiplayerServiceRecord): Promise<void> =>
+const LoopThroughMatches = async (app: admin.app.App, gamertag: string): Promise<void> =>
 {
-	// Should we loop?
-	const isAllowed = await firebase.GetIsAllowed(app, gamertag);
-	if (!isAllowed) { return; }
+	// Get previous SR, new SR, and bots SR
+	const [prevBotGames, prevSR, newSR, botsSR] = await Promise.all([
+		firebase.GetTotalBotGames(app, gamertag),
+		firebase.GetServiceRecord(app, gamertag),
+		autocode.GetServiceRecord(gamertag),
+		autocode.GetServiceRecord(gamertag, undefined, "a446725e-b281-414c-a21e-31b8700e95a1")
+	]);
 
-	// Get current game count from the service record that was passed in
-	const currGameCount = startingServiceRecord.data?.matches?.total ?? 0;
-	if (currGameCount === 0) { return; }
+	// If new SR has no games, return
+	const prevTotalGames = prevSR?.data?.matches?.total ?? 0;
+	const currTotalGames = newSR?.data?.matches?.total ?? 0;
+	const currBotGames = botsSR?.data?.matches?.total ?? 0;
+	if (currTotalGames === 0) 
+	{ 
+		console.error("Couldn't load autocode SR for " + gamertag);
+		return; 
+	}
+
+	// See how many bot games were played since last time, if negative, something went wrong
+	const botGamesPlayedSinceLastSync = (botsSR.data?.matches?.total ?? 0) - prevBotGames;
+	if (botGamesPlayedSinceLastSync < 0) 
+	{ 
+		console.error("Bot games total is a negative number for " + gamertag);
+		return; 
+	}
 	
-	let offset = 0;
-	let newLastMatchIDSynced = "";
-	let indexOfLastMatchID = -1;
-	let game = currGameCount;
 	let matches: (AutocodeMatch | undefined)[] = [];
 
 	// Setup maps to track filtered service records
 	const mapSRs = new Map<string, AutocodeMultiplayerServiceRecord>();
-	const variantSRs = new Map<string, AutocodeMultiplayerServiceRecord>();
-	const playlistSRs = new Map<string, AutocodeMultiplayerServiceRecord>();
+	const modeSRs = new Map<string, AutocodeMultiplayerServiceRecord>();
 	const outcomeSRs = new Map<string, AutocodeMultiplayerServiceRecord>();
+
+	const mapFilters = new Map<string, number>();
+	const modeFilters = new Map<string, number>();
+	const outcomeFilters = new Map<string, number>();
 	
 	// Get previous filtered SRs and best matches
 	const [filteredSRs, availableFilters, bestMatches, bestMatchesPerMap] = await Promise.all([
@@ -258,43 +271,38 @@ const LoopThroughMatches = async (app: admin.app.App, gamertag: string, lastMatc
 	
 	// Populate maps
 	PopulateSRMap(filteredSRs, firebase.ServiceRecordFilter.Map, mapSRs);
-	PopulateSRMap(filteredSRs, firebase.ServiceRecordFilter.Variant, variantSRs);
-	PopulateSRMap(filteredSRs, firebase.ServiceRecordFilter.Playlist, playlistSRs);
+	PopulateSRMap(filteredSRs, firebase.ServiceRecordFilter.Mode, modeSRs);
 	PopulateSRMap(filteredSRs, firebase.ServiceRecordFilter.Outcome, outcomeSRs);
-	
-	// Setup maps to track the keys of maps and modes and stuff
-	const mapFilters = new Map<string, number>();
-	const variantFilters = new Map<string, number>();
-	const playlistFilters = new Map<string, number>();
-	const outcomeFilters = new Map<string, number>();
 
 	PopulateFilterMap(availableFilters, firebase.ServiceRecordFilter.Map, mapFilters);
-	PopulateFilterMap(availableFilters, firebase.ServiceRecordFilter.Variant, variantFilters);
-	PopulateFilterMap(availableFilters, firebase.ServiceRecordFilter.Playlist, playlistFilters);
+	PopulateFilterMap(availableFilters, firebase.ServiceRecordFilter.Mode, modeFilters);
 	PopulateFilterMap(availableFilters, firebase.ServiceRecordFilter.Outcome, outcomeFilters);
 
 	// Get latest SR over time
-	const overtimeSR = startingServiceRecord;
+	const overtimeSR = prevSR ?? AutocodeHelpers.CreateEmptyServiceRecord(gamertag);
+	
+	// Get number of matches played since last pull
+	const matchesPlayedSinceLastPull: number = (currTotalGames - prevTotalGames) + (currBotGames - prevBotGames);
+	let game = prevTotalGames;
+	let remainingMatchesToQuery = matchesPlayedSinceLastPull;
 	
 	// Pull matches until we have the complete match history since the last query
-	do
+	while (remainingMatchesToQuery > 0)
 	{
-		// Get the last chunk of matches
-		const playerMatches = await autocode.GetPlayerMatches(gamertag, 25, offset);
-		if (!playerMatches || !playerMatches.data || !playerMatches.data.matches) { return; }
+		// Reset matches
+		matches = [];
 
-		// Do a quick loop to see if we hit our last match ID and cut everything after it
-		let playerMatchResults = playerMatches.data.matches;
-		if (lastMatchID)
-		{
-			indexOfLastMatchID = playerMatchResults.findIndex((match: AutocodePlayerMatch) => match.id === lastMatchID);
-			if (indexOfLastMatchID === 0) { break; }
-			if (indexOfLastMatchID !== -1)
-			{
-				playerMatchResults = playerMatchResults.slice(0, indexOfLastMatchID);
-			}
+		// Determine number of matches we need to query during this iteration of the loop (max is 25)
+		const queryCount = Math.min(remainingMatchesToQuery, 25);
+		const offset = remainingMatchesToQuery - queryCount;
+		const playerMatches = await autocode.GetPlayerMatches(gamertag, queryCount, offset);
+		if (!playerMatches || !playerMatches.data || !playerMatches.data.matches) 
+		{ 
+			console.error("Player Matches were not returned. Skipping " + gamertag);
+			return; 
 		}
 
+		const playerMatchResults = playerMatches.data.matches;
 		const autocodeMatchesToQuery = new Map<string, number>();
 		const matchIDsToGet: string[] = [];
 
@@ -322,7 +330,7 @@ const LoopThroughMatches = async (app: admin.app.App, gamertag: string, lastMatc
 			// Something went wrong here
 			if (!autocodeMatches || !autocodeMatches.data) 
 			{ 
-				console.warn("AutocodeMatches returned nothing for " + matchIDsToGet);
+				console.error("AutocodeMatches returned nothing for " + matchIDsToGet + " for " + gamertag);
 				return; 
 			}
 	
@@ -351,29 +359,24 @@ const LoopThroughMatches = async (app: admin.app.App, gamertag: string, lastMatc
 		// Loop through all matches for this query, index them, and store details to gamertag
 		for (const autocodeMatch of matches)
 		{
+			remainingMatchesToQuery -= 1;
 			if (!autocodeMatch) { continue; }
-			if (game <= 0) { break; }
 
 			// Match is required
 			const match = autocodeMatch.match;
 			if (!match || !match.id) { continue; }
-			if (!newLastMatchIDSynced) { newLastMatchIDSynced = match.id; }
-
-			// Update offset
-			offset += 1;
 
 			// We don't keep track of bot battles, so skip this
 			if (match.experience === "pve-bots") { continue; }
 			if (match.type !== "matchmaking") { continue; }
 
-			// Update which game we are on, break if we met our goal
-			game -= 1;
+			// Update which game we are on
+			game += 1;
 
 			// Need to get player details
 			const playerDetails = AutocodeHelpers.GetPlayerDetailsForGamertag(gamertag, autocodeMatch);
 			if (!playerDetails) { continue; }
 
-			const isRanked = !!match.details?.playlist?.properties?.ranked;
 			const secondsPlayed = match.duration?.seconds ?? 0;
 			const map = match.details?.map?.name;
 
@@ -381,35 +384,32 @@ const LoopThroughMatches = async (app: admin.app.App, gamertag: string, lastMatc
 			EvaluateBestValues(match.id, playerDetails, bestMatches, map, bestMatchesPerMap);
 
 			// Update filtered service records
-			UpdateMap(mapSRs, mapFilters, map, playerDetails, isRanked, secondsPlayed);
-			UpdateMap(variantSRs, variantFilters, match.details?.gamevariant?.name, playerDetails, isRanked, secondsPlayed);
-			UpdateMap(playlistSRs, playlistFilters, match.details?.playlist?.name, playerDetails, isRanked, secondsPlayed);
-			UpdateMap(outcomeSRs, outcomeFilters, playerDetails.outcome, playerDetails, isRanked, secondsPlayed);
+			UpdateMap(mapSRs, mapFilters, map, playerDetails, secondsPlayed);
+			UpdateMap(modeSRs, modeFilters, match.details?.gamevariant?.name, playerDetails, secondsPlayed);
+			UpdateMap(outcomeSRs, outcomeFilters, playerDetails.outcome, playerDetails, secondsPlayed);
 
 			// Update service record overtime
-			AutocodeHelpers.RemoveMatchFromServiceRecord(overtimeSR, playerDetails, isRanked, secondsPlayed);
+			AutocodeHelpers.AddMatchToServiceRecord(overtimeSR, playerDetails, secondsPlayed);
 
 			// Store history and update filters every 25 games
-			if (game % 25 === 0 && game > 0)
+			if (game % 25 === 0)
 			{
 				// Populate maps
 				await firebase.SetHistoricStatistics(app, gamertag, AutocodeHelpers.TrimHistoricServiceRecord(overtimeSR), game);
 			}
 		}
-	} while (matches && matches.length > 0 && game > 0 && indexOfLastMatchID === -1);
+	}
 
 	// Save filters, bests, last synced match, and anything else we need to wrap up
 	await Promise.all([
 		firebase.SetBest(app, gamertag, bestMatches),
 		firebase.SetBestForMaps(app, gamertag, bestMatchesPerMap),
-		firebase.SetLastSyncedMatchID(app, gamertag, newLastMatchIDSynced),
+		firebase.SetServiceRecord(app, gamertag, newSR),
 		firebase.SetFilteredServiceRecord(app, gamertag, firebase.ServiceRecordFilter.Map, mapSRs),
-		firebase.SetFilteredServiceRecord(app, gamertag, firebase.ServiceRecordFilter.Variant, variantSRs),
-		firebase.SetFilteredServiceRecord(app, gamertag, firebase.ServiceRecordFilter.Playlist, playlistSRs),
+		firebase.SetFilteredServiceRecord(app, gamertag, firebase.ServiceRecordFilter.Mode, modeSRs),
 		firebase.SetFilteredServiceRecord(app, gamertag, firebase.ServiceRecordFilter.Outcome, outcomeSRs),
 		firebase.SetAvailableFilters(app, gamertag, firebase.ServiceRecordFilter.Map, mapFilters),
-		firebase.SetAvailableFilters(app, gamertag, firebase.ServiceRecordFilter.Variant, variantFilters),
-		firebase.SetAvailableFilters(app, gamertag, firebase.ServiceRecordFilter.Playlist, playlistFilters),
+		firebase.SetAvailableFilters(app, gamertag, firebase.ServiceRecordFilter.Mode, modeFilters),
 		firebase.SetAvailableFilters(app, gamertag, firebase.ServiceRecordFilter.Outcome, outcomeFilters)
 	]);
 
@@ -419,90 +419,30 @@ const LoopThroughMatches = async (app: admin.app.App, gamertag: string, lastMatc
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 
-export const GetLatestStatistics = functions
+export const UpdatePlayerFilters = functions
 	.runWith({ 
 		timeoutSeconds: 540, 
 		memory: "512MB" 
-	}).https.onCall(async (data, context): Promise<boolean> =>
+	}).pubsub.schedule("every day 12:00")
+	.timeZone("America/Chicago")
+	.onRun(async (context) =>
 {
-	// Check input
-	const gamertag = data.gamertag;
-	if (!gamertag) 
-	{ 
-		console.warn("No gamertag passed in.");
-		return false; 
-	}
-
 	const app = admin.initializeApp();
 
-	// Currently syncing this gamertag, don't do it double
-	if (await firebase.GetIsSyncing(app, gamertag)) 
-	{
-		await app.delete();
-		return false;
-	}
-
-	// Check if we need to sync at all
-	const [lastPlayedMatchID, lastSyncedMatchID] = await Promise.all([
-		autocode.GetLastMatchID(gamertag),
-		firebase.GetLastSyncedMatchID(app, gamertag)
-	]);
-
-	// Check if this player has played any matches at all
-	if (!lastPlayedMatchID) 
+	// Get all allowed gamertags
+	const gamertags = await firebase.GetAllAllowed(app);
+	if (!gamertags || gamertags.length === 0) 
 	{ 
+		console.error("WARNING: no gamertags found, nothing to update."); 
 		await app.delete();
-		console.log(gamertag + " has not played any matches.");
-		return false; 
+		return; 
 	}
 
-	// Check if the last synced match is the same as the current last match
-	if (lastPlayedMatchID === lastSyncedMatchID) 
-	{ 
-		await app.delete();
-		return false; 
-	}
-
-	// Get service record
-	let [serviceRecord, appearance] = await Promise.all([
-		autocode.GetServiceRecord(gamertag),
-		autocode.GetAppearance(gamertag),
-		firebase.SetIsSyncing(app, gamertag, true)
-	]).catch(() => 
+	await Promise.all(gamertags.map((gamertag) => LoopThroughMatches(app, gamertag))).finally(async () => 
 	{
-		return [false, false]; 
-	});
-
-	// Uh oh
-	if (serviceRecord === false || appearance === false)
-	{
-		await firebase.SetIsSyncing(app, gamertag, false);
-		await app.delete();
-		console.error("Something went wrong, check autocode logs.");
-		return false; 
-	}
-
-	// Check if something went wrong
-	if ((serviceRecord as any)?.error)
-	{
-		await firebase.SetIsSyncing(app, gamertag, false);
-		await app.delete();
-		console.error((serviceRecord as any).error.message);
-		return false; 
-	}
-
-	// Otherwise update the current service record, appearance, and historic service record
-	await Promise.all([
-		firebase.SetServiceRecord(app, gamertag, serviceRecord as AutocodeMultiplayerServiceRecord),
-		firebase.SetAppearance(app, gamertag, appearance as AutocodeAppearance),
-		LoopThroughMatches(app, gamertag, lastSyncedMatchID, serviceRecord as AutocodeMultiplayerServiceRecord)
-	]).finally(async () =>
-	{
-		// No longer syncing
-		await firebase.SetIsSyncing(app, gamertag, false);
 		// Clean up
 		await app.delete();
 	});
 
-	return true;
+	return;
 });

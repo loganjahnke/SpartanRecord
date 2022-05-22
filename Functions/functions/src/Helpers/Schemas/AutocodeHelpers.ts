@@ -226,14 +226,13 @@ export class AutocodeHelpers
 	 * Creates a new service record from a player's match details
 	 * @param gamertag the gamertag
 	 * @param playerDetails the player's match details
-	 * @param isRanked was this a ranked match?
 	 * @param secondsPlayed the number of seconds the match lasted
 	 * @returns a service record for the match
 	 */
-	public static CreateServiceRecordFromMatch(gamertag: string, playerDetails: AutocodeMatchPlayer, isRanked: boolean, secondsPlayed: number): AutocodeMultiplayerServiceRecord
+	public static CreateServiceRecordFromMatch(gamertag: string, playerDetails: AutocodeMatchPlayer, secondsPlayed: number): AutocodeMultiplayerServiceRecord
 	{
 		const sr = this.CreateEmptyServiceRecord(gamertag);
-		this.AddMatchToServiceRecord(sr, playerDetails, isRanked, secondsPlayed);
+		this.AddMatchToServiceRecord(sr, playerDetails, secondsPlayed);
 		return sr;
 	}
 
@@ -242,10 +241,9 @@ export class AutocodeHelpers
 	 * Adds a player's details to an existing service record
 	 * @param serviceRecord the service record to add to
 	 * @param playerDetails the player's match details
-	 * @param isRanked was this a ranked match?
 	 * @param secondsPlayed the number of seconds the match lasted
 	 */
-	public static AddMatchToServiceRecord(serviceRecord: AutocodeMultiplayerServiceRecord, playerDetails: AutocodeMatchPlayer, isRanked: boolean, secondsPlayed: number): void
+	public static AddMatchToServiceRecord(serviceRecord: AutocodeMultiplayerServiceRecord, playerDetails: AutocodeMatchPlayer, secondsPlayed: number): void
 	{	
 		if (!serviceRecord.data) { return; }
 
