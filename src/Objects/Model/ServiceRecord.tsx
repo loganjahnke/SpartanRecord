@@ -28,6 +28,8 @@ export class ServiceRecord
     public medals: Medal[];
     /** Raw autocode and firebase JSON */
     public data?: AutocodeServiceRecordData;
+    /** If there is an error in the response, store it here */
+    public error?: string;
  
     /** The damage efficiency per kill */
     public get damageEfficiency(): number
@@ -64,6 +66,12 @@ export class ServiceRecord
      */
     constructor(result?: AutocodeMultiplayerServiceRecord)
     {
+        // Add error
+        if (result && (result as any).error)
+        {
+            this.error = (result as any).error?.message;
+        }
+
         // Set raw result for future use
         this.data = result?.data;
 

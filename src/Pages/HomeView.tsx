@@ -4,12 +4,7 @@ import { useState } from "react";
 import { GamertagSearch } from "./Subpage/GamertagSearch";
 import { ViewProps } from "./Props/ViewProps";
 
-interface HomeViewProps
-{
-	switchTab: (url: string, tab?: string) => void;
-}
-
-export function HomeView(props: ViewProps & HomeViewProps)
+export function HomeView(props: ViewProps)
 {
 	//#region Props and Navigate
 	const { updatePlayer, switchTab } = props;

@@ -1,13 +1,11 @@
 import { Box, Divider, Grid, Toolbar } from "@mui/material";
-import React from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { FFAResultBreakdown, TeamResultBreakdown } from "../Assets/Components/Breakdowns/TeamResultBreakdown";
+import { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { TeamResultBreakdown } from "../Assets/Components/Breakdowns/TeamResultBreakdown";
 import { ImageCard } from "../Assets/Components/Cards/ImageCard";
 import { AccuracyMatchRanks } from "../Assets/Components/Ranks/AccuracyRanks";
 import { DamageMatchRanks } from "../Assets/Components/Ranks/DamageRanks";
 import { KDAMatchRanks } from "../Assets/Components/Ranks/KDARanks";
-import { HaloMode } from "../Database/ArrowheadFirebase";
 
 import { Match } from "../Objects/Model/Match";
 import { MatchPlayer } from "../Objects/Pieces/MatchPlayer";
@@ -18,9 +16,8 @@ import { TeamTable } from "./Subpage/TeamTable";
 export function SingleMatchView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, updatePlayer: setGamertag } = props;
+	const { app, setLoadingMessage, updatePlayer: setGamertag, switchTab } = props;
 	const { id, gamertag } = useParams();
-	const navigate = useNavigate();
 	//#endregion
 	
 	//#region State
@@ -71,7 +68,7 @@ export function SingleMatchView(props: ViewProps)
 	{
 		if (tag && tag.indexOf("343 Bot") !== 0)
 		{
-			navigate("/service_record/" + tag);
+			switchTab("/service_record/" + tag, "Service Record");
 		}
 	}
 

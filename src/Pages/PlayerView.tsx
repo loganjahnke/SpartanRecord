@@ -1,6 +1,6 @@
-import { Box, Divider, Grid, Toolbar } from "@mui/material";
+import { Box, Button, Divider, Grid, Toolbar, Typography } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { TopMedals } from "../Assets/Components/Medals/TopMedals";
 import { KillDeathCard } from "../Assets/Components/Breakdowns/KillDeathCard";
@@ -8,8 +8,6 @@ import { AssistBreakdown } from "../Assets/Components/Breakdowns/AssistBreakdown
 import { MatchesBreakdown } from "../Assets/Components/Breakdowns/MatchesBreakdown";
 import { ShotsBreakdown } from "../Assets/Components/Breakdowns/ShotsBreakdown";
 import { DamageBreakdown } from "../Assets/Components/Breakdowns/DamageBreakdown";
-import { Player } from "../Objects/Model/Player";
-import { ServiceRecordChart } from "../Assets/Components/Charts/ServiceRecordChart";
 import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
 import { LevelBreakdown } from "../Assets/Components/Breakdowns/LevelBreakdown";
 import { VehicleBreakdown } from "../Assets/Components/Breakdowns/VehicleBreakdown";
@@ -23,9 +21,8 @@ import { SeasonChooser } from "./Subpage/SeasonChooser";
 export function PlayerView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setBackgroundLoadingProgress, player, updatePlayer } = props;
+	const { app, setLoadingMessage, setBackgroundLoadingProgress, player, updatePlayer, switchTab } = props;
 	const { gamertag } = useParams();
-	const navigate = useNavigate();
 	//#endregion
 
 	//#region Refs
@@ -40,7 +37,7 @@ export function PlayerView(props: ViewProps)
 
 	const loadData = useCallback(async () => 
 	{		
-		if (!gamertag) { navigate("/"); return; }
+		if (!gamertag) { switchTab("/", "Search"); return; }
 
 		// Set page gamertag and show loading message
 		setLoadingMessage("Loading " + gamertag);
@@ -90,7 +87,7 @@ export function PlayerView(props: ViewProps)
 			// });
 		}
 		else { setBackgroundLoadingProgress(undefined); }
-	}, [lastUpdate, app, gamertag, updatePlayer, setBackgroundLoadingProgress, season, setSeason]);
+	}, [lastUpdate, app, gamertag, updatePlayer, setBackgroundLoadingProgress, season, setSeason, switchTab]);
 	
 	useEffect(() =>
 	{
@@ -107,7 +104,14 @@ export function PlayerView(props: ViewProps)
 			<Toolbar />
 			<Divider />
 			<Box sx={{ p: player ? 2 : 0, height: "calc(100% - 64px)" }}>
-				{player && 
+				{player && player.serviceRecord?.error !== undefined &&
+					<Box sx={{ m: 10, color: "primary.main" }}>
+						<Typography variant="h3">Couldn't load {player.gamertag}</Typography>
+						<Typography variant="h6">{player.serviceRecord.error}</Typography>
+						<Button sx={{ mt: 4 }} onClick={() => switchTab("/", "Search")} variant="contained">Back to Search</Button>
+					</Box>
+				}
+				{player && player.serviceRecord?.error === undefined &&
 					<Grid container spacing={2}>
 						{/* Top */}
 						<Grid item xs={12}>
@@ -129,6 +133,9 @@ export function PlayerView(props: ViewProps)
 								<KDABreakdown serviceRecord={player.serviceRecord} />
 							</Grid>
 							<Grid item xs={12}>
+								<LevelBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
+							</Grid>
+							<Grid item xs={12}>
 								<ShotsBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 						</Grid>
@@ -136,9 +143,6 @@ export function PlayerView(props: ViewProps)
 						<Grid container item spacing={2} sm={12} md={6} lg={6} xl={3} sx={{ alignContent: "flex-start" }}>
 							<Grid item xs={12}>
 								<KillBreakdownCard serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
-							</Grid>
-							<Grid item xs={12}>
-								<LevelBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
 								<VehicleBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
@@ -161,8 +165,7 @@ export function PlayerView(props: ViewProps)
 							{/* <Grid item xs={12}>
 								<CampaignBreakdown campaignRecord={player.campaignRecord} />
 							</Grid> */}
-						</Grid>
-						
+						</Grid>						
 					</Grid>}
 			</Box>
 		</Box>

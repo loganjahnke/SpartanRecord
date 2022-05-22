@@ -10,4 +10,5 @@ export interface ViewProps
     setBackgroundLoadingProgress: (progress: number | undefined) => void;
     player?: Player;
     updatePlayer: (gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, season?: number) => void;
+    switchTab: (url: string, tab?: string) => void;
 }

@@ -21,7 +21,7 @@ export class SCAutocode
 	/** Turns on or off debugging mode */
 	private readonly IS_DEBUGGING = process.env.NODE_ENV !== "production";
 	/** The HaloDotAPI version */
-	private readonly AUTOCODE_VERSION = "1-4-2";
+	private readonly AUTOCODE_VERSION = "1-4-3";
 
 	constructor() {}
 

@@ -29,7 +29,7 @@ export function AHAppBar(props: AHAppBarProps)
 				<CircularProgress size={20} variant={loadingFromAutocode === -1 ? "indeterminate" : "determinate"} value={loadingFromAutocode} />
 				<Typography sx={{ ml: 2 }} variant="subtitle1">Getting latest data from HaloDotAPI</Typography>
 				</>}
-				<Box sx={{ flexGrow: 1 }}></Box>
+				<Box sx={{ flexGrow: 1, ml: 1, mr: 1 }}></Box>
 				{player && <PlayerCard player={player} rightAlign />}
 			</Toolbar>
 		</AppBar>

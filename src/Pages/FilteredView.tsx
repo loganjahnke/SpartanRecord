@@ -27,14 +27,12 @@ import { SeasonChooser } from "./Subpage/SeasonChooser";
 export function FilteredView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, updatePlayer: setGamertag } = props;
+	const { app, setLoadingMessage, updatePlayer, switchTab } = props;
 	const { node, filter, gamertag } = useParams();
-	const navigate = useNavigate();
 	//#endregion
 	
 	//#region State
 	const [showPerMatch, setShowPerMatch] = useState(false);
-	const [myPlayer, setMyPlayer] = useState(new Player());
     const [sr, setSR] = useState<ServiceRecord | undefined>();
     const [selectedPlaylist, setSelectedPlaylist] = useState<AutocodePlaylist | undefined>();
 	const [playlists, setPlaylists] = useState<AutocodePlaylist[] | undefined>([]);
@@ -54,9 +52,6 @@ export function FilteredView(props: ViewProps)
 		if (gamertag && node)
 		{
 			setLoadingMessage("Loading filters");
-
-			const player = await app.GetPlayerAppearanceOnly(gamertag);
-			setMyPlayer(player);
 
 			if (node === ServiceRecordFilter.Playlist)
 			{
@@ -92,13 +87,14 @@ export function FilteredView(props: ViewProps)
 				setSelectedPlaylist(undefined);
 			}
 
-			setGamertag(gamertag);
+			const myPlayer = await app.GetPlayerAppearanceOnly(gamertag);
+			updatePlayer(gamertag, myPlayer.appearance);
             
 			app.LogViewServiceRecord(gamertag, node as ServiceRecordFilter, node);
 		}
 
 		setLoadingMessage("");
-	}, [app, gamertag, setMyPlayer, node, filter, season]);
+	}, [app, gamertag, node, filter, season]);
 
 	const loadFilteredSR = useCallback(async () => 
 	{		
@@ -126,8 +122,8 @@ export function FilteredView(props: ViewProps)
 
 	const onFilterSelected = useCallback((filter: string) =>
 	{
-		navigate(`/service_record/${node}/${gamertag}/${filter}`)
-	}, [navigate]);
+		switchTab(`/service_record/${node}/${gamertag}/${filter}`, node === ServiceRecordFilter.Playlist ? "Playlists" : node === ServiceRecordFilter.Ranked ? "Ranked" : node === ServiceRecordFilter.Social ? "Social" : node === ServiceRecordFilter.Variant ? "Variants" : "");
+	}, [switchTab]);
 
     useEffect(() =>
     {
