@@ -45,5 +45,8 @@ export enum ServiceRecordFilter
 	Social = "social",
 	Ranked = "ranked",
 	Variant = "variant",
-	Playlist = "playlist"
+	Playlist = "playlist",
+	Maps = "maps",
+	Modes = "modes",
+	Outcomes = "outcomes"
 }

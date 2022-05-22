@@ -1,6 +1,7 @@
-import { SyntheticEvent, useEffect } from "react";
+import { SyntheticEvent } from "react";
 import { Box, Button, Divider, Drawer, Link, Tab, Tabs, Toolbar, Typography } from "@mui/material";
 import { ServiceRecordFilter } from "../../../Database/ArrowheadFirebase";
+import { Player } from "../../../Objects/Model/Player";
 
 import MapIcon from '@mui/icons-material/Map';
 import ListIcon from '@mui/icons-material/List';
@@ -12,7 +13,9 @@ import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import GroupsIcon from '@mui/icons-material/Groups';
 import StarIcon from '@mui/icons-material/Star';
-import { Player } from "../../../Objects/Model/Player";
+import DeveloperModeIcon from '@mui/icons-material/DeveloperMode';
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 interface AHDrawerProps
 {
@@ -69,11 +72,28 @@ export function AHDrawer(props: AHDrawerProps)
 			case "Matches":
 				switchTab(`/matches/${player.gamertag}`, newTab);
 				break;
-			case "Best":
-				switchTab(`/best/matches/${player.gamertag}`, newTab);
-				break;
 			case "Company":
 				switchTab(`/arrowhead`, newTab);
+				break;
+			// Patreon exclusives
+			case "Patreon":
+				switchTab(`/patreon/${player.gamertag}`, newTab);
+				break;
+			case "Maps":
+				if (!isAllowed) { switchTab(`/patreon/${player.gamertag}`, newTab); break; }
+				switchTab(`/service_record/${ServiceRecordFilter.Maps}/${player.gamertag}`, newTab);
+				break;
+			case "Modes":
+				if (!isAllowed) { switchTab(`/patreon/${player.gamertag}`, newTab); break; }
+				switchTab(`/service_record/${ServiceRecordFilter.Modes}/${player.gamertag}`, newTab);
+				break;
+			case "Match Outcome":
+				if (!isAllowed) { switchTab(`/patreon/${player.gamertag}`, newTab); break; }
+				switchTab(`/service_record/${ServiceRecordFilter.Outcomes}/${player.gamertag}`, newTab);
+				break;
+			case "Best":
+				if (!isAllowed) { switchTab(`/patreon/${player.gamertag}`, newTab); break; }
+				switchTab(`/best/matches/${player.gamertag}`, newTab);
 				break;
 			default: 
 				console.log("Something unexpected was pressed in the tabs: " + newTab);
@@ -98,15 +118,17 @@ export function AHDrawer(props: AHDrawerProps)
 				<Tabs orientation="vertical" value={currentTab || "Search"} onChange={tabClicked} sx={{ mt: 5 }}>
 					<Tab className="ahTab" value="Search" label="Search" icon={<PersonSearchIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Service Record" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" />
-					{/* <Tab className="ahTab" value="Maps" label="Maps" icon={<MapIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
 					<Tab className="ahTab" value="Playlists" label="Playlists" icon={<ListIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Variants" label="Variants" icon={<GamesIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Social" label="Social" icon={<GroupsIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Ranked" label="Ranked" icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					{/* <Tab className="ahTab" value="Match Outcome" label="Match Outcome" icon={<EmojiEventsIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
 					<Tab className="ahTab" value="Medals" label="Medals" icon={<MilitaryTechIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Matches" label="Matches" icon={<SportsEsportsIcon />} iconPosition="start" />
-					{/* <Tab className="ahTab" value="Best" label="Best Matches" icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
+					<Tab className="ahTab" value="Patreon" label="Patreon" icon={<EmojiEmotionsIcon />} iconPosition="start" />
+					<Tab className="ahTab" value="Maps" label="Maps" icon={<MapIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Modes" label="Modes" icon={<DeveloperModeIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Match Outcome" label="Match Outcome" icon={<EmojiEventsIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Best" label="Best Matches" icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					{/* <Tab className="ahTab" value="Company" label="Spartan Company" icon={<GroupsIcon />} iconPosition="start" /> */}
 				</Tabs>
 				: player && player.gamertag ?
@@ -119,6 +141,11 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab className="ahTab" value="Ranked" label="Ranked" icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Medals" label="Medals" icon={<MilitaryTechIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Matches" label="Matches" icon={<SportsEsportsIcon />} iconPosition="start" />
+					<Tab className="ahTab" value="Patreon" label="Patreon" icon={<EmojiEmotionsIcon />} iconPosition="start" />
+					<Tab className="ahTab" value="Maps" label="Maps" icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Modes" label="Modes" icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Match Outcome" label="Match Outcome" icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Best" label="Best Matches" icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					{/* <Tab className="ahTab" value="Company" label="Spartan Company" icon={<GroupsIcon />} iconPosition="start" /> */}
 				</Tabs>
 				:

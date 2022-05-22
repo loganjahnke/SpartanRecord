@@ -151,14 +151,15 @@ export class SCFirebase
 	{
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetAvailableFilters()", `${gamertag} - ${node}`); }
 
+		const n = node === ServiceRecordFilter.Maps ? "map" : ServiceRecordFilter.Modes ? "mode" : "outcome";
 		const filters: SRFilter[] = [];
-		const snapshot = await this.__get(`filters/${gamertag}/${node}`);
+		const snapshot = await this.__get(`filters/${gamertag}/${n}`);
 		if (snapshot)
 		{
 			for (const name in snapshot.val())
 			{
 				const count = snapshot.val()[name];
-				filters.push(new SRFilter(name, count ?? 0));
+				filters.push(new SRFilter(name, name, count ?? 0));
 			}
 		}
 

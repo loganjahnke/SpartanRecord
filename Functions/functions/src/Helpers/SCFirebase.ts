@@ -39,6 +39,16 @@ export const GetTotalBotGames = async (app: admin.app.App, gamertag: string): Pr
 }
 
 /**
+ * Gets the total number of bot games from the last sync
+ * @param gamertag the gamertag to get the service record of
+ * @returns the total number of bot games
+ */
+export const SetTotalBotGames = async (app: admin.app.App, gamertag: string, count: number): Promise<void> =>
+{
+	await set(app, `bots/${gamertag}`, count);
+}
+
+/**
  * Gets the service record for the gamertag from Firebase
  * @param gamertag the gamertag to get the service record of
  * @returns the service record for the gamertag

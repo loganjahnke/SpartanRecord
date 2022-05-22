@@ -15,13 +15,12 @@ import { FirebaseBest } from "../Database/Schemas/FirebaseBest";
 export function BestMatchesView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, updatePlayer: setGamertag } = props;
+	const { app, setLoadingMessage, updatePlayer, switchTab } = props;
 	const { filter, gamertag } = useParams();
 	const navigate = useNavigate();
 	//#endregion
 	
 	//#region State
-	const [myPlayer, setMyPlayer] = useState(new Player());
 	const [bests, setBests] = useState<FirebaseBest>();
     const [bestKDA, setBestKDA] = useState<Match>();
 	const [worstKDA, setWorstKDA] = useState<Match>();
@@ -45,9 +44,9 @@ export function BestMatchesView(props: ViewProps)
 		{
 			setLoadingMessage("Loading " + gamertag);
 
-			const player = await app.GetPlayerAppearanceOnly(gamertag);
+			const myPlayer = await app.GetPlayerAppearanceOnly(gamertag);
 			const [filters, bests] = await Promise.all([
-				await app.GetAvailableFilters(gamertag, ServiceRecordFilter.Social),
+				await app.GetAvailableFilters(gamertag, ServiceRecordFilter.Maps),
 				await app.GetBest(gamertag)
 			]);
 			
@@ -71,12 +70,11 @@ export function BestMatchesView(props: ViewProps)
 			
 			setBests(bests);
 			setAvailableFilters(filters);
-			setMyPlayer(player);
-			setGamertag(gamertag);
+			updatePlayer(gamertag, myPlayer.appearance);
 		}
 
 		setLoadingMessage("");
-	}, [app, gamertag, setMyPlayer, setLoadingMessage]);
+	}, [app, gamertag, setLoadingMessage, updatePlayer]);
 
 	const loadFilteredSR = useCallback(async () => 
 	{		
@@ -164,11 +162,11 @@ export function BestMatchesView(props: ViewProps)
     {
 		if (gamertag)
 		{
-			navigate(`/match/${id}/${gamertag}`);
+			switchTab(`/match/${id}/${gamertag}`, "Matches");
 		}
 		else 
 		{
-			navigate(`/match/${id}`);
+			switchTab(`/match/${id}`, "Matches");
 		}
     }
 
@@ -178,16 +176,10 @@ export function BestMatchesView(props: ViewProps)
 			<Divider />
 			<Box sx={{ p: 2 }}>
 				<Grid container spacing={2}>
-					{/* Top */}
-					<Grid item xs={12}>
-						<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
-							<PlayerCard player={myPlayer} />
-						</Box>
-					</Grid>
 					{/* Still top but less so*/}
 					<Grid item xs={12}>
 						<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
-							<ChipFilters activeFilter={selectedFilter ?? ""} filters={[]} onFilterClick={onFilterSelected} />
+							<ChipFilters activeFilter={selectedFilter ?? ""} filters={availableFilters} onFilterClick={onFilterSelected} />
 						</Box>
 					</Grid>
 				</Grid>

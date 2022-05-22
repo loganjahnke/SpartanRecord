@@ -1,11 +1,12 @@
 import { Box, Chip, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useEffect, useState } from "react";
 import { AutocodePlaylist, AutocodeVariant } from "../../Database/Schemas/AutocodeMetadata";
+import { SRFilter } from "../../Objects/Pieces/SRFilter";
 
 interface ServiceRecordFiltersProps
 {
 	activeFilter: string;
-	filters: AutocodePlaylist[] | AutocodeVariant[] | string[];
+	filters: AutocodePlaylist[] | AutocodeVariant[] | string[] | SRFilter[];
 	onFilterClick: (filter: string) => void;
 }
 
@@ -28,6 +29,10 @@ export function ChipFilters(props: ServiceRecordFiltersProps)
 				if (typeof(filter) === "string")
 				{
 					return <Chip sx={{ margin: "4px 4px" }} label={filter} variant={activeFilter === filter ? "filled" : "outlined"} onClick={() => onChipClick(filter)} />;
+				}
+				else if (filter instanceof SRFilter)
+				{
+					return <Chip sx={{ margin: "4px 4px" }} label={(filter as SRFilter).name + " (" + (filter as SRFilter).count + ")"} variant={activeFilter === (filter as SRFilter).id ? "filled" : "outlined"} onClick={() => onChipClick((filter as SRFilter).id)} />;
 				}
 				else
 				{

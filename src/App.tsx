@@ -22,6 +22,7 @@ import { BestMatchesView } from "./Pages/BestMatchesView";
 import { Player } from "./Objects/Model/Player";
 import { Appearance } from "./Objects/Model/Appearance";
 import { ServiceRecord } from "./Objects/Model/ServiceRecord";
+import { PatreonView } from "./Pages/PatreonView";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -81,9 +82,8 @@ const App = () =>
 		}
 
 		setPlayer(player);
+		updateIsAllowed();
 	}, [player, setPlayer]);
-
-	useEffect(() => { updateIsAllowed() }, [player]);
 	//#endregion
 
 	//#region App Bar and Drawer
@@ -117,14 +117,15 @@ const App = () =>
 				<Routes>
 					<Route path="/" element={<HomeView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
 					<Route path="/service_record/:gamertag" element={<PlayerView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
-					<Route path={`/service_record/:node/:gamertag`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
-					<Route path={`/service_record/:node/:gamertag/:filter`} element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
+					<Route path="/service_record/:node/:gamertag" element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
+					<Route path="/service_record/:node/:gamertag/:filter" element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
 					<Route path="/best/matches/:gamertag" element={<BestMatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
 					<Route path="/arrowhead" element={<SpartanCompanyView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
 					<Route path="/medals/:gamertag" element={<MedalsView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
 					<Route path="/matches/:gamertag" element={<MatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
 					<Route path="/match/:id" element={<SingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
 					<Route path="/match/:id/:gamertag" element={<SingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
+					<Route path="/patreon/:gamertag" element={<PatreonView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
 					<Route path="*" element={<UhOh />} />
 				</Routes>
 			</Box>

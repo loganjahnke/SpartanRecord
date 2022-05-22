@@ -405,6 +405,7 @@ const LoopThroughMatches = async (app: admin.app.App, gamertag: string): Promise
 		firebase.SetBest(app, gamertag, bestMatches),
 		firebase.SetBestForMaps(app, gamertag, bestMatchesPerMap),
 		firebase.SetServiceRecord(app, gamertag, newSR),
+		firebase.SetTotalBotGames(app, gamertag, currBotGames),
 		firebase.SetFilteredServiceRecord(app, gamertag, firebase.ServiceRecordFilter.Map, mapSRs),
 		firebase.SetFilteredServiceRecord(app, gamertag, firebase.ServiceRecordFilter.Mode, modeSRs),
 		firebase.SetFilteredServiceRecord(app, gamertag, firebase.ServiceRecordFilter.Outcome, outcomeSRs),
