@@ -122,13 +122,13 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab className="ahTab" value="Variants" label="Variants" icon={<GamesIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Social" label="Social" icon={<GroupsIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Ranked" label="Ranked" icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Maps" label="Maps" icon={<MapIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Match Outcome" label="Match Outcome" icon={<EmojiEventsIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Medals" label="Medals" icon={<MilitaryTechIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Matches" label="Matches" icon={<SportsEsportsIcon />} iconPosition="start" />
-					<Tab className="ahTab" value="Patreon" label="Patreon" icon={<EmojiEmotionsIcon />} iconPosition="start" />
-					<Tab className="ahTab" value="Maps" label="Maps" icon={<MapIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab className="ahTab" value="Modes" label="Modes" icon={<DeveloperModeIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab className="ahTab" value="Match Outcome" label="Match Outcome" icon={<EmojiEventsIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Best" label="Best Matches" icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					{/* <Tab className="ahTab" value="Patreon" label="Patreon" icon={<EmojiEmotionsIcon />} iconPosition="start" />
+					<Tab className="ahTab" value="Modes" label="Modes" icon={<DeveloperModeIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />*/}
 					{/* <Tab className="ahTab" value="Company" label="Spartan Company" icon={<GroupsIcon />} iconPosition="start" /> */}
 				</Tabs>
 				: player && player.gamertag ?
@@ -141,11 +141,11 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab className="ahTab" value="Ranked" label="Ranked" icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Medals" label="Medals" icon={<MilitaryTechIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Matches" label="Matches" icon={<SportsEsportsIcon />} iconPosition="start" />
-					<Tab className="ahTab" value="Patreon" label="Patreon" icon={<EmojiEmotionsIcon />} iconPosition="start" />
+					{/* <Tab className="ahTab" value="Patreon" label="Patreon" icon={<EmojiEmotionsIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Maps" label="Maps" icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Modes" label="Modes" icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Match Outcome" label="Match Outcome" icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab className="ahTab" value="Best" label="Best Matches" icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab className="ahTab" value="Best" label="Best Matches" icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
 					{/* <Tab className="ahTab" value="Company" label="Spartan Company" icon={<GroupsIcon />} iconPosition="start" /> */}
 				</Tabs>
 				:

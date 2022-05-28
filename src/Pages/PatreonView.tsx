@@ -12,7 +12,7 @@ import { Match } from "../Objects/Model/Match";
 import { MatchSummary } from "../Assets/Components/Match/MatchSummary";
 import { FirebaseBest } from "../Database/Schemas/FirebaseBest";
 
-export function PatreonView(props: ViewProps & { isAllowed?: boolean })
+export function PatreonView(props: ViewProps)
 {
 	//#region Props and Navigate
 	const { app, setLoadingMessage, updatePlayer, switchTab, isAllowed } = props;

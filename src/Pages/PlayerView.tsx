@@ -17,16 +17,13 @@ import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { Cookie } from "../Objects/Helpers/Cookie";
 import { KillBreakdownCard } from "../Assets/Components/Breakdowns/KillBreakdownCard";
 import { SeasonChooser } from "./Subpage/SeasonChooser";
+import { ServiceRecordChart } from "../Assets/Components/Charts/ServiceRecordChart";
 
 export function PlayerView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setBackgroundLoadingProgress, player, updatePlayer, switchTab } = props;
+	const { app, setLoadingMessage, setBackgroundLoadingProgress, player, updatePlayer, switchTab, isAllowed } = props;
 	const { gamertag } = useParams();
-	//#endregion
-
-	//#region Refs
-	const lastUpdate = useRef<Date | null>(null);
 	//#endregion
 	
 	//#region State
@@ -44,9 +41,9 @@ export function PlayerView(props: ViewProps)
 		Cookie.addRecent(gamertag);
 		
 		// Get the player from firebase and show on screen
-		const player = await app.GetPlayerFromFirebase(gamertag, season, false);
-		//setHistoricStats(player.historicStats ?? []);
+		const player = await app.GetPlayerFromFirebase(gamertag, season, isAllowed);
 		updatePlayer(player.gamertag, player.appearance, player.serviceRecord);
+		if (isAllowed) { setHistoricStats(player.historicStats ?? []); }
 		
 		// Set loading message to nada, start background load
 		setLoadingMessage("");
@@ -58,46 +55,24 @@ export function PlayerView(props: ViewProps)
 			app.AddToSyncing(gamertag);
 
 			// Sync into firebase
-			app.GetPlayerFromAutocode(gamertag, season).then(async (result) =>
+			const newPlayer = await app.GetPlayerFromAutocode(gamertag, season);
+			if (newPlayer)
 			{
-				if (result)
-				{
-					updatePlayer(result.gamertag, result.appearance, result.serviceRecord);
-					await app.SetPlayerIntoFirebase(result, season);
-				}					
-			}).finally(() => 
-			{
-				setLoadingMessage("");
-				app.RemoveFromSyncing(gamertag);
-				setBackgroundLoadingProgress(undefined);
-			});
-
-			// app.SyncPlayer(gamertag).then(async (result) =>
-			// {
-			// 	if (result)
-			// 	{
-			// 		const player = await app.GetPlayerFromFirebase(gamertag, true);
-			// 		setMyPlayer(player);
-			// 		setHistoricStats(player.historicStats ?? []);
-			// 	}					
-			// }).finally(() => 
-			// {
-			// 	app.RemoveFromSyncing(gamertag);
-			// 	setBackgroundLoadingProgress(undefined);
-			// });
+				updatePlayer(newPlayer.gamertag, newPlayer.appearance, newPlayer.serviceRecord);
+				await app.SetPlayerIntoFirebase(newPlayer, season);
+			}
+			
+			setLoadingMessage("");
+			app.RemoveFromSyncing(gamertag);
+			setBackgroundLoadingProgress(undefined);
 		}
 		else { setBackgroundLoadingProgress(undefined); }
-	}, [lastUpdate, app, gamertag, updatePlayer, setBackgroundLoadingProgress, season, setSeason, switchTab]);
+	}, [app, gamertag, updatePlayer, setBackgroundLoadingProgress, season, switchTab]);
 	
 	useEffect(() =>
 	{
 		loadData();
-	}, [gamertag]);
-
-	useEffect(() =>
-	{
-		loadData();
-	}, [season]);
+	}, [gamertag, season]);
 
 	return (
 		<Box component="main" sx={{ flexGrow: 1 }}>
@@ -159,9 +134,9 @@ export function PlayerView(props: ViewProps)
 							<Grid item xs={12}>
 								<DamageBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
-							{/* <Grid item xs={12}>
+							{isAllowed && season === -1 && <Grid item xs={12}>
 								<ServiceRecordChart historicServiceRecords={historicStats} currentSR={player.serviceRecord} />
-							</Grid> */}
+							</Grid>}
 							{/* <Grid item xs={12}>
 								<CampaignBreakdown campaignRecord={player.campaignRecord} />
 							</Grid> */}

@@ -11,4 +11,5 @@ export interface ViewProps
     player?: Player;
     updatePlayer: (gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, season?: number) => void;
     switchTab: (url: string, tab?: string) => void;
+    isAllowed?: boolean;
 }

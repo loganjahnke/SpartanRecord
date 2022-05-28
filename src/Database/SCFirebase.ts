@@ -135,7 +135,8 @@ export class SCFirebase
 	{
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetFilteredServiceRecord()", `${gamertag} - ${filter}`); }
 
-		const snapshot = await this.__get(`service_record/filtered/${gamertag}/${tree}/${filter}`);
+		const node = tree === ServiceRecordFilter.Maps ? "map" : tree === ServiceRecordFilter.Modes ? "mode" : "outcome";
+		const snapshot = await this.__get(`service_record/filtered/${gamertag}/${node}/${filter}`);
 		if (snapshot)
 		{
 			return new ServiceRecord(snapshot.val());
@@ -151,7 +152,7 @@ export class SCFirebase
 	{
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetAvailableFilters()", `${gamertag} - ${node}`); }
 
-		const n = node === ServiceRecordFilter.Maps ? "map" : ServiceRecordFilter.Modes ? "mode" : "outcome";
+		const n = node === ServiceRecordFilter.Maps ? "map" : node === ServiceRecordFilter.Modes ? "mode" : "outcome";
 		const filters: SRFilter[] = [];
 		const snapshot = await this.__get(`filters/${gamertag}/${n}`);
 		if (snapshot)
@@ -256,27 +257,16 @@ export class SCFirebase
 		if (snapshot)
 		{
 			const result = snapshot.val();
+			const keys = Object.keys(result);
+			const numberOfMatches = +keys[keys.length - 1];
 			for (const key in result)
 			{
 				if (+key < 50) { continue; }
+				if (numberOfMatches > 3000 && +key % 150 !== 0) { continue; }
+				else if (numberOfMatches > 2000 && +key % 100 !== 0) { continue; }
+				else if (numberOfMatches > 1000 && +key % 50 !== 0) { continue; }
 				let autocodeSR: any = {
-					data: {
-						records: {
-							pvp: result[key]
-						},
-						privacy: {
-							public: true
-						},
-					},
-					additional: {
-						polling: {
-							synced_at: "",
-						},
-						parameters: {
-							gamertag: "gamertag",
-							filter: "matchmade"
-						},
-					}
+					data: result[key]
 				};
 
 				historicSRs.push(new ServiceRecord(autocodeSR));

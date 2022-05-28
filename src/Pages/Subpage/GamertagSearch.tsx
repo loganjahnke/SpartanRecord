@@ -18,7 +18,7 @@ export function GamertagSearch(props: SearchProps)
     const recents = Cookie.getRecents();
     
     return (
-        <Box sx={{ backgroundColor: "secondary.main", height: "100%", display: "flex", flexDirection: "column", textAlign: "left", alignItems: "flex-start", p: 4 }}>
+        <Box sx={{ backgroundColor: "secondary.main", height: "100%", display: "flex", flexDirection: "column", textAlign: "center", alignItems: "center", p: 4, pt: 12 }}>
             <Typography variant="h3">Halo Infinite Service Record</Typography>
             <Typography variant="h6">Search for a gamertag to see Halo Infinite statistics such as KDA, KDR, and more</Typography>
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mt: 3 }}>
