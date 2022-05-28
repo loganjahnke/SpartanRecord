@@ -14,14 +14,17 @@ import { LevelBreakdown } from "../Assets/Components/Breakdowns/LevelBreakdown";
 import { VehicleBreakdown } from "../Assets/Components/Breakdowns/VehicleBreakdown";
 import { ServiceRecordFilters } from "./Subpage/ServiceRecordFilters";
 import { ViewProps } from "./Props/ViewProps";
-import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { Cookie } from "../Objects/Helpers/Cookie";
 import { KillBreakdownCard } from "../Assets/Components/Breakdowns/KillBreakdownCard";
 import { SeasonChooser } from "./Subpage/SeasonChooser";
 import { ServiceRecordChart } from "../Assets/Components/Charts/ServiceRecordChart";
 import { CaptureTheFlagBreakdown } from "../Assets/Components/Breakdowns/CaptureTheFlagBreakdown";
+import { ZoneBreakdown } from "../Assets/Components/Breakdowns/ZoneBreakdown";
+import { StockpileBreakdown } from "../Assets/Components/Breakdowns/StockpileBreakdown";
+import { OddballBreakdown } from "../Assets/Components/Breakdowns/OddballBreakdown";
+import { EliminationBreakdown } from "../Assets/Components/Breakdowns/EliminationBreakdown";
 
-export function PlayerView(props: ViewProps)
+export function ModesView(props: ViewProps)
 {
 	//#region Props and Navigate
 	const { app, setLoadingMessage, setBackgroundLoadingProgress, player, updatePlayer, switchTab, isAllowed } = props;
@@ -29,7 +32,6 @@ export function PlayerView(props: ViewProps)
 	//#endregion
 	
 	//#region State
-	const [historicStats, setHistoricStats] = useState<ServiceRecord[]>([]);
 	const [showPerMatch, setShowPerMatch] = useState(false);
 	const [season, setSeason] = useState(-1);
 	//#endregion
@@ -45,33 +47,11 @@ export function PlayerView(props: ViewProps)
 		Cookie.addRecent(gamertag);
 		
 		// Get the player from firebase and show on screen
-		const player = await app.GetPlayerFromFirebase(gamertag, season, isAllowed);
+		const player = await app.GetPlayerFromFirebase(gamertag, season);
 		updatePlayer(player.gamertag, player.appearance, player.serviceRecord);
-		if (isAllowed) { setHistoricStats(player.historicStats ?? []); }
 		
-		// Set loading message to nada, start background load
 		setLoadingMessage("");
-		setBackgroundLoadingProgress(-1);
-
-		// If they are, sync with autocode
-		if (!app.IsSyncing(gamertag))
-		{
-			app.AddToSyncing(gamertag);
-
-			// Sync into firebase
-			const newPlayer = await app.GetPlayerFromAutocode(gamertag, season);
-			if (newPlayer)
-			{
-				updatePlayer(newPlayer.gamertag, newPlayer.appearance, newPlayer.serviceRecord);
-				await app.SetPlayerIntoFirebase(newPlayer, season);
-			}
-			
-			setLoadingMessage("");
-			app.RemoveFromSyncing(gamertag);
-			setBackgroundLoadingProgress(undefined);
-		}
-		else { setBackgroundLoadingProgress(undefined); }
-	}, [app, gamertag, updatePlayer, setBackgroundLoadingProgress, season, switchTab]);
+	}, [app, gamertag, updatePlayer, season, switchTab]);
 	
 	useEffect(() =>
 	{
@@ -100,54 +80,30 @@ export function PlayerView(props: ViewProps)
 								<ServiceRecordFilters setPerMatch={setShowPerMatch} />
 							</Box>
 						</Grid>
-						{/* Far left */}
-						<Grid container item spacing={2} md={12} lg={6} xl={4} sx={{ alignContent: "flex-start" }}>
+						{/* left */}
+						<Grid container item spacing={2} sm={12} md={6} xl={4} sx={{ alignContent: "flex-start" }}>
 							<Grid item xs={12}>
-								<MatchesBreakdown serviceRecord={player.serviceRecord} />
+								<CaptureTheFlagBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
-								<KillDeathCard serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
-							</Grid>
-							<Grid item xs={12}>
-								<KDABreakdown serviceRecord={player.serviceRecord} />
-							</Grid>
-							<Grid item xs={12}>
-								<LevelBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
-							</Grid>
-							<Grid item xs={12}>
-								<ShotsBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
+								<EliminationBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 						</Grid>
-						{/* Middle 6 */}
-						<Grid container item spacing={2} sm={12} md={6} lg={6} xl={3} sx={{ alignContent: "flex-start" }}>
+						{/* middle */}
+						<Grid container item spacing={2} sm={12} md={6} xl={4} sx={{ alignContent: "flex-start" }}>
 							<Grid item xs={12}>
-								<KillBreakdownCard serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
+								<ZoneBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
-								<VehicleBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
+								<StockpileBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
-							{!isAllowed && <Grid item xs={12}>
-								<Box id="container-a7b55266c8d1e7c39ed0ac2f85cf49fa" />
-							</Grid>}
 						</Grid>
-						{/* Far right */}
-						<Grid container item spacing={2} sm={12} md={6} lg={12} xl={5} sx={{ alignContent: "flex-start" }}>
+						{/* right */}
+						<Grid container item spacing={2} sm={12} md={12} xl={4} sx={{ alignContent: "flex-start" }}>
 							<Grid item xs={12}>
-								<TopMedals medals={player.serviceRecord.medals} matchesPlayed={player.serviceRecord.matchesPlayed} showPerMatch={showPerMatch} />
+								<OddballBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
-							<Grid item xs={12}>
-								<AssistBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
-							</Grid>
-							<Grid item xs={12}>
-								<DamageBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
-							</Grid>
-							{isAllowed && season === -1 && <Grid item xs={12}>
-								<ServiceRecordChart historicServiceRecords={historicStats} currentSR={player.serviceRecord} />
-							</Grid>}
-							{/* <Grid item xs={12}>
-								<CampaignBreakdown campaignRecord={player.campaignRecord} />
-							</Grid> */}
-						</Grid>						
+						</Grid>
 					</Grid>}
 			</Box>
 		</Box>

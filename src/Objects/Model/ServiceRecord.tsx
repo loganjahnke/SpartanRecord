@@ -2,11 +2,16 @@ import { HaloOutcome } from "../../Database/ArrowheadFirebase";
 import { AutocodeMultiplayerServiceRecord, AutocodeServiceRecordData } from "../../Database/Schemas/AutocodeMultiplayerServiceRecord";
 import { AllMedals } from "../Helpers/AllMedals";
 import { Breakdowns } from "../Pieces/Breakdowns";
+import { CaptureTheFlag } from "../Pieces/CaptureTheFlag";
 import { Damage } from "../Pieces/Damage";
+import { Elimination } from "../Pieces/Elimination";
 import { Medal, MedalRarity, MedalType } from "../Pieces/Medal";
+import { Oddball } from "../Pieces/Oddball";
 import { Shots } from "../Pieces/Shots";
+import { Stockpile } from "../Pieces/Stockpile";
 import { Summary } from "../Pieces/Summary";
 import { TimePlayed } from "../Pieces/TimePlayed";
+import { Zone } from "../Pieces/Zone";
 import { PlayerMatch } from "./PlayerMatch";
 
 export class ServiceRecord
@@ -26,6 +31,16 @@ export class ServiceRecord
     public timePlayed: TimePlayed;
     /** Contains all medals */
     public medals: Medal[];
+    /** Capture the flag statistics */
+    public ctf: CaptureTheFlag;
+    /** Zone statistics */
+    public zone: Zone;
+    /** Oddball statistics */
+    public oddball: Oddball;
+    /** Elimination statistics */
+    public elimination: Elimination;
+    /** Sotkcpile statistics */
+    public stockpile: Stockpile;
     /** Raw autocode and firebase JSON */
     public data?: AutocodeServiceRecordData;
     /** If there is an error in the response, store it here */
@@ -173,6 +188,11 @@ export class ServiceRecord
         this.totalPoints = core?.scores?.points ?? 0;
         this.matchesPlayed = matches?.total ?? 0;
         this.winRate = matches?.win_rate ?? 0;
+        this.ctf = new CaptureTheFlag(record?.modes?.capture_the_flag);
+        this.zone = new Zone(record?.modes?.zones);
+        this.oddball = new Oddball(record?.modes?.oddball);
+        this.elimination = new Elimination(record?.modes?.elimination);
+        this.stockpile = new Stockpile(record?.modes?.stockpile);
     }
 
     /**

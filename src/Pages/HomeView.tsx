@@ -45,7 +45,7 @@ export function HomeView(props: ViewProps)
 	};
 
 	return (
-		<Box component="main" sx={{ flexGrow: 1, height: "calc(100% - 64px)" }}>
+		<Box component="main" sx={{ flexGrow: 1, height: "calc(100% - 160px)" }}>
 			<Toolbar />
 			<Divider />
 			<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} />

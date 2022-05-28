@@ -13,7 +13,7 @@ import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import GroupsIcon from '@mui/icons-material/Groups';
 import StarIcon from '@mui/icons-material/Star';
-import DeveloperModeIcon from '@mui/icons-material/DeveloperMode';
+import FlagIcon from '@mui/icons-material/Flag';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
@@ -69,6 +69,9 @@ export function AHDrawer(props: AHDrawerProps)
 			case "Medals":
 				switchTab(`/medals/${player.gamertag}`, newTab);
 				break;
+			case "Modes":
+				switchTab(`/modes/${player.gamertag}`, newTab);
+				break;
 			case "Matches":
 				switchTab(`/matches/${player.gamertag}`, newTab);
 				break;
@@ -82,10 +85,6 @@ export function AHDrawer(props: AHDrawerProps)
 			case "Maps":
 				if (!isAllowed) { switchTab(`/patreon/${player.gamertag}`, newTab); break; }
 				switchTab(`/service_record/${ServiceRecordFilter.Maps}/${player.gamertag}`, newTab);
-				break;
-			case "Modes":
-				if (!isAllowed) { switchTab(`/patreon/${player.gamertag}`, newTab); break; }
-				switchTab(`/service_record/${ServiceRecordFilter.Modes}/${player.gamertag}`, newTab);
 				break;
 			case "Match Outcome":
 				if (!isAllowed) { switchTab(`/patreon/${player.gamertag}`, newTab); break; }
@@ -125,10 +124,10 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab className="ahTab" value="Maps" label="Maps" icon={<MapIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Match Outcome" label="Match Outcome" icon={<EmojiEventsIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Medals" label="Medals" icon={<MilitaryTechIcon />} iconPosition="start" />
+					<Tab className="ahTab" value="Modes" label="Modes" icon={<FlagIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Matches" label="Matches" icon={<SportsEsportsIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Best" label="Best Matches" icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					{/* <Tab className="ahTab" value="Patreon" label="Patreon" icon={<EmojiEmotionsIcon />} iconPosition="start" />
-					<Tab className="ahTab" value="Modes" label="Modes" icon={<DeveloperModeIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />*/}
+					{/* <Tab className="ahTab" value="Patreon" label="Patreon" icon={<EmojiEmotionsIcon />} iconPosition="start" />*/}
 					{/* <Tab className="ahTab" value="Company" label="Spartan Company" icon={<GroupsIcon />} iconPosition="start" /> */}
 				</Tabs>
 				: player && player.gamertag ?
@@ -140,10 +139,10 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab className="ahTab" value="Social" label="Social" icon={<GroupsIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Ranked" label="Ranked" icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Medals" label="Medals" icon={<MilitaryTechIcon />} iconPosition="start" />
+					<Tab className="ahTab" value="Modes" label="Modes" icon={<FlagIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Matches" label="Matches" icon={<SportsEsportsIcon />} iconPosition="start" />
 					{/* <Tab className="ahTab" value="Patreon" label="Patreon" icon={<EmojiEmotionsIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Maps" label="Maps" icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab className="ahTab" value="Modes" label="Modes" icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Match Outcome" label="Match Outcome" icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value="Best" label="Best Matches" icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
 					{/* <Tab className="ahTab" value="Company" label="Spartan Company" icon={<GroupsIcon />} iconPosition="start" /> */}
@@ -156,8 +155,9 @@ export function AHDrawer(props: AHDrawerProps)
 				}
 			<Divider flexItem sx={{ flexGrow: 1 }} />
 			<Box sx={{ display: "flex", flexDirection: "column", p: 1 }}>
-				<Typography variant="subtitle1">Powered by <Link href="https://twitter.com/halodotapi">HaloDotAPI</Link></Typography>
-				<Typography variant="subtitle1">Made by <Link href="https://twitter.com/Logan_Jahnke">Logan Jahnke</Link></Typography>
+				<Typography variant="subtitle2"><Link href="https://www.paypal.com/donate/?hosted_button_id=FTQWP27P5JMPG">Donate with PayPal</Link></Typography>
+				<Typography variant="subtitle2">Powered by <Link href="https://twitter.com/halodotapi">HaloDotAPI</Link></Typography>
+				<Typography variant="subtitle2">Made by <Link href="https://twitter.com/Logan_Jahnke">Logan Jahnke</Link></Typography>
 			</Box>
 		</Box>
 	);

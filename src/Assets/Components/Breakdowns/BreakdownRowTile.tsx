@@ -23,14 +23,14 @@ export function BreakdownRowTile(props: BreakdownTileProps)
             <Box sx={{ 
 				background: background, 
 				display: "grid",
-				gridTemplateColumns: icon ? "48px auto 25%" : "auto 25%",
+				gridTemplateColumns: icon ? "48px auto 33%" : "auto 33%",
 				margin: 0.5, 
 				alignItems: "center",
 				padding: 0.5,
 				width: "100%" }}>
 				{icon}
 				<Box>
-					<Typography variant="subtitle1" sx={{ fontSize: tooltip ? "0.8rem" : "1rem", ml:1 }}>{title}</Typography>
+					<Typography variant={tooltip ? "subtitle1" : "body2"} sx={{ fontSize: tooltip ? "0.8rem" : "1rem", ml:1 }}>{title}</Typography>
 					{tooltip && <Typography variant="caption" sx={{ display: "block", fontSize: "0.8rem", ml:1 }}>{tooltip}</Typography>}
 				</Box>
 				<Typography variant={"h5"} sx={{ textAlign: "right", mr: 2 }}>{typeof value === "number" ? (Math.round(value * 100) / 100).toLocaleString() : value}{isPercent ? "%" : ""}</Typography>
