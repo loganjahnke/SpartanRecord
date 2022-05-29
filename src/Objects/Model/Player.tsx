@@ -1,5 +1,6 @@
 import { AutocodeAppearance } from "../../Database/Schemas/AutocodeAppearance";
 import { AutocodeMultiplayerServiceRecord } from "../../Database/Schemas/AutocodeMultiplayerServiceRecord";
+import { MMR } from "../Pieces/MMR";
 import { Appearance } from "./Appearance";
 import { CampaignRecord } from "./CampaignRecord";
 import { ServiceRecord } from "./ServiceRecord";
@@ -16,6 +17,8 @@ export class Player
     public historicStats: ServiceRecord[] | undefined;
     /** The player's appearance */
     public appearance: Appearance;
+    /** The player's MMR */
+    public mmr: MMR;
     /** Last match ID */
     public lastMatchID: string;
 
@@ -24,12 +27,13 @@ export class Player
     public appearanceData?: AutocodeAppearance;
     public serviceRecordData?: AutocodeMultiplayerServiceRecord;
 
-    constructor(gamertag?: string, serviceRecord?: ServiceRecord, history?: ServiceRecord[], appearance?: Appearance, campaignRecord?: CampaignRecord)
+    constructor(gamertag?: string, serviceRecord?: ServiceRecord, history?: ServiceRecord[], appearance?: Appearance, mmr?: MMR, campaignRecord?: CampaignRecord)
     {
         this.gamertag = gamertag ?? "";
         this.serviceRecord = serviceRecord ?? new ServiceRecord();
         this.historicStats = history;
         this.appearance = appearance ?? new Appearance();
+        this.mmr = mmr ?? new MMR();
         this.campaignRecord = campaignRecord;
         this.lastMatchID = "";
     }

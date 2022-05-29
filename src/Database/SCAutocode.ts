@@ -2,8 +2,10 @@ import { Debugger } from "../Objects/Helpers/Debugger";
 import { Appearance } from "../Objects/Model/Appearance";
 import { Player } from "../Objects/Model/Player";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
+import { MMR } from "../Objects/Pieces/MMR";
 import { AutocodeMatch, AutocodeMatchResults } from "./Schemas/AutocodeMatch";
 import { AutocodeMap, AutocodeMedal, AutocodePlaylist, AutocodeTeam, AutocodeVariant } from "./Schemas/AutocodeMetadata";
+import { AutocodeMMR } from "./Schemas/AutocodeMMR";
 import { AutocodeMultiplayerServiceRecord } from "./Schemas/AutocodeMultiplayerServiceRecord";
 import { AutocodePlayerMatchResults } from "./Schemas/AutocodePlayerMatch";
 
@@ -21,21 +23,56 @@ export class SCAutocode
 	/** Turns on or off debugging mode */
 	private readonly IS_DEBUGGING = process.env.NODE_ENV !== "production";
 	/** The HaloDotAPI version */
-	private readonly AUTOCODE_VERSION = "1-4-3";
+	private readonly AUTOCODE_VERSION = "1-4-4";
 
 	constructor() {}
 
 	/**
 	 * Gets the player from autocode
-	 * @param player the player
+	 * @param gamertag the gamertag
+	 * @param season the season
 	 * @returns 
 	 */
 	public async GetPlayer(gamertag: string, season: number): Promise<Player>
 	{
 		const player = new Player(gamertag);
-		await Promise.all([this.GetAppearance(player), this.GetServiceRecord(player, season)]);
+		await Promise.all([this.GetAppearance(player), this.GetServiceRecord(player, season), this.GetMMR(player)]);
 		return player;
 	}
+
+	//#region MMR
+	/**
+	 * Gets the MMR of the gamertag
+	 * @param player the player to get the MMR of
+	 * @returns the MMR for the gamertag
+	 */
+	public async GetMMR(player: Player): Promise<void>
+	{
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCAutocode.GetMMR()", player.gamertag); }
+
+		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/mmr`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				gamertag: player.gamertag
+			})
+		});
+
+		const mmrData = await response.json() as AutocodeMMR;
+
+		if (mmrData && mmrData.data)
+		{
+			if (mmrData.data.playlist?.name === "Last Spartan Standing")
+			{
+				player.mmr.lastSpartanStanding = mmrData.data.value ?? 0;
+			}
+			else
+			{
+				player.mmr.ffa = mmrData.data.value ?? 0;
+			}
+		}
+	}
+	//#endregion
 
 	//#region Appearance
 	/**

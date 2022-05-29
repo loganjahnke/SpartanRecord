@@ -24,6 +24,7 @@ import { Appearance } from "./Objects/Model/Appearance";
 import { ServiceRecord } from "./Objects/Model/ServiceRecord";
 import { PatreonView } from "./Pages/PatreonView";
 import { ModesView } from "./Pages/ModesView";
+import { MMR } from "./Objects/Pieces/MMR";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -65,20 +66,24 @@ const App = () =>
 	 * @param gamertag the new gamertag of the player
 	 * @param appearance the new appearance of the player
 	 * @param serviceRecord the new service record for the player
+	 * @param season the season
+	 * @param mmr the MMR
 	 */
-	const updatePlayer = useCallback((gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, season?: number) =>
+	const updatePlayer = useCallback((gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, season?: number, mmr?: MMR) =>
 	{
 		if (gamertag && gamertag !== player.gamertag)
 		{
 			player.gamertag = gamertag;
 			player.appearance = appearance ?? new Appearance();
 			player.serviceRecord = serviceRecord ?? new ServiceRecord();
+			player.mmr = mmr ?? new MMR();
 			player.season = season ?? -1;
 		}
 		else
 		{
 			if (appearance) { player.appearance = appearance; }
 			if (serviceRecord) { player.serviceRecord = serviceRecord; }
+			if (mmr) { player.mmr = mmr; }
 			player.season = season ?? -1;
 		}
 

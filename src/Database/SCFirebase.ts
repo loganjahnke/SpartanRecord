@@ -4,6 +4,7 @@ import { Appearance } from "../Objects/Model/Appearance";
 import { Match } from "../Objects/Model/Match";
 import { Player } from "../Objects/Model/Player";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
+import { MMR } from "../Objects/Pieces/MMR";
 import { SRFilter } from "../Objects/Pieces/SRFilter";
 import { ServiceRecordFilter } from "./ArrowheadFirebase";
 import { AutocodeAppearance } from "./Schemas/AutocodeAppearance";
@@ -38,17 +39,19 @@ export class SCFirebase
 
 		if (historic)
 		{
-			[player.serviceRecord, player.appearance, player.historicStats] = await Promise.all([
+			[player.serviceRecord, player.appearance, player.historicStats, player.mmr] = await Promise.all([
 				this.GetServiceRecord(player.gamertag, season),
 				this.GetAppearance(player.gamertag),
-				this.GetHistoricStatistics(player.gamertag)
+				this.GetHistoricStatistics(player.gamertag),
+				this.GetMMR(player.gamertag)
 			]);
 		}
 		else
 		{
-			[player.serviceRecord, player.appearance] = await Promise.all([
+			[player.serviceRecord, player.appearance, player.mmr] = await Promise.all([
 				this.GetServiceRecord(player.gamertag, season),
-				this.GetAppearance(player.gamertag)
+				this.GetAppearance(player.gamertag),
+				this.GetMMR(player.gamertag)
 			]);
 		}
 
@@ -285,6 +288,55 @@ export class SCFirebase
 	{
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetHistoricStatistics()", gamertag); }
 		await this.__update(`service_record/historic/${gamertag}/${matchCount}`, serviceRecord);
+	}
+	//#endregion
+
+	//#region MMR
+	/**
+	 * Gets the MMR of the gamertag
+	 * @param gamertag the gamertag to get the MMR of
+	 * @returns the MMR for the gamertag
+	 */
+	public async GetMMR(gamertag: string): Promise<MMR>
+	{
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetMMR()", gamertag); }
+
+		const snapshot = await this.__get(`mmr/${gamertag}`);
+		const data = snapshot?.val();
+		if (!data) { return new MMR(); }
+		
+		const lss = data["lss"];
+		const ffa = data["ffa"];
+
+		return new MMR(lss, ffa);
+	}
+
+	/**
+	 * Sets the MMR for the gamertag into Firebase
+	 * @param gamertag the gamertag
+	 * @param mmr the MMR
+	 */
+	public async SetMMR(gamertag: string, mmr: MMR): Promise<void>
+	{
+		if (!mmr) { return; }
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetMMR()", gamertag); }
+
+		let update: any = {};
+		if (mmr.ffa && mmr.lastSpartanStanding)
+		{
+			update = { ffa: mmr.ffa, lss: mmr.lastSpartanStanding };
+		}
+		else if (mmr.ffa)
+		{
+			update = { ffa: mmr.ffa };
+		}
+		else if (mmr.lastSpartanStanding)
+		{
+			update = { lss: mmr.lastSpartanStanding };
+		}
+		else { return; }
+
+		await this.__update(`mmr/${gamertag}`, update);	
 	}
 	//#endregion
 

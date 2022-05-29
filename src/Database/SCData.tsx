@@ -98,7 +98,8 @@ export class SCData
         if (!player.gamertag) { return; }
 		await Promise.all([
             this.__firebase.SetAppearance(player.gamertag, player.appearanceData),
-            this.__firebase.SetServiceRecord(player.gamertag, player.serviceRecordData, season)
+            this.__firebase.SetServiceRecord(player.gamertag, player.serviceRecordData, season),
+            this.__firebase.SetMMR(player.gamertag, player.mmr)
         ]);
 	}
 

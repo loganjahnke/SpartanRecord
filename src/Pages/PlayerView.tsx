@@ -1,7 +1,6 @@
 import { Box, Button, Divider, Grid, Toolbar, Typography } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import useScript from "../Objects/Helpers/Hooks";
 
 import { TopMedals } from "../Assets/Components/Medals/TopMedals";
 import { KillDeathCard } from "../Assets/Components/Breakdowns/KillDeathCard";
@@ -19,7 +18,7 @@ import { Cookie } from "../Objects/Helpers/Cookie";
 import { KillBreakdownCard } from "../Assets/Components/Breakdowns/KillBreakdownCard";
 import { SeasonChooser } from "./Subpage/SeasonChooser";
 import { ServiceRecordChart } from "../Assets/Components/Charts/ServiceRecordChart";
-import { CaptureTheFlagBreakdown } from "../Assets/Components/Breakdowns/CaptureTheFlagBreakdown";
+import { MMRBreakdown } from "../Assets/Components/Breakdowns/MMRBreakdown";
 
 export function PlayerView(props: ViewProps)
 {
@@ -34,7 +33,7 @@ export function PlayerView(props: ViewProps)
 	const [season, setSeason] = useState(-1);
 	//#endregion
 
-	useScript("//pl17321505.safestgatetocontent.com/a7b55266c8d1e7c39ed0ac2f85cf49fa/invoke.js");
+	// useScript("//pl17321505.safestgatetocontent.com/a7b55266c8d1e7c39ed0ac2f85cf49fa/invoke.js");
 
 	const loadData = useCallback(async () => 
 	{		
@@ -46,7 +45,7 @@ export function PlayerView(props: ViewProps)
 		
 		// Get the player from firebase and show on screen
 		const player = await app.GetPlayerFromFirebase(gamertag, season, isAllowed);
-		updatePlayer(player.gamertag, player.appearance, player.serviceRecord);
+		updatePlayer(player.gamertag, player.appearance, player.serviceRecord, undefined, player.mmr);
 		if (isAllowed) { setHistoricStats(player.historicStats ?? []); }
 		
 		// Set loading message to nada, start background load
@@ -62,7 +61,7 @@ export function PlayerView(props: ViewProps)
 			const newPlayer = await app.GetPlayerFromAutocode(gamertag, season);
 			if (newPlayer)
 			{
-				updatePlayer(newPlayer.gamertag, newPlayer.appearance, newPlayer.serviceRecord);
+				updatePlayer(newPlayer.gamertag, newPlayer.appearance, newPlayer.serviceRecord, undefined, player.mmr);
 				await app.SetPlayerIntoFirebase(newPlayer, season);
 			}
 			
@@ -126,9 +125,9 @@ export function PlayerView(props: ViewProps)
 							<Grid item xs={12}>
 								<VehicleBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
-							{!isAllowed && <Grid item xs={12}>
+							{/* {!isAllowed && <Grid item xs={12}>
 								<Box id="container-a7b55266c8d1e7c39ed0ac2f85cf49fa" />
-							</Grid>}
+							</Grid>} */}
 						</Grid>
 						{/* Far right */}
 						<Grid container item spacing={2} sm={12} md={6} lg={12} xl={5} sx={{ alignContent: "flex-start" }}>
@@ -140,6 +139,9 @@ export function PlayerView(props: ViewProps)
 							</Grid>
 							<Grid item xs={12}>
 								<DamageBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
+							</Grid>
+							<Grid item xs={12}>
+								<MMRBreakdown mmr={player.mmr} />
 							</Grid>
 							{isAllowed && season === -1 && <Grid item xs={12}>
 								<ServiceRecordChart historicServiceRecords={historicStats} currentSR={player.serviceRecord} />
