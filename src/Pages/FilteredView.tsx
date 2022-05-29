@@ -56,6 +56,8 @@ export function FilteredView(props: ViewProps)
 	{		
 		// Check if we need to check Firebase or HaloDotAPI
 		setLoadingMessage("Loading Filters");
+
+		document.title = "Spartan Record | " + gamertag;
 		
 		// Get player's service record
 		if (gamertag && node)

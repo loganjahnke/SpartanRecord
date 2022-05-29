@@ -115,7 +115,7 @@ export function AHDrawer(props: AHDrawerProps)
 			<Divider flexItem />
 			<Box sx={{ pt: 5, pb: 5, overflowY: "auto" }}>
 				{player && player.gamertag && isAllowed ? 
-				<Tabs orientation="vertical" value={currentTab || "Search"} onChange={tabClicked}>
+				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
 					<Tab className="ahTab" value="Search" label="Search" icon={<PersonSearchIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Service Record" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Playlists" label="Playlists" icon={<ListIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
@@ -132,7 +132,7 @@ export function AHDrawer(props: AHDrawerProps)
 					{/* <Tab className="ahTab" value="Company" label="Spartan Company" icon={<GroupsIcon />} iconPosition="start" /> */}
 				</Tabs>
 				: player && player.gamertag ?
-				<Tabs orientation="vertical" value={currentTab || "Search"} onChange={tabClicked}>
+				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
 					<Tab className="ahTab" value="Search" label="Search" icon={<PersonSearchIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Service Record" label="Service Record" icon={<ModeStandbyIcon />} iconPosition="start" />
 					<Tab className="ahTab" value="Playlists" label="Playlists" icon={<ListIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
@@ -149,17 +149,18 @@ export function AHDrawer(props: AHDrawerProps)
 					{/* <Tab className="ahTab" value="Company" label="Spartan Company" icon={<GroupsIcon />} iconPosition="start" /> */}
 				</Tabs>
 				:
-				<Tabs orientation="vertical" value={currentTab || "Search"} onChange={tabClicked}>
+				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
 					<Tab className="ahTab" value="Search" label="Search" icon={<PersonSearchIcon />} iconPosition="start" />
 					{/* <Tab className="ahTab" value="Company" label="Spartan Company" icon={<GroupsIcon />} iconPosition="start" /> */}
 				</Tabs>
 				}
 			</Box>
 			<Divider flexItem sx={{ flexGrow: 1 }} />
-			<Box sx={{ display: "flex", flexDirection: "column", p: 1 }}>
-				<Typography variant="subtitle2"><Link href="https://www.paypal.com/donate/?hosted_button_id=FTQWP27P5JMPG">Donate with PayPal</Link></Typography>
-				<Typography variant="subtitle2">Powered by <Link href="https://twitter.com/halodotapi">HaloDotAPI</Link></Typography>
-				<Typography variant="subtitle2">Made by <Link href="https://twitter.com/Logan_Jahnke">Logan Jahnke</Link></Typography>
+			<Box sx={{ display: "flex", flexDirection: "column", p: 1, textAlign: "center" }}>
+				<Typography sx={{ m: 0.5 }} variant="body2"><Link href="https://www.paypal.com/donate/?hosted_button_id=FTQWP27P5JMPG">Donate</Link> with PayPal</Typography>
+				<Typography sx={{ m: 0.5 }} variant="body2">Powered by <Link href="https://twitter.com/halodotapi">HaloDotAPI</Link></Typography>
+				<Typography sx={{ m: 0.5 }} variant="body2">Made by <Link href="https://twitter.com/Logan_Jahnke">Logan Jahnke</Link></Typography>
+				<Typography sx={{ m: 0.5 }} variant="body2"><Link sx={{ cursor: "pointer" }} onClick={() => switchTab("/powered_by_halodotapi")}>Other Creators</Link></Typography>
 			</Box>
 		</Box>
 	);

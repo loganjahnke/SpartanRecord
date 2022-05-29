@@ -1,8 +1,10 @@
 import { Debugger } from "../Objects/Helpers/Debugger";
 import { Appearance } from "../Objects/Model/Appearance";
+import { CSRS } from "../Objects/Model/CSRS";
 import { Player } from "../Objects/Model/Player";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { MMR } from "../Objects/Pieces/MMR";
+import { AutocodeCSRS } from "./Schemas/AutocodeCSRS";
 import { AutocodeMatch, AutocodeMatchResults } from "./Schemas/AutocodeMatch";
 import { AutocodeMap, AutocodeMedal, AutocodePlaylist, AutocodeTeam, AutocodeVariant } from "./Schemas/AutocodeMetadata";
 import { AutocodeMMR } from "./Schemas/AutocodeMMR";
@@ -23,7 +25,7 @@ export class SCAutocode
 	/** Turns on or off debugging mode */
 	private readonly IS_DEBUGGING = process.env.NODE_ENV !== "production";
 	/** The HaloDotAPI version */
-	private readonly AUTOCODE_VERSION = "1-4-4";
+	private readonly AUTOCODE_VERSION = "1-4-6";
 
 	constructor() {}
 
@@ -36,15 +38,14 @@ export class SCAutocode
 	public async GetPlayer(gamertag: string, season: number): Promise<Player>
 	{
 		const player = new Player(gamertag);
-		await Promise.all([this.GetAppearance(player), this.GetServiceRecord(player, season), this.GetMMR(player)]);
+		await Promise.all([this.GetAppearance(player), this.GetServiceRecord(player, season), this.GetMMR(player), this.GetCSRS(player, season)]);
 		return player;
 	}
 
-	//#region MMR
+	//#region MMR and CSRS
 	/**
 	 * Gets the MMR of the gamertag
 	 * @param player the player to get the MMR of
-	 * @returns the MMR for the gamertag
 	 */
 	public async GetMMR(player: Player): Promise<void>
 	{
@@ -71,6 +72,31 @@ export class SCAutocode
 				player.mmr.ffa = mmrData.data.value ?? 0;
 			}
 		}
+	}
+
+	/**
+	 * Gets the player's CSRS
+	 * @param player the player
+	 * @param season the season
+	 */
+	public async GetCSRS(player: Player, season: number): Promise<void>
+	{
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCAutocode.GetCSRS()", player.gamertag); }
+
+		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/csrs`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				gamertag: player.gamertag,
+				season: season === -1 ? undefined : season
+			})
+		});
+
+		if (!response) { return; }
+		const csrsData = await response.json() as AutocodeCSRS;
+		
+		if (!csrsData || !csrsData.data) { return; }
+		player.csrs = csrsData.data.map(iter => new CSRS(iter));
 	}
 	//#endregion
 
@@ -103,16 +129,6 @@ export class SCAutocode
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCAutocode.GetServiceRecord()", player.gamertag); }
 		player.serviceRecordData = await this.__getServiceRecordFromHaloDotAPI(player.gamertag, season === -1 ? undefined : season, playlistId, categoryId, type);
 		player.serviceRecord = new ServiceRecord(player.serviceRecordData);
-	}
- 
-	/**
-	 * Gets the historic statistics for a gamertag
-	 * @param gamertag the gamertag to get the historic statistics of
-	 * @returns an array of service records
-	 */
-	public async GetHistoricStatistics(gamertag: string): Promise<ServiceRecord[]>
-	{
-		return [];
 	}
 	//#endregion
  

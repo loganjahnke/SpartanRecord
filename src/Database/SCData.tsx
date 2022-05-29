@@ -99,7 +99,8 @@ export class SCData
 		await Promise.all([
             this.__firebase.SetAppearance(player.gamertag, player.appearanceData),
             this.__firebase.SetServiceRecord(player.gamertag, player.serviceRecordData, season),
-            this.__firebase.SetMMR(player.gamertag, player.mmr)
+            this.__firebase.SetMMR(player.gamertag, player.mmr),
+            this.__firebase.SetCSRS(player.gamertag, season, player.csrs.map(iter => iter.GetJSON()))
         ]);
 	}
 

@@ -19,6 +19,7 @@ import { KillBreakdownCard } from "../Assets/Components/Breakdowns/KillBreakdown
 import { SeasonChooser } from "./Subpage/SeasonChooser";
 import { ServiceRecordChart } from "../Assets/Components/Charts/ServiceRecordChart";
 import { MMRBreakdown } from "../Assets/Components/Breakdowns/MMRBreakdown";
+import { CSRSBreakdown } from "../Assets/Components/Breakdowns/CSRSBreakdown";
 
 export function PlayerView(props: ViewProps)
 {
@@ -39,13 +40,15 @@ export function PlayerView(props: ViewProps)
 	{		
 		if (!gamertag) { switchTab("/", "Search"); return; }
 
+		document.title = "Spartan Record | " + gamertag;
+
 		// Set page gamertag and show loading message
 		setLoadingMessage("Loading " + gamertag);
 		Cookie.addRecent(gamertag);
 		
 		// Get the player from firebase and show on screen
 		const player = await app.GetPlayerFromFirebase(gamertag, season, isAllowed);
-		updatePlayer(player.gamertag, player.appearance, player.serviceRecord, undefined, player.mmr);
+		updatePlayer(player.gamertag, player.appearance, player.serviceRecord, player.mmr, player.csrs);
 		if (isAllowed) { setHistoricStats(player.historicStats ?? []); }
 		
 		// Set loading message to nada, start background load
@@ -61,7 +64,7 @@ export function PlayerView(props: ViewProps)
 			const newPlayer = await app.GetPlayerFromAutocode(gamertag, season);
 			if (newPlayer)
 			{
-				updatePlayer(newPlayer.gamertag, newPlayer.appearance, newPlayer.serviceRecord, undefined, player.mmr);
+				updatePlayer(newPlayer.gamertag, newPlayer.appearance, newPlayer.serviceRecord, newPlayer.mmr, newPlayer.csrs);
 				await app.SetPlayerIntoFirebase(newPlayer, season);
 			}
 			
@@ -125,6 +128,9 @@ export function PlayerView(props: ViewProps)
 							<Grid item xs={12}>
 								<VehicleBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
+							{player.mmr && <Grid item xs={12}>
+								<MMRBreakdown mmr={player.mmr} />
+							</Grid>}
 							{/* {!isAllowed && <Grid item xs={12}>
 								<Box id="container-a7b55266c8d1e7c39ed0ac2f85cf49fa" />
 							</Grid>} */}
@@ -140,9 +146,9 @@ export function PlayerView(props: ViewProps)
 							<Grid item xs={12}>
 								<DamageBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
-							<Grid item xs={12}>
-								<MMRBreakdown mmr={player.mmr} />
-							</Grid>
+							{player.csrs && player.csrs.length > 0 && <Grid item xs={12}>
+								<CSRSBreakdown csrs={player.csrs} />
+							</Grid>}
 							{isAllowed && season === -1 && <Grid item xs={12}>
 								<ServiceRecordChart historicServiceRecords={historicStats} currentSR={player.serviceRecord} />
 							</Grid>}

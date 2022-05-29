@@ -35,6 +35,8 @@ export function SingleMatchView(props: ViewProps)
 			const match = await app.GetMatch(id);
             setMatch(match);
 
+			document.title = "Spartan Record | Match Summary";
+
 			if (match)
 			{
 				setPlayers(match.players && match.players.length > 0 ? match.players : match.teams.reduce((prev, curr) => 

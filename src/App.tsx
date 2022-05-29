@@ -25,6 +25,8 @@ import { ServiceRecord } from "./Objects/Model/ServiceRecord";
 import { PatreonView } from "./Pages/PatreonView";
 import { ModesView } from "./Pages/ModesView";
 import { MMR } from "./Objects/Pieces/MMR";
+import { CSRS } from "./Objects/Model/CSRS";
+import { OtherCreators } from "./Pages/OtherCreators";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -49,6 +51,11 @@ const App = () =>
 
 	//#region State
 	const [player, setPlayer] = useState<Player>(new Player());
+	const [mobileOpen, setMobileOpen] = useState(false);
+	const [tab, setTab] = useState("Search");
+	const [loadingMessage, setLoadingMessage] = useState("");
+	const [backgroundLoadingProgress, setBackgroundLoadingProgress] = useState<number | undefined>(undefined);
+	const [isAllowed, setIsAllowed] = useState(true);
 	//#endregion
 
 	//#region Navigate
@@ -56,11 +63,6 @@ const App = () =>
 	//#endregion
 
 	//#region Callback and Effect
-	const updateIsAllowed = useCallback(async () =>
-	{
-		setIsAllowed(await arrowhead.GetIsAllowed(player.gamertag));
-	}, [player]);
-
 	/**
 	 * Updates the player
 	 * @param gamertag the new gamertag of the player
@@ -69,36 +71,32 @@ const App = () =>
 	 * @param season the season
 	 * @param mmr the MMR
 	 */
-	const updatePlayer = useCallback((gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, season?: number, mmr?: MMR) =>
+	const updatePlayer = useCallback(async (gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, mmr?: MMR, csrs?: CSRS[]) =>
 	{
+		const newPlayer = Player.Copy(player);
+
 		if (gamertag && gamertag !== player.gamertag)
 		{
-			player.gamertag = gamertag;
-			player.appearance = appearance ?? new Appearance();
-			player.serviceRecord = serviceRecord ?? new ServiceRecord();
-			player.mmr = mmr ?? new MMR();
-			player.season = season ?? -1;
+			newPlayer.gamertag = gamertag;
+			newPlayer.appearance = appearance ?? new Appearance();
+			newPlayer.serviceRecord = serviceRecord ?? new ServiceRecord();
+			newPlayer.mmr = mmr ?? new MMR();
+			newPlayer.csrs = csrs ?? [];
 		}
 		else
 		{
-			if (appearance) { player.appearance = appearance; }
-			if (serviceRecord) { player.serviceRecord = serviceRecord; }
-			if (mmr) { player.mmr = mmr; }
-			player.season = season ?? -1;
+			if (appearance) { newPlayer.appearance = appearance; }
+			if (serviceRecord) { newPlayer.serviceRecord = serviceRecord; }
+			if (mmr) { newPlayer.mmr = mmr; }
+			if (csrs) { newPlayer.csrs = csrs; }
 		}
 
-		setPlayer(player);
-		updateIsAllowed();
-	}, [player, setPlayer]);
+		setPlayer(newPlayer);
+		setIsAllowed(await arrowhead.GetIsAllowed(newPlayer.gamertag));
+	}, [player, setPlayer, setIsAllowed]);
 	//#endregion
 
 	//#region App Bar and Drawer
-	const [mobileOpen, setMobileOpen] = useState(false);
-	const [tab, setTab] = useState("");
-	const [loadingMessage, setLoadingMessage] = useState("");
-	const [backgroundLoadingProgress, setBackgroundLoadingProgress] = useState<number | undefined>(undefined);
-	const [isAllowed, setIsAllowed] = useState(true);
-
 	/** Opens or closes the drawer */
 	const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
@@ -133,6 +131,7 @@ const App = () =>
 					<Route path="/match/:id" element={<SingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
 					<Route path="/match/:id/:gamertag" element={<SingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
 					<Route path="/patreon/:gamertag" element={<PatreonView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
+					<Route path="/powered_by_halodotapi" element={<OtherCreators />} />
 					<Route path="*" element={<UhOh />} />
 				</Routes>
 			</Box>

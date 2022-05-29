@@ -45,6 +45,8 @@ export function ModesView(props: ViewProps)
 		// Set page gamertag and show loading message
 		setLoadingMessage("Loading " + gamertag);
 		Cookie.addRecent(gamertag);
+
+		document.title = "Spartan Record | " + gamertag;
 		
 		// Get the player from firebase and show on screen
 		const player = await app.GetPlayerFromFirebase(gamertag, season);

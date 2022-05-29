@@ -1,4 +1,4 @@
-import { Box, Divider, Toolbar } from "@mui/material";
+import { Box, Divider, Grid, Link, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
 
 import { GamertagSearch } from "./Subpage/GamertagSearch";
@@ -45,10 +45,18 @@ export function HomeView(props: ViewProps)
 	};
 
 	return (
-		<Box component="main" sx={{ flexGrow: 1, height: "calc(100% - 160px)" }}>
+		<Box component="main" sx={{ flexGrow: 1, height: "calc(100% - 32px)" }}>
 			<Toolbar />
 			<Divider />
-			<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} />
+			<Box sx={{ backgroundColor: "secondary.main", height: "100%", display: "flex", flexDirection: "column" }}>
+				<Box sx={{ flexGrow: 1 }} />
+				<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} />
+				<Box sx={{ flexGrow: 1 }} />
+				<Box sx={{ backgroundColor: "secondary.main", textAlign: "center", mt: 18 }}>
+					<Typography variant="h6" sx={{ textAlign: "center" }}>Powered by <Link sx={{ cursor: "pointer" }} onClick={() => switchTab("/powered_by_halodotapi")}>HaloDotAPI</Link></Typography>
+				</Box>
+
+			</Box>
 		</Box>
 	);
 }

@@ -1,24 +1,12 @@
-import { Box, LinearProgress, linearProgressClasses, styled, Tooltip, Typography } from "@mui/material";
+import { Box, Tooltip, Typography } from "@mui/material";
 import { Halo5Converter } from "../../../Objects/Helpers/Halo5Converter";
-import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { TitleCard } from "../Cards/TitleCard";
+import { BorderLinearProgress } from "../Custom/BorderLinearProgress";
 import { BreakdownProps, BreakdownTile } from "./BreakdownTile";
 
 export function LevelBreakdown(props: BreakdownProps)
 {
 	const { serviceRecord, showPerMatch } = props;
-
-	const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-		height: 10,
-		borderRadius: 5,
-		[`&.${linearProgressClasses.colorPrimary}`]: {
-			backgroundColor: ArrowheadTheme.background,
-		},
-		[`& .${linearProgressClasses.bar}`]: {
-			borderRadius: 5,
-			backgroundColor: ArrowheadTheme.good,
-		},
-	}));
 
 	const currLvl = Halo5Converter.GetNumericLevelFromScore(serviceRecord.totalScore);
 	const nextLvl = Halo5Converter.GetNumericLevelFromScore(serviceRecord.totalScore) + 1;

@@ -23,6 +23,8 @@ export function MedalsView(props: ViewProps)
 	{		
 		// Check if we need to check Firebase or HaloDotAPI
 		setLoadingMessage("Loading Medals");
+
+		document.title = "Spartan Record | " + gamertag;
 		
 		// Get service record of gamertag
 		if (gamertag)

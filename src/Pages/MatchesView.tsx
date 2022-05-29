@@ -39,6 +39,8 @@ export function MatchesView(props: ViewProps)
 		{
 			if (!hideLoading) { setLoadingMessage("Loading matches for " + gamertag); }
 
+			document.title = "Spartan Record | " + gamertag;
+
 			const additionalMatches = await app.GetPlayerMatches(gamertag, offset.current);
 			const newMatches = matches.concat(additionalMatches);
 			setMatches(newMatches);

@@ -1,6 +1,7 @@
 import { child, Database, DataSnapshot, get, ref, set, update } from "firebase/database";
 import { Debugger } from "../Objects/Helpers/Debugger";
 import { Appearance } from "../Objects/Model/Appearance";
+import { CSRS } from "../Objects/Model/CSRS";
 import { Match } from "../Objects/Model/Match";
 import { Player } from "../Objects/Model/Player";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
@@ -8,6 +9,7 @@ import { MMR } from "../Objects/Pieces/MMR";
 import { SRFilter } from "../Objects/Pieces/SRFilter";
 import { ServiceRecordFilter } from "./ArrowheadFirebase";
 import { AutocodeAppearance } from "./Schemas/AutocodeAppearance";
+import { AutocodeCSRSData } from "./Schemas/AutocodeCSRS";
 import { AutocodeMatch } from "./Schemas/AutocodeMatch";
 import { AutocodeMultiplayerServiceRecord } from "./Schemas/AutocodeMultiplayerServiceRecord";
 import { FirebaseBest } from "./Schemas/FirebaseBest";
@@ -39,19 +41,21 @@ export class SCFirebase
 
 		if (historic)
 		{
-			[player.serviceRecord, player.appearance, player.historicStats, player.mmr] = await Promise.all([
+			[player.serviceRecord, player.appearance, player.historicStats, player.mmr, player.csrs] = await Promise.all([
 				this.GetServiceRecord(player.gamertag, season),
 				this.GetAppearance(player.gamertag),
 				this.GetHistoricStatistics(player.gamertag),
-				this.GetMMR(player.gamertag)
+				this.GetMMR(player.gamertag),
+				this.GetCSRS(player.gamertag, season)
 			]);
 		}
 		else
 		{
-			[player.serviceRecord, player.appearance, player.mmr] = await Promise.all([
+			[player.serviceRecord, player.appearance, player.mmr, player.csrs] = await Promise.all([
 				this.GetServiceRecord(player.gamertag, season),
 				this.GetAppearance(player.gamertag),
-				this.GetMMR(player.gamertag)
+				this.GetMMR(player.gamertag),
+				this.GetCSRS(player.gamertag, season)
 			]);
 		}
 
@@ -291,7 +295,7 @@ export class SCFirebase
 	}
 	//#endregion
 
-	//#region MMR
+	//#region MMR and CSRS
 	/**
 	 * Gets the MMR of the gamertag
 	 * @param gamertag the gamertag to get the MMR of
@@ -304,7 +308,7 @@ export class SCFirebase
 		const snapshot = await this.__get(`mmr/${gamertag}`);
 		const data = snapshot?.val();
 		if (!data) { return new MMR(); }
-		
+
 		const lss = data["lss"];
 		const ffa = data["ffa"];
 
@@ -337,6 +341,47 @@ export class SCFirebase
 		else { return; }
 
 		await this.__update(`mmr/${gamertag}`, update);	
+	}
+
+	/**
+	 * Gets the MMR of the gamertag
+	 * @param gamertag the gamertag to get the MMR of
+	 * @param season the season
+	 * @returns the CSRS
+	 */
+	public async GetCSRS(gamertag: string, season?: number): Promise<CSRS[]>
+	{
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetCSRS()", gamertag); }
+
+		let snapshot: DataSnapshot | undefined;
+
+		if (!season || season === -1) { snapshot = await this.__get(`csrs/${gamertag}/current`); }
+		else { snapshot = await this.__get(`csrs/${gamertag}/season/${season}`); }
+
+		const data = snapshot?.val();
+		const csrs: CSRS[] = [];
+
+		if (data && data.length > 0)
+		{
+			for (const iter of data) { csrs.push(new CSRS(iter)); }
+		}
+
+		return csrs;
+	}
+
+	/**
+	 * Sets the MMR for the gamertag into Firebase
+	 * @param gamertag the gamertag
+	 * @param season the season
+	 * @param data the data to save
+	 */
+	public async SetCSRS(gamertag: string, season?: number, data?: Partial<AutocodeCSRSData>[]): Promise<void>
+	{
+		if (!data) { return; }
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetCSRS()", gamertag); }
+		
+		if (!season || season === -1) { await this.__set(`csrs/${gamertag}/current`, data); }
+		else { await this.__set(`csrs/${gamertag}/season/${season}`, data); }
 	}
 	//#endregion
 
