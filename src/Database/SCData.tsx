@@ -108,7 +108,7 @@ export class SCData
      * Gets the player from Autocode
      * @param gamertag the gamertag
      */
-	public GetPlayerFromAutocode = async (gamertag: string, season: number): Promise<Player> => this.__autocode.GetPlayer(gamertag, season);
+	public GetPlayerFromAutocode = async (gamertag: string, season: number): Promise<Player> => this.__autocode.GetAllPlayerEndpoints(gamertag, season);
 
     /**
 	 * Gets the service record for the gamertag from Autocode

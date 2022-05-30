@@ -4,6 +4,7 @@ import { CSRS } from "../Objects/Model/CSRS";
 import { Player } from "../Objects/Model/Player";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { MMR } from "../Objects/Pieces/MMR";
+import { AutocodeAppearance } from "./Schemas/AutocodeAppearance";
 import { AutocodeCSRS } from "./Schemas/AutocodeCSRS";
 import { AutocodeMatch, AutocodeMatchResults } from "./Schemas/AutocodeMatch";
 import { AutocodeMap, AutocodeMedal, AutocodePlaylist, AutocodeTeam, AutocodeVariant } from "./Schemas/AutocodeMetadata";
@@ -25,7 +26,7 @@ export class SCAutocode
 	/** Turns on or off debugging mode */
 	private readonly IS_DEBUGGING = process.env.NODE_ENV !== "production";
 	/** The HaloDotAPI version */
-	private readonly AUTOCODE_VERSION = "1-4-6";
+	private readonly AUTOCODE_VERSION = "1-4-8";
 
 	constructor() {}
 
@@ -41,6 +42,54 @@ export class SCAutocode
 		await Promise.all([this.GetAppearance(player), this.GetServiceRecord(player, season), this.GetMMR(player), this.GetCSRS(player, season)]);
 		return player;
 	}
+
+	//#region Combined Result
+	/**
+	 * Gets a player from autocode
+	 * @param gamertag the gamertag
+	 * @param season the season
+	 * @returns the player
+	 */
+	public async GetAllPlayerEndpoints(gamertag: string, season: number): Promise<Player>
+	{
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCAutocode.GetAllPlayerEndpoints()", gamertag); }
+
+		const player = new Player(gamertag);
+
+		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/player`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				gamertag: gamertag,
+				season: season === -1 ? undefined : season
+			})
+		});
+
+		const data = await response.json() as { service_record: AutocodeMultiplayerServiceRecord, appearance: AutocodeAppearance, csrs: AutocodeCSRS, mmr: AutocodeMMR };
+		if (!data) { return player; }
+
+		player.serviceRecord = new ServiceRecord(data.service_record);
+		player.appearance = new Appearance(data.appearance);
+
+		// CSRS
+		if (data.csrs) { player.csrs = data.csrs.data.map(iter => new CSRS(iter)); }
+		
+		// MMR
+		if (data.mmr)
+		{
+			if (data.mmr.data.playlist?.name === "Last Spartan Standing")
+			{
+				player.mmr.lastSpartanStanding = data.mmr.data.value ?? 0;
+			}
+			else
+			{
+				player.mmr.ffa = data.mmr.data.value ?? 0;
+			}
+		}
+
+		return player;
+	}
+	//#endregion
 
 	//#region MMR and CSRS
 	/**
