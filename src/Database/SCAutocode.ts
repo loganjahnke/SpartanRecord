@@ -48,13 +48,14 @@ export class SCAutocode
 	 * Gets a player from autocode
 	 * @param gamertag the gamertag
 	 * @param season the season
+	 * @param mmr
 	 * @returns the player
 	 */
-	public async GetAllPlayerEndpoints(gamertag: string, season: number): Promise<Player>
+	public async GetAllPlayerEndpoints(gamertag: string, season: number, mmr: MMR): Promise<Player>
 	{
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCAutocode.GetAllPlayerEndpoints()", gamertag); }
 
-		const player = new Player(gamertag);
+		const player = new Player(gamertag, undefined, undefined, undefined, mmr);
 
 		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/player`, {
 			method: "POST",
@@ -70,6 +71,9 @@ export class SCAutocode
 
 		player.serviceRecord = new ServiceRecord(data.service_record);
 		player.appearance = new Appearance(data.appearance);
+
+		player.serviceRecordData = data.service_record;
+		player.appearanceData = data.appearance;
 
 		// CSRS
 		if (data.csrs) { player.csrs = data.csrs.data.map(iter => new CSRS(iter)); }

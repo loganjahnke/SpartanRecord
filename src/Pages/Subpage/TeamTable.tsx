@@ -16,6 +16,7 @@ import { ExpectationBreakdown } from "../../Assets/Components/Breakdowns/Expecta
 
 interface TeamTableProps
 {
+	selectedGamertag?: string;
 	ranked?: boolean;
 	team: Team;
 	variant?: string;
@@ -26,6 +27,7 @@ interface TeamTableProps
 
 interface TeamTableRowProps
 {
+	selectedGamertag?: string;
 	onGamertagClick: (gamertag: string) => void; 
 	player: MatchPlayer; 
 	topSR: { score: number, points: number, kills: number, deaths: number, assists: number };
@@ -36,7 +38,7 @@ interface TeamTableRowProps
 
 export function TeamTable(props: TeamTableProps)
 {
-	const { ranked, team, best, variant, onGamertagClick, ffa } = props;
+	const { selectedGamertag, ranked, team, best, variant, onGamertagClick, ffa } = props;
 
 	const showPoints = !!variant && (variant.includes("CTF") || variant.includes("Oddball"));
 
@@ -59,7 +61,7 @@ export function TeamTable(props: TeamTableProps)
 				</TableHead>
 				<TableBody>
 					{team.players.sort((a, b) => b.stats.totalScore - a.stats.totalScore).map((player, index) => (
-						<Row key={index} player={player} topSR={best} showPoints={showPoints} showRank={ranked} onGamertagClick={onGamertagClick} ffa={ffa} />
+						<Row key={index} player={player} topSR={best} showPoints={showPoints} showRank={ranked} onGamertagClick={onGamertagClick} selectedGamertag={selectedGamertag} ffa={ffa} />
 					))}
 				</TableBody>
 			</Table>
@@ -69,7 +71,7 @@ export function TeamTable(props: TeamTableProps)
 
 function Row(props: TeamTableRowProps)
 {
-	const { onGamertagClick, player, topSR, showRank, showPoints, ffa } = props;
+	const { selectedGamertag, onGamertagClick, player, topSR, showRank, showPoints, ffa } = props;
 	const [expanded, setExpanded] = useState(false);
 
 	const bestScore = player.stats.totalScore === topSR?.score;
@@ -91,7 +93,7 @@ function Row(props: TeamTableRowProps)
 						<img src={player.progression.post.tierImageUrl} alt={player.progression.post.tier + " " + (player.progression.post.subTier)} title={player.progression.post.tier + " " + (player.progression.post.subTier)} height="32px" />
 					</TableCell> 
 				}
-				<TableCell sx={{ pl: 2, pr: 2, position: "sticky", left: 0, backgroundColor: ArrowheadTheme.box }} component="th" scope="row" onClick={() => onGamertagClick(player.gamertag)} width={"150px"}>{player.gamertag}</TableCell>
+				<TableCell sx={{ pl: 2, pr: 2, position: "sticky", left: 0, backgroundColor: selectedGamertag === player.gamertag ? ArrowheadTheme.good : ArrowheadTheme.box }} component="th" scope="row" onClick={() => onGamertagClick(player.gamertag)} width={"150px"}>{player.gamertag}</TableCell>
 				<TableCell sx={{ pl: 2, pr: 2 }} width={"80px"} align="right">
 					<Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
 						{bestScore ? <StarIcon sx={{ color: ArrowheadTheme.good, mr: 1 }} /> : undefined}

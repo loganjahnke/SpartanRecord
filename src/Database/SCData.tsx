@@ -5,6 +5,7 @@ import { Match } from "../Objects/Model/Match";
 import { Player } from "../Objects/Model/Player";
 import { PlayerMatch } from "../Objects/Model/PlayerMatch";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
+import { MMR } from "../Objects/Pieces/MMR";
 import { SRFilter } from "../Objects/Pieces/SRFilter";
 import { HaloMap, HaloMode, HaloOutcome, HaloRanked, ServiceRecordFilter } from "./ArrowheadFirebase";
 import { SCAutocode, ServiceRecordType } from "./SCAutocode";
@@ -107,8 +108,10 @@ export class SCData
     /**
      * Gets the player from Autocode
      * @param gamertag the gamertag
+     * @param season the season
+     * @param mmr the MMR
      */
-	public GetPlayerFromAutocode = async (gamertag: string, season: number): Promise<Player> => this.__autocode.GetAllPlayerEndpoints(gamertag, season);
+	public GetPlayerFromAutocode = async (gamertag: string, season: number, mmr: MMR): Promise<Player> => this.__autocode.GetAllPlayerEndpoints(gamertag, season, mmr);
 
     /**
 	 * Gets the service record for the gamertag from Autocode

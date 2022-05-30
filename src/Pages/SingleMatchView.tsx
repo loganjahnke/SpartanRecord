@@ -105,13 +105,13 @@ export function SingleMatchView(props: ViewProps)
 											<TeamResultBreakdown team={team} />
 										</Grid>
 										<Grid item xs={12}>
-											<TeamTable team={team} best={match.best} variant={match.mode.name} onGamertagClick={onGamertagClick} ranked={match.playlist.ranked} />
+											<TeamTable team={team} best={match.best} variant={match.mode.name} onGamertagClick={onGamertagClick} ranked={match.playlist.ranked} selectedGamertag={gamertag} />
 										</Grid>
 									</>
 								))
 								: match?.players && match.players.length > 0 && (
 									<Grid item xs={12}>
-										<TeamTable team={new Team(undefined, undefined, match.players)} variant={match.mode.name} best={match.best} onGamertagClick={onGamertagClick} ranked={match.playlist.ranked} ffa />
+										<TeamTable team={new Team(undefined, undefined, match.players)} variant={match.mode.name} best={match.best} onGamertagClick={onGamertagClick} ranked={match.playlist.ranked} selectedGamertag={gamertag} ffa />
 									</Grid>
 							)}
 					</Grid>

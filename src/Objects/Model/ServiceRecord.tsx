@@ -418,9 +418,12 @@ export class ServiceRecord
      * @param type the medal type
      * @returns array of medals sorted by rarity
      */
-    public GetMedalType(type: MedalType)
+    public GetMedalType(type: MedalType): Medal[]
     {
         const filtered = this.medals.filter(medal => medal.type === type);
         return filtered.sort((a, b) => a.sort > b.sort ? 1 : -1);
     }
+
+    /** Returns true if the service record is empty */
+    public IsEmpty = (): boolean => this.summary.kills === 0 && this.summary.deaths === 0 && this.matchesPlayed === 0;
 }

@@ -20,6 +20,7 @@ import { SeasonChooser } from "./Subpage/SeasonChooser";
 import { ServiceRecordChart } from "../Assets/Components/Charts/ServiceRecordChart";
 import { MMRBreakdown } from "../Assets/Components/Breakdowns/MMRBreakdown";
 import { CSRSBreakdown } from "../Assets/Components/Breakdowns/CSRSBreakdown";
+import { TimePlayed } from "../Assets/Components/Breakdowns/TimePlayed";
 
 export function PlayerView(props: ViewProps)
 {
@@ -50,10 +51,13 @@ export function PlayerView(props: ViewProps)
 		const player = await app.GetPlayerFromFirebase(gamertag, season, isAllowed);
 		updatePlayer(player.gamertag, player.appearance, player.serviceRecord, player.mmr, player.csrs);
 		if (isAllowed) { setHistoricStats(player.historicStats ?? []); }
-		
-		// Set loading message to nada, start background load
-		setLoadingMessage("");
-		setBackgroundLoadingProgress(-1);
+
+		if (!player.serviceRecord.IsEmpty())
+		{
+			// Set loading message to nada, start background load
+			setLoadingMessage("");
+			setBackgroundLoadingProgress(-1);
+		}		
 
 		// If they are, sync with autocode
 		if (!app.IsSyncing(gamertag))
@@ -61,7 +65,7 @@ export function PlayerView(props: ViewProps)
 			app.AddToSyncing(gamertag);
 
 			// Sync into firebase
-			const newPlayer = await app.GetPlayerFromAutocode(gamertag, season);
+			const newPlayer = await app.GetPlayerFromAutocode(gamertag, season, player.mmr);
 			if (newPlayer)
 			{
 				updatePlayer(newPlayer.gamertag, newPlayer.appearance, newPlayer.serviceRecord, newPlayer.mmr, newPlayer.csrs);
@@ -72,7 +76,11 @@ export function PlayerView(props: ViewProps)
 			app.RemoveFromSyncing(gamertag);
 			setBackgroundLoadingProgress(undefined);
 		}
-		else { setBackgroundLoadingProgress(undefined); }
+		else 
+		{ 
+			setLoadingMessage("");
+			setBackgroundLoadingProgress(undefined); 
+		}
 	}, [app, gamertag, updatePlayer, setBackgroundLoadingProgress, season, switchTab]);
 	
 	useEffect(() =>
@@ -92,7 +100,7 @@ export function PlayerView(props: ViewProps)
 						<Button sx={{ mt: 4 }} onClick={() => switchTab("/", "Search")} variant="contained">Back to Search</Button>
 					</Box>
 				}
-				{player && player.serviceRecord?.error === undefined &&
+				{player && !player.serviceRecord?.IsEmpty() && player.serviceRecord?.error === undefined &&
 					<Grid container spacing={2}>
 						{/* Top */}
 						<Grid item xs={12}>
@@ -118,6 +126,9 @@ export function PlayerView(props: ViewProps)
 							</Grid>
 							<Grid item xs={12}>
 								<ShotsBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
+							</Grid>
+							<Grid item xs={12}>
+								<TimePlayed serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 						</Grid>
 						{/* Middle 6 */}
