@@ -70,6 +70,12 @@ export function PlayerView(props: ViewProps)
 			{
 				updatePlayer(newPlayer.gamertag, newPlayer.appearance, newPlayer.serviceRecord, newPlayer.mmr, newPlayer.csrs);
 				await app.SetPlayerIntoFirebase(newPlayer, season);
+
+				if (newPlayer.gamertag !== gamertag)
+				{
+					// Autocode automatically corrected the gamertag, make sure we point Firebase to the right gamertag
+					await app.UpdateGamertagReference(newPlayer.gamertag, gamertag);
+				}
 			}
 			
 			setLoadingMessage("");

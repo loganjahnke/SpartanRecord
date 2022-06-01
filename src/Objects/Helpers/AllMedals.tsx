@@ -709,18 +709,6 @@ export const AllMedals = {
 			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/always-rotating.png"
 		}
 	},
-	420808268: {
-		name: "Zone Guardian",
-		description: "Occupy the zone for 30 seconds without leaving in King of the Hill",
-		type: MedalRarity.Heoric,
-		category: MedalType.KingOfTheHill,
-		sort: 0,
-		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/zone-guardian.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/zone-guardian.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/zone-guardian.png"
-		}
-	},
 	3630529364: {
 		name: "Clock Stop",
 		description: "Stop the enemy from scoring their final points by capturing a zone in Strongholds",

@@ -75,6 +75,8 @@ export class SCAutocode
 		player.serviceRecordData = data.service_record;
 		player.appearanceData = data.appearance;
 
+		player.gamertag = player.serviceRecordData?.additional?.parameters?.gamertag ?? player.gamertag;
+
 		// CSRS
 		if (data.csrs) { player.csrs = data.csrs.data.map(iter => new CSRS(iter)); }
 		
@@ -182,6 +184,7 @@ export class SCAutocode
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCAutocode.GetServiceRecord()", player.gamertag); }
 		player.serviceRecordData = await this.__getServiceRecordFromHaloDotAPI(player.gamertag, season === -1 ? undefined : season, playlistId, categoryId, type);
 		player.serviceRecord = new ServiceRecord(player.serviceRecordData);
+		player.gamertag = player.serviceRecordData?.additional?.parameters?.gamertag ?? player.gamertag;
 	}
 	//#endregion
  

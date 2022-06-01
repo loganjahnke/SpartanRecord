@@ -515,6 +515,34 @@ export class SCFirebase
 	}
 	//#endregion
 
+	//#region Gamertag References
+	/**
+	 * Gets the reference to the right gamertag from the input
+	 * @param input the inputted gamertag
+     * @returns the real gamertag
+	 */
+	public async GetGamertag(input: string): Promise<string>
+	{
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetGamertag()", `${input}`); }
+		const snapshot = await this.__get(`gamertag/${input}`);
+		if (!snapshot || !snapshot.val()) { return input; }
+		return snapshot.val();
+	}
+
+	/**
+	 * Sets the reference to the right gamertag from the wrong one
+	 * @param correct the correct gamertag
+     * @param incorrect the incorrect gamertag
+	 */
+	public async SetGamertagPointer(correct: string, incorrect: string): Promise<void>
+	{
+		if (correct === incorrect) { return; }
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetGamertagPointer()", `${incorrect} -> ${correct}`); }
+
+		await this.__set(`gamertag/${incorrect}`, correct);	
+	}
+	//#endregion
+
 	//#region Helpers
 	/**
 	 * Gets the snapshot given the path

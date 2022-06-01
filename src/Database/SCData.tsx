@@ -7,11 +7,10 @@ import { PlayerMatch } from "../Objects/Model/PlayerMatch";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { MMR } from "../Objects/Pieces/MMR";
 import { SRFilter } from "../Objects/Pieces/SRFilter";
-import { HaloMap, HaloMode, HaloOutcome, HaloRanked, ServiceRecordFilter } from "./ArrowheadFirebase";
+import { ServiceRecordFilter } from "./ArrowheadFirebase";
 import { SCAutocode, ServiceRecordType } from "./SCAutocode";
 import { SCFirebase } from "./SCFirebase";
 import { AutocodeMap, AutocodeMedal, AutocodePlaylist, AutocodeTeam, AutocodeVariant } from "./Schemas/AutocodeMetadata";
-import { AutocodeMultiplayerServiceRecord } from "./Schemas/AutocodeMultiplayerServiceRecord";
 import { FirebaseBest } from "./Schemas/FirebaseBest";
 
 export class SCData
@@ -85,7 +84,8 @@ export class SCData
      */
     public async GetPlayerFromFirebase(gamertag: string, season?: number, historic?: boolean): Promise<Player>
 	{
-		const player = new Player(gamertag);
+        const correct = await this.__firebase.GetGamertag(gamertag);
+		const player = new Player(correct);
 		await this.__firebase.GetPlayer(player, season, historic);
 		return player;
 	}
@@ -97,6 +97,7 @@ export class SCData
     public async SetPlayerIntoFirebase(player: Player, season?: number): Promise<void>
 	{
         if (!player.gamertag) { return; }
+
 		await Promise.all([
             this.__firebase.SetAppearance(player.gamertag, player.appearanceData),
             this.__firebase.SetServiceRecord(player.gamertag, player.serviceRecordData, season),
@@ -104,6 +105,13 @@ export class SCData
             this.__firebase.SetCSRS(player.gamertag, season, player.csrs.map(iter => iter.GetJSON()))
         ]);
 	}
+
+    /**
+     * Sets a reference from the incorrect gamertag (likely casing) to the correct gamertag
+     * @param correct the correct gamertag
+     * @param incorrect the incorrect gamertag
+     */
+    public UpdateGamertagReference = async (correct: string, incorrect: string): Promise<void> => this.__firebase.SetGamertagPointer(correct, incorrect);
 
     /**
      * Gets the player from Autocode
