@@ -11,6 +11,7 @@ import { AutocodeMap, AutocodeMedal, AutocodePlaylist, AutocodeTeam, AutocodeVar
 import { AutocodeMMR } from "./Schemas/AutocodeMMR";
 import { AutocodeMultiplayerServiceRecord } from "./Schemas/AutocodeMultiplayerServiceRecord";
 import { AutocodePlayerMatchResults } from "./Schemas/AutocodePlayerMatch";
+import { AutocodeXboxProfile } from "./Schemas/AutocodeXboxProfile";
 
 export enum ServiceRecordType
 {
@@ -25,8 +26,6 @@ export class SCAutocode
 {
 	/** Turns on or off debugging mode */
 	private readonly IS_DEBUGGING = process.env.NODE_ENV !== "production";
-	/** The HaloDotAPI version */
-	private readonly AUTOCODE_VERSION = "1-4-8";
 
 	constructor() {}
 
@@ -57,7 +56,7 @@ export class SCAutocode
 
 		const player = new Player(gamertag, undefined, undefined, undefined, mmr);
 
-		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/player`, {
+		const response = await fetch(`https://${process.env.REACT_APP_AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/player`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -106,7 +105,7 @@ export class SCAutocode
 	{
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCAutocode.GetMMR()", player.gamertag); }
 
-		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/mmr`, {
+		const response = await fetch(`https://${process.env.REACT_APP_AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/mmr`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -138,7 +137,7 @@ export class SCAutocode
 	{
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCAutocode.GetCSRS()", player.gamertag); }
 
-		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/csrs`, {
+		const response = await fetch(`https://${process.env.REACT_APP_AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/csrs`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -194,7 +193,7 @@ export class SCAutocode
 	 */
 	public async GetMaps(): Promise<AutocodeMap[]>
 	{
-		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/metadata/maps`, {
+		const response = await fetch(`https://${process.env.REACT_APP_AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/metadata/maps`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -210,7 +209,7 @@ export class SCAutocode
 	 */
 	public async GetPlaylists(): Promise<AutocodePlaylist[]>
 	{
-		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/metadata/playlists`, {
+		const response = await fetch(`https://${process.env.REACT_APP_AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/metadata/playlists`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -228,7 +227,7 @@ export class SCAutocode
 	 */
 	public async GetVariants(): Promise<AutocodeVariant[]>
 	{
-		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/metadata/variants`, {
+		const response = await fetch(`https://${process.env.REACT_APP_AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/metadata/variants`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -244,7 +243,7 @@ export class SCAutocode
 	 */
 	public async GetMedals(ids: string[] = []): Promise<AutocodeMedal[]>
 	{
-		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/metadata/medals`, {
+		const response = await fetch(`https://${process.env.REACT_APP_AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/metadata/medals`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -260,7 +259,7 @@ export class SCAutocode
 	 */
 	public async GetTeams(): Promise<AutocodeTeam[]>
 	{
-		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/metadata/teams`, {
+		const response = await fetch(`https://${process.env.REACT_APP_AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/metadata/teams`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -294,12 +293,32 @@ export class SCAutocode
 
 	//#region Communication with Autocode
 	/**
+	 * Checks if a gamertag is a valid gamertag
+	 * @param gamertag the gamertag
+	 * @returns the gamertag in its official form if valid, empty string otherwise
+	 */
+	public async IsValidGamertag(gamertag: string): Promise<string>
+	{
+		const response = await fetch(`https://${process.env.REACT_APP_AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/profile`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				gamertag: gamertag
+			})
+		});
+
+		const json = await response.json() as AutocodeXboxProfile;
+
+		return json?.data?.player?.gamertag || "";
+	}
+
+	/**
 	 * Gets the matches from HaloDotAPI for a specific gamertag
 	 * @param gamertag the gamertag
 	 */
 	public async GetPlayerMatches(gamertag: string, count: number, offset: number): Promise<AutocodePlayerMatchResults>
 	{
-		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/matches`, {
+		const response = await fetch(`https://${process.env.REACT_APP_AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/matches`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -343,7 +362,7 @@ export class SCAutocode
 	 */
 	public async GetMatches(ids: string[]): Promise<AutocodeMatchResults>
 	{
-		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/match`, {
+		const response = await fetch(`https://${process.env.REACT_APP_AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/match`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -361,7 +380,7 @@ export class SCAutocode
 	 */
 	private async __getSCampaignRecordFromHaloDotAPI(gamertag: string): Promise<any>
 	{
-		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/campaign_record`, {
+		const response = await fetch(`https://${process.env.REACT_APP_AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/campaign_record`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({gamertag: gamertag})
@@ -381,7 +400,7 @@ export class SCAutocode
 	 */
 	private async __getServiceRecordFromHaloDotAPI(gamertag: string, season?: number, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<AutocodeMultiplayerServiceRecord>
 	{
-		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/service_record`, {
+		const response = await fetch(`https://${process.env.REACT_APP_AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/service_record`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -403,7 +422,7 @@ export class SCAutocode
 	 */
 	private async __getPlayerAppearanceFromHaloDotAPI(gamertag: string): Promise<any>
 	{
-		const response = await fetch(`https://${this.AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/appearance`, {
+		const response = await fetch(`https://${process.env.REACT_APP_AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/appearance`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({gamertag: gamertag})

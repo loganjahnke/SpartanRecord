@@ -45,7 +45,6 @@ export function PlayerView(props: ViewProps)
 
 		// Set page gamertag and show loading message
 		setLoadingMessage("Loading " + gamertag);
-		Cookie.addRecent(gamertag);
 		
 		// Get the player from firebase and show on screen
 		const player = await app.GetPlayerFromFirebase(gamertag, season, isAllowed);
@@ -65,7 +64,7 @@ export function PlayerView(props: ViewProps)
 			app.AddToSyncing(gamertag);
 
 			// Sync into firebase
-			const newPlayer = await app.GetPlayerFromAutocode(gamertag, season, player.mmr);
+			const newPlayer = await app.GetPlayerFromHaloDotAPI(gamertag, season, player.mmr);
 			if (newPlayer)
 			{
 				updatePlayer(newPlayer.gamertag, newPlayer.appearance, newPlayer.serviceRecord, newPlayer.mmr, newPlayer.csrs);
@@ -78,6 +77,7 @@ export function PlayerView(props: ViewProps)
 				}
 			}
 			
+			Cookie.addRecent(newPlayer.gamertag);
 			setLoadingMessage("");
 			app.RemoveFromSyncing(gamertag);
 			setBackgroundLoadingProgress(undefined);

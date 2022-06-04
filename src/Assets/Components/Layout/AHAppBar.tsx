@@ -24,7 +24,6 @@ export function AHAppBar(props: AHAppBarProps)
 				<IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2, display: { sm: "none" } }}>
 					<MenuIcon />
 				</IconButton>
-				<Divider orientation="vertical" flexItem sx={{ display: { sm: "none" }}} />
 				{loadingFromAutocode && <>
 				<CircularProgress size={20} variant={loadingFromAutocode === -1 ? "indeterminate" : "determinate"} value={loadingFromAutocode} />
 				<Typography sx={{ ml: 2 }} variant="subtitle1">Getting latest data from HaloDotAPI</Typography>

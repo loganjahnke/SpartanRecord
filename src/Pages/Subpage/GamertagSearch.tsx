@@ -9,6 +9,7 @@ export interface SearchProps
     onKeyPress: (event: React.KeyboardEvent<HTMLDivElement>) => void;
     onSearch: React.MouseEventHandler<HTMLButtonElement>;
     openRecent?: (gamertag: string) => void;
+    error?: string;
 }
 
 export function GamertagSearch(props: SearchProps)

@@ -76,7 +76,7 @@ export function AHDrawer(props: AHDrawerProps)
 				switchTab(`/matches/${player.gamertag}`, newTab);
 				break;
 			case "Company":
-				switchTab(`/arrowhead`, newTab);
+				switchTab(`/spartan_company`, newTab);
 				break;
 			// Patreon exclusives
 			case "Patreon":

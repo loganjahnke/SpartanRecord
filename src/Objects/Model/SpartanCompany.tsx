@@ -1,3 +1,4 @@
+import { AllMedals } from "../Helpers/AllMedals";
 import { Player } from "./Player";
 import { ServiceRecord } from "./ServiceRecord";
 
@@ -9,22 +10,38 @@ export class SpartanCompany
     public players: Player[] = [];
     /** The company's members */
     public members: UID2Gamertag[];
-    /** The company medal */
-    public emblem: string;
+    /** The company medal ID */
+    public medalID: number;
     /** The admin of the company */
     public adminUID: string = "";
     /** The list of gamertags who have requested permission to join the spartan company */
     public requested: UID2Gamertag[];
+
+    /** The emblem */
+    public get emblem(): string
+    {
+        let newEmblem = "";
+        if (this.medalID)
+        {
+            const medal = (AllMedals as any)[this.medalID];
+            if (medal && medal.image_urls && medal.image_urls.medium)
+            { 
+                newEmblem = medal.image_urls.medium;
+            }
+        }
+
+        return newEmblem || "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/combat-evolved.png";
+    }
     
     /** Index of gamertag to player index */
     private __gamertagToPlayerIndex: Map<string, number> = new Map<string, number>();
 
-    constructor(name: string)
+    constructor(name?: string, medalID?: number)
     {
-        this.name = name;
+        this.name = name || "Spartan";
         this.members = [];
         this.requested = [];
-        this.emblem = "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/gunner.png";
+        this.medalID = medalID ?? 641726424;
     }
 
     /**

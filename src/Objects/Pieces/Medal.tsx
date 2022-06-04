@@ -61,9 +61,9 @@ export class Medal
     /** Medal images */
     public images: { small: string, medium: string, large: string };
 
-    constructor(data?: any)
+    constructor(data?: any, id?: number)
     {
-        this.id = data?.id ?? -1;
+        this.id = id ?? data?.id ?? -1;
         this.name = data?.name ?? "";
         this.rarity = data?.type ?? MedalRarity.Normal;
         this.type = data?.category ?? MedalType.Unknown;
@@ -108,5 +108,21 @@ export class Medal
             : this.rarity === MedalRarity.Heoric ? 2
             : this.rarity === MedalRarity.Legendary ? 3
             : 4; // MedalRarity.Mythic
+    }
+
+    public CompareTo(other: Medal): number
+    {
+        if (this.type < other.type)
+        {
+            return -1;
+        }
+        else if (this.type > other.type)
+        {
+            return 1;
+        }
+        else
+        {
+            return this.sort > other.sort ? 1 : -1;
+        }
     }
 }

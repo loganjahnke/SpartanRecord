@@ -45,6 +45,34 @@ export class ServiceRecord
     public data?: AutocodeServiceRecordData;
     /** If there is an error in the response, store it here */
     public error?: string;
+
+    /** The kills per game */
+    public get killsPerGame(): number
+    {
+        if (this.matchesPlayed === 0) { return 0; }
+        return this.summary.kills / this.matchesPlayed;
+    }
+
+    /** The deaths per game */
+    public get deathsPerGame(): number
+    {
+        if (this.matchesPlayed === 0) { return 0; }
+        return this.summary.deaths / this.matchesPlayed;
+    }
+
+    /** The assists per game */
+    public get assistsPerGame(): number
+    {
+        if (this.matchesPlayed === 0) { return 0; }
+        return this.summary.assists / this.matchesPlayed;
+    }
+
+    /** The damage per game */
+    public get damagePerGame(): number
+    {
+        if (this.matchesPlayed === 0) { return 0; }
+        return this.damage.dealt / this.matchesPlayed;
+    }
  
     /** The damage efficiency per kill */
     public get damageEfficiency(): number

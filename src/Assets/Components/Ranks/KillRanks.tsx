@@ -6,20 +6,20 @@ import { MatchRankTile, RankTile } from "./RankTile";
 import { MatchPlayer } from "../../../Objects/Pieces/MatchPlayer";
 import { MatchRanksProps } from "./KDARanks";
 
-export function KillRanks(props: { company: SpartanCompany, sharedSR: ServiceRecord, goToMember: Function })
+export function KillRanks(props: { company: SpartanCompany, sharedSR: ServiceRecord, goToMember: Function, myGamertag?: string })
 {
-	const { company, sharedSR, goToMember } = props;
+	const { company, sharedSR, goToMember, myGamertag } = props;
 
 	return (
         <Box sx={{ backgroundColor: "divider", borderRadius: 3, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
             <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "100%" }}>
                 <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                    <BreakdownTile title={`${company.name} Kills`} value={sharedSR.summary.kills} isMainStat />
+                    <BreakdownTile title={`Kills / Game`} value={sharedSR.killsPerGame} isMainStat />
                 </Box>
                 {[...company.players]
-                    .sort((a, b) => b.serviceRecord.summary.kills - a.serviceRecord.summary.kills)
-                    .slice(0, 3)
-                    .map((player, index) => <RankTile player={player} value={player.serviceRecord.summary.kills} rank={index + 1} goToMember={goToMember} />)}
+                    .sort((a, b) => b.serviceRecord.killsPerGame - a.serviceRecord.killsPerGame)
+                    .slice(0, 5)
+                    .map((player) => <RankTile player={player} value={player.serviceRecord.killsPerGame} myGamertag={myGamertag} goToMember={goToMember} />)}
             </Box>
 		</Box>
 	);

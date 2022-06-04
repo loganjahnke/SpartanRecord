@@ -101,7 +101,7 @@ export class Cookie
      */
     public static addGamertagToCompany(gamertag: string): void
     {
-        const members = this.getCompany();
+        const members = this.getCompanyMembers();
         if (members.includes(gamertag))
         {
             return;
@@ -117,7 +117,7 @@ export class Cookie
      */
     public static removeGamertagToCompany(gamertag: string): void
     {
-        const members = this.getCompany();
+        const members = this.getCompanyMembers();
         if (!members.includes(gamertag))
         {
             return;
@@ -130,7 +130,7 @@ export class Cookie
      * Gets the gamertags in the spartan company
      * @returns the gamertags in the spartan company
      */
-    public static getCompany(): string[]
+    public static getCompanyMembers(): string[]
     {
         const spartanCompany = this.get("sc-company");
         if (spartanCompany)
@@ -143,6 +143,37 @@ export class Cookie
         }
 
         return [];
+    }
+
+    /**
+     * Gets the name of the spartan company
+     * @returns the name of the spartan company
+     */
+    public static getCompanyName(): string
+    {
+        const name = this.get("sc-company-name");
+        return name ?? "";
+    }
+
+    /**
+     * Gets the medal of the spartan company
+     * @returns the medal of the spartan company
+     */
+    public static getCompanyMedal(): number | undefined
+    {
+        const medal = this.get("sc-company-medal");
+        return medal ? +medal : undefined;
+    }
+
+    /**
+     * Sets the SC name and medal
+     * @param name the new SC name
+     * @param medal the new SC medal
+     */
+    public static setSpartanCompanyNameAndMedal(name: string, medal: number): void
+    {
+        this.set("sc-company-name", name);
+        this.set("sc-company-medal", medal.toString());
     }
     
     /**

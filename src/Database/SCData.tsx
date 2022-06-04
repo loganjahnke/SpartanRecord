@@ -1,6 +1,5 @@
 import { Analytics, logEvent } from "firebase/analytics";
 import { Database } from "firebase/database";
-import { getFunctions, httpsCallable } from "firebase/functions";
 import { Match } from "../Objects/Model/Match";
 import { Player } from "../Objects/Model/Player";
 import { PlayerMatch } from "../Objects/Model/PlayerMatch";
@@ -10,6 +9,7 @@ import { SRFilter } from "../Objects/Pieces/SRFilter";
 import { ServiceRecordFilter } from "./ArrowheadFirebase";
 import { SCAutocode, ServiceRecordType } from "./SCAutocode";
 import { SCFirebase } from "./SCFirebase";
+import { SCHaloDotAPI } from "./SCHaloDotAPI";
 import { AutocodeMap, AutocodeMedal, AutocodePlaylist, AutocodeTeam, AutocodeVariant } from "./Schemas/AutocodeMetadata";
 import { FirebaseBest } from "./Schemas/FirebaseBest";
 
@@ -17,6 +17,7 @@ export class SCData
 {
     private __firebase: SCFirebase;
     private __autocode: SCAutocode;
+    private __halodapi: SCHaloDotAPI;
     private __analytics: Analytics;
     private __currentlySyncing: Set<string>;
 
@@ -30,6 +31,7 @@ export class SCData
         this.__analytics = analytics;
         this.__firebase = new SCFirebase(database);
         this.__autocode = new SCAutocode();
+        this.__halodapi = new SCHaloDotAPI();
         this.__currentlySyncing = new Set<string>();
     }
 
@@ -44,25 +46,14 @@ export class SCData
     public IsSyncing = (gamertag: string) => this.__currentlySyncing.has(gamertag);
     //#endregion
 
-    //#region Firebase Functions
-    /**
-	 * Process the statistics for a new user
-	 * @param gamertag the gamertag
-	 * @returns error message if there is one
-	 */
-	public async SyncPlayer(gamertag: string): Promise<boolean>
-	{
-        // Check if firebase is already doing this
-        if (await this.__firebase.GetIsSyncing(gamertag)) { return true; }
-
-		// Get statistics
-		const GetLatestStatistics = httpsCallable(getFunctions(), "GetLatestStatistics");
-		const result: any = await GetLatestStatistics({ gamertag: gamertag });
-		return result;
-	}
-    //#endregion
-
     //#region Gets
+    /**
+	 * Checks if a gamertag is a valid gamertag
+	 * @param gamertag the gamertag
+	 * @returns the gamertag in its official form if valid, empty string otherwise
+	 */
+    public IsValidGamertag = async (gamertag: string): Promise<string> => this.__halodapi.IsValidGamertag(gamertag);
+
     /**
      * Gets the player's appearance from firebase
      * @param gamertag the gamertag
@@ -71,7 +62,7 @@ export class SCData
     public async GetPlayerAppearanceOnly(gamertag: string): Promise<Player>
     {
         const player = new Player(gamertag);
-        player.appearance = await this.__firebase.GetAppearance(gamertag);
+        await this.__halodapi.GetAppearance(player);
         return player;
     }
 
@@ -107,11 +98,31 @@ export class SCData
 	}
 
     /**
+     * Syncs a player from HaloDotAPI to Firebase
+     * @param gamertag the gamertag
+     */
+    public async SyncPlayerIntoFirebase(gamertag: string): Promise<void>
+	{
+        if (!gamertag) { return; }
+
+        const player = await this.GetPlayerFromHaloDotAPI(gamertag);
+        await this.SetPlayerIntoFirebase(player);
+	}
+
+    /**
      * Sets a reference from the incorrect gamertag (likely casing) to the correct gamertag
      * @param correct the correct gamertag
      * @param incorrect the incorrect gamertag
      */
     public UpdateGamertagReference = async (correct: string, incorrect: string): Promise<void> => this.__firebase.SetGamertagPointer(correct, incorrect);
+
+    /**
+     * Gets the player from HaloDotAPI
+     * @param gamertag the gamertag
+     * @param season the season
+     * @param mmr the MMR
+     */
+	public GetPlayerFromHaloDotAPI = async (gamertag: string, season?: number, mmr?: MMR): Promise<Player> => this.__halodapi.GetPlayer(gamertag, season, mmr);
 
     /**
      * Gets the player from Autocode
@@ -133,7 +144,7 @@ export class SCData
 	public async GetServiceRecordFromAutocode(gamertag: string, season?: number, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<ServiceRecord> 
     {
         const player = new Player(gamertag);
-        await this.__autocode.GetServiceRecord(player, season, playlistId, categoryId, type);
+        await this.__halodapi.GetServiceRecord(player, season, playlistId, categoryId, type);
         return player.serviceRecord;
     }
 
@@ -166,7 +177,7 @@ export class SCData
      */
     public async GetLast25PlayerMatches(gamertag: string): Promise<PlayerMatch[]>
     {
-        const result = await this.__autocode.GetPlayerMatches(gamertag, 25, 0);
+        const result = await this.__halodapi.GetPlayerMatches(gamertag, 25, 0);
         
         let playerMatches: PlayerMatch[] = [];
         for (const match of result.data.matches) { playerMatches.push(new PlayerMatch(match)); }
@@ -182,7 +193,7 @@ export class SCData
      */
     public async GetPlayerMatches(gamertag: string, offset: number): Promise<PlayerMatch[]>
     {
-        const result = await this.__autocode.GetPlayerMatches(gamertag, 25, offset);
+        const result = await this.__halodapi.GetPlayerMatches(gamertag, 25, offset);
         
         let playerMatches: PlayerMatch[] = [];
         for (const match of result.data.matches) { playerMatches.push(new PlayerMatch(match)); }
@@ -204,7 +215,7 @@ export class SCData
         if (match) { return match; }
 
         // Now check autocode
-        const result = await this.__autocode.GetMatch(matchID);
+        const result = await this.__halodapi.GetMatch(matchID);
         if (!result) { return new Match(); }
 
         // Set match into firebase for faster lookup next time
@@ -254,15 +265,15 @@ export class SCData
      */
      public GetAvailableFilters = async (gamertag: string, node: ServiceRecordFilter): Promise<SRFilter[]> => this.__firebase.GetAvailableFilters(gamertag, node);
     /** Gets the maps */
-	public GetMaps = async (): Promise<AutocodeMap[]> => this.__autocode.GetMaps();
+	public GetMaps = async (): Promise<AutocodeMap[]> => this.__halodapi.GetMaps();
 	/** Gets the playlists */
-	public GetPlaylists = async (): Promise<AutocodePlaylist[]> => this.__autocode.GetPlaylists();
+	public GetPlaylists = async (): Promise<AutocodePlaylist[]> => this.__halodapi.GetPlaylists();
 	/** Gets the game variants */
-	public GetVariants = async (): Promise<AutocodeVariant[]> => this.__autocode.GetVariants();
+	public GetVariants = async (): Promise<AutocodeVariant[]> => this.__halodapi.GetVariants();
 	/** Gets the medals */
-	public GetMedals = async (ids: string[] = []): Promise<AutocodeMedal[]> => this.__autocode.GetMedals(ids);
+	public GetMedals = async (ids: string[] = []): Promise<AutocodeMedal[]> => this.__halodapi.GetMedals(ids);
 	/** Gets the teams */
-	public GetTeams = async (): Promise<AutocodeTeam[]> => this.__autocode.GetTeams();
+	public GetTeams = async (): Promise<AutocodeTeam[]> => this.__halodapi.GetTeams();
     //#endregion
 
     //#region Event logging

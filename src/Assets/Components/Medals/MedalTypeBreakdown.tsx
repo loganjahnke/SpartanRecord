@@ -6,43 +6,61 @@ import { UnearnedMedalTile } from "./UnearnedMedalTile";
 
 interface MedalTypeBreakdownProps
 {
-	type: MedalType;
+	type?: MedalType;
 	medals: Medal[];
-	showAll: boolean;
+	showAll?: boolean;
+	select?: (id: number) => void;
+	selectedID?: number;
 }
 
 export function MedalTypeBreakdown(props: MedalTypeBreakdownProps)
 {
-	const { type, medals, showAll } = props;
+	const { type, medals, showAll, select, selectedID } = props;
 
-	const filtered = medals.filter(medal => medal.type === type);
+	const filtered = type ? medals.filter(medal => medal.type === type) : [];
 
 	return (
-		<Box sx={{ backgroundColor: "divider", borderRadius: 3 }}>
-			<Box sx={{ 
-				display: "flex", 
-				flexDirection: "column", 
-				justifyContent: "center", 
-				alignItems: "center", 
-				clear: "both" }}>
-				<Box sx={{ borderRadius: "12px 12px 0 0", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", width: "100%", pt: 2, pb: 2, backgroundColor: "secondary.main" }}>
-					<Typography variant="h5">{type}</Typography>
+		!select 
+			? 
+			<Box sx={{ backgroundColor: "divider", borderRadius: 3 }}>
+				<Box sx={{ 
+					display: "flex", 
+					flexDirection: "column", 
+					justifyContent: "center", 
+					alignItems: "center", 
+					clear: "both" }}>
+					<Box sx={{ borderRadius: "12px 12px 0 0", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", width: "100%", pt: 2, pb: 2, backgroundColor: "secondary.main" }}>
+						<Typography variant="h5">{type}</Typography>
+					</Box>
+					<Box sx={{width: !select ? "100%" : "48px" }}>
+						{filtered.length > 0 
+							? filtered.sort((a, b) => a.sort > b.sort ? 1 : -1).map(medal => <MedalTile medal={medal} />) 
+							: <Typography variant="body1" sx={{ mt: 4, mb: 4, width: "100%", textAlign: "center" }}>No medals earned.</Typography>}
+					</Box>
+					{showAll && <Box sx={{width: "100%" }}>
+						{Object.values(AllMedals)
+							.map((medalJSON: any) => new Medal(medalJSON))
+							.filter(medal => medal.type === type && (filtered.length > 0 ? !filtered.map(filter => filter.name).includes(medal.name) : true))
+							.sort((a, b) => a.sort > b.sort ? 1 : -1)
+							.map(medal => <MedalTile medal={medal} />)}
+					</Box>}
 				</Box>
-				<Box sx={{width: "100%" }}>
-					{filtered.length > 0 
-						? filtered.sort((a, b) => a.sort > b.sort ? 1 : -1).map(medal => <MedalTile medal={medal} />) 
-						: <Typography variant="body1" sx={{ mt: 4, mb: 4, width: "100%", textAlign: "center" }}>No medals earned.</Typography>}
-				</Box>
-				{showAll 
-					?  <Box sx={{width: "100%" }}>
-							{Object.values(AllMedals)
-								.map((medalJSON: any) => new Medal(medalJSON))
-								.filter(medal => medal.type === type && (filtered.length > 0 ? !filtered.map(filter => filter.name).includes(medal.name) : true))
-								.sort((a, b) => a.sort > b.sort ? 1 : -1)
-								.map(medal => <MedalTile medal={medal} />)}
-						</Box>
-					: undefined}
 			</Box>
-		</Box>
+			:
+			<Box sx={{ backgroundColor: "divider", borderRadius: 3 }}>
+				<Box sx={{ 
+					display: "flex", 
+					flexDirection: "row", 
+					justifyContent: "space-evenly", 
+					alignItems: "center", 
+					clear: "both" }}>
+					<Box sx={{width: "100%" }}>
+						{Object.keys(AllMedals)
+							.map((id: string) => new Medal((AllMedals as any)[id], +id))
+							.sort((a, b) => a.CompareTo(b))
+							.map(medal => <MedalTile medal={medal} select={select} selectedID={selectedID} disabled={medals.findIndex(m => m.id === medal.id) === -1} />)}
+					</Box>
+				</Box>
+			</Box>
 	);
 }
