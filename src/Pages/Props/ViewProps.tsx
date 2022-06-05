@@ -1,3 +1,4 @@
+import { SRTabs } from "../../Assets/Components/Layout/AHDrawer";
 import { SCData } from "../../Database/SCData";
 import { Appearance } from "../../Objects/Model/Appearance";
 import { CSRS } from "../../Objects/Model/CSRS";
@@ -12,6 +13,6 @@ export interface ViewProps
     setBackgroundLoadingProgress: (progress: number | undefined) => void;
     player?: Player;
     updatePlayer: (gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, mmr?: MMR, csrs?: CSRS[]) => void;
-    switchTab: (url: string, tab?: string) => void;
+    switchTab: (url?: string, tab?: SRTabs) => void;
     isAllowed?: boolean;
 }

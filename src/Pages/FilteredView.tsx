@@ -25,6 +25,7 @@ import { TitleCard } from "../Assets/Components/Cards/TitleCard";
 import { SeasonChooser } from "./Subpage/SeasonChooser";
 import { SRFilter } from "../Objects/Pieces/SRFilter";
 import { AllMaps } from "../Objects/Helpers/AllMaps";
+import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 
 export function FilteredView(props: ViewProps)
 {
@@ -69,6 +70,7 @@ export function FilteredView(props: ViewProps)
 				setPlaylists(await app.GetPlaylists());
 				setVariants(undefined);
 				setFBFilters(undefined);
+				switchTab(undefined, SRTabs.Playlists);
 			}
 			else if (node === ServiceRecordFilter.Variant)
 			{
@@ -77,6 +79,7 @@ export function FilteredView(props: ViewProps)
 				setVariants(variants.filter(variant => !notAllowed.includes(variant.name.toLowerCase())));
 				setPlaylists(undefined);
 				setFBFilters(undefined);
+				switchTab(undefined, SRTabs.Variants);
 			}
 			else if (node === ServiceRecordFilter.Ranked)
 			{
@@ -90,6 +93,7 @@ export function FilteredView(props: ViewProps)
 				setSelectedPlaylist(undefined);
 				setSelectedFBFilter(undefined);
 				setFBFilters(undefined);
+				switchTab(undefined, SRTabs.Ranked);
 			}
 			else if (node === ServiceRecordFilter.Social)
 			{
@@ -102,6 +106,7 @@ export function FilteredView(props: ViewProps)
 				setSelectedPlaylist(undefined);
 				setSelectedFBFilter(undefined);
 				setFBFilters(undefined);
+				switchTab(undefined, SRTabs.Social);
 			}
 			else if (node === ServiceRecordFilter.Maps || node === ServiceRecordFilter.Outcomes)
 			{
@@ -112,6 +117,7 @@ export function FilteredView(props: ViewProps)
 				setSelectedVariant(undefined);
 				setSelectedRank(undefined);
 				setSelectedPlaylist(undefined);
+				switchTab(undefined, node === ServiceRecordFilter.Maps ? SRTabs.Maps : SRTabs.MatchOutcome);
 			}
 
 			const myPlayer = await app.GetPlayerAppearanceOnly(gamertag);
@@ -121,7 +127,7 @@ export function FilteredView(props: ViewProps)
 		}
 
 		setLoadingMessage("");
-	}, [app, gamertag, node, filter, season]);
+	}, [app, gamertag, node, filter, season, switchTab]);
 
 	const loadFilteredSR = useCallback(async () => 
 	{		
@@ -159,12 +165,12 @@ export function FilteredView(props: ViewProps)
 	const onFilterSelected = useCallback((filter: string) =>
 	{
 		switchTab(`/service_record/${node}/${gamertag}/${filter}`, 
-			node === ServiceRecordFilter.Playlist ? "Playlists" : 
-			node === ServiceRecordFilter.Ranked ? "Ranked" : 
-			node === ServiceRecordFilter.Social ? "Social" : 
-			node === ServiceRecordFilter.Variant ? "Variants" : 
-			node === ServiceRecordFilter.Maps ? "Maps" : 
-			node === ServiceRecordFilter.Outcomes ? "Match Outcome" : "");
+			node === ServiceRecordFilter.Playlist ? SRTabs.Playlists : 
+			node === ServiceRecordFilter.Ranked ? SRTabs.Ranked : 
+			node === ServiceRecordFilter.Social ? SRTabs.Social : 
+			node === ServiceRecordFilter.Variant ? SRTabs.Variants : 
+			node === ServiceRecordFilter.Maps ? SRTabs.Maps : 
+			node === ServiceRecordFilter.Outcomes ? SRTabs.MatchOutcome : undefined);
 	}, [switchTab]);
 
     useEffect(() =>

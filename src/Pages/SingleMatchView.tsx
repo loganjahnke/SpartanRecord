@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { TeamResultBreakdown } from "../Assets/Components/Breakdowns/TeamResultBreakdown";
 import { ImageCard } from "../Assets/Components/Cards/ImageCard";
+import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { AccuracyMatchRanks } from "../Assets/Components/Ranks/AccuracyRanks";
 import { DamageMatchRanks } from "../Assets/Components/Ranks/DamageRanks";
 import { KDAMatchRanks } from "../Assets/Components/Ranks/KDARanks";
@@ -54,8 +55,9 @@ export function SingleMatchView(props: ViewProps)
 			}
 		}
 
+		switchTab(undefined, SRTabs.Matches)
 		setLoadingMessage("");
-	}, [app, setMatch, setPlayers, setGamertag, gamertag]);
+	}, [app, setMatch, setPlayers, setGamertag, gamertag, switchTab]);
 	
 	useEffect(() =>
 	{
@@ -70,7 +72,7 @@ export function SingleMatchView(props: ViewProps)
 	{
 		if (tag && tag.indexOf("343 Bot") !== 0)
 		{
-			switchTab("/service_record/" + tag, "Service Record");
+			switchTab("/service_record/" + tag, SRTabs.ServiceRecord);
 		}
 	}
 

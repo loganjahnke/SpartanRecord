@@ -62,7 +62,7 @@ export class SCData
     public async GetPlayerAppearanceOnly(gamertag: string): Promise<Player>
     {
         const player = new Player(gamertag);
-        await this.__halodapi.GetAppearance(player);
+        player.appearance = await this.__firebase.GetAppearance(gamertag);
         return player;
     }
 

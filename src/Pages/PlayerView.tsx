@@ -21,6 +21,7 @@ import { ServiceRecordChart } from "../Assets/Components/Charts/ServiceRecordCha
 import { MMRBreakdown } from "../Assets/Components/Breakdowns/MMRBreakdown";
 import { CSRSBreakdown } from "../Assets/Components/Breakdowns/CSRSBreakdown";
 import { TimePlayed } from "../Assets/Components/Breakdowns/TimePlayed";
+import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 
 export function PlayerView(props: ViewProps)
 {
@@ -39,7 +40,7 @@ export function PlayerView(props: ViewProps)
 
 	const loadData = useCallback(async () => 
 	{		
-		if (!gamertag) { switchTab("/", "Search"); return; }
+		if (!gamertag) { switchTab("/", SRTabs.Search); return; }
 
 		document.title = "Spartan Record | " + gamertag;
 
@@ -87,6 +88,8 @@ export function PlayerView(props: ViewProps)
 			setLoadingMessage("");
 			setBackgroundLoadingProgress(undefined); 
 		}
+
+		switchTab(undefined, SRTabs.ServiceRecord);
 	}, [app, gamertag, updatePlayer, setBackgroundLoadingProgress, season, switchTab]);
 	
 	useEffect(() =>
@@ -103,7 +106,7 @@ export function PlayerView(props: ViewProps)
 					<Box sx={{ m: 10, color: "primary.main" }}>
 						<Typography variant="h3">Couldn't load {player.gamertag}</Typography>
 						<Typography variant="h6">{player.serviceRecord.error}</Typography>
-						<Button sx={{ mt: 4 }} onClick={() => switchTab("/", "Search")} variant="contained">Back to Search</Button>
+						<Button sx={{ mt: 4 }} onClick={() => switchTab("/", SRTabs.Search)} variant="contained">Back to Search</Button>
 					</Box>
 				}
 				{player && !player.serviceRecord?.IsEmpty() && player.serviceRecord?.error === undefined &&

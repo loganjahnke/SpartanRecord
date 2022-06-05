@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardContent, CardMedia, IconButton, Typography } from "@mui/material";
+import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, IconButton, Typography } from "@mui/material";
 import { SpartanCompany } from "../../../Objects/Model/SpartanCompany";
 
 import { Player } from "../../../Objects/Model/Player";
@@ -7,12 +7,14 @@ import { Halo5Converter } from "../../../Objects/Helpers/Halo5Converter";
 import ArrowheadImg from "../../Images/arrowhead.png";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 
+import AddIcon from '@mui/icons-material/Add';
+import SyncIcon from '@mui/icons-material/Sync';
 import ClearIcon from '@mui/icons-material/Clear';
 import ModeStandbyIcon from '@mui/icons-material/ModeStandby';
 
-export function MemberList(props: { company: SpartanCompany, goToMember: (gamertag: string) => void, deleteMember: (gamertag: string) => void })
+export function MemberList(props: { company: SpartanCompany, goToMember: (gamertag: string) => void, deleteMember: (gamertag: string) => void, onAddGamertag: () => void, syncPlayers: () => void })
 {
-	const { company, goToMember, deleteMember } = props;
+	const { company, goToMember, deleteMember, onAddGamertag, syncPlayers } = props;
 
 	return (
 		<Card sx={{ borderRadius: 3 }}>
@@ -21,6 +23,10 @@ export function MemberList(props: { company: SpartanCompany, goToMember: (gamert
 				<Typography variant="h6" sx={{ mb: 1 }}>Members</Typography>
 				{company.players.map(player => <MemberComponent player={player} goToMember={goToMember} deleteMember={deleteMember} />)}
             </CardContent>
+			<CardActions sx={{ justifyContent: "flex-end" }}>
+				<Button startIcon={<AddIcon />} size="small" title={company.players.length >= 10 ? "Cannot have more than 10 members in your spartan company" : "Add a gamertag to your spartan company"} disabled={company.players.length >= 10} onClick={onAddGamertag}>Gamertag</Button>
+				<Button startIcon={<SyncIcon />} size="small" onClick={syncPlayers}>Sync</Button>
+			</CardActions>
         </Card>
 	);
 }

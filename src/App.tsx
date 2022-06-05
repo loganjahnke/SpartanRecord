@@ -14,7 +14,7 @@ import { FilteredView } from "./Pages/FilteredView";
 import { SCData } from "./Database/SCData";
 import { HomeView } from "./Pages/HomeView";
 import { AHAppBar } from "./Assets/Components/Layout/AHAppBar";
-import { AHDrawer } from "./Assets/Components/Layout/AHDrawer";
+import { AHDrawer, SRTabs } from "./Assets/Components/Layout/AHDrawer";
 import { Box } from "@mui/material";
 import { AHLoading } from "./Assets/Components/Layout/AHLoading";
 import { UhOh } from "./Pages/UhOh";
@@ -102,11 +102,11 @@ const App = () =>
 	const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
 	/** Navigates to a new URL */
-	const switchTab = (url: string, tab?: string) => 
+	const switchTab = (url?: string, tab?: SRTabs) => 
 	{
 		setMobileOpen(false);
 		setTab(tab ?? "");
-		navigate(url);
+		if (url) { navigate(url); }
 	}
 
 	/** The container for the drawer */

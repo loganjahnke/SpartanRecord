@@ -22,10 +22,20 @@ import { KillRanks } from "../../Assets/Components/Ranks/KillRanks";
 import { RemoveGamertagDialog } from "./RemoveGamertagDialog";
 import { EditCompanyDialog } from "./EditCompanyDialog";
 
+import EditIcon from '@mui/icons-material/Edit';
+import { SRTabs } from "../../Assets/Components/Layout/AHDrawer";
+import { KDABreakdown } from "../../Assets/Components/Breakdowns/KDABreakdown";
+import { LevelBreakdown } from "../../Assets/Components/Breakdowns/LevelBreakdown";
+import { TimePlayed } from "../../Assets/Components/Breakdowns/TimePlayed";
+import { KillBreakdownCard } from "../../Assets/Components/Breakdowns/KillBreakdownCard";
+import { VehicleBreakdown } from "../../Assets/Components/Breakdowns/VehicleBreakdown";
+import { AssistBreakdown } from "../../Assets/Components/Breakdowns/AssistBreakdown";
+import { Player } from "../../Objects/Model/Player";
+
 export function SpartanCompanyView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, switchTab, player } = props;
+	const { app, setLoadingMessage, switchTab, player, updatePlayer } = props;
 	//#endregion
 	
 	//#region State
@@ -37,8 +47,10 @@ export function SpartanCompanyView(props: ViewProps)
 	const [loadingProfile, setLoadingProfile] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
 	const [openEditCompanyDialog, setOpenEditCompanyDialog] = useState(false);
+	const [recentPlayers, setRecentPlayers] = useState<Player[]>(Cookie.getRecents().map(gamertag => new Player(gamertag)));
 	//#endregion
 
+	/** Loads all players for the spartan company */
     const loadData = useCallback(async () => 
     {
 		const members = Cookie.getCompanyMembers();
@@ -66,7 +78,24 @@ export function SpartanCompanyView(props: ViewProps)
 		setSpartanCompany(sc);
 		setSharedSR(sr);
 		setLoadingMessage("");
+		switchTab(undefined, SRTabs.SpartanCompany);
     }, [app, setSpartanCompany, setSharedSR]);
+
+	/** Syncs all players with autocode */
+	const syncPlayers = useCallback(async () =>
+	{		
+		// Check if we need to check Firebase or HaloDotAPI
+		setLoadingMessage("Syncing Service Records");
+		
+		// Get service records for all users
+		for (const player of spartanCompany.players)
+		{
+			setLoadingMessage("Syncing " + player.gamertag);
+			await app.SyncPlayerIntoFirebase(player.gamertag);
+		}
+
+		await loadData();
+	}, [app, spartanCompany, loadData]);
     
     useEffect(() =>
     {
@@ -78,10 +107,29 @@ export function SpartanCompanyView(props: ViewProps)
 	 */
 	const goToServiceRecord = useCallback((gamertag: string) =>
 	{
-		switchTab("/service_record/" + gamertag, "Service Record");
-	}, [switchTab, app]);
+		const player = spartanCompany.GetPlayer(gamertag);
+		if (!player) { return; }
+		updatePlayer(gamertag, player.appearance, player.serviceRecord, player.mmr, player.csrs);
+		//switchTab("/service_record/" + gamertag, SRTabs.ServiceRecord);
+	}, [switchTab, app, updatePlayer, spartanCompany]);
 
 	//#region Add Gamertag Dialog
+	/** Opens the add gamertag dialog */
+	const openAddGamertag = useCallback(async () =>
+	{
+		const recentGamertags = Cookie.getRecents();
+		if (!recentGamertags || recentGamertags.length === 0) { return; }
+
+		const players: Player[] = [];
+		for (const gamertag of recentGamertags)
+		{
+			players.push(await app.GetPlayerAppearanceOnly(gamertag));
+		}
+
+		setRecentPlayers(players);
+		setAddGamertagDialog(true);
+	}, [app, setRecentPlayers, setAddGamertagDialog]);
+
 	/** Controlled search component */
 	function onGamertagTextChange(event: React.ChangeEvent<HTMLInputElement>)
 	{
@@ -228,6 +276,7 @@ export function SpartanCompanyView(props: ViewProps)
 				searchViaEnter={searchForGamertagViaEnter} 
 				addRecent={addRecent} 
 				loading={loadingProfile} 
+				recentPlayers={recentPlayers}
 				error={errorMessage} />
 			<RemoveGamertagDialog open={removeGamertagDialog} accept={closeRemoveGamertagDialog} cancel={cancelRemoveGamertagDialog} />
 			<EditCompanyDialog open={openEditCompanyDialog} accept={saveEditCompanyDialog} cancel={cancelEditCompanyDialog} spartanCompany={spartanCompany} sharedSR={sharedSR} loading={false} />
@@ -235,38 +284,19 @@ export function SpartanCompanyView(props: ViewProps)
 			<Box sx={{ p: 2 }}>
 				<Grid container spacing={2}>
 					{/* Top */}
-					<Grid container item spacing={2} xs={12} sx={{ alignItems: "center" }}>
-						<Grid item xs={12} sm={6}>
+					<Grid container item spacing={2} xs={12}>
+						<Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
 							<CompanyCard company={spartanCompany} />
-						</Grid>
-						<Grid item xs={12} sm={6} sx={{ textAlign: "right", width: "100%" }}>
-							<Button variant="contained" sx={{ mr: 1 }} title={spartanCompany.players.length >= 10 ? "Cannot have more than 10 members in your spartan company" : "Add a gamertag to your spartan company"} disabled={spartanCompany.players.length >= 10} onClick={() => setAddGamertagDialog(true)}>Add Gamertag</Button>
-							<Button variant="contained" sx={{ mr: 1 }} onClick={() => setOpenEditCompanyDialog(true)}>Edit Company</Button>
+							<Box sx={{ flexGrow: 1 }} />
+							<Box>
+								<Button startIcon={<EditIcon />} size="small" variant="contained" onClick={() => setOpenEditCompanyDialog(true)}>Edit</Button>
+							</Box>
 						</Grid>
 					</Grid>
 					<Grid container item spacing={2} sm={12} md={6} lg={4} xl={3} sx={{ alignContent: "flex-start" }}>
 						<Grid item xs={12}>
-							<MemberList company={spartanCompany} goToMember={goToServiceRecord} deleteMember={onPressDeleteForMember} />
+							<MemberList company={spartanCompany} goToMember={goToServiceRecord} deleteMember={onPressDeleteForMember} onAddGamertag={openAddGamertag} syncPlayers={syncPlayers} />
 						</Grid>
-					</Grid>
-					<Grid container item spacing={2} sm={12} md={6} lg={4} xl={6} sx={{ alignContent: "flex-start" }}>
-						<Grid item xs={12}>
-							<TopMedals medals={sharedSR.medals} />
-						</Grid>
-						<Grid item xs={12}>
-							<KillDeathCard serviceRecord={sharedSR} />
-						</Grid>
-						<Grid item xs={12}>
-							<MatchesBreakdown serviceRecord={sharedSR} />
-						</Grid>
-						<Grid item xs={12}>
-							<DamageBreakdown serviceRecord={sharedSR} />
-						</Grid>
-						<Grid item xs={12}>
-							<ShotsBreakdown serviceRecord={sharedSR} />
-						</Grid>
-					</Grid>
-					<Grid container item spacing={2} md={12} lg={4} xl={3} sx={{ alignContent: "flex-start" }}>
 						<Grid item xs={12}>
 							<KillRanks company={spartanCompany} myGamertag={player?.gamertag} sharedSR={sharedSR} goToMember={goToServiceRecord} />
 						</Grid>
@@ -283,10 +313,44 @@ export function SpartanCompanyView(props: ViewProps)
 							<AccuracyRanks company={spartanCompany} myGamertag={player?.gamertag} sharedSR={sharedSR} goToMember={goToServiceRecord} />
 						</Grid>
 					</Grid>
+					<Grid container item spacing={2} sm={12} md={6} lg={4} xl={5} sx={{ alignContent: "flex-start" }}>
+						<Grid item xs={12}>
+							<MatchesBreakdown serviceRecord={sharedSR} />
+						</Grid>
+						<Grid item xs={12}>
+							<KillDeathCard serviceRecord={sharedSR} />
+						</Grid>
+						<Grid item xs={12}>
+							<KDABreakdown serviceRecord={sharedSR} />
+						</Grid>
+						<Grid item xs={12}>
+							<TopMedals medals={sharedSR.medals} matchesPlayed={sharedSR.matchesPlayed} />
+						</Grid>
+						<Grid item xs={12}>
+							<ShotsBreakdown serviceRecord={sharedSR} />
+						</Grid>
+						<Grid item xs={12}>
+							<DamageBreakdown serviceRecord={sharedSR} />
+						</Grid>
+						<Grid item xs={12}>
+							<TimePlayed serviceRecord={sharedSR} />
+						</Grid>
+					</Grid>
+					<Grid container item spacing={2} md={12} lg={4} xl={4} sx={{ alignContent: "flex-start" }}>
+						<Grid item xs={12}>
+							<KillBreakdownCard serviceRecord={sharedSR} />
+						</Grid>
+						<Grid item xs={12}>
+							<AssistBreakdown serviceRecord={sharedSR} />
+						</Grid>
+						<Grid item xs={12}>
+							<VehicleBreakdown serviceRecord={sharedSR} />
+						</Grid>
+					</Grid>
 				</Grid>
 			</Box>
 			: 
-			<AddGamertag search={gamertagToAdd} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} onValueChanged={onGamertagTextChange} />
+			<AddGamertag search={gamertagToAdd} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} onValueChanged={onGamertagTextChange} recentPlayers={recentPlayers} />
 			}
 		</Box>
 	);

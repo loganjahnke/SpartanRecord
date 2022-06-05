@@ -1,7 +1,7 @@
 import { Box, Divider, Grid, Toolbar } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { PlayerMatchSummary } from "../Assets/Components/Match/PlayerMatchSummary";
 import { ViewProps } from "./Props/ViewProps";
@@ -11,13 +11,13 @@ import { KillDeathCard } from "../Assets/Components/Breakdowns/KillDeathCard";
 import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
 import { PlayerMatch } from "../Objects/Model/PlayerMatch";
 import { Player } from "../Objects/Model/Player";
+import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 
 export function MatchesView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage } = props;
+	const { app, setLoadingMessage, switchTab } = props;
 	const { gamertag } = useParams();
-	const navigate = useNavigate();
 	//#endregion
 
 	//#region Refs
@@ -52,8 +52,9 @@ export function MatchesView(props: ViewProps)
 			app.LogViewMatches(gamertag);
 		}
 
+		switchTab(undefined, SRTabs.Matches);
 		if (!hideLoading) { setLoadingMessage(""); }
-	}, [lastUpdate, app, gamertag, setPlayer, matches, setMatches, setCombinedSR, offset]);
+	}, [lastUpdate, app, gamertag, setPlayer, matches, setMatches, setCombinedSR, offset, switchTab]);
 
 	const loadMore = useCallback(async () =>
 	{
@@ -76,11 +77,11 @@ export function MatchesView(props: ViewProps)
     {
 		if (gamertag)
 		{
-			navigate(`/match/${id}/${gamertag}`);
+			switchTab(`/match/${id}/${gamertag}`, SRTabs.Matches);
 		}
 		else 
 		{
-			navigate(`/match/${id}`);
+			switchTab(`/match/${id}`, SRTabs.Matches);
 		}
     }
 

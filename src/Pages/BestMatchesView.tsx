@@ -11,6 +11,7 @@ import { ChipFilters } from "./Subpage/ChipFilters";
 import { Match } from "../Objects/Model/Match";
 import { MatchSummary } from "../Assets/Components/Match/MatchSummary";
 import { FirebaseBest } from "../Database/Schemas/FirebaseBest";
+import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 
 export function BestMatchesView(props: ViewProps)
 {
@@ -73,8 +74,9 @@ export function BestMatchesView(props: ViewProps)
 			updatePlayer(gamertag, myPlayer.appearance);
 		}
 
+		switchTab(undefined, SRTabs.BestMatches)
 		setLoadingMessage("");
-	}, [app, gamertag, setLoadingMessage, updatePlayer]);
+	}, [app, gamertag, setLoadingMessage, updatePlayer, switchTab]);
 
 	const loadFilteredSR = useCallback(async () => 
 	{		
@@ -162,11 +164,11 @@ export function BestMatchesView(props: ViewProps)
     {
 		if (gamertag)
 		{
-			switchTab(`/match/${id}/${gamertag}`, "Matches");
+			switchTab(`/match/${id}/${gamertag}`, SRTabs.Matches);
 		}
 		else 
 		{
-			switchTab(`/match/${id}`, "Matches");
+			switchTab(`/match/${id}`, SRTabs.Matches);
 		}
     }
 

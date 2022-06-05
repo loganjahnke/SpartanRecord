@@ -6,11 +6,12 @@ import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { MedalTypeBreakdown } from "../Assets/Components/Medals/MedalTypeBreakdown";
 import { MedalType } from "../Objects/Pieces/Medal";
 import { ViewProps } from "./Props/ViewProps";
+import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 
 export function MedalsView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, updatePlayer: setGamertag } = props;
+	const { app, setLoadingMessage, updatePlayer: setGamertag, switchTab } = props;
 	const { gamertag } = useParams();
 	//#endregion
 	
@@ -35,8 +36,9 @@ export function MedalsView(props: ViewProps)
 			setServiceRecord(player.serviceRecord);
 		}
 
+		switchTab(undefined, SRTabs.Medals);
 		setLoadingMessage("");
-	}, [app, gamertag, setServiceRecord]);
+	}, [app, gamertag, setServiceRecord, switchTab]);
 	
 	useEffect(() =>
 	{

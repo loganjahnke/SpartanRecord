@@ -23,11 +23,12 @@ import { ZoneBreakdown } from "../Assets/Components/Breakdowns/ZoneBreakdown";
 import { StockpileBreakdown } from "../Assets/Components/Breakdowns/StockpileBreakdown";
 import { OddballBreakdown } from "../Assets/Components/Breakdowns/OddballBreakdown";
 import { EliminationBreakdown } from "../Assets/Components/Breakdowns/EliminationBreakdown";
+import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 
 export function ModesView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setBackgroundLoadingProgress, player, updatePlayer, switchTab, isAllowed } = props;
+	const { app, setLoadingMessage, player, updatePlayer, switchTab } = props;
 	const { gamertag } = useParams();
 	//#endregion
 	
@@ -40,7 +41,7 @@ export function ModesView(props: ViewProps)
 
 	const loadData = useCallback(async () => 
 	{		
-		if (!gamertag) { switchTab("/", "Search"); return; }
+		if (!gamertag) { switchTab("/", SRTabs.Search); return; }
 
 		// Set page gamertag and show loading message
 		setLoadingMessage("Loading " + gamertag);
@@ -52,6 +53,7 @@ export function ModesView(props: ViewProps)
 		const player = await app.GetPlayerFromFirebase(gamertag, season);
 		updatePlayer(player.gamertag, player.appearance, player.serviceRecord);
 		
+		switchTab("/", SRTabs.Modes);
 		setLoadingMessage("");
 	}, [app, gamertag, updatePlayer, season, switchTab]);
 	
@@ -69,7 +71,7 @@ export function ModesView(props: ViewProps)
 					<Box sx={{ m: 10, color: "primary.main" }}>
 						<Typography variant="h3">Couldn't load {player.gamertag}</Typography>
 						<Typography variant="h6">{player.serviceRecord.error}</Typography>
-						<Button sx={{ mt: 4 }} onClick={() => switchTab("/", "Search")} variant="contained">Back to Search</Button>
+						<Button sx={{ mt: 4 }} onClick={() => switchTab("/", SRTabs.Search)} variant="contained">Back to Search</Button>
 					</Box>
 				}
 				{player && player.serviceRecord?.error === undefined &&
