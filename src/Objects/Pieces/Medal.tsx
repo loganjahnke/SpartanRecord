@@ -110,19 +110,28 @@ export class Medal
             : 4; // MedalRarity.Mythic
     }
 
+    /**
+     * Comparer for medals
+     * @param other the other medal
+     * @returns sort order
+     */
     public CompareTo(other: Medal): number
     {
-        if (this.type < other.type)
+        if (this.type !== other.type)
         {
-            return -1;
+            return this.type > other.type ? 1 : -1;
         }
-        else if (this.type > other.type)
+        else if (this.sort !== other.sort)
         {
-            return 1;
+            return this.sort > other.sort ? 1 : -1;
+        }
+        else if (this.RarityValue() !== other.RarityValue())
+        {
+            return this.RarityValue() > other.RarityValue() ? 1 : -1;
         }
         else
         {
-            return this.sort > other.sort ? 1 : -1;
+            return this.id > other.id ? 1 : -1;
         }
     }
 }

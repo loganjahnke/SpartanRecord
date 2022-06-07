@@ -34,14 +34,14 @@ export function MedalTypeBreakdown(props: MedalTypeBreakdownProps)
 					</Box>
 					<Box sx={{width: !select ? "100%" : "48px" }}>
 						{filtered.length > 0 
-							? filtered.sort((a, b) => a.sort > b.sort ? 1 : -1).map(medal => <MedalTile medal={medal} />) 
+							? filtered.sort((a, b) => a.CompareTo(b)).map(medal => <MedalTile medal={medal} />) 
 							: <Typography variant="body1" sx={{ mt: 4, mb: 4, width: "100%", textAlign: "center" }}>No medals earned.</Typography>}
 					</Box>
 					{showAll && <Box sx={{width: "100%" }}>
 						{Object.values(AllMedals)
 							.map((medalJSON: any) => new Medal(medalJSON))
 							.filter(medal => medal.type === type && (filtered.length > 0 ? !filtered.map(filter => filter.name).includes(medal.name) : true))
-							.sort((a, b) => a.sort > b.sort ? 1 : -1)
+							.sort((a, b) => a.CompareTo(b))
 							.map(medal => <MedalTile medal={medal} />)}
 					</Box>}
 				</Box>

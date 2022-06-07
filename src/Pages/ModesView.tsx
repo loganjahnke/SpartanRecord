@@ -37,7 +37,7 @@ export function ModesView(props: ViewProps)
 	const [season, setSeason] = useState(-1);
 	//#endregion
 
-	useScript("//pl17321505.safestgatetocontent.com/a7b55266c8d1e7c39ed0ac2f85cf49fa/invoke.js");
+	//useScript("//pl17321505.safestgatetocontent.com/a7b55266c8d1e7c39ed0ac2f85cf49fa/invoke.js");
 
 	const loadData = useCallback(async () => 
 	{		
@@ -53,7 +53,7 @@ export function ModesView(props: ViewProps)
 		const player = await app.GetPlayerFromFirebase(gamertag, season);
 		updatePlayer(player.gamertag, player.appearance, player.serviceRecord);
 		
-		switchTab("/", SRTabs.Modes);
+		switchTab(undefined, SRTabs.Modes);
 		setLoadingMessage("");
 	}, [app, gamertag, updatePlayer, season, switchTab]);
 	

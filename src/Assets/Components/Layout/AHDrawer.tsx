@@ -148,7 +148,7 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab className="ahTab" value={SRTabs.Matches} label={SRTabs.Matches} icon={<SportsEsportsIcon />} iconPosition="start" />
 					<Tab className="ahTab" value={SRTabs.BestMatches} label={SRTabs.BestMatches} icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					{/* <Tab className="ahTab" value={SRTabs.Patreon} label={SRTabs.Patreon} icon={<EmojiEmotionsIcon />} iconPosition="start" />*/}
-					<Tab className="ahTab" value={SRTabs.SpartanCompany} label={SRTabs.SpartanCompany} icon={<GroupsIcon />} iconPosition="start" />
+					{/* <Tab className="ahTab" value={SRTabs.SpartanCompany} label={SRTabs.SpartanCompany} icon={<GroupsIcon />} iconPosition="start" /> */}
 				</Tabs>
 				: player && player.gamertag ?
 				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
@@ -165,12 +165,12 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab className="ahTab" value={SRTabs.Maps} label={SRTabs.Maps} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value={SRTabs.MatchOutcome} label={SRTabs.MatchOutcome} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab className="ahTab" value={SRTabs.BestMatches} label={SRTabs.BestMatches} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
-					<Tab className="ahTab" value={SRTabs.SpartanCompany} label={SRTabs.SpartanCompany} icon={<GroupsIcon />} iconPosition="start" />
+					{/* <Tab className="ahTab" value={SRTabs.SpartanCompany} label={SRTabs.SpartanCompany} icon={<GroupsIcon />} iconPosition="start" /> */}
 				</Tabs>
 				:
 				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
 					<Tab className="ahTab" value={SRTabs.Search} label={SRTabs.Search} icon={<PersonSearchIcon />} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.SpartanCompany} label={SRTabs.SpartanCompany} icon={<GroupsIcon />} iconPosition="start" />
+					{/* <Tab className="ahTab" value={SRTabs.SpartanCompany} label={SRTabs.SpartanCompany} icon={<GroupsIcon />} iconPosition="start" /> */}
 				</Tabs>
 				}
 			</Box>

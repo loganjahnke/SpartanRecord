@@ -1,5 +1,6 @@
 import { Box, Tooltip, Typography } from "@mui/material";
 import { Halo5Converter } from "../../../Objects/Helpers/Halo5Converter";
+import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { TitleCard } from "../Cards/TitleCard";
 import { BorderLinearProgress } from "../Custom/BorderLinearProgress";
 import { BreakdownProps, BreakdownTile } from "./BreakdownTile";
@@ -24,7 +25,7 @@ export function LevelBreakdown(props: BreakdownProps)
 			<Box sx={{ display: "flex", flexDirection: "row", width: "90%", alignItems: "center", m: 1, mt: 0 }}>
 				<Typography variant="caption" sx={{ flexBasis: "12.5%", textAlign: "center" }}>{`SR${currLvl}`}</Typography>
 				<Tooltip title={`${xpNeeded.toLocaleString()} XP needed for next level`}>
-					<BorderLinearProgress variant="determinate" value={progress} sx={{ flexBasis: "75%", m: 1 }} />
+					<BorderLinearProgress variant="determinate" value={progress} sx={{ flexBasis: "75%", m: 1, "> .MuiLinearProgress-bar": { backgroundColor: ArrowheadTheme.good } }} />
 				</Tooltip>
 				<Typography variant="caption" sx={{ flexBasis: "12.5%", textAlign: "center" }}>{`SR${nextLvl}`}</Typography>
 			</Box>

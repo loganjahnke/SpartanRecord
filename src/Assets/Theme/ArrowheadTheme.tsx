@@ -8,7 +8,7 @@ import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 
 export class ArrowheadTheme
 {
-	private static readonly __coolors = ["002029","00303d","004052","70A288","F9F0FA"];
+	private static readonly __coolors = ["002029","00303d","004052","74a58b","F9F0FA"];
 
 	/** #002029 */
 	public static background = `#${this.__coolors[0]}`;

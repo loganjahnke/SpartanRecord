@@ -52,7 +52,7 @@ export function PlayerView(props: ViewProps)
 		updatePlayer(player.gamertag, player.appearance, player.serviceRecord, player.mmr, player.csrs);
 		if (isAllowed) { setHistoricStats(player.historicStats ?? []); }
 
-		if (!player.serviceRecord.IsEmpty())
+		if (!player.serviceRecord.IsEmpty() && season === -1)
 		{
 			// Set loading message to nada, start background load
 			setLoadingMessage("");
@@ -125,32 +125,32 @@ export function PlayerView(props: ViewProps)
 								<MatchesBreakdown serviceRecord={player.serviceRecord} />
 							</Grid>
 							<Grid item xs={12}>
-								<KillDeathCard serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
-							</Grid>
-							<Grid item xs={12}>
 								<KDABreakdown serviceRecord={player.serviceRecord} />
 							</Grid>
+							{player.csrs && player.csrs.length > 0 && <Grid item xs={12}>
+								<CSRSBreakdown csrs={player.csrs} />
+							</Grid>}
 							<Grid item xs={12}>
 								<LevelBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
-								<ShotsBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
-							</Grid>
-							<Grid item xs={12}>
 								<TimePlayed serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
+							{player.mmr && <Grid item xs={12}>
+								<MMRBreakdown mmr={player.mmr} />
+							</Grid>}
 						</Grid>
 						{/* Middle 6 */}
 						<Grid container item spacing={2} sm={12} md={6} lg={6} xl={3} sx={{ alignContent: "flex-start" }}>
+							<Grid item xs={12}>
+								<KillDeathCard serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
+							</Grid>
 							<Grid item xs={12}>
 								<KillBreakdownCard serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
 								<VehicleBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
-							{player.mmr && <Grid item xs={12}>
-								<MMRBreakdown mmr={player.mmr} />
-							</Grid>}
 							{/* {!isAllowed && <Grid item xs={12}>
 								<Box id="container-a7b55266c8d1e7c39ed0ac2f85cf49fa" />
 							</Grid>} */}
@@ -164,11 +164,11 @@ export function PlayerView(props: ViewProps)
 								<AssistBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
+								<ShotsBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
+							</Grid>
+							<Grid item xs={12}>
 								<DamageBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
-							{player.csrs && player.csrs.length > 0 && <Grid item xs={12}>
-								<CSRSBreakdown csrs={player.csrs} />
-							</Grid>}
 							{isAllowed && season === -1 && <Grid item xs={12}>
 								<ServiceRecordChart historicServiceRecords={historicStats} currentSR={player.serviceRecord} />
 							</Grid>}

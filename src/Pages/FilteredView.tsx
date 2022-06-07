@@ -26,6 +26,8 @@ import { SeasonChooser } from "./Subpage/SeasonChooser";
 import { SRFilter } from "../Objects/Pieces/SRFilter";
 import { AllMaps } from "../Objects/Helpers/AllMaps";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
+import { VehicleBreakdown } from "../Assets/Components/Breakdowns/VehicleBreakdown";
+import { TimePlayed } from "../Assets/Components/Breakdowns/TimePlayed";
 
 export function FilteredView(props: ViewProps)
 {
@@ -219,7 +221,7 @@ export function FilteredView(props: ViewProps)
 					{!sr ? undefined :
 					<>
 						{/* Far left */}
-						<Grid container item spacing={2} md={12} lg={4} xl={4} sx={{ alignContent: "flex-start" }}>
+						<Grid container item spacing={2} md={12} lg={6} xl={4} sx={{ alignContent: "flex-start" }}>
 							{node !== ServiceRecordFilter.Social && node !== ServiceRecordFilter.Ranked && node !== ServiceRecordFilter.Outcomes && <Grid item xs={12}>
 								<ImageCard image={selectedPlaylist?.asset?.thumbnail_url ?? selectedVariant?.thumbnail_url ?? (node === ServiceRecordFilter.Maps && selectedFBFilter ? (AllMaps as any)[selectedFBFilter.name]?.thumbnail_url : "")} title={selectedPlaylist?.name ?? selectedVariant?.name ?? selectedFBFilter?.name} />
 							</Grid>}
@@ -229,37 +231,40 @@ export function FilteredView(props: ViewProps)
 								<MatchesBreakdown serviceRecord={sr} />
 							</Grid>
 							<Grid item xs={12}>
+								<KDABreakdown serviceRecord={sr} />
+							</Grid>
+							<Grid item xs={12}>
 								<LevelBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
 							</Grid>
-							{/* <Grid item xs={12}>
-								<PercentageBreakdown totalMatches={availableFilters.map(avail => avail.count).reduce((a, b) => a + b)} filteredMatches={sr.matchesPlayed} />
-							</Grid> */}
+							<Grid item xs={12}>
+								<TimePlayed serviceRecord={sr} showPerMatch={showPerMatch} />
+							</Grid>
 						</Grid>
 						{/* Middle 5 */}
-						<Grid container item spacing={2} md={12} lg={4} xl={3} sx={{ alignContent: "flex-start" }}>
+						<Grid container item spacing={2} sm={12} md={6} lg={6} xl={3} sx={{ alignContent: "flex-start" }}>
 							<Grid item xs={12}>
 								<KillDeathCard serviceRecord={sr} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
-								<KDABreakdown serviceRecord={sr} />
+								<KillBreakdownCard serviceRecord={sr} showPerMatch={showPerMatch} />
+							</Grid>
+							<Grid item xs={12}>
+								<VehicleBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
+							</Grid>
+						</Grid>
+						{/* Far right */}
+						<Grid container item spacing={2} sm={12} md={6} lg={12} xl={5} sx={{ alignContent: "flex-start" }}>
+							<Grid item xs={12}>
+								<TopMedals medals={sr.medals} matchesPlayed={sr.matchesPlayed} showPerMatch={showPerMatch} />
+							</Grid>
+							<Grid item xs={12}>
+								<AssistBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
 								<ShotsBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
-								<AssistBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
-							</Grid>
-						</Grid>
-						{/* Far right */}
-						<Grid container item spacing={2} md={12} lg={4} xl={5} sx={{ alignContent: "flex-start" }}>
-							<Grid item xs={12}>
-								<TopMedals medals={sr.medals} matchesPlayed={sr.matchesPlayed} showPerMatch={showPerMatch} />
-							</Grid>
-							<Grid item xs={12}>
 								<DamageBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
-							</Grid>
-							<Grid item xs={12}>
-								<KillBreakdownCard serviceRecord={sr} showPerMatch={showPerMatch} />
 							</Grid>
 						</Grid>
 					</>}

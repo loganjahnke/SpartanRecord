@@ -10,7 +10,6 @@ export const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 	},
 	[`& .${linearProgressClasses.bar}`]: {
 		borderRadius: 5,
-		backgroundColor: ArrowheadTheme.good,
 	},
 }));
 
