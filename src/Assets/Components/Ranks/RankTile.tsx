@@ -1,4 +1,5 @@
 import { Box, Button, Typography } from "@mui/material";
+import { GetColorForTeam } from "../../../Objects/Helpers/AllTeams";
 import { Player } from "../../../Objects/Model/Player";
 import { MatchPlayer } from "../../../Objects/Pieces/MatchPlayer";
 
@@ -31,7 +32,7 @@ export function MatchRankTile(props: { player: MatchPlayer, value: number, myGam
 			<Button onClick={() => goToMember(player.gamertag)} sx={{ width: "100%", height: "100%", justifyContent: "flex-start", p: 0, borderRadius: 2, textTransform: "none", textAlign: "left", backgroundColor: myGamertag === player.gamertag ? ArrowheadTheme.good : "" }}>
 				{player.team.emblem && <Box sx={{ 
 					backgroundImage: `url(${player.team.emblem})`, 
-					backgroundColor: player.team.name === "Eagle" ? ArrowheadTheme.eagle : ArrowheadTheme.cobra, 
+					backgroundColor: GetColorForTeam(player.team.name), 
 					backgroundSize: "80%",
 					backgroundRepeat: "no-repeat",
 					width: "48px", 

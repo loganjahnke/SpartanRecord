@@ -173,7 +173,7 @@ export class SCHaloDotAPI
 	 */
 	public async GetVariants(): Promise<AutocodeVariant[]>
 	{
-		let result = await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].metadata.multiplayer.variants();		
+		let result = await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].metadata.multiplayer.gamevariants();		
 		return result.data as AutocodeVariant[];
 	}
 
@@ -313,12 +313,11 @@ export class SCHaloDotAPI
 	 */
 	private async __getServiceRecordFromHaloDotAPI(gamertag: string, season?: number, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<AutocodeMultiplayerServiceRecord>
 	{
-		const params = {
-			gamertag: gamertag,
-			season: season,
-			playlist_id: playlistId,
-			category_id: categoryId
-		};
+		const params: any = {};
+		params.gamertag = gamertag;
+		if (season && season !== -1) { params.season = season; }
+		if (playlistId) { params.playlist_id = playlistId; }
+		if (categoryId) { params.category_id = +categoryId; }
 		  
 		let result;
 		

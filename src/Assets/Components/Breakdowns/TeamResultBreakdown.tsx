@@ -11,6 +11,7 @@ import SportsScoreIcon from '@mui/icons-material/SportsScore';
 import ModeStandbyIcon from '@mui/icons-material/ModeStandby';
 import PersonOffOutlinedIcon from '@mui/icons-material/PersonOffOutlined';
 import StarsIcon from '@mui/icons-material/Stars';
+import { GetColorForTeam } from "../../../Objects/Helpers/AllTeams";
 
 interface TeamResultBreakdownProps
 {
@@ -23,7 +24,7 @@ export function TeamResultBreakdown(props: TeamResultBreakdownProps)
 
     const serviceRecord = team.statistics;
     const image = team.details.emblem;
-    const background = team.details.name === "Cobra" ? ArrowheadTheme.cobra : ArrowheadTheme.eagle;
+    const background = GetColorForTeam(team.details.name);
 
     const total = serviceRecord.summary.kills;
     const filtered = team.players.filter(player => player.outcome !== HaloOutcome.Left);

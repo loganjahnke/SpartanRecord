@@ -110,7 +110,7 @@ export const TeamBreakdownChart = (props: { players: MatchPlayer[], blue?: boole
 		labels: players.map(player => player.gamertag),
 		datasets: [
 			{
-				backgroundColor: Object.values(CHART_COLORS),
+				backgroundColor: ArrowheadTheme.halo_colors, //Object.values(CHART_COLORS),
 				borderColor: ArrowheadTheme.box,
 				data: players.map(player => player.stats.summary.kills)
 			}

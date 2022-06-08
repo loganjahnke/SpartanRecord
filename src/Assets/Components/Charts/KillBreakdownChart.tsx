@@ -110,7 +110,7 @@ export const KillBreakdownChart = (props: { currentSR: ServiceRecord }) =>
 		],
 		datasets: [
 			{
-				backgroundColor: Object.values(CHART_COLORS),
+				backgroundColor: ArrowheadTheme.halo_colors, //Object.values(CHART_COLORS),
 				borderColor: ArrowheadTheme.box,
 				data: [
 					//currentSR.breakdowns.kills.assassinations,

@@ -22,6 +22,8 @@ export class Match
     public teamGame: boolean;
     /** Arena or BTB */
     public experience: string;
+    /** Matchmaking, custom, or local */
+    public type: string;
     /** The datetime the match was played */
     public date: Date;
     /** The total duration of the match */
@@ -41,6 +43,11 @@ export class Match
         this.playlist = new Playlist(match?.match?.details?.playlist);
         this.teamGame = !!match?.match?.teams?.enabled;
         this.experience = match?.match?.experience ?? "";
+        this.type = match?.match?.type === "custom" 
+            ? "Custom"
+            : match?.match?.type === "local" 
+            ? "Local"
+            : "Matchmaking";
         this.date = match?.match?.played_at ? new Date(match.match?.played_at) : new Date();
         this.duration = new TimePlayed(match?.match?.duration);
         this.teams = [];

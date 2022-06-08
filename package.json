@@ -1,6 +1,6 @@
 {
   "name": "spartan_record",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.7.1",

@@ -86,7 +86,7 @@ export function SingleMatchView(props: ViewProps)
 					<Grid container item spacing={2} xs={12} xl={4}>
 						<Grid item xs={12}>
 							<ImageCard image={match?.map?.asset.thumbnail} 
-								titles={[match?.map?.name ?? "", match?.mode ? match.mode.name.slice(match.mode.name.indexOf(": ") + 2) : "", match?.playlist?.name ?? ""]} 
+								titles={[match?.map?.name || "", match?.mode?.name || "", match?.playlist?.name || match?.type || ""]} 
 								headers={["Map", "Variant", "Playlist"]} />
 						</Grid>
 						<Grid item xs={12}>

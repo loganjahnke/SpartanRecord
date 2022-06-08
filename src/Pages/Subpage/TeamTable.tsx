@@ -13,6 +13,7 @@ import { ShotsBreakdown } from "../../Assets/Components/Breakdowns/ShotsBreakdow
 
 import StarIcon from '@mui/icons-material/Star';
 import { ExpectationBreakdown } from "../../Assets/Components/Breakdowns/ExpectationBreakdown";
+import { GetColorForTeam } from "../../Objects/Helpers/AllTeams";
 
 interface TeamTableProps
 {
@@ -45,11 +46,11 @@ export function TeamTable(props: TeamTableProps)
 	return (
 		<TableContainer component={Box} sx={{ backgroundColor: ArrowheadTheme.box, borderRadius: 3 }}>
 			<Table>
-				<TableHead sx={{ backgroundColor: team.details.name === "Cobra" ? ArrowheadTheme.cobra : ArrowheadTheme.eagle }}>
+				<TableHead sx={{ backgroundColor: GetColorForTeam(team.details.name) }}>
 					<TableRow>
 						<TableCell />
 						{ranked && <TableCell sx={{ pr: 2 }} align="right">Rank</TableCell>}
-						<TableCell sx={{ pl: 2, pr: 2, position: "sticky", left: 0, backgroundColor: team.details.name === "Cobra" ? ArrowheadTheme.cobra : ArrowheadTheme.eagle }}>Gamertag</TableCell>
+						<TableCell sx={{ pl: 2, pr: 2, position: "sticky", left: 0, backgroundColor: GetColorForTeam(team.details.name) }}>Gamertag</TableCell>
 						<TableCell sx={{ pl: 2, pr: 2 }} align="right">Total Score</TableCell>
 						{showPoints &&  <TableCell sx={{ pl: 2, pr: 2 }} align="right">Points</TableCell>}
 						<TableCell sx={{ pl: 2, pr: 2 }} align="right">Kills</TableCell>

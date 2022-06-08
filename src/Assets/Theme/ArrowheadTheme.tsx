@@ -30,6 +30,44 @@ export class ArrowheadTheme
 	public static cobra = "#CC2500";
 	public static eagle = "#007FFF";
 	public static leftEarlyText = "#95A3B3";
+
+	//#region Halo Colors
+	public static halo_salmon = "#FE3939";
+	public static halo_vermilion = "#D84141";
+	public static halo_cotton_candy = "#F89AE7";
+	public static halo_cerise = "#C43AAC";
+	public static halo_lavender = "#8F67AA";
+	public static halo_aubergine = "#8D3AC4";
+	public static halo_sky = "#49B8FE";
+	public static halo_cerulean = "#3B9DFF";
+	public static halo_jade = "#8AFFBE";
+	public static halo_mint = "#23ED7D";
+	public static halo_grass = "#A2DA62";
+	public static halo_lime = "#8FED23";
+	public static halo_sunshine = "#FCF55C";
+	public static halo_pineapple = "#FFEA00";
+	public static halo_carrot = "#DC5839";
+	public static halo_tangelo = "#DA3A04";
+
+	public static halo_colors = [
+		this.halo_salmon,
+		this.halo_cerulean,
+		this.halo_sunshine,
+		this.halo_jade,
+		this.halo_cerise,
+		this.halo_tangelo,
+		this.halo_carrot,
+		this.halo_aubergine,
+		this.halo_grass,
+		this.halo_mint,
+		this.halo_sky,
+		this.halo_lime,
+		this.halo_lavender,
+		this.halo_pineapple,
+		this.halo_vermilion,
+		this.halo_cotton_candy,
+	];
+	//#endregion
 	
 	public static theme = responsiveFontSizes(createTheme({
 		typography:
