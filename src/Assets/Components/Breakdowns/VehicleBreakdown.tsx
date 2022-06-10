@@ -8,7 +8,7 @@ export function VehicleBreakdown(props: BreakdownProps)
 
 	return (
 		<TitleCard title="Vehicles">
-            <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", width: "100%"}}>
+            <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", width: "100%", flexWrap: "wrap" }}>
                 <BreakdownTile title="Vehicles Destroyed" value={showPerMatch ? serviceRecord.summary.vehicles.destroys / serviceRecord.matchesPlayed : serviceRecord.summary.vehicles.destroys} isMainStat />
                 <BreakdownTile title="Vehicles Hijacks" value={showPerMatch ? serviceRecord.summary.vehicles.hijacks / serviceRecord.matchesPlayed : serviceRecord.summary.vehicles.hijacks} isMainStat />
             </Box>

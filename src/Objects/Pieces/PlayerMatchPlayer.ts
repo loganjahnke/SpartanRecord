@@ -18,6 +18,18 @@ export class PlayerMatchPlayer
     public outcome: HaloOutcome;
     /** Was this a win? */
     public won: boolean;
+    
+    /** The KDA for the player */
+    public get kda(): number
+    {
+        return (this.kills + (this.assists / 3)) - this.deaths;
+    }
+
+    /** The KDR for the player */
+    public get kdr(): number
+    {
+        return this.deaths > 0 ? this.kills / this.deaths : this.kills;
+    }
 
     constructor(data?: AutocodePlayerMatchPlayer)
     {

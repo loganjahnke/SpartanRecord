@@ -43,7 +43,9 @@ export class SCHaloDotAPI
 	public async GetPlayer(gamertag: string, season?: number, mmr?: MMR): Promise<Player>
 	{
 		const player = new Player(gamertag, undefined, undefined, undefined, mmr);
-		await Promise.all([this.GetAppearance(player), this.GetServiceRecord(player, season), this.GetMMR(player), this.GetCSRS(player, season)]);
+		await Promise.all([this.GetAppearance(player), this.GetServiceRecord(player, season), this.GetMMR(player), this.GetCSRS(player, season)]).catch(error => {
+			player.serviceRecord.error = error?.message ?? "Could not load player";
+		});
 		return player;
 	}
 

@@ -94,7 +94,14 @@ function Row(props: TeamTableRowProps)
 						<img src={player.progression.post.tierImageUrl} alt={player.progression.post.tier + " " + (player.progression.post.subTier)} title={player.progression.post.tier + " " + (player.progression.post.subTier)} height="32px" />
 					</TableCell> 
 				}
-				<TableCell sx={{ pl: 2, pr: 2, position: "sticky", left: 0, backgroundColor: selectedGamertag === player.gamertag ? ArrowheadTheme.good : ArrowheadTheme.box }} component="th" scope="row" onClick={() => onGamertagClick(player.gamertag)} width={"150px"}>{player.gamertag}</TableCell>
+				<TableCell 
+					sx={{ pl: 2, pr: 2, position: "sticky", cursor: player.type === "bot" ? "default" : "pointer", left: 0, backgroundColor: selectedGamertag === player.gamertag ? ArrowheadTheme.good : ArrowheadTheme.box }} 
+					component="th" 
+					scope="row" 
+					onClick={player.type === "player" ? () => onGamertagClick(player.gamertag) : undefined} 
+					width={"150px"}>
+						{player.gamertag}
+				</TableCell>
 				<TableCell sx={{ pl: 2, pr: 2 }} width={"80px"} align="right">
 					<Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
 						{bestScore ? <StarIcon sx={{ color: ArrowheadTheme.good, mr: 1 }} /> : undefined}

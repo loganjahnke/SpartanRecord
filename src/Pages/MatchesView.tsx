@@ -12,6 +12,7 @@ import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
 import { PlayerMatch } from "../Objects/Model/PlayerMatch";
 import { Player } from "../Objects/Model/Player";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
+import { RecentMatchesChart } from "../Assets/Components/Charts/RecentMatchesChart";
 
 export function MatchesView(props: ViewProps)
 {
@@ -100,6 +101,9 @@ export function MatchesView(props: ViewProps)
 					</Grid>
 					<Grid item xs={12} lg={4}>
 						<KillDeathCard serviceRecord={combinedSR} />
+					</Grid>
+					<Grid item xs={12}>
+						<RecentMatchesChart matches={matches} />
 					</Grid>
 				</Grid>
 				<Grid container spacing={2} sx={{ mt: 1 }}>

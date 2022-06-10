@@ -14,18 +14,20 @@ export function TimePlayed(props: BreakdownProps)
 	const humanReadable = (seconds: number): string =>
 	{
 		const numdays = Math.floor((seconds % 31536000) / 86400); 
-        const numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
-        const numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
-        const numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
+        let numhours: number | string = Math.floor(((seconds % 31536000) % 86400) / 3600);
+        let numminutes: number | string = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
+		
+		if (numhours < 10) { numhours = "0" + numhours; }
+		if (numminutes < 10) { numminutes = "0" + numminutes; }
 
         let daysStr = "";
         const timeStr = numhours > 0 
-            ? numhours + "h " + numminutes + "m " + numseconds + "s"
-            : numminutes + "m " + Math.round(numseconds) + "s";
+            ? numhours + ":" + numminutes
+            : "00:" + numminutes;
 
         if (numdays > 0)
         {
-            daysStr = numdays + "d ";
+            daysStr = numdays + " days ";
         }
 
         return daysStr + timeStr;
@@ -34,8 +36,8 @@ export function TimePlayed(props: BreakdownProps)
 
 	return (
 		<TitleCard title={small ? "" : "Time Played"} secondary={small}>
-			<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", flexWrap: "wrap", justifyContent: "space-evenly", width: "100%"}}>
-				<BreakdownTile small={small} title="" value={showPerMatch ? humanReadable(serviceRecord.timePlayed.seconds / serviceRecord.matchesPlayed) : humanReadable(serviceRecord.timePlayed.seconds)} isMainStat />
+			<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", flexWrap: "wrap", justifyContent: "space-evenly", width: "100%" }}>
+				<BreakdownTile small={small} title="" tooltip="The total time played (Days Hours:Minutes)" value={showPerMatch ? humanReadable(serviceRecord.timePlayed.seconds / serviceRecord.matchesPlayed) : humanReadable(serviceRecord.timePlayed.seconds)} isMainStat />
 			</Box>
 		</TitleCard>
 	);

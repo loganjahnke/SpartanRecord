@@ -119,11 +119,20 @@ export function PlayerView(props: ViewProps)
 								<ServiceRecordFilters setPerMatch={setShowPerMatch} />
 							</Box>
 						</Grid>
-						{/* Far left */}
-						<Grid container item spacing={2} md={12} lg={6} xl={4} sx={{ alignContent: "flex-start" }}>
-							<Grid item xs={12}>
+						{/* Always the top three boxes */}
+						<Grid container item spacing={2} xs={12} sx={{ flexDirection: "row", alignContent: "flex-start" }}>
+							<Grid item xs={12} lg={4}>
 								<MatchesBreakdown serviceRecord={player.serviceRecord} />
 							</Grid>
+							<Grid item xs={12} lg={4}>
+								<KillDeathCard serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
+							</Grid>
+							<Grid item xs={12} lg={4}>
+								<ShotsBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
+							</Grid>
+						</Grid>
+						{/* Far left */}
+						<Grid container item spacing={2} md={12} lg={6} xl={4} sx={{ alignContent: "flex-start" }}>
 							<Grid item xs={12}>
 								<KDABreakdown serviceRecord={player.serviceRecord} />
 							</Grid>
@@ -131,25 +140,16 @@ export function PlayerView(props: ViewProps)
 								<CSRSBreakdown csrs={player.csrs} />
 							</Grid>}
 							<Grid item xs={12}>
-								<LevelBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
+								<AssistBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
-								<TimePlayed serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
+								<DamageBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
-							{player.mmr && <Grid item xs={12}>
-								<MMRBreakdown mmr={player.mmr} />
-							</Grid>}
 						</Grid>
 						{/* Middle 6 */}
 						<Grid container item spacing={2} sm={12} md={6} lg={6} xl={3} sx={{ alignContent: "flex-start" }}>
 							<Grid item xs={12}>
-								<KillDeathCard serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
-							</Grid>
-							<Grid item xs={12}>
 								<KillBreakdownCard serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
-							</Grid>
-							<Grid item xs={12}>
-								<VehicleBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
 							{/* {!isAllowed && <Grid item xs={12}>
 								<Box id="container-a7b55266c8d1e7c39ed0ac2f85cf49fa" />
@@ -161,13 +161,18 @@ export function PlayerView(props: ViewProps)
 								<TopMedals medals={player.serviceRecord.medals} matchesPlayed={player.serviceRecord.matchesPlayed} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
-								<AssistBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
+								<LevelBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
-							<Grid item xs={12}>
-								<ShotsBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
-							</Grid>
-							<Grid item xs={12}>
-								<DamageBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
+							{player.mmr && <Grid item xs={12}>
+								<MMRBreakdown mmr={player.mmr} />
+							</Grid>}						
+							<Grid container item spacing={2} xs={12}>
+								<Grid item xs={12} lg={6}>
+									<TimePlayed serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
+								</Grid>
+								<Grid item xs={12} lg={6}>
+									<VehicleBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
+								</Grid>
 							</Grid>
 							{isAllowed && season === -1 && <Grid item xs={12}>
 								<ServiceRecordChart historicServiceRecords={historicStats} currentSR={player.serviceRecord} />

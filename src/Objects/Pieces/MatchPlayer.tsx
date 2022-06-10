@@ -10,6 +10,8 @@ export class MatchPlayer
 {
     /** The player's gamertag */
     public gamertag: string;
+    /** Player type */
+    public type: "bot" | "player";
     /** Team details */
     public team: TeamDetails;
     /** Player statistics */
@@ -34,6 +36,7 @@ export class MatchPlayer
     constructor(data?: AutocodeMatchPlayer, isRanked: boolean = false, timePlayedInSeconds: number = 0)
     {
         this.gamertag = "";
+        this.type = "player";
         this.team = new TeamDetails();
         this.stats = new ServiceRecord();
         this.rank = -1
@@ -47,6 +50,7 @@ export class MatchPlayer
         if (!data) { return; }
         
         this.gamertag = data.details.name;
+        this.type = data.details.type;
         this.team = new TeamDetails(data.team);
         this.stats = new ServiceRecord(AutocodeHelpers.CreateServiceRecordFromMatch(this.gamertag, data, isRanked, timePlayedInSeconds));
         this.rank = data.rank;
@@ -57,8 +61,8 @@ export class MatchPlayer
         this.mmr = data.stats.mmr ?? 0;
         this.won = data.outcome === "win" || data.outcome === "won";
         this.outcome = this.won ? HaloOutcome.Win
-        : data?.outcome === "left" ? HaloOutcome.Left
-        : data?.outcome === "loss" ? HaloOutcome.Loss
-        : HaloOutcome.Draw;
+            : data?.outcome === "left" ? HaloOutcome.Left
+            : data?.outcome === "loss" ? HaloOutcome.Loss
+            : HaloOutcome.Draw;
     }
 }

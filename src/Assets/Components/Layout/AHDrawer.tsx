@@ -3,19 +3,10 @@ import { Box, Button, Divider, Drawer, Link, Tab, Tabs, Toolbar, Typography } fr
 import { ServiceRecordFilter } from "../../../Database/ArrowheadFirebase";
 import { Player } from "../../../Objects/Model/Player";
 
-import MapIcon from '@mui/icons-material/Map';
-import ListIcon from '@mui/icons-material/List';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import GamesIcon from '@mui/icons-material/Games';
-import ModeStandbyIcon from '@mui/icons-material/ModeStandby';
-import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
-import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
-import PersonSearchIcon from '@mui/icons-material/PersonSearch';
-import GroupsIcon from '@mui/icons-material/Groups';
-import StarIcon from '@mui/icons-material/Star';
-import FlagIcon from '@mui/icons-material/Flag';
-import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import PrimaryLogo from "../../Images/Primary/Spartan-Record-Logo-Primary-White.png";
+
+import { BestMatchIcon, MapIcon, MatchesIcon, MatchOutcomeIcon, MedalsIcon, ModesIcon, PlaylistsIcon, RankedIcon, SearchIcon, ServiceRecordIcon, SocialIcon, SpartanCompanyIcon, VariantsIcon } from "../../Icons/CustomIcons";
+import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 
 export enum SRTabs
 {
@@ -129,48 +120,62 @@ export function AHDrawer(props: AHDrawerProps)
 	const drawer = (
 		<Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
 			<Toolbar>
-				<Button className="ahTab" onClick={goHome}>SpartanRecord.com</Button>
+				<Button onClick={goHome}><img src={PrimaryLogo} alt="Spartan Record" height="32px" /></Button>
 			</Toolbar>
 			<Divider flexItem />
-			<Box sx={{ pt: 5, pb: 5, overflowY: "auto" }}>
+			<Box sx={
+				{ 
+					pt: 5, 
+					pb: 5, 
+					overflowY: "auto", 
+					"button": 
+					{ 
+						textTransform: "none", 
+						textAlign: "left", 
+						justifyContent: "left", 
+						color: ArrowheadTheme.text_secondary 
+					}, 
+					".Mui-selected": { color: ArrowheadTheme.selected + " !important" }, 
+					".MuiTabs-indicator": { backgroundColor: ArrowheadTheme.selected + " !important" } 
+				}}>
 				{player && player.gamertag && isAllowed ? 
 				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
-					<Tab className="ahTab" value={SRTabs.Search} label={SRTabs.Search} icon={<PersonSearchIcon />} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.ServiceRecord} label={SRTabs.ServiceRecord} icon={<ModeStandbyIcon />} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.Playlists} label={SRTabs.Playlists} icon={<ListIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.Variants} label={SRTabs.Variants} icon={<GamesIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.Social} label={SRTabs.Social} icon={<GroupsIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.Ranked} label={SRTabs.Ranked} icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.Maps} label={SRTabs.Maps} icon={<MapIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.MatchOutcome} label={SRTabs.MatchOutcome} icon={<EmojiEventsIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.Medals} label={SRTabs.Medals} icon={<MilitaryTechIcon />} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.Modes} label={SRTabs.Modes} icon={<FlagIcon />} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.Matches} label={SRTabs.Matches} icon={<SportsEsportsIcon />} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.BestMatches} label={SRTabs.BestMatches} icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					{/* <Tab className="ahTab" value={SRTabs.Patreon} label={SRTabs.Patreon} icon={<EmojiEmotionsIcon />} iconPosition="start" />*/}
-					{/* <Tab className="ahTab" value={SRTabs.SpartanCompany} label={SRTabs.SpartanCompany} icon={<GroupsIcon />} iconPosition="start" /> */}
+					<Tab value={SRTabs.Search} label={SRTabs.Search} icon={<SearchIcon />} iconPosition="start" />
+					<Tab value={SRTabs.ServiceRecord} label={SRTabs.ServiceRecord} icon={<ServiceRecordIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Playlists} label={SRTabs.Playlists} icon={<PlaylistsIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab value={SRTabs.Variants} label={SRTabs.Variants} icon={<VariantsIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab value={SRTabs.Social} label={SRTabs.Social} icon={<SocialIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab value={SRTabs.Ranked} label={SRTabs.Ranked} icon={<RankedIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab value={SRTabs.Maps} label={SRTabs.Maps} icon={<MapIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab value={SRTabs.MatchOutcome} label={SRTabs.MatchOutcome} icon={<MatchOutcomeIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab value={SRTabs.Medals} label={SRTabs.Medals} icon={<MedalsIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Modes} label={SRTabs.Modes} icon={<ModesIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Matches} label={SRTabs.Matches} icon={<MatchesIcon />} iconPosition="start" />
+					<Tab value={SRTabs.BestMatches} label={SRTabs.BestMatches} icon={<BestMatchIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					{/* <Tab value={SRTabs.Patreon} label={SRTabs.Patreon} icon={<EmojiEmotionsIcon />} iconPosition="start" />*/}
+					{/* <Tab value={SRTabs.SpartanCompany} label={SRTabs.SpartanCompany} icon={<SpartanCompanyIcon />} iconPosition="start" /> */}
 				</Tabs>
 				: player && player.gamertag ?
 				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
-					<Tab className="ahTab" value="Search" label="Search" icon={<PersonSearchIcon />} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.ServiceRecord} label={SRTabs.ServiceRecord} icon={<ModeStandbyIcon />} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.Playlists} label={SRTabs.Playlists} icon={<ListIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.Variants} label={SRTabs.Variants} icon={<GamesIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.Social} label={SRTabs.Social} icon={<GroupsIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.Ranked} label={SRTabs.Ranked} icon={<StarIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.Medals} label={SRTabs.Medals} icon={<MilitaryTechIcon />} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.Modes} label={SRTabs.Modes} icon={<FlagIcon />} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.Matches} label={SRTabs.Matches} icon={<SportsEsportsIcon />} iconPosition="start" />
-					{/* <Tab className="ahTab" value={SRTabs.Patreon} label={SRTabs.Patreon} icon={<EmojiEmotionsIcon />} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.Maps} label={SRTabs.Maps} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.MatchOutcome} label={SRTabs.MatchOutcome} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab className="ahTab" value={SRTabs.BestMatches} label={SRTabs.BestMatches} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.75rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
-					{/* <Tab className="ahTab" value={SRTabs.SpartanCompany} label={SRTabs.SpartanCompany} icon={<GroupsIcon />} iconPosition="start" /> */}
+					<Tab value="Search" label="Search" icon={<SearchIcon />} iconPosition="start" />
+					<Tab value={SRTabs.ServiceRecord} label={SRTabs.ServiceRecord} icon={<ServiceRecordIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Playlists} label={SRTabs.Playlists} icon={<PlaylistsIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab value={SRTabs.Variants} label={SRTabs.Variants} icon={<VariantsIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab value={SRTabs.Social} label={SRTabs.Social} icon={<SocialIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab value={SRTabs.Ranked} label={SRTabs.Ranked} icon={<RankedIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab value={SRTabs.Medals} label={SRTabs.Medals} icon={<MedalsIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Modes} label={SRTabs.Modes} icon={<ModesIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Matches} label={SRTabs.Matches} icon={<MatchesIcon />} iconPosition="start" />
+					{/* <Tab value={SRTabs.Patreon} label={SRTabs.Patreon} icon={<EmojiEmotionsIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Maps} label={SRTabs.Maps} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab value={SRTabs.MatchOutcome} label={SRTabs.MatchOutcome} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab value={SRTabs.BestMatches} label={SRTabs.BestMatches} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
+					{/* <Tab value={SRTabs.SpartanCompany} label={SRTabs.SpartanCompany} icon={<SpartanCompanyIcon />} iconPosition="start" /> */}
 				</Tabs>
 				:
 				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
-					<Tab className="ahTab" value={SRTabs.Search} label={SRTabs.Search} icon={<PersonSearchIcon />} iconPosition="start" />
-					{/* <Tab className="ahTab" value={SRTabs.SpartanCompany} label={SRTabs.SpartanCompany} icon={<GroupsIcon />} iconPosition="start" /> */}
+					<Tab value={SRTabs.Search} label={SRTabs.Search} icon={<SearchIcon />} iconPosition="start" />
+					{/* <Tab value={SRTabs.SpartanCompany} label={SRTabs.SpartanCompany} icon={<SpartanCompanyIcon />} iconPosition="start" /> */}
 				</Tabs>
 				}
 			</Box>

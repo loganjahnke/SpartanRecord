@@ -29,7 +29,7 @@ export function MatchRankTile(props: { player: MatchPlayer, value: number, myGam
 
 	return (
 		<Box sx={{ backgroundColor: "secondary.main", borderRadius: 3, display: "flex", flexDirection: "row", alignItems: "center", width: "90%", margin: 1, padding: 0, height: "48px" }}>
-			<Button onClick={() => goToMember(player.gamertag)} sx={{ width: "100%", height: "100%", justifyContent: "flex-start", p: 0, borderRadius: 2, textTransform: "none", textAlign: "left", backgroundColor: myGamertag === player.gamertag ? ArrowheadTheme.good : "" }}>
+			<Button disabled={player.type === "bot"} onClick={() => goToMember(player.gamertag)} sx={{ width: "100%", height: "100%", justifyContent: "flex-start", p: 0, borderRadius: 2, textTransform: "none", textAlign: "left", backgroundColor: myGamertag === player.gamertag ? ArrowheadTheme.good : "" }}>
 				{player.team.emblem && <Box sx={{ 
 					backgroundImage: `url(${player.team.emblem})`, 
 					backgroundColor: GetColorForTeam(player.team.name), 

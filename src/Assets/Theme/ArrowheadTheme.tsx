@@ -11,17 +11,19 @@ export class ArrowheadTheme
 	private static readonly __coolors = ["002029","00303d","004052","74a58b","F9F0FA"];
 
 	/** #002029 */
-	public static background = `#${this.__coolors[0]}`;
+	public static background = `#072028`;
 	/** #00303d */
-	public static box = `#${this.__coolors[1]}`;
+	public static box = `#00303C`;
 	/** #004052 */
-	public static secondary = `#${this.__coolors[2]}`;
+	public static secondary = `#014052`;
 	/** #70A288 */
 	public static text_secondary = `#${this.__coolors[3]}`;
 	/** #F9F0FA */
 	public static text_primary = `#${this.__coolors[4]}`;
 	/** #70A288 */
 	public static thin_border = `#${this.__coolors[3]}` + "40";
+
+	public static selected = "#2BC3EB";
 
 	public static good = `#1B9D46`;
 	public static bad = `#CC2500`;

@@ -70,7 +70,7 @@ export function SingleMatchView(props: ViewProps)
 	 */
 	function onGamertagClick(tag: string): void
 	{
-		if (tag && tag.indexOf("343 Bot") !== 0)
+		if (tag)
 		{
 			switchTab("/service_record/" + tag, SRTabs.ServiceRecord);
 		}
