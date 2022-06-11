@@ -80,7 +80,7 @@ export function HomeView(props: ViewProps)
 				<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} />
 				<Box sx={{ flexGrow: 1 }} />
 				<Box sx={{ backgroundColor: "secondary.main", textAlign: "center", mt: 18 }}>
-					<Typography variant="subtitle1" sx={{ textAlign: "center" }}>Powered by <Link sx={{ cursor: "pointer" }} onClick={() => switchTab("/powered_by_halodotapi")}>HaloDotAPI</Link> | Spartan Record v{process.env.REACT_APP_VERSION}</Typography>
+					<Typography variant="subtitle1" sx={{ textAlign: "center" }}>Powered by <Link sx={{ cursor: "pointer" }} onClick={() => switchTab("/powered_by_halodotapi")}>HaloDotAPI</Link> v{process.env.REACT_APP_HALO_API_VERSION} | Spartan Record v{process.env.REACT_APP_VERSION}</Typography>
 				</Box>
 
 			</Box>

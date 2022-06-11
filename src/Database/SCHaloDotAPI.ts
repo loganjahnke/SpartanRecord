@@ -58,7 +58,7 @@ export class SCHaloDotAPI
 	{
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCHaloDotAPI.GetMMR()", player.gamertag); }
 
-		const mmrData = await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].stats.players.mmr({
+		const mmrData = await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].stats.players.mmr({
 			gamertag: player.gamertag,
 			kind: "free-for-all"
 		}) as AutocodeMMR;
@@ -85,7 +85,7 @@ export class SCHaloDotAPI
 	{
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCHaloDotAPI.GetCSRS()", player.gamertag); }
 
-		const csrsData = await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].stats.players.csrs({
+		const csrsData = await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].stats.players.csrs({
 			gamertag: player.gamertag,
 			season: season,
 			version: !season ? undefined : (season === 1 ? 2 : 1)
@@ -135,7 +135,7 @@ export class SCHaloDotAPI
 	 */
 	public async GetMaps(): Promise<AutocodeMap[]>
 	{
-		let result = await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].metadata.multiplayer.maps();		
+		let result = await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].metadata.multiplayer.maps();		
 		return result.data as AutocodeMap[];
 	}
 
@@ -144,7 +144,7 @@ export class SCHaloDotAPI
 	 */
 	public async GetPlaylists(): Promise<AutocodePlaylist[]>
 	{
-		let result = await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].metadata.multiplayer.playlists();		
+		let result = await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].metadata.multiplayer.playlists();		
 		const playlists = result.data as AutocodePlaylist[];
 
 		for (const playlist of playlists)
@@ -175,7 +175,7 @@ export class SCHaloDotAPI
 	 */
 	public async GetVariants(): Promise<AutocodeVariant[]>
 	{
-		let result = await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].metadata.multiplayer.gamevariants();		
+		let result = await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].metadata.multiplayer.gamevariants();		
 		return result.data as AutocodeVariant[];
 	}
 
@@ -184,7 +184,7 @@ export class SCHaloDotAPI
 	 */
 	public async GetMedals(ids: string[] = []): Promise<AutocodeMedal[]>
 	{
-		let result = await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].metadata.multiplayer.medals({
+		let result = await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].metadata.multiplayer.medals({
 			ids: ids
 		});
 
@@ -196,7 +196,7 @@ export class SCHaloDotAPI
 	 */
 	public async GetTeams(): Promise<AutocodeTeam[]>
 	{
-		let result = await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].metadata.multiplayer.teams();		
+		let result = await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].metadata.multiplayer.teams();		
 		return result.data as AutocodeTeam[];
 	}
 	//#endregion
@@ -229,7 +229,7 @@ export class SCHaloDotAPI
 	 */
 	public async IsValidGamertag(gamertag: string): Promise<string>
 	{
-		const json = await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].tooling['xbox-network'].players.profile({
+		const json = await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].tooling['xbox-network'].players.profile({
 			gamertag: gamertag // required
 		}) as AutocodeXboxProfile;
 		
@@ -242,7 +242,7 @@ export class SCHaloDotAPI
 	 */
 	public async GetPlayerMatches(gamertag: string, count: number, offset: number): Promise<AutocodePlayerMatchResults>
 	{
-		return await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].stats.players.matches({
+		return await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].stats.players.matches({
 			gamertag: gamertag, // required
 			type: "matchmaking",
 			language: "en-us",
@@ -282,7 +282,7 @@ export class SCHaloDotAPI
 	 */
 	public async GetMatches(ids: string[]): Promise<AutocodeMatchResults>
 	{
-		return await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].stats.matches({
+		return await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].stats.matches({
 			ids: ids,
 			language: 'en-us'
 		});
@@ -295,7 +295,7 @@ export class SCHaloDotAPI
 	 */
 	private async __getSCampaignRecordFromHaloDotAPI(gamertag: string): Promise<any>
 	{
-		const response = await fetch(`https://${process.env.REACT_APP_HALO_API_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/campaign_record`, {
+		const response = await fetch(`https://${"@" + process.env.REACT_APP_HALO_API_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/campaign_record`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({gamertag: gamertag})
@@ -326,22 +326,22 @@ export class SCHaloDotAPI
 		switch (type)
 		{
 			case ServiceRecordType.all:
-				result = await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].stats.players['service-record'].multiplayer.matchmade.all(params);
+				result = await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].stats.players['service-record'].multiplayer.matchmade.all(params);
 				break;
 			case ServiceRecordType.ranked:
-				result = await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].stats.players['service-record'].multiplayer.matchmade.ranked(params);
+				result = await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].stats.players['service-record'].multiplayer.matchmade.ranked(params);
 				break;
 			case ServiceRecordType.social:
-				result = await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].stats.players['service-record'].multiplayer.matchmade.social(params);
+				result = await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].stats.players['service-record'].multiplayer.matchmade.social(params);
 				break;
 			case ServiceRecordType.local:
-				result = await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].stats.players['service-record'].multiplayer['non-matchmade'].local(params);
+				result = await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].stats.players['service-record'].multiplayer['non-matchmade'].local(params);
 				break;
 			case ServiceRecordType.custom:
-				result = await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].stats.players['service-record'].multiplayer['non-matchmade'].custom(params);
+				result = await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].stats.players['service-record'].multiplayer['non-matchmade'].custom(params);
 				break;
 			default:
-				result = await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].stats.players['service-record'].multiplayer.matchmade.all(params);
+				result = await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].stats.players['service-record'].multiplayer.matchmade.all(params);
 				break;
 		}
 		
@@ -356,7 +356,7 @@ export class SCHaloDotAPI
 	 */
 	private async __getPlayerAppearanceFromHaloDotAPI(gamertag: string): Promise<any>
 	{
-		return await this.__lib.halo.infinite[process.env.REACT_APP_HALO_API_VERSION ?? "1-4-0"].appearance.players['spartan-id']({
+		return await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].appearance.players['spartan-id']({
 			gamertag: gamertag
 		});
 	}
