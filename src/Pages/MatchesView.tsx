@@ -19,10 +19,6 @@ export function MatchesView(props: ViewProps)
 	const { app, setLoadingMessage, switchTab, player, updatePlayer } = props;
 	const { gamertag } = useParams();
 	//#endregion
-
-	//#region Refs
-	const lastUpdate = useRef<Date | null>(null);
-	//#endregion
 	
 	//#region State
 	const [matches, setMatches] = useState<PlayerMatch[]>([]);
@@ -59,7 +55,7 @@ export function MatchesView(props: ViewProps)
 
 		switchTab(undefined, SRTabs.Matches);
 		if (!hideLoading) { setLoadingMessage(""); }
-	}, [lastUpdate, app, gamertag, matches, setMatches, setCombinedSR, offset, switchTab, player, updatePlayer]);
+	}, [app, gamertag, matches, setMatches, setCombinedSR, offset, switchTab, player, updatePlayer, setLoadingMessage]);
 
 	const loadMore = useCallback(async () =>
 	{
@@ -76,6 +72,7 @@ export function MatchesView(props: ViewProps)
 		offset.current = 0;
 		setMatches([]);
 		loadData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [gamertag]);
 
     function goToMatch(id: string): void

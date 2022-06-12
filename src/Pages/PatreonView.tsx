@@ -1,21 +1,12 @@
 import { Box, Card, CardContent, CardMedia, Divider, Grid, Toolbar, Typography } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-import { ServiceRecordFilter } from "../Database/ArrowheadFirebase";
-import { Player } from "../Objects/Model/Player";
-import { PlayerCard } from "../Assets/Components/Cards/PlayerCard";
 import { ViewProps } from "./Props/ViewProps";
-import { SRFilter } from "../Objects/Pieces/SRFilter";
-import { ChipFilters } from "./Subpage/ChipFilters";
-import { Match } from "../Objects/Model/Match";
-import { MatchSummary } from "../Assets/Components/Match/MatchSummary";
-import { FirebaseBest } from "../Database/Schemas/FirebaseBest";
 
 export function PatreonView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, updatePlayer, switchTab, isAllowed } = props;
+	const { isAllowed } = props;
 	const { gamertag } = useParams();
 	//#endregion
 	

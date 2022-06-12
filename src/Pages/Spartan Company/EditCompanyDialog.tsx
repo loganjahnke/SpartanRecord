@@ -1,11 +1,10 @@
 import { LoadingButton } from "@mui/lab";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Box, TextField, Checkbox, FormControlLabel, FormGroup, Grid, Typography } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Box, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { MedalTypeBreakdown } from "../../Assets/Components/Medals/MedalTypeBreakdown";
 import { ArrowheadTheme } from "../../Assets/Theme/ArrowheadTheme";
 import { ServiceRecord } from "../../Objects/Model/ServiceRecord";
 import { SpartanCompany } from "../../Objects/Model/SpartanCompany";
-import { MedalType } from "../../Objects/Pieces/Medal";
 
 interface EditCompanyDialogProps
 {

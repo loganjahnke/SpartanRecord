@@ -1,7 +1,6 @@
 import { LoadingButton } from "@mui/lab";
 import { Box, TextField, Button, Typography, Chip, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { ArrowheadTheme } from "../../Assets/Theme/ArrowheadTheme";
-import { Cookie } from "../../Objects/Helpers/Cookie";
 import { Player } from "../../Objects/Model/Player";
 import { SearchProps } from "../Subpage/GamertagSearch";
 
@@ -33,7 +32,7 @@ function AddGamertagInline(props: SearchProps & { loading?: boolean })
 			{recentPlayers.length === 0 ? undefined :
                 <Box sx={{ mt: 1 }}>
                     <Typography variant="caption" sx={{ color: "white" }}>Recents: </Typography>
-                    {recentPlayers.map(player => <Chip sx={{ margin: "4px 4px" }} icon={<img  height="24px" src={player.appearance.emblemURL} />} label={player.gamertag} onClick={openRecent ? () => openRecent(player.gamertag) : undefined} />)}
+                    {recentPlayers.map(player => <Chip sx={{ margin: "4px 4px" }} icon={<img  height="24px" src={player.appearance.emblemURL} alt="Emblem" />} label={player.gamertag} onClick={openRecent ? () => openRecent(player.gamertag) : undefined} />)}
                 </Box>
             }
 			{!!error && <Typography variant="caption" sx={{ mt: 1, color: ArrowheadTheme.text_primary }}>{error}</Typography>}

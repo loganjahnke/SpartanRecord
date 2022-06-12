@@ -1,6 +1,5 @@
 import { AutocodeMatch, AutocodeOutcome, AutocodeMatchPlayer, AutocodeMatchTeamDetails, AutocodeSRSummary, AutocodeSRDamage, AutocodeSRAccuracy, AutocodeSRRounds, AutocodeSRScore, AutocodeSRBreakdowns } from "./AutocodeMatch";
 import { AutocodeServiceRecordData, AutocodeMultiplayerServiceRecord } from "./AutocodeMultiplayerServiceRecord";
-import { FirebaseHistoricServiceRecord } from "./FirebaseHistoricServiceRecord";
 
 export class AutocodeHelpers
 {

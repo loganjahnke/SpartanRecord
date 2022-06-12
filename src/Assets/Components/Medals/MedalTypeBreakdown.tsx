@@ -2,7 +2,6 @@ import { Box, Typography } from "@mui/material";
 import { AllMedals } from "../../../Objects/Helpers/AllMedals";
 import { Medal, MedalType } from "../../../Objects/Pieces/Medal";
 import { MedalTile } from "./MedalTile";
-import { UnearnedMedalTile } from "./UnearnedMedalTile";
 
 interface MedalTypeBreakdownProps
 {

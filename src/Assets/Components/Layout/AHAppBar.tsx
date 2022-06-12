@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, IconButton, Divider, Typography, CircularProgress, Box } from "@mui/material";
+import { AppBar, Toolbar, IconButton, Typography, CircularProgress, Box } from "@mui/material";
 
 import MenuIcon from '@mui/icons-material/Menu';
 import { Player } from "../../../Objects/Model/Player";

@@ -5,7 +5,6 @@ import { Team } from "../../../Objects/Pieces/Team";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { TeamBreakdownChart } from "../Charts/TeamBreakdownChart";
 import { BreakdownRowTile } from "./BreakdownRowTile";
-import { BreakdownTile } from "./BreakdownTile";
 
 import SportsScoreIcon from '@mui/icons-material/SportsScore';
 import ModeStandbyIcon from '@mui/icons-material/ModeStandby';
@@ -26,7 +25,6 @@ export function TeamResultBreakdown(props: TeamResultBreakdownProps)
     const image = team.details.emblem;
     const background = GetColorForTeam(team.details.name);
 
-    const total = serviceRecord.summary.kills;
     const filtered = team.players.filter(player => player.outcome !== HaloOutcome.Left);
 
 	return (
@@ -45,7 +43,7 @@ export function TeamResultBreakdown(props: TeamResultBreakdownProps)
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <Box sx={{ height: "300px", width: "calc(100% - 16px)", m: "0 8px" }}>
-                            {filtered && filtered.length > 0 ? <TeamBreakdownChart players={filtered} blue={team.details.name === "Eagle"} /> : undefined}
+                            {filtered && filtered.length > 0 ? <TeamBreakdownChart players={filtered} /> : undefined}
                         </Box>
                     </Grid>
                 </Grid>

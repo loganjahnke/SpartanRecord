@@ -29,17 +29,6 @@ export const KillBreakdownChart = (props: { currentSR: ServiceRecord }) =>
 		CategoryScale
 	);
 
-	const CHART_COLORS = {
-		red: "rgb(255, 99, 132)",
-		blue: "rgb(54, 162, 235)",
-		orange: "rgb(255, 159, 64)",
-		grey: "rgb(201, 203, 207)",
-		yellow: "rgb(255, 205, 86)",
-		green: "rgb(75, 192, 192)",
-		purple: "rgb(153, 102, 255)",
-		theme: ArrowheadTheme.cobra
-	};
-
 	const { currentSR } = props;
 	
 	const options = {

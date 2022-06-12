@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Medal } from "../../../Objects/Pieces/Medal";
 import { TitleCard } from "../Cards/TitleCard";
 import { MedalTile } from "./MedalTile";

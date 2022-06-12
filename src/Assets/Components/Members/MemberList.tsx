@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, IconButton, Typography } from "@mui/material";
+import { Box, Button, Card, CardActions, CardContent, CardMedia, IconButton, Typography } from "@mui/material";
 import { SpartanCompany } from "../../../Objects/Model/SpartanCompany";
 
 import { Player } from "../../../Objects/Model/Player";

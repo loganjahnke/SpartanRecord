@@ -1,8 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { SpartanCompany } from "../../../Objects/Model/SpartanCompany";
-import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
-import { BreakdownTile } from "../Breakdowns/BreakdownTile";
-import { MatchRankTile, RankTile } from "./RankTile";
+import { MatchRankTile } from "./RankTile";
 import { MatchRanksProps } from "./KDARanks";
 
 export function TopSpreeRanks(props: MatchRanksProps)

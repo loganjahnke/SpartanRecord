@@ -3,7 +3,6 @@ import { SpartanCompany } from "../../../Objects/Model/SpartanCompany";
 import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import { BreakdownTile } from "../Breakdowns/BreakdownTile";
 import { MatchRankTile, RankTile } from "./RankTile";
-import { MatchPlayer } from "../../../Objects/Pieces/MatchPlayer";
 import { MatchRanksProps } from "./KDARanks";
 
 export function KillRanks(props: { company: SpartanCompany, sharedSR: ServiceRecord, goToMember: Function, myGamertag?: string })

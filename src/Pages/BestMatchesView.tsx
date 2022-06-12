@@ -1,10 +1,8 @@
 import { Box, Divider, Grid, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { ServiceRecordFilter } from "../Database/ArrowheadFirebase";
-import { Player } from "../Objects/Model/Player";
-import { PlayerCard } from "../Assets/Components/Cards/PlayerCard";
 import { ViewProps } from "./Props/ViewProps";
 import { SRFilter } from "../Objects/Pieces/SRFilter";
 import { ChipFilters } from "./Subpage/ChipFilters";
@@ -18,7 +16,6 @@ export function BestMatchesView(props: ViewProps)
 	//#region Props and Navigate
 	const { app, setLoadingMessage, updatePlayer, switchTab } = props;
 	const { filter, gamertag } = useParams();
-	const navigate = useNavigate();
 	//#endregion
 	
 	//#region State
@@ -30,7 +27,6 @@ export function BestMatchesView(props: ViewProps)
 	const [mostAssists, setMostAssists] = useState<Match>();
 	const [highestKDSpread, setHighestKDSpread] = useState<Match>();
 	const [lowestKDSpread, setLowestKDSpread] = useState<Match>();
-    const [image, setImage] = useState("");
 	const [availableFilters, setAvailableFilters] = useState<SRFilter[]>([]);
 	const [selectedFilter, setSelectedFilter] = useState(filter);
 	//#endregion
@@ -106,9 +102,6 @@ export function BestMatchesView(props: ViewProps)
 			setLowestKDSpread(lowKDS);
 			
 			setBests(bests);
-
-			const imageName = selectedFilter.toLowerCase().replace(" ", "-");
-			setImage(`https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/maps/${imageName}.jpg`);
 		}
 		else if (gamertag)
 		{
@@ -136,7 +129,7 @@ export function BestMatchesView(props: ViewProps)
 
 
 		setLoadingMessage("");
-	}, [app, gamertag, selectedFilter]);
+	}, [app, gamertag, selectedFilter, setLoadingMessage]);
 
 	const onFilterSelected = useCallback((filter: string) =>
 	{
@@ -146,6 +139,7 @@ export function BestMatchesView(props: ViewProps)
     useEffect(() =>
     {
         loadData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [gamertag]);
 
 	useEffect(() =>
@@ -154,6 +148,7 @@ export function BestMatchesView(props: ViewProps)
 		{
 			loadFilteredSR();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedFilter]);
 
 	/**

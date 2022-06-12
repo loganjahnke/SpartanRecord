@@ -1,6 +1,6 @@
 import { TableContainer, Box, Table, TableHead, TableCell, TableRow, TableBody, IconButton, Collapse, Typography, Grid } from "@mui/material";
 import { ArrowheadTheme } from "../../Assets/Theme/ArrowheadTheme";
-import { HaloMode, HaloOutcome } from "../../Database/ArrowheadFirebase";
+import { HaloOutcome } from "../../Database/ArrowheadFirebase";
 import { MatchPlayer } from "../../Objects/Pieces/MatchPlayer";
 import { Team } from "../../Objects/Pieces/Team";
 

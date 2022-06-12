@@ -27,8 +27,6 @@ export class SCAutocode
 	/** Turns on or off debugging mode */
 	private readonly IS_DEBUGGING = process.env.NODE_ENV !== "production";
 
-	constructor() {}
-
 	/**
 	 * Gets the player from autocode
 	 * @param gamertag the gamertag

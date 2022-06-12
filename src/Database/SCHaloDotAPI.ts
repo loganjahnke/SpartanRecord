@@ -149,19 +149,19 @@ export class SCHaloDotAPI
 
 		for (const playlist of playlists)
 		{
-			if (playlist.asset.id == "0299adc1-f07a-4b6c-8126-0c35ac2fa08d")
+			if (playlist.asset.id === "0299adc1-f07a-4b6c-8126-0c35ac2fa08d")
 			{
 				playlist.name = "Last Spartan Standing (Event)";
 			}
-			else if (playlist.asset.id == "edfef3ac-9cbe-4fa2-b949-8f29deafd483")
+			else if (playlist.asset.id === "edfef3ac-9cbe-4fa2-b949-8f29deafd483")
 			{
 				playlist.name = "Ranked Arena (Open Crossplay)";
 			}
-			else if (playlist.asset.id == "f7f30787-f607-436b-bdec-44c65bc2ecef")
+			else if (playlist.asset.id === "f7f30787-f607-436b-bdec-44c65bc2ecef")
 			{
 				playlist.name = "Ranked Arena (Solo-Duo Controller)";
 			}
-			else if (playlist.asset.id == "f7eb8c71-fedb-4696-8c0f-96025e285ffd")
+			else if (playlist.asset.id === "f7eb8c71-fedb-4696-8c0f-96025e285ffd")
 			{
 				playlist.name = "Ranked Arena (Solo-Duo MnK)";
 			}

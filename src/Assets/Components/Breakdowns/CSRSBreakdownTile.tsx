@@ -1,8 +1,7 @@
-import { Box, linearProgressClasses, Tooltip, Typography } from "@mui/material";
-import React from "react";
+import { Box, Tooltip, Typography } from "@mui/material";
 import { CSRS } from "../../../Objects/Model/CSRS";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
-import { BorderLinearProgress, BorderLinearProgressMatches } from "../Custom/BorderLinearProgress";
+import { BorderLinearProgress } from "../Custom/BorderLinearProgress";
 
 export function CSRSBreakdownTile(props: { csrs: CSRS })
 {
@@ -21,7 +20,7 @@ export function CSRSBreakdownTile(props: { csrs: CSRS })
 			alignItems: "center",
 			padding: 0.5,
 			width: "100%" }}>
-			<img src={csrs.ranks.current.tierImageUrl} height="48px" width="48px" />
+			<img src={csrs.ranks.current.tierImageUrl} alt="Tier" height="48px" width="48px" />
 			<Box sx={{ mb: 1 }}>
 				<Box sx={{ display: "flex", flexDirection: "row", mb: 0.5 }}>
 					<Typography variant={"subtitle1"} sx={{ fontSize: "0.8rem", ml: 1 }}>{csrs.GetHeader()}</Typography>

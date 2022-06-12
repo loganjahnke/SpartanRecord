@@ -1,5 +1,5 @@
-import { ToggleButtonGroup, ToggleButton, Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
-import React, { useState } from "react";
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { useState } from "react";
 
 interface ServiceRecordFiltersProps
 {

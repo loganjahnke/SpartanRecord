@@ -7,7 +7,7 @@ import { SpartanCompanyView } from "./Pages/Spartan Company/SpartanCompanyView";
 import { ArrowheadTheme } from "./Assets/Theme/ArrowheadTheme";
 import { PlayerView } from "./Pages/PlayerView";
 import { MedalsView } from "./Pages/MedalsView";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { MatchesView } from "./Pages/MatchesView";
 import { SingleMatchView } from "./Pages/SingleMatchView";
 import { FilteredView } from "./Pages/FilteredView";
@@ -47,6 +47,7 @@ const App = () =>
 	const app = initializeApp(firebaseConfig);
 	const database = getDatabase(app);
 	const analytics = getAnalytics();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const arrowhead = new SCData(database, analytics);
 	//#endregion
 
@@ -94,7 +95,7 @@ const App = () =>
 
 		setPlayer(newPlayer);
 		setIsAllowed(await arrowhead.GetIsAllowed(newPlayer.gamertag));
-	}, [player, setPlayer, setIsAllowed]);
+	}, [player, setPlayer, setIsAllowed, arrowhead]);
 	//#endregion
 
 	//#region App Bar and Drawer

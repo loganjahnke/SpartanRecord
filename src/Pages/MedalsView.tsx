@@ -1,5 +1,5 @@
 import { Box, Checkbox, Divider, FormControlLabel, FormGroup, Grid, Toolbar, Typography } from "@mui/material";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
@@ -38,11 +38,12 @@ export function MedalsView(props: ViewProps)
 
 		switchTab(undefined, SRTabs.Medals);
 		setLoadingMessage("");
-	}, [app, gamertag, setServiceRecord, switchTab]);
+	}, [app, gamertag, setServiceRecord, switchTab, setGamertag, setLoadingMessage]);
 	
 	useEffect(() =>
 	{
 		loadData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [gamertag]);
 
 	function onPressShowAll(event: React.ChangeEvent<HTMLInputElement>)

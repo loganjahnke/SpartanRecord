@@ -1,6 +1,5 @@
-import { HaloMap, HaloMode, HaloOutcome, HaloRanked } from "../../Database/ArrowheadFirebase";
+import { HaloOutcome } from "../../Database/ArrowheadFirebase";
 import { AutocodeMatch } from "../../Database/Schemas/AutocodeMatch";
-import { AutocodePlayerMatch } from "../../Database/Schemas/AutocodePlayerMatch";
 import { GameVariant } from "../Pieces/GameVariant";
 import { Map } from "../Pieces/Map";
 import { MatchPlayer } from "../Pieces/MatchPlayer";

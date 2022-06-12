@@ -1,6 +1,4 @@
 import { Box, Divider, Grid, Link, Toolbar, Typography } from "@mui/material";
-
-import { ViewProps } from "./Props/ViewProps";
 import { ImageCardWithContent } from "../Assets/Components/Cards/ImageCardWithContent";
 
 export function OtherCreators()

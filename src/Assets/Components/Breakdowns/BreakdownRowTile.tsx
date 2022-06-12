@@ -5,16 +5,9 @@ import { BreakdownTileProps } from "./BreakdownTile";
 
 export function BreakdownRowTile(props: BreakdownTileProps)
 {
-	const { title, value, total, isMainStat, isPercent, isHeader, backgroundColor, small, tooltip, icon } = props;
+	const { title, value, isMainStat, isPercent, backgroundColor, small, tooltip, icon } = props;
 
     const background = backgroundColor ?? (isMainStat && !small ? ArrowheadTheme.box : ArrowheadTheme.secondary);
-
-    let flexBasis = "";
-    if (total !== undefined && typeof value === "number")
-    {
-        const percentage = value / total;
-        flexBasis = `${Math.round(percentage * 100)}%`;
-    }
 
     if (value === 0 && !isMainStat) { return <React.Fragment />; }
 

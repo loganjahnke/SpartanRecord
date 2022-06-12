@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, Link, Toolbar, Typography } from "@mui/material";
+import { Box, Divider, Link, Toolbar, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 
 import { GamertagSearch } from "./Subpage/GamertagSearch";
@@ -68,6 +68,7 @@ export function HomeView(props: ViewProps)
 	{
 		loadRecentPlayers();
 		document.title = "Spartan Record";
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 

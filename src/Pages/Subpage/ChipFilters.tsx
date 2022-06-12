@@ -1,5 +1,4 @@
-import { Box, Chip, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, Chip } from "@mui/material";
 import { AutocodePlaylist, AutocodeVariant } from "../../Database/Schemas/AutocodeMetadata";
 import { SRFilter } from "../../Objects/Pieces/SRFilter";
 

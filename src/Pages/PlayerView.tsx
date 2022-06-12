@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Grid, Toolbar, Typography } from "@mui/material";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { TopMedals } from "../Assets/Components/Medals/TopMedals";
@@ -90,11 +90,12 @@ export function PlayerView(props: ViewProps)
 		}
 
 		switchTab(undefined, SRTabs.ServiceRecord);
-	}, [app, gamertag, updatePlayer, setBackgroundLoadingProgress, season, switchTab]);
+	}, [app, gamertag, updatePlayer, setBackgroundLoadingProgress, season, switchTab, isAllowed, setLoadingMessage]);
 	
 	useEffect(() =>
 	{
 		loadData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [gamertag, season]);
 
 	return (

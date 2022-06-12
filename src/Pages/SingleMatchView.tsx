@@ -60,11 +60,12 @@ export function SingleMatchView(props: ViewProps)
 
 		switchTab(undefined, SRTabs.Matches)
 		setLoadingMessage("");
-	}, [app, setMatch, setPlayers, setGamertag, gamertag, switchTab]);
+	}, [app, setMatch, setPlayers, setGamertag, gamertag, switchTab, id, setLoadingMessage]);
 	
 	useEffect(() =>
 	{
 		loadData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [id]);
 
 	/**

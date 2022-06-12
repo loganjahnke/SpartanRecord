@@ -25,7 +25,6 @@ import { EditCompanyDialog } from "./EditCompanyDialog";
 import EditIcon from '@mui/icons-material/Edit';
 import { SRTabs } from "../../Assets/Components/Layout/AHDrawer";
 import { KDABreakdown } from "../../Assets/Components/Breakdowns/KDABreakdown";
-import { LevelBreakdown } from "../../Assets/Components/Breakdowns/LevelBreakdown";
 import { TimePlayed } from "../../Assets/Components/Breakdowns/TimePlayed";
 import { KillBreakdownCard } from "../../Assets/Components/Breakdowns/KillBreakdownCard";
 import { VehicleBreakdown } from "../../Assets/Components/Breakdowns/VehicleBreakdown";
@@ -35,7 +34,7 @@ import { Player } from "../../Objects/Model/Player";
 export function SpartanCompanyView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, switchTab, player, updatePlayer } = props;
+	const { app, setLoadingMessage, switchTab, player } = props;
 	//#endregion
 	
 	//#region State
@@ -79,7 +78,7 @@ export function SpartanCompanyView(props: ViewProps)
 		setSharedSR(sr);
 		setLoadingMessage("");
 		switchTab(undefined, SRTabs.SpartanCompany);
-    }, [app, setSpartanCompany, setSharedSR]);
+    }, [app, setSpartanCompany, setSharedSR, setLoadingMessage, switchTab]);
 
 	/** Syncs all players with autocode */
 	const syncPlayers = useCallback(async () =>
@@ -95,11 +94,12 @@ export function SpartanCompanyView(props: ViewProps)
 		}
 
 		await loadData();
-	}, [app, spartanCompany, loadData]);
+	}, [app, spartanCompany, loadData, setLoadingMessage]);
     
     useEffect(() =>
     {
         loadData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 	/**
@@ -109,9 +109,8 @@ export function SpartanCompanyView(props: ViewProps)
 	{
 		const player = spartanCompany.GetPlayer(gamertag);
 		if (!player) { return; }
-		updatePlayer(gamertag, player.appearance, player.serviceRecord, player.mmr, player.csrs);
-		//switchTab("/service_record/" + gamertag, SRTabs.ServiceRecord);
-	}, [switchTab, app, updatePlayer, spartanCompany]);
+		switchTab("/service_record/" + gamertag, SRTabs.ServiceRecord);
+	}, [switchTab, spartanCompany]);
 
 	//#region Add Gamertag Dialog
 	/** Opens the add gamertag dialog */
@@ -154,11 +153,11 @@ export function SpartanCompanyView(props: ViewProps)
 	}
 
 	/** Cancels the close */
-	function cancelAddGamertagDialog()
+	const cancelAddGamertagDialog = useCallback(() =>
 	{
 		setErrorMessage("");
 		setAddGamertagDialog(false);
-	}
+	}, [setErrorMessage, setAddGamertagDialog]);
 	
 	/** Adds the gamertag from the company */
 	const closeAddGamertagDialog = useCallback(async (gamertag?: string) =>
@@ -206,7 +205,7 @@ export function SpartanCompanyView(props: ViewProps)
 		setGamertagToAdd("");
 		loadData();
 		
-	}, [gamertagToAdd, cancelAddGamertagDialog, loadData, setErrorMessage, setLoadingProfile, spartanCompany, setGamertagToAdd]);
+	}, [app, gamertagToAdd, cancelAddGamertagDialog, loadData, setErrorMessage, setLoadingProfile, spartanCompany, setGamertagToAdd]);
 
 	/** Adds a recent gamertag to the spartan company */
 	const addRecent = useCallback((gamertag: string) =>
@@ -217,10 +216,10 @@ export function SpartanCompanyView(props: ViewProps)
 
 	//#region Remove Gamertag Dialog
 	/** Cancels the close */
-	function cancelRemoveGamertagDialog()
+	const cancelRemoveGamertagDialog = useCallback(() =>
 	{
 		setRemoveGamertagDialog("");
-	}
+	}, [setRemoveGamertagDialog]);
 	
 	/** Removes the gamertag from the company */
 	const closeRemoveGamertagDialog = useCallback(() =>
@@ -242,10 +241,10 @@ export function SpartanCompanyView(props: ViewProps)
 
 	//#region Edit Company Dialog
 	/** Cancels the close */
-	function cancelEditCompanyDialog()
+	const cancelEditCompanyDialog = useCallback(() =>
 	{
 		setOpenEditCompanyDialog(false);
-	}
+	}, [setOpenEditCompanyDialog]);
 	
 	/** Removes the gamertag from the company */
 	const saveEditCompanyDialog = useCallback((name: string, medal: number) =>
@@ -259,7 +258,7 @@ export function SpartanCompanyView(props: ViewProps)
 		setSharedSR(newSC.GetServiceRecord());
 		cancelEditCompanyDialog();
 
-	}, [removeGamertagDialog, cancelRemoveGamertagDialog, loadData, spartanCompany, setSpartanCompany, setSharedSR]);
+	}, [spartanCompany, setSpartanCompany, setSharedSR, cancelEditCompanyDialog]);
 	//#endregion
 
 	return (

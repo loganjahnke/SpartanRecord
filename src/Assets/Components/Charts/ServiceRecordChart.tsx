@@ -208,6 +208,7 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 	useEffect(() => 
 	{
 		changeDataSet();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [historicServiceRecords]);
 	
 	return (

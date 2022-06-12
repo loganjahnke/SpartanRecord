@@ -234,7 +234,7 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 				}
 			]
 		});
-	}, [matches]);
+	}, [matches, openMatch, sr]);
 
 	const initialChartData = {
 		labels: matches.map((_, index) => matches.length - index),
@@ -250,6 +250,7 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 	useEffect(() => 
 	{
 		changeDataSet();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [matches]);
 	
 	return (

@@ -1,4 +1,4 @@
-import { ToggleButtonGroup, ToggleButton, Box } from "@mui/material";
+import { ToggleButtonGroup, ToggleButton } from "@mui/material";
 import { useState } from "react";
 
 interface ServiceRecordFiltersProps

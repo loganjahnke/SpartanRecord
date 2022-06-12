@@ -1,19 +1,17 @@
 import { Box, Divider, Grid, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-import { ServiceRecordFilter, HaloMap, HaloMode, HaloRanked, HaloOutcome } from "../Database/ArrowheadFirebase";
+import { ServiceRecordFilter } from "../Database/ArrowheadFirebase";
 import { KillDeathCard } from "../Assets/Components/Breakdowns/KillDeathCard";
 import { AssistBreakdown } from "../Assets/Components/Breakdowns/AssistBreakdown";
 import { MatchesBreakdown } from "../Assets/Components/Breakdowns/MatchesBreakdown";
 import { ShotsBreakdown } from "../Assets/Components/Breakdowns/ShotsBreakdown";
 import { DamageBreakdown } from "../Assets/Components/Breakdowns/DamageBreakdown";
-import { Player } from "../Objects/Model/Player";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { ImageCard } from "../Assets/Components/Cards/ImageCard";
 import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
 import { LevelBreakdown } from "../Assets/Components/Breakdowns/LevelBreakdown";
-import { PlayerCard } from "../Assets/Components/Cards/PlayerCard";
 import { ServiceRecordFilters } from "./Subpage/ServiceRecordFilters";
 import { ViewProps } from "./Props/ViewProps";
 import { ChipFilters } from "./Subpage/ChipFilters";
@@ -45,8 +43,7 @@ export function FilteredView(props: ViewProps)
 	
 	const [selectedVariant, setSelectedVariant] = useState<AutocodeVariant | undefined>();
 	const [variants, setVariants] = useState<AutocodeVariant[] | undefined>([]);
-	
-	const [selectedRank, setSelectedRank] = useState<string | undefined>();
+
 	const [ranks, setRanks] = useState<string[] | undefined>([]);
 
 	const [selectedFBFilter, setSelectedFBFilter] = useState<SRFilter | undefined>();
@@ -91,7 +88,6 @@ export function FilteredView(props: ViewProps)
 				setVariants(undefined);
 				setPlaylists(undefined);
 				setSelectedVariant(undefined);
-				setSelectedRank(undefined);
 				setSelectedPlaylist(undefined);
 				setSelectedFBFilter(undefined);
 				setFBFilters(undefined);
@@ -104,7 +100,6 @@ export function FilteredView(props: ViewProps)
 				setVariants(undefined);
 				setPlaylists(undefined);
 				setSelectedVariant(undefined);
-				setSelectedRank(undefined);
 				setSelectedPlaylist(undefined);
 				setSelectedFBFilter(undefined);
 				setFBFilters(undefined);
@@ -117,7 +112,6 @@ export function FilteredView(props: ViewProps)
 				setVariants(undefined);
 				setPlaylists(undefined);
 				setSelectedVariant(undefined);
-				setSelectedRank(undefined);
 				setSelectedPlaylist(undefined);
 				switchTab(undefined, node === ServiceRecordFilter.Maps ? SRTabs.Maps : SRTabs.MatchOutcome);
 			}
@@ -129,7 +123,7 @@ export function FilteredView(props: ViewProps)
 		}
 
 		setLoadingMessage("");
-	}, [app, gamertag, node, filter, season, switchTab]);
+	}, [app, gamertag, node, season, switchTab, setLoadingMessage, updatePlayer]);
 
 	const loadFilteredSR = useCallback(async () => 
 	{		
@@ -162,7 +156,7 @@ export function FilteredView(props: ViewProps)
 
 			setLoadingMessage("");
 		}
-	}, [app, gamertag, node, filter, setSR, setSelectedPlaylist, setSelectedVariant, setLoadingMessage, season]);
+	}, [app, gamertag, node, filter, setSR, setSelectedPlaylist, setSelectedVariant, setLoadingMessage, season, fbFilters, playlists, variants]);
 
 	const onFilterSelected = useCallback((filter: string) =>
 	{
@@ -173,12 +167,13 @@ export function FilteredView(props: ViewProps)
 			node === ServiceRecordFilter.Variant ? SRTabs.Variants : 
 			node === ServiceRecordFilter.Maps ? SRTabs.Maps : 
 			node === ServiceRecordFilter.Outcomes ? SRTabs.MatchOutcome : undefined);
-	}, [switchTab]);
+	}, [switchTab, gamertag, node]);
 
     useEffect(() =>
     {
         loadData();
 		setSR(undefined);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [node, gamertag]);
 
 	useEffect(() =>
@@ -187,6 +182,7 @@ export function FilteredView(props: ViewProps)
 		{
 			loadFilteredSR();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [filter]);
 	
 	useEffect(() =>
@@ -196,6 +192,7 @@ export function FilteredView(props: ViewProps)
 			loadFilteredSR();
 		}
 		else { loadData(); }
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [season]);
 
 	return (

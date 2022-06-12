@@ -1,23 +1,11 @@
 import { Box, Button, Divider, Grid, Toolbar, Typography } from "@mui/material";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import useScript from "../Objects/Helpers/Hooks";
 
-import { TopMedals } from "../Assets/Components/Medals/TopMedals";
-import { KillDeathCard } from "../Assets/Components/Breakdowns/KillDeathCard";
-import { AssistBreakdown } from "../Assets/Components/Breakdowns/AssistBreakdown";
-import { MatchesBreakdown } from "../Assets/Components/Breakdowns/MatchesBreakdown";
-import { ShotsBreakdown } from "../Assets/Components/Breakdowns/ShotsBreakdown";
-import { DamageBreakdown } from "../Assets/Components/Breakdowns/DamageBreakdown";
-import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
-import { LevelBreakdown } from "../Assets/Components/Breakdowns/LevelBreakdown";
-import { VehicleBreakdown } from "../Assets/Components/Breakdowns/VehicleBreakdown";
 import { ServiceRecordFilters } from "./Subpage/ServiceRecordFilters";
 import { ViewProps } from "./Props/ViewProps";
 import { Cookie } from "../Objects/Helpers/Cookie";
-import { KillBreakdownCard } from "../Assets/Components/Breakdowns/KillBreakdownCard";
 import { SeasonChooser } from "./Subpage/SeasonChooser";
-import { ServiceRecordChart } from "../Assets/Components/Charts/ServiceRecordChart";
 import { CaptureTheFlagBreakdown } from "../Assets/Components/Breakdowns/CaptureTheFlagBreakdown";
 import { ZoneBreakdown } from "../Assets/Components/Breakdowns/ZoneBreakdown";
 import { StockpileBreakdown } from "../Assets/Components/Breakdowns/StockpileBreakdown";
@@ -55,11 +43,12 @@ export function ModesView(props: ViewProps)
 		
 		switchTab(undefined, SRTabs.Modes);
 		setLoadingMessage("");
-	}, [app, gamertag, updatePlayer, season, switchTab]);
+	}, [app, gamertag, updatePlayer, season, switchTab, setLoadingMessage]);
 	
 	useEffect(() =>
 	{
 		loadData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [gamertag, season]);
 
 	return (
