@@ -132,6 +132,7 @@ export class ServiceRecord
             assists: core?.summary?.assists ?? 0,
             betrayals: core?.summary?.betrayals ?? 0,
             suicides: core?.summary?.suicides ?? 0,
+            maxKillingSpree: core?.summary?.max_killing_spree,
             vehicles:
             {
                 destroys: core?.summary?.vehicles?.destroys ?? 0,
@@ -359,9 +360,9 @@ export class ServiceRecord
     {
         this.summary = 
         {
-            kills: match.player.kills + this.summary.kills,
-            deaths: match.player.deaths + this.summary.deaths,
-            assists: match.player.assists + this.summary.assists,
+            kills: match.player.summary.kills + this.summary.kills,
+            deaths: match.player.summary.deaths + this.summary.deaths,
+            assists: match.player.summary.assists + this.summary.assists,
             betrayals: this.summary.betrayals,
             suicides: this.summary.suicides,
             vehicles:

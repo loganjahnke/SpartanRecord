@@ -10,6 +10,8 @@ export class Summary
     public betrayals: number;
     /** Total suicides */
     public suicides: number;
+    /** The max killing spree */
+    public maxKillingSpree?: number;
     /** Vehicles statistics */
     public vehicles: Vehicles;
     /** Total medals */

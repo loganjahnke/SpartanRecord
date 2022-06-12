@@ -23,9 +23,9 @@ export function RankTile(props: { player: Player, myGamertag?: string, value: nu
 	);
 }
 
-export function MatchRankTile(props: { player: MatchPlayer, value: number, myGamertag?: string, isPercent?: boolean, goToMember: Function })
+export function MatchRankTile(props: { player: MatchPlayer, value: number, myGamertag?: string, isPercent?: boolean, goToMember: Function, isSpree?: boolean })
 {
-	const { player, value, myGamertag, isPercent, goToMember } = props;
+	const { player, value, myGamertag, isPercent, goToMember, isSpree } = props;
 
 	return (
 		<Box sx={{ backgroundColor: "secondary.main", borderRadius: 3, display: "flex", flexDirection: "row", alignItems: "center", width: "90%", margin: 1, padding: 0, height: "48px" }}>
@@ -43,8 +43,34 @@ export function MatchRankTile(props: { player: MatchPlayer, value: number, myGam
 				<Box sx={{ ml: 1, display: "flex", flexDirection: "column", fontSize: "0.8rem" }}>
 					<Typography variant="h6">{player.gamertag}</Typography>
 				</Box>
-                <Typography variant="h5" sx={{ flexGrow: 1, textAlign: "right", mr: 2 }}>{(Math.round(value * 100) / 100).toLocaleString()}{isPercent ? "%" : ""}</Typography>
+				<Box sx={{ flexGrow: 1 }} />
+				{isSpree && value >=5 && <HighestSpreeMedal maxSpree={value} />}
+                <Typography variant="h5" sx={{ textAlign: "right", ml: 2, mr: 2 }}>{(Math.round(value * 100) / 100).toLocaleString()}{isPercent ? "%" : ""}</Typography>
 			</Button>
 		</Box>
 	);
+}
+
+function HighestSpreeMedal(props: { maxSpree: number })
+{
+	const { maxSpree } = props;
+
+	return <img alt="Highest Spree Medal" height="32px" src={
+		maxSpree >= 40 
+			? "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/demon.png" :
+		maxSpree >= 35
+			? "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/grim-reaper.png" :
+		maxSpree >= 30
+			? "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/boogeyman.png" :
+		maxSpree >= 25
+			? "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/nightmare.png" :
+		maxSpree >= 20
+			? "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/rampage.png" :
+		maxSpree >= 15
+			? "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/running-riot.png" :
+		maxSpree >= 10
+			? "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/killing-frenzy.png" :
+		maxSpree >= 5
+			? "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/killing-spree.png" : ""
+	} />
 }

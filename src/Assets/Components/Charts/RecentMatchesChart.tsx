@@ -15,6 +15,7 @@ import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PlayerMatch } from "../../../Objects/Model/PlayerMatch";
+import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 
 enum RecentMatchesDataSets
 {
@@ -23,7 +24,9 @@ enum RecentMatchesDataSets
 	KDR = "KDR",
 	Kills = "Kills",
 	Deaths = "Deaths",
-	Assists = "Assists"
+	Assists = "Assists",
+	Damage = "Damage",
+	Accuracy = "Accuracy"
 }
 
 enum ChartType
@@ -32,7 +35,7 @@ enum ChartType
 	Line = "Line"
 }
 
-export const RecentMatchesChart = (props: { matches: PlayerMatch[] }) =>
+export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceRecord, openMatch: (matchID: string) => void }) =>
 {
 	ChartJS.defaults.color = "#DDDDDD";
 	ChartJS.defaults.font.family = "Roboto";
@@ -48,7 +51,7 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[] }) =>
 		Legend
 	);
 
-	const { matches } = props;
+	const { matches, sr, openMatch } = props;
 	const dataSet = useRef<RecentMatchesDataSets>(RecentMatchesDataSets.WinLoss);
 	const [chartType, setChartType] = useState(ChartType.Bar);
 	const [options, setOptions] = useState<any>({
@@ -82,6 +85,13 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[] }) =>
 		setOptions({
 			responsive: true,
 			maintainAspectRatio: false,
+			onClick: (event: any, item: any) =>
+			{
+				if (item && item.length > 0 && item[0].index !== undefined)
+				{
+					openMatch(matches[item[0].index].id);
+				}
+			},
 			plugins: {
 				legend: {
 					display: false,
@@ -116,7 +126,35 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[] }) =>
 					grid: {
 						color: function(context: any)
 						{
-							return context.tick.value === 0 ? "white" : "transparent"
+							if (context.tick.value === 0) { return ArrowheadTheme.text_primary; }
+							switch (dataSet.current)
+							{
+								case RecentMatchesDataSets.WinLoss: break;
+								case RecentMatchesDataSets.KDA: 
+									if (context.tick.value === sr.kda) { return ArrowheadTheme.selected; }
+									break;
+								case RecentMatchesDataSets.KDR: 
+									if (context.tick.value === sr.kdr) { return ArrowheadTheme.selected; }
+									break;
+								case RecentMatchesDataSets.Kills: 
+									if (context.tick.value === sr.killsPerGame) { return ArrowheadTheme.selected; }
+									break;
+								case RecentMatchesDataSets.Deaths: 
+									if (context.tick.value === sr.deathsPerGame) { return ArrowheadTheme.selected; }
+									break;
+								case RecentMatchesDataSets.Assists: 
+									if (context.tick.value === sr.assistsPerGame) { return ArrowheadTheme.selected; }
+									break;
+								case RecentMatchesDataSets.Damage: 
+									if (context.tick.value === sr.damagePerGame) { return ArrowheadTheme.selected; }
+									break;
+								case RecentMatchesDataSets.Accuracy: 
+									if (context.tick.value === sr.shots.accuracy) { return ArrowheadTheme.selected; }
+									break;
+								default: return "transparent";
+							}
+
+							return "transparent";
 						},
 						display: true,
 						drawBorder: false,
@@ -143,20 +181,37 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[] }) =>
 			}
 		});
 
+		let label = "";
+		switch (dataSet.current)
+		{
+			case RecentMatchesDataSets.WinLoss: label = "Win"; break;
+			case RecentMatchesDataSets.KDA: label = "KDA"; break;
+			case RecentMatchesDataSets.KDR: label = "KDR"; break;
+			case RecentMatchesDataSets.Kills: label = "Kills"; break;
+			case RecentMatchesDataSets.Deaths: label = "Deaths"; break;
+			case RecentMatchesDataSets.Assists: label = "Assists"; break;
+			case RecentMatchesDataSets.Damage: label = "Damage"; break;
+			case RecentMatchesDataSets.Accuracy: label = "Accuracy"; break;
+			default: label = ""; break;
+		}
+
 		setChartData({
 			labels: matches.map((_, index) => index + 1),
 			datasets: [
 				{
+					label: label,
 					backgroundColor: matches.map(match => 
 					{
 						switch (dataSet.current)
 						{
 							case RecentMatchesDataSets.WinLoss: return match.player.won ? ArrowheadTheme.good : ArrowheadTheme.bad;
-							case RecentMatchesDataSets.KDA: return match.player.kda > 0 ? ArrowheadTheme.good : ArrowheadTheme.bad;
-							case RecentMatchesDataSets.KDR: return match.player.kdr > 1 ? ArrowheadTheme.good : ArrowheadTheme.bad;
-							case RecentMatchesDataSets.Kills: return match.player.kills ? ArrowheadTheme.good : ArrowheadTheme.bad;
-							case RecentMatchesDataSets.Deaths: return match.player.deaths ? ArrowheadTheme.good : ArrowheadTheme.bad;
-							case RecentMatchesDataSets.Assists: return match.player.assists ? ArrowheadTheme.good : ArrowheadTheme.bad;
+							case RecentMatchesDataSets.KDA: return match.player.kda > sr.kda ? ArrowheadTheme.good : ArrowheadTheme.bad;
+							case RecentMatchesDataSets.KDR: return match.player.kdr > sr.kdr ? ArrowheadTheme.good : ArrowheadTheme.bad;
+							case RecentMatchesDataSets.Kills: return match.player.summary.kills > sr.killsPerGame ? ArrowheadTheme.good : ArrowheadTheme.bad;
+							case RecentMatchesDataSets.Deaths: return match.player.summary.deaths > sr.deathsPerGame ? ArrowheadTheme.good : ArrowheadTheme.bad;
+							case RecentMatchesDataSets.Assists: return match.player.summary.assists > sr.assistsPerGame ? ArrowheadTheme.good : ArrowheadTheme.bad;
+							case RecentMatchesDataSets.Damage: return match.player.damage.dealt > sr.damagePerGame ? ArrowheadTheme.good : ArrowheadTheme.bad;
+							case RecentMatchesDataSets.Accuracy: return match.player.shots.accuracy > sr.shots.accuracy ? ArrowheadTheme.good : ArrowheadTheme.bad;
 							default: return match.player.won ? ArrowheadTheme.good : ArrowheadTheme.bad;
 						}
 					}),
@@ -168,9 +223,11 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[] }) =>
 							case RecentMatchesDataSets.WinLoss: return match.player.won ? 1 : -1;
 							case RecentMatchesDataSets.KDA: return match.player.kda;
 							case RecentMatchesDataSets.KDR: return match.player.kdr;
-							case RecentMatchesDataSets.Kills: return match.player.kills;
-							case RecentMatchesDataSets.Deaths: return match.player.deaths;
-							case RecentMatchesDataSets.Assists: return match.player.assists;
+							case RecentMatchesDataSets.Kills: return match.player.summary.kills;
+							case RecentMatchesDataSets.Deaths: return match.player.summary.deaths;
+							case RecentMatchesDataSets.Assists: return match.player.summary.assists;
+							case RecentMatchesDataSets.Damage: return match.player.damage.dealt;
+							case RecentMatchesDataSets.Accuracy: return match.player.shots.accuracy;
 							default: return match.player.won ? 1 : -1;
 						}
 					}),
@@ -210,6 +267,8 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[] }) =>
 							<MenuItem value={RecentMatchesDataSets.Kills}>{RecentMatchesDataSets.Kills}</MenuItem>
 							<MenuItem value={RecentMatchesDataSets.Deaths}>{RecentMatchesDataSets.Deaths}</MenuItem>
 							<MenuItem value={RecentMatchesDataSets.Assists}>{RecentMatchesDataSets.Assists}</MenuItem>
+							<MenuItem value={RecentMatchesDataSets.Damage}>{RecentMatchesDataSets.Damage}</MenuItem>
+							<MenuItem value={RecentMatchesDataSets.Accuracy}>{RecentMatchesDataSets.Accuracy}</MenuItem>
 						</Select>
 					</FormControl>
 					{dataSet.current !== RecentMatchesDataSets.WinLoss && 

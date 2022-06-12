@@ -186,13 +186,13 @@ export function BestMatchesView(props: ViewProps)
 					</Grid>
 				</Grid>
 				<Grid container spacing={2} sx={{ mt: 1 }}>
-					{bestKDA ? <MatchSummary match={bestKDA} goToMatch={goToMatch} category="Highest KDA" value={bests?.values.best_kda ?? 0} /> : undefined}
-					{worstKDA ? <MatchSummary match={worstKDA} goToMatch={goToMatch} category="Lowest KDA" value={bests?.values.worst_kda ?? 0} /> : undefined}
-					{mostKills ? <MatchSummary match={mostKills} goToMatch={goToMatch} category="Most Kills" value={bests?.values.most_kills ?? 0} /> : undefined}
-					{mostDeaths ? <MatchSummary match={mostDeaths} goToMatch={goToMatch} category="Most Deaths" value={bests?.values.most_deaths ?? 0} /> : undefined}
-					{mostAssists ? <MatchSummary match={mostAssists} goToMatch={goToMatch} category="Most Assists" value={bests?.values.most_assists ?? 0} /> : undefined}
-					{highestKDSpread ? <MatchSummary match={highestKDSpread} goToMatch={goToMatch} category="Highest KD Spread" value={bests?.values.highest_kd_spread ?? 0} /> : undefined}
-					{lowestKDSpread ? <MatchSummary match={lowestKDSpread} goToMatch={goToMatch} category="Lowest KD Spread" value={bests?.values.worst_kd_spread ?? 0} /> : undefined}
+					{bestKDA ? <MatchSummary match={bestKDA} goToMatch={goToMatch} gamertag={gamertag ?? ""} category="Highest KDA" value={bests?.values.best_kda ?? 0} /> : undefined}
+					{worstKDA ? <MatchSummary match={worstKDA} goToMatch={goToMatch} gamertag={gamertag ?? ""} category="Lowest KDA" value={bests?.values.worst_kda ?? 0} /> : undefined}
+					{mostKills ? <MatchSummary match={mostKills} goToMatch={goToMatch} gamertag={gamertag ?? ""} category="Most Kills" value={bests?.values.most_kills ?? 0} /> : undefined}
+					{mostDeaths ? <MatchSummary match={mostDeaths} goToMatch={goToMatch} gamertag={gamertag ?? ""} category="Most Deaths" value={bests?.values.most_deaths ?? 0} /> : undefined}
+					{mostAssists ? <MatchSummary match={mostAssists} goToMatch={goToMatch} gamertag={gamertag ?? ""} category="Most Assists" value={bests?.values.most_assists ?? 0} /> : undefined}
+					{highestKDSpread ? <MatchSummary match={highestKDSpread} goToMatch={goToMatch} gamertag={gamertag ?? ""} category="Highest KD Spread" value={bests?.values.highest_kd_spread ?? 0} /> : undefined}
+					{lowestKDSpread ? <MatchSummary match={lowestKDSpread} goToMatch={goToMatch} gamertag={gamertag ?? ""} category="Lowest KD Spread" value={bests?.values.worst_kd_spread ?? 0} /> : undefined}
 				</Grid>
 			</Box>
 		</Box>

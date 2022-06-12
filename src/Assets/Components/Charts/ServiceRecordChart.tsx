@@ -1,4 +1,4 @@
-import { Line } from "react-chartjs-2";
+import { Bar, Line } from "react-chartjs-2";
 import {
 	Chart as ChartJS,
 	CategoryScale,
@@ -8,6 +8,7 @@ import {
 	Title,
 	Tooltip,
 	Legend,
+	BarElement,
   } from 'chart.js';
 
 import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
@@ -24,7 +25,11 @@ enum HistoricDataSets
 	KillsPerGame = "Kills / Game",
 	DeathsPerGame = "Deaths / Game",
 	AssistsPerGame = "Assists / Game",
-	DamagePerGame = "Damage / Game"
+	DamagePerGame = "Damage / Game",
+	Kills = "Kills (25 Game Block)",
+	Deaths = "Deaths (25 Game Block)",
+	Assists = "Assists (25 Game Block)",
+	DamageEfficiency = "Damage Efficiency"
 }
 
 export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecord[], currentSR: ServiceRecord }) =>
@@ -36,6 +41,7 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 		LinearScale,
 		PointElement,
 		LineElement,
+		BarElement,
 		Title,
 		Tooltip,
 		Legend
@@ -164,7 +170,7 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 				{
 					backgroundColor: ArrowheadTheme.text_secondary,
 					borderColor: ArrowheadTheme.text_secondary,
-					data: allSRs.map(sr => 
+					data: allSRs.map((sr, index) => 
 					{
 						switch (dataSet.current)
 						{
@@ -176,6 +182,10 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 							case HistoricDataSets.DeathsPerGame: return sr.summary.deaths / sr.matchesPlayed;
 							case HistoricDataSets.AssistsPerGame: return sr.summary.assists / sr.matchesPlayed;
 							case HistoricDataSets.DamagePerGame: return sr.damage.dealt / sr.matchesPlayed;
+							case HistoricDataSets.Kills: return index === 0 ? sr.summary.kills : sr.summary.kills - allSRs[index - 1].summary.kills;
+							case HistoricDataSets.Deaths: return index === 0 ? sr.summary.deaths : sr.summary.deaths - allSRs[index - 1].summary.deaths;
+							case HistoricDataSets.Assists: return index === 0 ? sr.summary.assists : sr.summary.assists - allSRs[index - 1].summary.assists;
+							case HistoricDataSets.DamageEfficiency: return sr.damageEfficiency;
 							default: return sr.kda;
 						}
 					}),
@@ -216,11 +226,18 @@ export const ServiceRecordChart = (props: { historicServiceRecords: ServiceRecor
 							<MenuItem value={HistoricDataSets.DeathsPerGame}>{HistoricDataSets.DeathsPerGame}</MenuItem>
 							<MenuItem value={HistoricDataSets.AssistsPerGame}>{HistoricDataSets.AssistsPerGame}</MenuItem>
 							<MenuItem value={HistoricDataSets.DamagePerGame}>{HistoricDataSets.DamagePerGame}</MenuItem>
+							<MenuItem value={HistoricDataSets.Kills}>{HistoricDataSets.Kills}</MenuItem>
+							<MenuItem value={HistoricDataSets.Deaths}>{HistoricDataSets.Deaths}</MenuItem>
+							<MenuItem value={HistoricDataSets.Assists}>{HistoricDataSets.Assists}</MenuItem>
+							<MenuItem value={HistoricDataSets.DamageEfficiency}>{HistoricDataSets.DamageEfficiency}</MenuItem>
 						</Select>
 					</FormControl>
 				</Box>
 				<Box sx={{ height: "300px" }}>
-					<Line options={options} data={chartData.labels.length === 0 ? initialChartData : chartData} />
+					{dataSet.current === HistoricDataSets.Kills || dataSet.current === HistoricDataSets.Deaths || dataSet.current === HistoricDataSets.Assists
+						? <Bar options={options} data={chartData.labels.length === 0 ? initialChartData : chartData} />
+						: <Line options={options} data={chartData.labels.length === 0 ? initialChartData : chartData} />
+					}
 				</Box>
 			</Box>
 			: 

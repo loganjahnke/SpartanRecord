@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, Toolbar } from "@mui/material";
+import { Box, Divider, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Snackbar, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { TeamResultBreakdown } from "../Assets/Components/Breakdowns/TeamResultBreakdown";
@@ -7,6 +7,7 @@ import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { AccuracyMatchRanks } from "../Assets/Components/Ranks/AccuracyRanks";
 import { DamageMatchRanks } from "../Assets/Components/Ranks/DamageRanks";
 import { KDAMatchRanks } from "../Assets/Components/Ranks/KDARanks";
+import { TopSpreeRanks } from "../Assets/Components/Ranks/TopSpreeRanks";
 
 import { Match } from "../Objects/Model/Match";
 import { MatchPlayer } from "../Objects/Pieces/MatchPlayer";
@@ -24,6 +25,8 @@ export function SingleMatchView(props: ViewProps)
 	//#region State
     const [match, setMatch] = useState<Match | undefined>(new Match());
 	const [players, setPlayers] = useState<MatchPlayer[]>([]);
+	const [snacking, setSnacking] = useState(false);
+	const [menu, setMenu] = useState(-1);
 	//#endregion
 
 	const loadData = useCallback(async () => 
@@ -76,6 +79,43 @@ export function SingleMatchView(props: ViewProps)
 		}
 	}
 
+	const onOptionChanged = (event: SelectChangeEvent<HTMLElement>) =>
+	{
+		if (!match) { return; }
+		if (+event.target.value === 0)
+		{
+			copyMatchID();
+		}
+		else if (+event.target.value === 1)
+		{
+			openInLeafApp();
+		}
+		else if (+event.target.value === 2)
+		{
+			openInHaloDataHive();
+		}
+
+		setMenu(-1);
+	};
+
+	const closeSnackbar = () => setSnacking(false);
+
+	const copyMatchID = () => 
+	{
+		navigator.clipboard.writeText(match!.id);
+		setSnacking(true);
+	}
+
+	const openInLeafApp = () =>
+	{
+		window.open("https://leafapp.co/game/" + match!.id, "_blank");
+	};
+
+	const openInHaloDataHive = () =>
+	{
+		window.open(`https://halodatahive.com/Infinite/Match/${match!.id}?gamertag=${gamertag}&page=0`, "_blank");
+	};
+
 	return (
 		<Box component="main" sx={{ flexGrow: 1, width: "100%" }}>
 			<Toolbar />
@@ -83,6 +123,27 @@ export function SingleMatchView(props: ViewProps)
 			<Box sx={{ p: 2 }}>
 				{/* Description of the game (map, mode, playlist) */}
 				<Grid container spacing={2} sx={{ alignItems: "flex-start", justifyContent: "flex-start" }}>
+					{/* Top */}
+					<Grid item xs={12}>
+						<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
+							<Box sx={{ flexGrow: 1 }}></Box>
+							<FormControl sx={{ width: "150px" }}>
+								<InputLabel id="additional-options-select-label"></InputLabel>
+								<Select
+									labelId="additional-options-select-label"
+									id="additional-options-select"
+									label=""
+									value={menu as any}
+									onChange={onOptionChanged}
+								>
+									<MenuItem disabled value={-1}>Options</MenuItem>
+									<MenuItem value={0}>Copy Match ID</MenuItem>
+									<MenuItem value={1}>Open in leafapp.co</MenuItem>
+									<MenuItem value={2}>Open in HaloDataHive.com</MenuItem>
+								</Select>
+								</FormControl>
+						</Box>
+					</Grid>
 					<Grid container item spacing={2} xs={12} xl={4}>
 						<Grid item xs={12}>
 							<ImageCard image={match?.map?.asset.thumbnail} 
@@ -97,6 +158,9 @@ export function SingleMatchView(props: ViewProps)
 						</Grid>
 						<Grid item xs={12}>
 							<DamageMatchRanks players={players} myGamertag={gamertag} goToMember={onGamertagClick} />
+						</Grid>
+						<Grid item xs={12}>
+							<TopSpreeRanks players={players} myGamertag={gamertag} goToMember={onGamertagClick} />
 						</Grid>
 					</Grid>
 					<Grid container item spacing={2} xs={12} xl={8}>
@@ -119,6 +183,13 @@ export function SingleMatchView(props: ViewProps)
 					</Grid>
 				</Grid>
 			</Box>
+			<Snackbar
+				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+				open={snacking}
+				onClose={closeSnackbar}
+				message="Copied Match ID"
+				autoHideDuration={3000}
+			/>
 		</Box>
 	);
 }

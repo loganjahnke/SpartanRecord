@@ -1,3 +1,5 @@
+import { AutocodeCTFMode, AutocodeEliminationMode, AutocodeOddballMode, AutocodeZoneMode, AutocodeStockpileMode } from "./AutocodeMultiplayerServiceRecord";
+
 export type AutocodeMatchResults = {
 	data: Array<AutocodeMatch>;
 	additional: {
@@ -128,7 +130,13 @@ export type AutocodeMatchPlayer = {
 			kdr: number;
 			scores: AutocodeSRScore;
 		};
-		mode: null | Record<string, any>;
+		mode?: {
+			capture_the_flag?: AutocodeCTFMode;
+			elimination?: AutocodeEliminationMode;
+			oddball?: AutocodeOddballMode;
+			zones?: AutocodeZoneMode;
+			stockpile?: AutocodeStockpileMode;
+		};
 		mmr: number | null;
 	};
 	rank: number;
@@ -182,6 +190,7 @@ export type AutocodeSRSummary = {
 	assists: number;
 	betrayals: number;
 	suicides: number;
+	max_killing_spree: number;
 	vehicles: {
 		destroys: number;
 		hijacks: number;

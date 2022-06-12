@@ -31,6 +31,7 @@ export class AutocodeHelpers
 						assists: 0,
 						betrayals: 0,
 						suicides: 0,
+						max_killing_spree: 0,
 						vehicles: {
 							destroys: 0,
 							hijacks: 0,
@@ -268,6 +269,8 @@ export class AutocodeHelpers
 		key.core.summary.kills += summary.kills;
 		key.core.summary.medals += summary.medals;
 		key.core.summary.suicides += summary.suicides;
+		if (key.core.summary.max_killing_spree) { key.core.summary.max_killing_spree += summary.max_killing_spree; }
+		else { key.core.summary.max_killing_spree = summary.max_killing_spree; }
 		key.core.summary.vehicles.destroys += summary.vehicles.destroys;
 		key.core.summary.vehicles.hijacks += summary.vehicles.hijacks;
 	}

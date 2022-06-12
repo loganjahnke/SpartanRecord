@@ -10,14 +10,13 @@ import { MatchesBreakdown } from "../Assets/Components/Breakdowns/MatchesBreakdo
 import { KillDeathCard } from "../Assets/Components/Breakdowns/KillDeathCard";
 import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
 import { PlayerMatch } from "../Objects/Model/PlayerMatch";
-import { Player } from "../Objects/Model/Player";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { RecentMatchesChart } from "../Assets/Components/Charts/RecentMatchesChart";
 
 export function MatchesView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, switchTab } = props;
+	const { app, setLoadingMessage, switchTab, player, updatePlayer } = props;
 	const { gamertag } = useParams();
 	//#endregion
 
@@ -26,7 +25,6 @@ export function MatchesView(props: ViewProps)
 	//#endregion
 	
 	//#region State
-	const [player, setPlayer] = useState<Player>(new Player());
 	const [matches, setMatches] = useState<PlayerMatch[]>([]);
 	const [combinedSR, setCombinedSR] = useState(new ServiceRecord());
 	const [loadingMore, setLoadingMore] = useState(false);
@@ -46,6 +44,12 @@ export function MatchesView(props: ViewProps)
 			const newMatches = matches.concat(additionalMatches);
 			setMatches(newMatches);
 
+			if (!player || !player.appearance || !player.serviceRecord || !player.appearance.emblemURL)
+			{
+				const p = await app.GetPlayerFromFirebase(gamertag);
+				updatePlayer(p.gamertag, p.appearance, p.serviceRecord, p.mmr, p.csrs);
+			}
+
 			const serviceRecord = new ServiceRecord();
 			for (const match of newMatches) { serviceRecord.AddPlayerMatch(match); }
 
@@ -55,7 +59,7 @@ export function MatchesView(props: ViewProps)
 
 		switchTab(undefined, SRTabs.Matches);
 		if (!hideLoading) { setLoadingMessage(""); }
-	}, [lastUpdate, app, gamertag, setPlayer, matches, setMatches, setCombinedSR, offset, switchTab]);
+	}, [lastUpdate, app, gamertag, matches, setMatches, setCombinedSR, offset, switchTab, player, updatePlayer]);
 
 	const loadMore = useCallback(async () =>
 	{
@@ -103,11 +107,11 @@ export function MatchesView(props: ViewProps)
 						<KillDeathCard serviceRecord={combinedSR} />
 					</Grid>
 					<Grid item xs={12}>
-						<RecentMatchesChart matches={matches} />
+						<RecentMatchesChart matches={matches} sr={player?.serviceRecord ?? new ServiceRecord()} openMatch={goToMatch} />
 					</Grid>
 				</Grid>
 				<Grid container spacing={2} sx={{ mt: 1 }}>
-					{matches?.length > 0 ? matches.map(match => <PlayerMatchSummary match={match} goToMatch={goToMatch} />) : undefined}
+					{matches?.length > 0 ? matches.map(match => <PlayerMatchSummary match={match} goToMatch={goToMatch} gamertag={gamertag ?? ""} />) : undefined}
 				</Grid>
 				{matches.length > 0 && <Grid item xs={12}>
 					<Box sx={{ display: "flex", justifyContent: "center", width: "100%", mt: 2 }}>

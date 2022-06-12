@@ -19,6 +19,7 @@ export type AutocodeServiceRecordData = {
 			assists: number;
 			betrayals: number;
 			suicides: number;
+			max_killing_spree: number;
 			vehicles: {
 				destroys: number;
 				hijacks: number;
