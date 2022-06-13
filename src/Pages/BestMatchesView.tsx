@@ -10,6 +10,7 @@ import { Match } from "../Objects/Model/Match";
 import { MatchSummary } from "../Assets/Components/Match/MatchSummary";
 import { FirebaseBest } from "../Database/Schemas/FirebaseBest";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
+import { Helmet } from "react-helmet";
 
 export function BestMatchesView(props: ViewProps)
 {
@@ -169,6 +170,13 @@ export function BestMatchesView(props: ViewProps)
 
 	return (
 		<Box component="main" sx={{ flexGrow: 1 }}>
+			<Helmet>
+				<title>{`Spartan Record | Modes | ${gamertag}`}</title>
+				<meta name="description" content={`Halo Infinite mode statistics for ${gamertag}`} />
+				<meta property="og:title" content="Spartan Record" />
+				<meta property="og:image" content="https://spartanrecord.com/Assets/Images/Patreon/banner.png" />
+				<link rel="canonical" href={`https://spartanrecord.com/modes/${gamertag}`} />
+			</Helmet>
 			<Toolbar />
 			<Divider />
 			<Box sx={{ p: 2 }}>
