@@ -6,6 +6,7 @@ import { ViewProps } from "./Props/ViewProps";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { Player } from "../Objects/Model/Player";
 import { Cookie } from "../Objects/Helpers/Cookie";
+import { Helmet } from "react-helmet";
 
 export function HomeView(props: ViewProps)
 {
@@ -74,6 +75,13 @@ export function HomeView(props: ViewProps)
 
 	return (
 		<Box component="main" sx={{ flexGrow: 1, height: "calc(100% - 32px)" }}>
+			<Helmet>
+				<title>{`Spartan Record`}</title>
+				<meta name="description" content={`Halo Infinite statistics such as KDA, KDR, and more`} />
+				<meta property="og:title" content="Spartan Record" />
+				<meta property="og:image" content="https://spartanrecord.com/images/banner.png" />
+				<link rel="canonical" href={`https://spartanrecord.com/`} />
+			</Helmet>
 			<Toolbar />
 			<Divider />
 			<Box sx={{ backgroundColor: "secondary.main", height: "100%", display: "flex", flexDirection: "column" }}>

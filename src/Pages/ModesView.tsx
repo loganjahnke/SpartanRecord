@@ -12,6 +12,7 @@ import { StockpileBreakdown } from "../Assets/Components/Breakdowns/StockpileBre
 import { OddballBreakdown } from "../Assets/Components/Breakdowns/OddballBreakdown";
 import { EliminationBreakdown } from "../Assets/Components/Breakdowns/EliminationBreakdown";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
+import { Helmet } from "react-helmet";
 
 export function ModesView(props: ViewProps)
 {
@@ -34,8 +35,6 @@ export function ModesView(props: ViewProps)
 		// Set page gamertag and show loading message
 		setLoadingMessage("Loading " + gamertag);
 		Cookie.addRecent(gamertag);
-
-		document.title = "Spartan Record | " + gamertag;
 		
 		// Get the player from firebase and show on screen
 		const player = await app.GetPlayerFromFirebase(gamertag, season);
@@ -53,6 +52,13 @@ export function ModesView(props: ViewProps)
 
 	return (
 		<Box component="main" sx={{ flexGrow: 1 }}>
+			<Helmet>
+				<title>{`Spartan Record | Modes | ${gamertag}`}</title>
+				<meta name="description" content={`Halo Infinite mode statistics for ${gamertag}`} />
+				<meta property="og:title" content="Spartan Record" />
+				<meta property="og:image" content="https://spartanrecord.com/images/banner.png" />
+				<link rel="canonical" href={`https://spartanrecord.com/modes/${gamertag}`} />
+			</Helmet>
 			<Toolbar />
 			<Divider />
 			<Box sx={{ p: player ? 2 : 0, height: "calc(100% - 64px)" }}>

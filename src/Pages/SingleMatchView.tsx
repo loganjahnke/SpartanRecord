@@ -1,5 +1,6 @@
 import { Box, Divider, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Snackbar, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 import { TeamResultBreakdown } from "../Assets/Components/Breakdowns/TeamResultBreakdown";
 import { ImageCard } from "../Assets/Components/Cards/ImageCard";
@@ -38,8 +39,6 @@ export function SingleMatchView(props: ViewProps)
 			if (gamertag) { setGamertag(gamertag); }
 			const match = await app.GetMatch(id);
             setMatch(match);
-
-			document.title = "Spartan Record | Match Summary";
 
 			if (match)
 			{
@@ -85,13 +84,17 @@ export function SingleMatchView(props: ViewProps)
 		if (!match) { return; }
 		if (+event.target.value === 0)
 		{
-			copyMatchID();
+			shareWithTwitter();
 		}
 		else if (+event.target.value === 1)
 		{
-			openInLeafApp();
+			copyMatchID();
 		}
 		else if (+event.target.value === 2)
+		{
+			openInLeafApp();
+		}
+		else if (+event.target.value === 3)
 		{
 			openInHaloDataHive();
 		}
@@ -101,24 +104,51 @@ export function SingleMatchView(props: ViewProps)
 
 	const closeSnackbar = () => setSnacking(false);
 
+	/** Copy the match ID to the clipboard */
 	const copyMatchID = () => 
 	{
 		navigator.clipboard.writeText(match!.id);
 		setSnacking(true);
 	}
 
+	/** Open in Leaf */
 	const openInLeafApp = () =>
 	{
 		window.open("https://leafapp.co/game/" + match!.id, "_blank");
 	};
 
+	/** Open in HDH */
 	const openInHaloDataHive = () =>
 	{
 		window.open(`https://halodatahive.com/Infinite/Match/${match!.id}?gamertag=${gamertag}&page=0`, "_blank");
 	};
 
+	/** Share the match link on Twitter */
+	const shareWithTwitter = () =>
+	{
+		// Opens a pop-up with twitter sharing dialog
+		var shareURL = "http://twitter.com/share?"; //url base
+
+		//params
+		var params = {
+			url: `https://spartanrecord.com/match/${match!.id}/${gamertag}\n\n`,
+			text: `${gamertag} - ${match!.mode.name} on ${match!.map.name}\n\n`,
+			hashtags: "Halo,SpartanRecord,HaloDotAPI"
+		}
+
+		for (const param in params) { shareURL += "&" + param + "=" + encodeURIComponent((params as any)[param]); }
+		window.open(shareURL, "_blank", "left=0,top=0,width=550,height=450,personalbar=0,toolbar=0,scrollbars=0,resizable=0");
+	};
+
 	return (
 		<Box component="main" sx={{ flexGrow: 1, width: "100%" }}>
+			<Helmet>
+				<title>{`Spartan Record | ${match!.mode.name} on ${match!.map.name}`}</title>
+				<meta name="description" content={`${gamertag} - ${match!.mode.name} on ${match!.map.name}`} />
+				<meta property="og:title" content="Spartan Record" />
+				<meta property="og:image" content={match?.map?.asset.thumbnail} />
+				<link rel="canonical" href={`https://spartanrecord.com/match/${match?.id}/${gamertag}`} />
+			</Helmet>
 			<Toolbar />
 			<Divider />
 			<Box sx={{ p: 2 }}>
@@ -138,9 +168,10 @@ export function SingleMatchView(props: ViewProps)
 									onChange={onOptionChanged}
 								>
 									<MenuItem disabled value={-1}>Options</MenuItem>
-									<MenuItem value={0}>Copy Match ID</MenuItem>
-									<MenuItem value={1}>Open in leafapp.co</MenuItem>
-									<MenuItem value={2}>Open in HaloDataHive.com</MenuItem>
+									<MenuItem value={0}>Share on Twitter</MenuItem>
+									<MenuItem value={1}>Copy Match ID</MenuItem>
+									<MenuItem value={2}>Open in leafapp.co</MenuItem>
+									<MenuItem value={3}>Open in HaloDataHive.com</MenuItem>
 								</Select>
 								</FormControl>
 						</Box>

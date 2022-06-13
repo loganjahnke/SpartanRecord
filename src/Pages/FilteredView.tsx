@@ -26,6 +26,7 @@ import { AllMaps } from "../Objects/Helpers/AllMaps";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { VehicleBreakdown } from "../Assets/Components/Breakdowns/VehicleBreakdown";
 import { TimePlayed } from "../Assets/Components/Breakdowns/TimePlayed";
+import { Helmet } from "react-helmet";
 
 export function FilteredView(props: ViewProps)
 {
@@ -56,8 +57,6 @@ export function FilteredView(props: ViewProps)
 	{		
 		// Check if we need to check Firebase or HaloDotAPI
 		setLoadingMessage("Loading Filters");
-
-		document.title = "Spartan Record | " + gamertag;
 		
 		// Get player's service record
 		if (gamertag && node)
@@ -197,6 +196,13 @@ export function FilteredView(props: ViewProps)
 
 	return (
 		<Box component="main" sx={{ flexGrow: 1 }}>
+			<Helmet>
+				<title>{`Spartan Record | Filtered | ${gamertag}`}</title>
+				<meta name="description" content={`${gamertag} - Halo Infinite statistics - ${node} - ${filter ?? "Filtered"}`} />
+				<meta property="og:title" content="Spartan Record" />
+				<meta property="og:image" content="https://spartanrecord.com/images/banner.png" />
+				<link rel="canonical" href={`https://spartanrecord.com/service_record/${node}/${gamertag}/${filter}`} />
+			</Helmet>
 			<Toolbar />
 			<Divider />
 			<Box sx={{ p: 2 }}>

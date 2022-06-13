@@ -1,5 +1,6 @@
 import { Box, Button, Divider, Grid, Toolbar, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 
 import { TopMedals } from "../Assets/Components/Medals/TopMedals";
@@ -41,8 +42,6 @@ export function PlayerView(props: ViewProps)
 	const loadData = useCallback(async () => 
 	{		
 		if (!gamertag) { switchTab("/", SRTabs.Search); return; }
-
-		document.title = "Spartan Record | " + gamertag;
 
 		// Set page gamertag and show loading message
 		setLoadingMessage("Loading " + gamertag);
@@ -100,6 +99,13 @@ export function PlayerView(props: ViewProps)
 
 	return (
 		<Box component="main" sx={{ flexGrow: 1 }}>
+			<Helmet>
+				<title>{"Spartan Record | " + gamertag}</title>
+				<meta name="description" content={`Halo Infinite service record for ${gamertag}`} />
+				<meta property="og:title" content="Spartan Record" />
+            	<meta property="og:image" content="https://spartanrecord.com/images/banner.png" />
+				<link rel="canonical" href={`https://spartanrecord.com/service_record/${gamertag}`} />
+			</Helmet>
 			<Toolbar />
 			<Divider />
 			<Box sx={{ p: player ? 2 : 0, height: "calc(100% - 64px)" }}>

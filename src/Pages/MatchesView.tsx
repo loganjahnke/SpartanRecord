@@ -12,6 +12,7 @@ import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
 import { PlayerMatch } from "../Objects/Model/PlayerMatch";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { RecentMatchesChart } from "../Assets/Components/Charts/RecentMatchesChart";
+import { Helmet } from "react-helmet";
 
 export function MatchesView(props: ViewProps)
 {
@@ -33,8 +34,6 @@ export function MatchesView(props: ViewProps)
 		if (gamertag)
 		{
 			if (!hideLoading) { setLoadingMessage("Loading matches for " + gamertag); }
-
-			document.title = "Spartan Record | " + gamertag;
 
 			const additionalMatches = await app.GetPlayerMatches(gamertag, offset.current);
 			const newMatches = matches.concat(additionalMatches);
@@ -89,6 +88,13 @@ export function MatchesView(props: ViewProps)
 
 	return (
 		<Box component="main" sx={{ flexGrow: 1 }}>
+			<Helmet>
+				<title>{`Spartan Record | Matches | ${gamertag}`}</title>
+				<meta name="description" content={`Halo Infinite matches for ${gamertag}`} />
+				<meta property="og:title" content="Spartan Record" />
+				<meta property="og:image" content="https://spartanrecord.com/images/banner.png" />
+				<link rel="canonical" href={`https://spartanrecord.com/matches/${gamertag}`} />
+			</Helmet>
 			<Toolbar />
 			<Divider />
 			<Box sx={{ p: 2 }}>

@@ -30,6 +30,7 @@ import { KillBreakdownCard } from "../../Assets/Components/Breakdowns/KillBreakd
 import { VehicleBreakdown } from "../../Assets/Components/Breakdowns/VehicleBreakdown";
 import { AssistBreakdown } from "../../Assets/Components/Breakdowns/AssistBreakdown";
 import { Player } from "../../Objects/Model/Player";
+import { Helmet } from "react-helmet";
 
 export function SpartanCompanyView(props: ViewProps)
 {
@@ -263,6 +264,13 @@ export function SpartanCompanyView(props: ViewProps)
 
 	return (
 		<Box component="main" sx={{ flexGrow: 1, height: "calc(100% - 64px)" }}>
+			<Helmet>
+				<title>{`Spartan Record | Spartan Company`}</title>
+				<meta name="description" content={`Halo Infinite - ${spartanCompany.name} Company`} />
+				<meta property="og:title" content="Spartan Record" />
+				<meta property="og:image" content="https://spartanrecord.com/images/banner.png" />
+				<link rel="canonical" href={`https://spartanrecord.com/spartan_company`} />
+			</Helmet>
 			<Toolbar />
 			<Divider />
 			<AddGamertagDialog 

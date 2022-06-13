@@ -7,6 +7,7 @@ import { MedalTypeBreakdown } from "../Assets/Components/Medals/MedalTypeBreakdo
 import { MedalType } from "../Objects/Pieces/Medal";
 import { ViewProps } from "./Props/ViewProps";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
+import { Helmet } from "react-helmet";
 
 export function MedalsView(props: ViewProps)
 {
@@ -24,8 +25,6 @@ export function MedalsView(props: ViewProps)
 	{		
 		// Check if we need to check Firebase or HaloDotAPI
 		setLoadingMessage("Loading Medals");
-
-		document.title = "Spartan Record | " + gamertag;
 		
 		// Get service record of gamertag
 		if (gamertag)
@@ -53,6 +52,13 @@ export function MedalsView(props: ViewProps)
 
 	return (
 		<Box component="main" sx={{ flexGrow: 1 }}>
+			<Helmet>
+				<title>{`Spartan Record | Medals | ${gamertag}`}</title>
+				<meta name="description" content={`Halo Infinite medals for ${gamertag}`} />
+				<meta property="og:title" content="Spartan Record" />
+				<meta property="og:image" content="https://spartanrecord.com/images/banner.png" />
+				<link rel="canonical" href={`https://spartanrecord.com/medals/${gamertag}`} />
+			</Helmet>
 			<Toolbar />
 			<Divider />
 			<Box sx={{ p: 2 }}>
