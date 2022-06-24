@@ -98,6 +98,10 @@ export function SingleMatchView(props: ViewProps)
 		{
 			openInHaloDataHive();
 		}
+		else if (+event.target.value === 4)
+		{
+			openInHaloSouthAfrica();
+		}
 
 		setMenu(-1);
 	};
@@ -115,6 +119,12 @@ export function SingleMatchView(props: ViewProps)
 	const openInLeafApp = () =>
 	{
 		window.open("https://leafapp.co/game/" + match!.id, "_blank");
+	};
+
+	/** Open in Halo South Africa */
+	const openInHaloSouthAfrica = () =>
+	{
+		window.open(`https://halosa.co.za/match/${match!.id}`, "_blank");
 	};
 
 	/** Open in HDH */
@@ -172,6 +182,7 @@ export function SingleMatchView(props: ViewProps)
 									<MenuItem value={1}>Copy Match ID</MenuItem>
 									<MenuItem value={2}>Open in leafapp.co</MenuItem>
 									<MenuItem value={3}>Open in HaloDataHive.com</MenuItem>
+									<MenuItem value={4}>Open in Halo South Africa</MenuItem>
 								</Select>
 								</FormControl>
 						</Box>

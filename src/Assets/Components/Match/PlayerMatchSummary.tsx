@@ -40,23 +40,52 @@ export function PlayerMatchSummary(props: MatchSummaryProps)
 	const closeSnackbar = () => setSnacking(false);
 	const closeContextMenu = () => setContextMenu(null);
 
+	/** Copy the match ID to the clipboard */
 	const copyMatchID = () => 
 	{
-		navigator.clipboard.writeText(match.id);
+		navigator.clipboard.writeText(match!.id);
 		setSnacking(true);
 		closeContextMenu();
 	}
 
+	/** Open in Leaf */
 	const openInLeafApp = () =>
 	{
 		closeContextMenu();
-		window.open("https://leafapp.co/game/" + match.id, "_blank");
+		window.open("https://leafapp.co/game/" + match!.id, "_blank");
 	};
 
+	/** Open in Halo South Africa */
+	const openInHaloSouthAfrica = () =>
+	{
+		closeContextMenu();
+		window.open(`https://halosa.co.za/match/${match!.id}`, "_blank");
+	};
+
+	/** Open in HDH */
 	const openInHaloDataHive = () =>
 	{
 		closeContextMenu();
-		window.open(`https://halodatahive.com/Infinite/Match/${match.id}?gamertag=${gamertag}&page=0`, "_blank");
+		window.open(`https://halodatahive.com/Infinite/Match/${match!.id}?gamertag=${gamertag}&page=0`, "_blank");
+	};
+
+	/** Share the match link on Twitter */
+	const shareWithTwitter = () =>
+	{
+		closeContextMenu();
+
+		// Opens a pop-up with twitter sharing dialog
+		var shareURL = "http://twitter.com/share?"; //url base
+
+		//params
+		var params = {
+			url: `https://spartanrecord.com/match/${match!.id}/${gamertag}\n\n`,
+			text: `${gamertag} - ${match!.variant.name} on ${match!.map.name}\n\n`,
+			hashtags: "Halo,SpartanRecord,HaloDotAPI"
+		}
+
+		for (const param in params) { shareURL += "&" + param + "=" + encodeURIComponent((params as any)[param]); }
+		window.open(shareURL, "_blank", "left=0,top=0,width=550,height=450,personalbar=0,toolbar=0,scrollbars=0,resizable=0");
 	};
 
 	return (
@@ -103,9 +132,11 @@ export function PlayerMatchSummary(props: MatchSummaryProps)
 					: undefined
 				}
 			>
+				<MenuItem onClick={shareWithTwitter}>Share on Twitter</MenuItem>
 				<MenuItem onClick={copyMatchID}>Copy Match ID</MenuItem>
 				<MenuItem onClick={openInLeafApp}>Open in leafapp.co</MenuItem>
 				<MenuItem onClick={openInHaloDataHive}>Open in HaloDataHive.com</MenuItem>
+				<MenuItem onClick={openInHaloSouthAfrica}>Open in Halo South Africa</MenuItem>
 			</Menu>
 			<Snackbar
 				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}

@@ -56,7 +56,9 @@ export function PlayerView(props: ViewProps)
 			// Set loading message to nada, start background load
 			setLoadingMessage("");
 			setBackgroundLoadingProgress(-1);
-		}		
+		}
+
+		switchTab(undefined, SRTabs.ServiceRecord);
 
 		// If they are, sync with autocode
 		if (!app.IsSyncing(gamertag))
@@ -87,8 +89,6 @@ export function PlayerView(props: ViewProps)
 			setLoadingMessage("");
 			setBackgroundLoadingProgress(undefined); 
 		}
-
-		switchTab(undefined, SRTabs.ServiceRecord);
 	}, [app, gamertag, updatePlayer, setBackgroundLoadingProgress, season, switchTab, isAllowed, setLoadingMessage]);
 	
 	useEffect(() =>

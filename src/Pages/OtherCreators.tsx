@@ -32,6 +32,12 @@ export function OtherCreators()
 								<Typography variant="body2" sx={{ textAlign: "center" }}>Created by <Link href="https://twitter.com/iBotPeaches">iBotPeaches</Link></Typography>
 							</ImageCardWithContent>
 						</Grid>
+						<Grid item xs={8} md={3} lg={2} sx={{ m: 2 }}>
+							<ImageCardWithContent image="https://halosa.co.za/logo.jpg">
+								<Typography variant="h6" sx={{ textAlign: "center" }}><Link href="https://halosa.co.za">Halo South Africa</Link></Typography>
+								<Typography variant="body2" sx={{ textAlign: "center" }}>Created by <Link href="https://twitter.com/NicmeistaR">NicmeisteR</Link></Typography>
+							</ImageCardWithContent>
+						</Grid>
 					</Grid>
 				</Box>
 				<Box sx={{ flexGrow: 1 }} />

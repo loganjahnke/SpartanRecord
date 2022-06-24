@@ -1429,7 +1429,7 @@ export const AllMedals = {
 		name: "Achilles Spine",
 		description: "Kill an Overshielded enemy by hitting them from behind with melee",
 		type: MedalRarity.Legendary,
-		category: MedalType.Weapons,
+		category: MedalType.Melee,
 		image_urls: {
 			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/achilles-spine.png",
 			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/achilles-spine.png",
@@ -1451,7 +1451,7 @@ export const AllMedals = {
 		name: "Pull",
 		description: "Kill an enemy with a sniper rifle after they've been launched by a Man Cannon",
 		type: MedalRarity.Heoric,
-		category: MedalType.Melee,
+		category: MedalType.Sniper,
 		image_urls: {
 			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/pull.png",
 			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/pull.png",
