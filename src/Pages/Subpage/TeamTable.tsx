@@ -14,6 +14,8 @@ import { ShotsBreakdown } from "../../Assets/Components/Breakdowns/ShotsBreakdow
 import StarIcon from '@mui/icons-material/Star';
 import { ExpectationBreakdown } from "../../Assets/Components/Breakdowns/ExpectationBreakdown";
 import { GetColorForTeam } from "../../Objects/Helpers/AllTeams";
+import { CSRSProgression, CSRSTooltip } from "../../Assets/Components/Custom/CSRSTooltip";
+import { CSRSBreakdownTile } from "../../Assets/Components/Breakdowns/CSRSBreakdownTile";
 
 interface TeamTableProps
 {
@@ -89,10 +91,14 @@ function Row(props: TeamTableRowProps)
 						{expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
 					</IconButton>
 				</TableCell>
-				{showRank && 
-					<TableCell sx={{ pl: 2, pr: 2, pt: 0, pb: 0 }} align="right" width={"64px"}>
-						<img src={player.progression.post.tierImageUrl} alt={player.progression.post.tier + " " + (player.progression.post.subTier)} title={player.progression.post.tier + " " + (player.progression.post.subTier)} height="32px" />
-					</TableCell> 
+				{showRank &&
+						<TableCell sx={{ pl: 2, pr: 2, pt: 0, pb: 0 }} align="right" width={"64px"}>
+							<CSRSTooltip title={
+								<CSRSProgression pre={player.progression.pre} post={player.progression.post} />
+							}>
+								<img src={player.progression.post.tierImageUrl} alt={player.progression.post.tier + " " + (player.progression.post.subTier)} title={player.progression.post.tier + " " + (player.progression.post.subTier)} height="32px" />
+							</CSRSTooltip>
+						</TableCell> 
 				}
 				<TableCell 
 					sx={{ pl: 2, pr: 2, position: "sticky", cursor: player.type === "bot" ? "default" : "pointer", left: 0, backgroundColor: selectedGamertag === player.gamertag ? ArrowheadTheme.good : ArrowheadTheme.box }} 

@@ -56,27 +56,55 @@ export class Rank
     public value: number;
     public measurementMatchesRemaining: number;
     public tier: string;
-    public tierStart: number;
     public subTier: number;
     public nextTier: string;
-    public nextTierStart: number;
     public nextSubTier: number;
     public tierImageUrl: string;
+
+    public get tierStart(): number 
+    { 
+        if (this.tier === "Unranked") { return 0; }
+
+        let startingValue = 0;
+        switch (this.tier)
+        {
+            case "Bronze": startingValue = 0; break;
+            case "Silver": startingValue = 300; break;
+            case "Gold": startingValue = 600; break;
+            case "Platinum": startingValue = 900; break;
+            case "Diamond": startingValue = 1200; break;
+            case "Onyx": startingValue = 1500; break;
+        }
+        if (this.tier === "Bronze") { return 0; }
+        
+        return startingValue + (50 * this.subTier - 50); 
+    }
+
+    public get nextTierStart(): number 
+    { 
+        return this.tierStart + 50;
+    }
 
     constructor(data?: Partial<AutocodeRank>)
     {
         this.value = data?.value ?? 0;
         this.measurementMatchesRemaining = data?.measurement_matches_remaining ?? 0;
         this.tier = data?.tier ?? "Unranked";
-        this.tierStart = data?.tier_start ?? 0;
         this.subTier = data?.sub_tier ?? 0;
         this.nextTier = data?.next_tier ?? "";
-        this.nextTierStart = data?.next_tier_start ?? 0;
         this.nextSubTier = data?.next_sub_tier ?? 0;
 
         let tierImageSuffix = this.tier?.toLowerCase() || "unranked";
         if (tierImageSuffix !== "unranked") { tierImageSuffix += "-" + this.subTier; }
         this.tierImageUrl = data?.tier_image_url || "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/playlist-csrs/" + tierImageSuffix + ".png";
+    }
+ 
+    /** Gets the title */
+    public GetTitle(): string
+    {
+        return this.tier === "Unranked" ? this.tier 
+            : this.tier === "Onyx" ? this.tier + " " + this.value
+            : this.tier + " " + this.subTier;
     }
 
     /** Gets the JSON representation of the rank */

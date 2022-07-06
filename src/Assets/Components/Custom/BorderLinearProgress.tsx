@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { LinearProgress, linearProgressClasses } from "@mui/material";
+import { Box, LinearProgress, linearProgressClasses, LinearProgressProps } from "@mui/material";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 
 export const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
@@ -10,8 +10,20 @@ export const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 	},
 	[`& .${linearProgressClasses.bar}`]: {
 		borderRadius: 5,
-	},
+	}
 }));
+
+export function BeforeAfterProgress(props: LinearProgressProps)
+{
+	//`calc(${props.valueBuffer}% + 56px)`
+	return (
+		<>
+			<BorderLinearProgress {...props} />
+			{props.valueBuffer !== undefined && <Box sx={{ height: "24px", mb: "-24px", backgroundColor: "white", width: "2px", position: "relative", top: "-18px", left: `calc(${props.valueBuffer}%)` }} />}
+		</>
+	);
+};
+
 
 export const BorderLinearProgressMatches = styled(LinearProgress)(({ theme }) => ({
 	height: 10,
