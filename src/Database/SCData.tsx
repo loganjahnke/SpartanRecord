@@ -279,35 +279,6 @@ export class SCData
     }
     //#endregion
 
-    //#region Leaderboards
-    public async SetLeaderboard(setProgress: ((percent: number) => void)): Promise<void>
-    {
-        //const gamertags = ["Bang402", "BoundlessEcho", "CaptainExquisit", "CrankyStankyLeg", "ItzEmoneyyy"];
-        let index = 0;
-        const total = AllGamertags.length;
-        
-        for (const gamertag of AllGamertags)
-        {
-            setProgress(index / total);
-
-            const player = await this.__halodapi.GetPlayerForLeaderboard(gamertag);
-            if (!player.serviceRecordData || (player.serviceRecordData as any).error) 
-            { 
-                index += 1; 
-                continue; 
-            }
-
-            await Promise.all([
-                this.__firebase.SetServiceRecord(player.gamertag, player.serviceRecordData),
-                this.__firebase.SetCSRS(player.gamertag, undefined, player.csrs.map(iter => iter.GetJSON())),
-                this.__firebase.UpdateLeaderboard(player)
-            ]);
-
-            index += 1;
-        }
-    }
-    //#endregion
-
     //#region Filters
     /**
      * Gets the available filters for a node

@@ -1,30 +1,18 @@
-import { Box, Button, Divider, FormControlLabel, Link, Switch, Toolbar, Typography } from "@mui/material";
+import { Box, Divider, Toolbar } from "@mui/material";
 
 import { ViewProps } from "./Props/ViewProps";
 import { Helmet } from "react-helmet";
 import { LabelValue } from "../Assets/Components/Common/LabelValue";
-import { useCallback } from "react";
 
 export function Admin(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, updatePlayer, switchTab, setLoadingMessage } = props;
+	const { app } = props;
 	//#endregion
 	
 	//#region State
 	
 	//#endregion
-
-	const setProgress = useCallback((percent: number) =>
-	{
-		setLoadingMessage((percent * 100).toLocaleString() + "%");
-	}, [setLoadingMessage]);
-	
-	const loadLeaderboard = useCallback(async () =>
-	{
-		await app.SetLeaderboard(setProgress);
-		setLoadingMessage("");
-	}, [app, setProgress]);
 
 	return (
 		<Box component="main" sx={{ flexGrow: 1, height: "calc(100% - 32px)" }}>
@@ -44,7 +32,6 @@ export function Admin(props: ViewProps)
 					<LabelValue label="Website Version" value={process.env.REACT_APP_VERSION} />
 				</Box>
 				<Box sx={{ flexGrow: 1 }} />
-				{/* <Button onClick={loadLeaderboard}>Load Leaderboard</Button> */}
 			</Box>
 		</Box>
 	);

@@ -37,8 +37,6 @@ export function PlayerView(props: ViewProps)
 	const [season, setSeason] = useState(-1);
 	//#endregion
 
-	// useScript("//pl17321505.safestgatetocontent.com/a7b55266c8d1e7c39ed0ac2f85cf49fa/invoke.js");
-
 	const loadData = useCallback(async () => 
 	{		
 		if (!gamertag) { switchTab("/", SRTabs.Search); return; }
@@ -158,9 +156,6 @@ export function PlayerView(props: ViewProps)
 							<Grid item xs={12}>
 								<KillBreakdownCard serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
-							{/* {!isAllowed && <Grid item xs={12}>
-								<Box id="container-a7b55266c8d1e7c39ed0ac2f85cf49fa" />
-							</Grid>} */}
 						</Grid>
 						{/* Far right */}
 						<Grid container item spacing={2} sm={12} md={6} lg={12} xl={5} sx={{ alignContent: "flex-start" }}>

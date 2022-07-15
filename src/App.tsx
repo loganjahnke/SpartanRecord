@@ -34,13 +34,13 @@ import { Donate } from "./Pages/Donate";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
 	apiKey: process.env.REACT_APP_FIREBASE,
-	authDomain: "arrowhead-company.firebaseapp.com",
-	databaseURL: process.env.NODE_ENV === "production" ? "https://arrowhead-company-default-rtdb.firebaseio.com" : "https://spartan-record-test.firebaseio.com",
-	projectId: "arrowhead-company",
-	storageBucket: "arrowhead-company.appspot.com",
-	messagingSenderId: "232273781507",
-	appId: "1:232273781507:web:f76541de89eba0baa77f36",
-	measurementId: "G-LWFYKTGPY4"
+	authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+	databaseURL: process.env.NODE_ENV === "production" ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_TEST_URL,
+	projectId: process.env.REACT_APP_PROJECT_ID,
+	storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+	messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+	appId: process.env.REACT_APP_APP_ID,
+	measurementId: process.env.REACT_APP_MEASUREMENT_ID
 };
 
 const App = () =>
@@ -49,7 +49,6 @@ const App = () =>
 	const app = initializeApp(firebaseConfig);
 	const database = getDatabase(app);
 	const analytics = getAnalytics();
-	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const arrowhead = new SCData(app, database, analytics);
 	//#endregion
 
