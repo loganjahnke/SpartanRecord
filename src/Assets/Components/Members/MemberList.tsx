@@ -10,7 +10,7 @@ import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import AddIcon from '@mui/icons-material/Add';
 import SyncIcon from '@mui/icons-material/Sync';
 import ClearIcon from '@mui/icons-material/Clear';
-import ModeStandbyIcon from '@mui/icons-material/ModeStandby';
+import { ServiceRecordIcon } from "../../Icons/CustomIcons";
 
 export function MemberList(props: { company: SpartanCompany, goToMember: (gamertag: string) => void, deleteMember: (gamertag: string) => void, onAddGamertag: () => void, syncPlayers: () => void })
 {
@@ -42,7 +42,7 @@ function MemberComponent(props: { player: Player, goToMember: (gamertag: string)
 				<Typography variant="body1">{player.gamertag}</Typography>
 				<Typography variant="body2" sx={{ fontWeight: 100 }}>{Halo5Converter.GetLevelFromScore(player.serviceRecord.totalScore)}</Typography>
 			</Box>
-			<IconButton sx={{ color: ArrowheadTheme.text_primary }} onClick={() => goToMember(player.gamertag)}><ModeStandbyIcon /></IconButton>
+			<IconButton sx={{ color: ArrowheadTheme.text_primary }} onClick={() => goToMember(player.gamertag)}><ServiceRecordIcon /></IconButton>
 			<IconButton sx={{ color: ArrowheadTheme.text_primary }} onClick={() => deleteMember(player.gamertag)}><ClearIcon /></IconButton>
 		</Box>
 	);

@@ -7,7 +7,7 @@ import { SpartanCompanyView } from "./Pages/Spartan Company/SpartanCompanyView";
 import { ArrowheadTheme } from "./Assets/Theme/ArrowheadTheme";
 import { PlayerView } from "./Pages/PlayerView";
 import { MedalsView } from "./Pages/MedalsView";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { MatchesView } from "./Pages/MatchesView";
 import { SingleMatchView } from "./Pages/SingleMatchView";
 import { FilteredView } from "./Pages/FilteredView";
@@ -49,7 +49,7 @@ const App = () =>
 	const app = initializeApp(firebaseConfig);
 	const database = getDatabase(app);
 	const analytics = getAnalytics();
-	const arrowhead = new SCData(app, database, analytics);
+	const arrowhead = useMemo(() => new SCData(app, database, analytics), [app, database, analytics]);
 	//#endregion
 
 	//#region State

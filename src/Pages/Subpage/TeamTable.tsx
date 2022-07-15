@@ -15,7 +15,6 @@ import StarIcon from '@mui/icons-material/Star';
 import { ExpectationBreakdown } from "../../Assets/Components/Breakdowns/ExpectationBreakdown";
 import { GetColorForTeam } from "../../Objects/Helpers/AllTeams";
 import { CSRSProgression, CSRSTooltip } from "../../Assets/Components/Custom/CSRSTooltip";
-import { CSRSBreakdownTile } from "../../Assets/Components/Breakdowns/CSRSBreakdownTile";
 
 interface TeamTableProps
 {

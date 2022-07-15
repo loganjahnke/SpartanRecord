@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Box, Typography, Tooltip, TooltipProps, tooltipClasses } from "@mui/material";
 import { Rank } from "../../../Objects/Model/CSRS";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
-import { BeforeAfterProgress, BorderLinearProgress } from "../Custom/BorderLinearProgress";
+import { BeforeAfterProgress } from "../Custom/BorderLinearProgress";
 
 export const CSRSTooltip = styled(({ className, ...props }: TooltipProps) => (
 	<Tooltip {...props} classes={{ popper: className }} />

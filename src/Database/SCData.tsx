@@ -1,7 +1,6 @@
 import { App } from "firebase-admin/app";
 import { Analytics, logEvent } from "firebase/analytics";
 import { Database } from "firebase/database";
-import { AllGamertags } from "../Objects/Helpers/AllGamertags";
 import { Match } from "../Objects/Model/Match";
 import { Player } from "../Objects/Model/Player";
 import { PlayerMatch } from "../Objects/Model/PlayerMatch";
