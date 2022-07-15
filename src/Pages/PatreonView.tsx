@@ -19,6 +19,49 @@ export function PatreonView(props: ViewProps)
 	
 	//#endregion
 
+	const tier1items = <>
+		<ListItem>
+			<ListItemIcon>
+				<MapIcon />
+			</ListItemIcon>
+			<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="Filter by map" />
+		</ListItem>
+		<ListItem>
+			<ListItemIcon>
+				<VariantsIcon />
+			</ListItemIcon>
+			<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="Filter by advanced variants such as Slayer BRs" />
+		</ListItem>
+		<ListItem>
+			<ListItemIcon>
+				<MatchOutcomeIcon />
+			</ListItemIcon>
+			<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="Filter by outcome, see how your performance is during wins or losses" />
+		</ListItem>
+	</>;
+
+	const tier2items = <ListItem>
+		<ListItemIcon>
+			<ServiceRecordIcon />
+		</ListItemIcon>
+		<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="See your performance over time with historical service records" />
+	</ListItem>;
+
+	const tier3items = <>
+		<ListItem>
+			<ListItemIcon>
+				<BestMatchIcon />
+			</ListItemIcon>
+			<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="View your best matches of all time" />
+		</ListItem>
+		<ListItem>
+			<ListItemIcon>
+				<PatreonIcon />
+			</ListItemIcon>
+			<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="Receive a callout on the SpartanRecord.com website" />
+		</ListItem>
+	</>;
+
 	return (
 		<Box component="main" sx={{ flexGrow: 1, height: "calc(100% - 64px)" }}>
 			<Toolbar />
@@ -42,24 +85,7 @@ export function PatreonView(props: ViewProps)
 									Drilldown into your service record even further
 								</Typography>
 								<List>
-									<ListItem>
-										<ListItemIcon>
-											<MapIcon />
-										</ListItemIcon>
-										<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="Filter by map" />
-									</ListItem>
-									<ListItem>
-										<ListItemIcon>
-											<VariantsIcon />
-										</ListItemIcon>
-										<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="Filter by advanced variants such as Slayer BRs" />
-									</ListItem>
-									<ListItem>
-										<ListItemIcon>
-											<MatchOutcomeIcon />
-										</ListItemIcon>
-										<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="Filter by outcome, see how your performance is during wins or losses" />
-									</ListItem>
+									{tier1items}
 								</List>
 							</CardContent>
 						</Card>
@@ -72,30 +98,8 @@ export function PatreonView(props: ViewProps)
 									View your historic service record
 								</Typography>
 								<List>
-									<ListItem>
-										<ListItemIcon>
-											<MapIcon />
-										</ListItemIcon>
-										<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="Filter by map" />
-									</ListItem>
-									<ListItem>
-										<ListItemIcon>
-											<VariantsIcon />
-										</ListItemIcon>
-										<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="Filter by advanced variants such as Slayer BRs" />
-									</ListItem>
-									<ListItem>
-										<ListItemIcon>
-											<MatchOutcomeIcon />
-										</ListItemIcon>
-										<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="Filter by outcome, see how your performance is during wins or losses" />
-									</ListItem>
-									<ListItem>
-										<ListItemIcon>
-											<ServiceRecordIcon />
-										</ListItemIcon>
-										<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="See your performance over time with historical service records" />
-									</ListItem>
+									{tier1items}
+									{tier2items}
 								</List>
 							</CardContent>
 						</Card>
@@ -108,42 +112,9 @@ export function PatreonView(props: ViewProps)
 									Receive a callout on SpartanRecord.com and view your best matches of all time
 								</Typography>
 								<List>
-									<ListItem>
-										<ListItemIcon>
-											<MapIcon />
-										</ListItemIcon>
-										<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="Filter by map" />
-									</ListItem>
-									<ListItem>
-										<ListItemIcon>
-											<VariantsIcon />
-										</ListItemIcon>
-										<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="Filter by advanced variants such as Slayer BRs" />
-									</ListItem>
-									<ListItem>
-										<ListItemIcon>
-											<MatchOutcomeIcon />
-										</ListItemIcon>
-										<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="Filter by outcome, see how your performance is during wins or losses" />
-									</ListItem>
-									<ListItem>
-										<ListItemIcon>
-											<ServiceRecordIcon />
-										</ListItemIcon>
-										<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="See your performance over time with historical service records" />
-									</ListItem>
-									<ListItem>
-										<ListItemIcon>
-											<BestMatchIcon />
-										</ListItemIcon>
-										<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="View your best matches of all time" />
-									</ListItem>
-									<ListItem>
-										<ListItemIcon>
-											<PatreonIcon />
-										</ListItemIcon>
-										<ListItemText sx={{ span: { fontSize: "0.85rem" }}} primary="Receive a callout on the SpartanRecord.com website" />
-									</ListItem>
+									{tier1items}
+									{tier2items}
+									{tier3items}
 								</List>
 							</CardContent>
 						</Card>
