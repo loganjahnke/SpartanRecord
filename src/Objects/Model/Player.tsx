@@ -54,4 +54,37 @@ export class Player
         newPlayer.serviceRecordData = player.serviceRecordData;
         return newPlayer;
     }
+
+    /** Gets the open crossplay CSR */
+    public GetOpenCrossplay(): CSRS
+    {
+        for (const csr of this.csrs)
+        {
+            if (csr.queue === "open" && csr.input === "crossplay") { return csr; }
+        }
+
+        return new CSRS();
+    }
+
+    /** Gets the MnK solo duo CSR */
+    public GetMnKSoloDuo(): CSRS
+    {
+        for (const csr of this.csrs)
+        {
+            if (csr.queue === "solo-duo" && csr.input === "mnk") { return csr; }
+        }
+
+        return new CSRS();
+    }
+
+    /** Gets the controller solo duo CSR */
+    public GetControllerSoloDuo(): CSRS
+    {
+        for (const csr of this.csrs)
+        {
+            if (csr.queue === "solo-duo" && csr.input === "controller") { return csr; }
+        }
+
+        return new CSRS();
+    }
 }

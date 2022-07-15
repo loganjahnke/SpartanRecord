@@ -27,6 +27,8 @@ import { ModesView } from "./Pages/ModesView";
 import { MMR } from "./Objects/Pieces/MMR";
 import { CSRS } from "./Objects/Model/CSRS";
 import { OtherCreators } from "./Pages/OtherCreators";
+import { Admin } from "./Pages/Admin";
+import { Donate } from "./Pages/Donate";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -48,7 +50,7 @@ const App = () =>
 	const database = getDatabase(app);
 	const analytics = getAnalytics();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	const arrowhead = new SCData(database, analytics);
+	const arrowhead = new SCData(app, database, analytics);
 	//#endregion
 
 	//#region State
@@ -133,7 +135,9 @@ const App = () =>
 					<Route path="/match/:id" element={<SingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
 					<Route path="/match/:id/:gamertag" element={<SingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
 					<Route path="/patreon/:gamertag" element={<PatreonView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
+					<Route path="/admin" element={<Admin app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
 					<Route path="/powered_by_halodotapi" element={<OtherCreators />} />
+					<Route path="/donate" element={<Donate />} />
 					<Route path="*" element={<UhOh />} />
 				</Routes>
 			</Box>

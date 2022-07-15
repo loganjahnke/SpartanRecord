@@ -1,5 +1,7 @@
+import { App } from "firebase-admin/app";
 import { Analytics, logEvent } from "firebase/analytics";
 import { Database } from "firebase/database";
+import { AllGamertags } from "../Objects/Helpers/AllGamertags";
 import { Match } from "../Objects/Model/Match";
 import { Player } from "../Objects/Model/Player";
 import { PlayerMatch } from "../Objects/Model/PlayerMatch";
@@ -15,6 +17,7 @@ import { FirebaseBest } from "./Schemas/FirebaseBest";
 
 export class SCData
 {
+    public app: App;
     private __firebase: SCFirebase;
     private __autocode: SCAutocode;
     private __halodapi: SCHaloDotAPI;
@@ -26,8 +29,9 @@ export class SCData
      * @param database the database manager
      * @param analytics the analytics manager
      */
-    constructor(database: Database, analytics: Analytics)
+    constructor(app: App, database: Database, analytics: Analytics)
     {
+        this.app = app;
         this.__analytics = analytics;
         this.__firebase = new SCFirebase(database);
         this.__autocode = new SCAutocode();
@@ -84,17 +88,36 @@ export class SCData
     /**
      * Sets a player into firebase
      * @param player the player
+     * @param season the multiplayer season
+     * @param oldSR the old service record
      */
-    public async SetPlayerIntoFirebase(player: Player, season?: number): Promise<void>
+    public async SetPlayerIntoFirebase(player: Player, season?: number, oldSR?: ServiceRecord): Promise<void>
 	{
         if (!player.gamertag) { return; }
 
-		await Promise.all([
-            this.__firebase.SetAppearance(player.gamertag, player.appearanceData),
-            this.__firebase.SetServiceRecord(player.gamertag, player.serviceRecordData, season),
-            this.__firebase.SetMMR(player.gamertag, player.mmr),
-            this.__firebase.SetCSRS(player.gamertag, season, player.csrs.map(iter => iter.GetJSON()))
-        ]);
+        if (season !== undefined && season !== -1 && season !== 0)
+        {
+            await Promise.all([
+                this.__firebase.SetAppearance(player.gamertag, player.appearanceData),
+                this.__firebase.SetServiceRecord(player.gamertag, player.serviceRecordData, season),
+                this.__firebase.SetMMR(player.gamertag, player.mmr),
+                this.__firebase.SetCSRS(player.gamertag, season, player.csrs.map(iter => iter.GetJSON())),
+            ]);
+        }
+        else if (oldSR && player.serviceRecord.matchesPlayed !== oldSR.matchesPlayed)
+        {
+            await Promise.all([
+                this.__firebase.SetAppearance(player.gamertag, player.appearanceData),
+                this.__firebase.SetServiceRecord(player.gamertag, player.serviceRecordData, season),
+                this.__firebase.SetMMR(player.gamertag, player.mmr),
+                this.__firebase.SetCSRS(player.gamertag, season, player.csrs.map(iter => iter.GetJSON())),
+                this.__firebase.UpdateLeaderboard(player)
+            ]);
+        }
+        else
+        {
+            await this.__firebase.SetAppearance(player.gamertag, player.appearanceData);
+        }
 	}
 
     /**
@@ -253,6 +276,35 @@ export class SCData
 	public async GetIsAllowed(gamertag: string): Promise<boolean>
     {
         return await this.__firebase.GetIsAllowed(gamertag);
+    }
+    //#endregion
+
+    //#region Leaderboards
+    public async SetLeaderboard(setProgress: ((percent: number) => void)): Promise<void>
+    {
+        //const gamertags = ["Bang402", "BoundlessEcho", "CaptainExquisit", "CrankyStankyLeg", "ItzEmoneyyy"];
+        let index = 0;
+        const total = AllGamertags.length;
+        
+        for (const gamertag of AllGamertags)
+        {
+            setProgress(index / total);
+
+            const player = await this.__halodapi.GetPlayerForLeaderboard(gamertag);
+            if (!player.serviceRecordData || (player.serviceRecordData as any).error) 
+            { 
+                index += 1; 
+                continue; 
+            }
+
+            await Promise.all([
+                this.__firebase.SetServiceRecord(player.gamertag, player.serviceRecordData),
+                this.__firebase.SetCSRS(player.gamertag, undefined, player.csrs.map(iter => iter.GetJSON())),
+                this.__firebase.UpdateLeaderboard(player)
+            ]);
+
+            index += 1;
+        }
     }
     //#endregion
 

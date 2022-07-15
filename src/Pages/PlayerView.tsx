@@ -70,7 +70,7 @@ export function PlayerView(props: ViewProps)
 			if (newPlayer)
 			{
 				updatePlayer(newPlayer.gamertag, newPlayer.appearance, newPlayer.serviceRecord, newPlayer.mmr, newPlayer.csrs);
-				await app.SetPlayerIntoFirebase(newPlayer, season);
+				await app.SetPlayerIntoFirebase(newPlayer, season, player.serviceRecord);
 
 				if (newPlayer.gamertag !== gamertag)
 				{

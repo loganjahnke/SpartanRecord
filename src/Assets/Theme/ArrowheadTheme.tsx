@@ -11,6 +11,8 @@ export class ArrowheadTheme
 	private static readonly __coolors = ["002029","00303d","004052","74a58b","F9F0FA"];
 
 	/** #002029 */
+	public static label = `#34F6F2`;
+	/** #002029 */
 	public static background = `#072028`;
 	/** #00303d */
 	public static box = `#00303C`;

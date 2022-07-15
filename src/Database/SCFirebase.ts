@@ -1,5 +1,6 @@
 import { child, Database, DataSnapshot, get, ref, set, update } from "firebase/database";
 import { Debugger } from "../Objects/Helpers/Debugger";
+import { Halo5Converter } from "../Objects/Helpers/Halo5Converter";
 import { Appearance } from "../Objects/Model/Appearance";
 import { CSRS } from "../Objects/Model/CSRS";
 import { Match } from "../Objects/Model/Match";
@@ -30,7 +31,7 @@ export class SCFirebase
 
 	/**
      * Gets a player from firebase
-     * @param gamertag the gamertag
+     * @param player the player object (needs gamertag populated)
      * @param season the season
      * @param historic the historic SRs
      * @returns player object
@@ -58,7 +59,6 @@ export class SCFirebase
 				this.GetCSRS(player.gamertag, season)
 			]);
 		}
-
 	}
 
 	//#region Appearance
@@ -540,6 +540,36 @@ export class SCFirebase
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetGamertagPointer()", `${incorrect} -> ${correct}`); }
 
 		await this.__set(`gamertag/${incorrect}`, correct);	
+	}
+	//#endregion
+
+	//#region Leaderboard
+	/**
+	 * Updates all leaderboards
+	 * @param player the player
+	 */
+	public async UpdateLeaderboard(player: Player): Promise<void>
+	{
+		// Must have more than 100 games played to be on leaderboard
+		if (!player || !player.gamertag || !player.serviceRecord || player.serviceRecord.matchesPlayed < 100) { return; }
+
+		await Promise.all([
+			await this.__set(`leaderboard/kda/${player.gamertag}`, player.serviceRecord.kda),
+			await this.__set(`leaderboard/kdr/${player.gamertag}`, player.serviceRecord.kdr),
+			await this.__set(`leaderboard/kills/${player.gamertag}`, player.serviceRecord.summary.kills),
+			await this.__set(`leaderboard/deaths/${player.gamertag}`, player.serviceRecord.summary.deaths),
+			await this.__set(`leaderboard/assists/${player.gamertag}`, player.serviceRecord.summary.assists),
+			await this.__set(`leaderboard/kills_per_game/${player.gamertag}`, player.serviceRecord.killsPerGame),
+			await this.__set(`leaderboard/deaths_per_game/${player.gamertag}`, player.serviceRecord.deathsPerGame),
+			await this.__set(`leaderboard/assists_per_game/${player.gamertag}`, player.serviceRecord.assistsPerGame),
+			await this.__set(`leaderboard/callouts/${player.gamertag}`, player.serviceRecord.breakdowns.assists.callouts),
+			await this.__set(`leaderboard/damage/${player.gamertag}`, player.serviceRecord.damage.dealt),
+			await this.__set(`leaderboard/accuracy/${player.gamertag}`, player.serviceRecord.shots.accuracy),
+			await this.__set(`leaderboard/spartan_rank/${player.gamertag}`, Halo5Converter.GetNumericLevelFromScore(player.serviceRecord.totalScore)),
+			await this.__set(`leaderboard/csr/open_crossplay/${player.gamertag}`, player.GetOpenCrossplay().ranks.current.value),
+			await this.__set(`leaderboard/csr/mnk_soloduo/${player.gamertag}`, player.GetMnKSoloDuo().ranks.current.value),
+			await this.__set(`leaderboard/csr/controller_soloduo/${player.gamertag}`, player.GetControllerSoloDuo().ranks.current.value),
+		]);
 	}
 	//#endregion
 

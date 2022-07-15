@@ -181,7 +181,7 @@ export function AHDrawer(props: AHDrawerProps)
 			</Box>
 			<Divider flexItem sx={{ flexGrow: 1 }} />
 			<Box sx={{ display: "flex", flexDirection: "column", p: 1, textAlign: "center" }}>
-				<Typography sx={{ m: 0.5 }} variant="body2"><Link href="https://www.paypal.com/donate/?hosted_button_id=FTQWP27P5JMPG">Donate</Link> with PayPal</Typography>
+				<Typography sx={{ m: 0.5 }} variant="body2"><Link sx={{ cursor: "pointer" }} onClick={() => switchTab("/donate")}>Donate</Link></Typography>
 				<Typography sx={{ m: 0.5 }} variant="body2">Powered by <Link href="https://twitter.com/halodotapi">HaloDotAPI</Link></Typography>
 				<Typography sx={{ m: 0.5 }} variant="body2">Made by <Link href="https://twitter.com/Logan_Jahnke">Logan Jahnke</Link></Typography>
 				<Typography sx={{ m: 0.5 }} variant="body2"><Link sx={{ cursor: "pointer" }} onClick={() => switchTab("/powered_by_halodotapi")}>Other Creators</Link></Typography>

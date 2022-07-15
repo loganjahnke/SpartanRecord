@@ -49,6 +49,20 @@ export class SCHaloDotAPI
 		return player;
 	}
 
+	/**
+	 * Gets the player from HaloDotAPI for leaderboard population
+	 * @param gamertag the gamertag
+	 * @returns the player
+	 */
+	public async GetPlayerForLeaderboard(gamertag: string): Promise<Player>
+	{
+		const player = new Player(gamertag);
+		await Promise.all([this.GetServiceRecord(player), this.GetCSRS(player)]).catch(error => {
+			player.serviceRecord.error = error?.message ?? "Could not load player";
+		});
+		return player;
+	}
+
 	//#region MMR and CSRS
 	/**
 	 * Gets the MMR of the gamertag
