@@ -415,11 +415,73 @@ const LoopThroughMatches = async (app: admin.app.App, gamertag: string): Promise
 	]);
 
 }
+
+/**
+ * Calculates the leaderboard averages given a specific leaderboard
+ * @param app the app
+ * @param leaderboard the leaderboard path 
+ * @returns nothing but fun
+ */
+const CalculateLeaderboardAverages = async (app: admin.app.App, leaderboard: string) =>
+{
+	// Get leaders for the leaderboard
+	const leaders = await firebase.GetLeaderboard(app, leaderboard);
+	if (!leaders) { return; }
+
+	// Get values and sort
+	const values: number[] = Object.values(leaders);
+	if (!values || values.length <= 0) { return; }
+
+	// Filter out -1 for CSRs
+	const filtered: number[] = leaderboard.includes("csr") ? values.filter(values => values !== -1) : values;
+	if (!filtered || filtered.length <= 0) { return; }
+	filtered.sort((a, b) => a - b);
+
+	// Calculate all the statistics
+	const count = filtered.length;
+
+	// Median and quartiles
+	const index25 = Math.floor(filtered.length / 4);
+	const index50 = Math.floor(filtered.length / 2);
+	const index75 = Math.floor(3 * filtered.length / 4);
+
+	let q25 = -1;
+	let q50 = -1;
+	let q75 = -1;
+
+	if (count % 2 !== 0) 
+	{ 
+		q25 = (filtered[index25 - 1] + filtered[index25]) / 2.0;
+		q50 = (filtered[index50 - 1] + filtered[index50]) / 2.0;
+		q75 = (filtered[index75 - 1] + filtered[index75]) / 2.0;
+	}
+	else
+	{
+		q25 = filtered[index25];
+		q50 = filtered[index50];
+		q75 = filtered[index75];
+	}
+
+	// Min and max
+	const min = filtered[filtered.length - 1];
+	const max = filtered[0];
+
+	// Standard deviation and mean
+	const mean = filtered.reduce((a, b) => a + b) / count;
+	const std = Math.sqrt(filtered.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / count);
+
+	// Set to firebase
+	await firebase.SetLeaderboardAverages(app, leaderboard, mean, q50, q25, q75, std, min, max);
+}
 //#endregion
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 
+/**
+ * Updates the additional statistics for allowed players
+ * Runs every day at 12:00p
+ */
 export const UpdatePlayerFilters = functions
 	.runWith({ 
 		timeoutSeconds: 540, 
@@ -440,6 +502,32 @@ export const UpdatePlayerFilters = functions
 	}
 
 	await Promise.all(gamertags.map((gamertag) => LoopThroughMatches(app, gamertag))).finally(async () => 
+	{
+		// Clean up
+		await app.delete();
+	});
+
+	return;
+});
+
+/**
+ * Updates the leaderboard graphs
+ * Runs every Tuesday at 10:00a
+ */
+export const UpdateLeaderboardGraph = functions
+	.runWith({ 
+		timeoutSeconds: 540, 
+		memory: "512MB" 
+	}).pubsub.schedule("every Tuesday 10:00")
+	.timeZone("America/Chicago")
+	.onRun(async (context) =>
+{
+	const app = admin.initializeApp();
+
+	// All leaderboard paths
+	const leaderboards = ["accuracy", "assists", "assists_per_game", "callouts", "csr/controller_soloduo", "csr/mnk_soloduo", "csr/open_crossplay", "damage", "deaths", "deaths_per_game", "kda", "kdr", "kills", "kills_per_game", "spartan_rank"];
+
+	await Promise.all(leaderboards.map((leaderboard) => CalculateLeaderboardAverages(app, leaderboard))).finally(async () => 
 	{
 		// Clean up
 		await app.delete();

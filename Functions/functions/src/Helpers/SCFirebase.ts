@@ -280,6 +280,41 @@ export const SetMatch = async (app: admin.app.App, matchID: string, match: Autoc
 }
 //#endregion
 
+//#region Leaderboards
+/**
+ * Gets the leaderboard
+ * @param app the firebase app
+ * @param leaderboard the leaderboard path
+ * @returns the leaderboard JSON results
+ */
+export const GetLeaderboard = async (app: admin.app.App, leaderboard: string): Promise<any> => await get(app, "leaderboard/" + leaderboard);
+
+/**
+ * Sets the leaderboard averages
+ * @param app the firebase app
+ * @param leaderboard the leaderboard path
+ * @param mean the average
+ * @param median the 50% quartile
+ * @param q25 the 25% quartile
+ * @param q75 the 75% quartile
+ * @param sd the standard deviation
+ * @param min the minimum
+ * @param max the maximum
+ */
+export const SetLeaderboardAverages = async (app: admin.app.App, leaderboard: string, mean: number, median: number, q25: number, q75: number, sd: number, min: number, max: number): Promise<void> => 
+{
+	await set(app, "averages/" + leaderboard, {
+		mean: mean,
+		median: median,
+		q25: q25,
+		q75: q75,
+		sd: sd,
+		min: min,
+		max: max
+	});
+}
+//#endregion
+
 //#region Helpers
 /**
  * Gets the snapshot given the path
