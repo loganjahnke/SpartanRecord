@@ -1,6 +1,6 @@
 import { SyntheticEvent } from "react";
 import { Box, Button, Divider, Drawer, Link, Tab, Tabs, Toolbar, Typography } from "@mui/material";
-import { ServiceRecordFilter } from "../../../Database/ArrowheadFirebase";
+import { Leaderboard, ServiceRecordFilter } from "../../../Database/ArrowheadFirebase";
 import { Player } from "../../../Objects/Model/Player";
 
 import PrimaryLogo from "../../Images/Primary/Spartan-Record-Logo-Primary-White.png";
@@ -91,7 +91,7 @@ export function AHDrawer(props: AHDrawerProps)
 				switchTab(`/spartan_company`, newTab);
 				break;
 			case SRTabs.Leaderboard:
-				switchTab(`/leaderboard/${player.gamertag}`, newTab);
+				switchTab(`/leaderboard/${player.gamertag}/${Leaderboard.Accuracy}`, newTab);
 				break;
 			// Patreon exclusives
 			case SRTabs.Patreon:

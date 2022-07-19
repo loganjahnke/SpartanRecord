@@ -101,7 +101,11 @@ export function LeaderboardView(props: ViewProps)
 
 	const loadData = useCallback(async () => 
 	{
-		if (!category || !isLeaderboard(category)) { return; }
+		if (!category || !isLeaderboard(category)) 
+		{ 
+			switchTab(`/leaderboard/${gamertag ?? "ItzEmoneyyy"}/${Leaderboard.Accuracy}`, SRTabs.Leaderboard); 
+			return; 
+		}
 
 		// Set page gamertag and show loading message
 		setLoadingMessage("Loading " + leaderboardName(category));
@@ -147,7 +151,7 @@ export function LeaderboardView(props: ViewProps)
 					{/* Top */}
 					<Grid item xs={12}>
 						<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
-							<LeaderboardChooser setLeaderboard={(newLeaderboard: Leaderboard) => switchTab(`/leaderboard/${gamertag ?? "none"}/${newLeaderboard}`)} />
+							<LeaderboardChooser setLeaderboard={(newLeaderboard: Leaderboard) => switchTab(`/leaderboard/${gamertag ?? "ItzEmoneyyy"}/${newLeaderboard}`)} />
 						</Box>
 					</Grid>
 					{category && isLeaderboard(category) &&
