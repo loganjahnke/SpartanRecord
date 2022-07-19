@@ -50,3 +50,20 @@ export enum ServiceRecordFilter
 	Modes = "modes",
 	Outcomes = "outcomes"
 }
+
+export enum Leaderboard
+{
+	Accuracy = "accuracy",
+	Assists = "assists",
+	AssistsPerGame = "assists_per_game",
+	Callouts = "callouts",
+	CSR = "csr",
+	Damage = "damage",
+	Deaths = "deaths",
+	DeathsPerGame = "deaths_per_game",
+	KDA = "kda",
+	KDR = "kdr",
+	Kills = "kills",
+	KillsPerGame = "kills_per_game",
+	SpartanRank = "spartan_rank",
+}

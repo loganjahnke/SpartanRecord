@@ -1,5 +1,5 @@
 import { Box, Typography, TextField, Button, Chip } from "@mui/material";
-import { Player } from "../../Objects/Model/Player";
+import { Player } from "../../../Objects/Model/Player";
 
 export interface SearchProps
 {

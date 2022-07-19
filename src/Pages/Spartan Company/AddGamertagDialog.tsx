@@ -1,8 +1,8 @@
 import { LoadingButton } from "@mui/lab";
 import { Box, TextField, Button, Typography, Chip, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { SearchProps } from "../../Assets/Components/ServiceRecord/GamertagSearch";
 import { ArrowheadTheme } from "../../Assets/Theme/ArrowheadTheme";
 import { Player } from "../../Objects/Model/Player";
-import { SearchProps } from "../Subpage/GamertagSearch";
 
 export function AddGamertag(props: SearchProps)
 {

@@ -1,9 +1,10 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Divider, Typography } from "@mui/material";
 import { GetColorForTeam } from "../../../Objects/Helpers/AllTeams";
+import { Leader } from "../../../Objects/Model/Leader";
 import { Player } from "../../../Objects/Model/Player";
 import { MatchPlayer } from "../../../Objects/Pieces/MatchPlayer";
 
-import ArrowheadImg from "../../Images/arrowhead.png";
+import ArrowheadImg from "../../Images/Secondary/Spartan-Record-Logo-Secondary-White.png";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 
 export function RankTile(props: { player: Player, myGamertag?: string, value: number, isPercent?: boolean, goToMember: Function })
@@ -20,6 +21,42 @@ export function RankTile(props: { player: Player, myGamertag?: string, value: nu
                 <Typography variant="h5" sx={{ flexGrow: 1, textAlign: "right", mr: 2 }}>{(Math.round(value * 100) / 100).toLocaleString()}{isPercent ? "%" : ""}</Typography>
 			</Button>
 		</Box>
+	);
+}
+
+export function LeaderRankTile(props: { leader: Leader, myGamertag?: string, isPercent?: boolean, goToMember: Function, rank: number })
+{
+	const { leader, myGamertag, isPercent, goToMember, rank } = props;
+
+	return (
+		<Button onClick={() => goToMember(leader.gamertag)} sx={{ 
+			display: "flex",
+			flexDirection: "row",
+			alignItems: "center",
+			width: "90%", 
+			height: "48px", 
+			justifyContent: "flex-start", 
+			margin: 1, pl: 1, pr: 1, pt: 4, pb: 4,
+			borderRadius: 2, 
+			textTransform: "none", 
+			textAlign: "left", 
+			backgroundColor: myGamertag === leader.gamertag ? ArrowheadTheme.good : "secondary.main" 
+		}}>
+			{leader.appearance.emblemURL === "" ? 
+				<Box sx={{ p: "4px", display: "flex", alignItems: "center" }}><img src={ArrowheadImg} alt="emblem" width="40px" /></Box> :
+				<img src={leader.appearance.emblemURL} alt="emblem" width="48px" />
+			}
+			
+			<Box sx={{ ml: 1, display: "flex", flexDirection: "column", fontSize: "0.8rem" }}>
+				<Typography variant="h6">{leader.gamertag}</Typography>
+				<Box sx={{ display: "flex", flexDirection: "row", fontSize: "0.75rem" }}>
+					<Typography variant="caption" sx={{ color: ArrowheadTheme.text_primary, mr: 1 }}>#{rank}</Typography>
+					<Divider flexItem orientation="vertical" sx={{ borderColor: myGamertag === leader.gamertag ? ArrowheadTheme.text_primary : ArrowheadTheme.thin_border }}/>
+					<Typography variant="caption" sx={{ color: myGamertag === leader.gamertag ? ArrowheadTheme.text_primary : ArrowheadTheme.text_secondary, ml: 1 }}>{leader.matchesPlayed.toLocaleString()} matches</Typography>
+				</Box>
+			</Box>
+			<Typography variant="h5" sx={{ flexGrow: 1, textAlign: "right", mr: 2 }}>{(Math.round(leader.value * 100) / 100).toLocaleString()}{isPercent ? "%" : ""}</Typography>
+		</Button>
 	);
 }
 

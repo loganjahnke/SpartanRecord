@@ -29,13 +29,14 @@ import { CSRS } from "./Objects/Model/CSRS";
 import { OtherCreators } from "./Pages/OtherCreators";
 import { Admin } from "./Pages/Admin";
 import { Donate } from "./Pages/Donate";
+import { LeaderboardView } from "./Pages/LeaderboardView";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
 	apiKey: process.env.REACT_APP_FIREBASE,
 	authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-	databaseURL: process.env.NODE_ENV === "production" ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_TEST_URL,
+	databaseURL: process.env.NODE_ENV === "production" || true ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_TEST_URL,
 	projectId: process.env.REACT_APP_PROJECT_ID,
 	storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
 	messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
@@ -135,6 +136,9 @@ const App = () =>
 					<Route path="/match/:id/:gamertag" element={<SingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
 					<Route path="/patreon/:gamertag" element={<PatreonView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
 					<Route path="/admin" element={<Admin app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
+					<Route path="/leaderboard" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
+					<Route path="/leaderboard/:gamertag" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
+					<Route path="/leaderboard/:gamertag/:category" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
 					<Route path="/powered_by_halodotapi" element={<OtherCreators />} />
 					<Route path="/donate" element={<Donate />} />
 					<Route path="*" element={<UhOh />} />

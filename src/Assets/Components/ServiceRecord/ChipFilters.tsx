@@ -1,6 +1,6 @@
 import { Box, Chip } from "@mui/material";
-import { AutocodePlaylist, AutocodeVariant } from "../../Database/Schemas/AutocodeMetadata";
-import { SRFilter } from "../../Objects/Pieces/SRFilter";
+import { AutocodePlaylist, AutocodeVariant } from "../../../Database/Schemas/AutocodeMetadata";
+import { SRFilter } from "../../../Objects/Pieces/SRFilter";
 
 interface ServiceRecordFiltersProps
 {

@@ -7,6 +7,7 @@ import PrimaryLogo from "../../Images/Primary/Spartan-Record-Logo-Primary-White.
 
 import { BestMatchIcon, MapIcon, MatchesIcon, MatchOutcomeIcon, MedalsIcon, ModesIcon, PlaylistsIcon, RankedIcon, SearchIcon, ServiceRecordIcon, SocialIcon, VariantsIcon, SpartanCompanyIcon } from "../../Icons/CustomIcons";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
+import { LeaderboardRounded } from "@mui/icons-material";
 
 export enum SRTabs
 {
@@ -24,7 +25,8 @@ export enum SRTabs
 	Maps = "Maps",
 	MatchOutcome = "Match Outcome",
 	Modes = "Modes",
-	Patreon = "Patreon"
+	Patreon = "Patreon",
+	Leaderboard = "Leaderboards"
 }
 
 interface AHDrawerProps
@@ -87,6 +89,9 @@ export function AHDrawer(props: AHDrawerProps)
 				break;
 			case SRTabs.SpartanCompany:
 				switchTab(`/spartan_company`, newTab);
+				break;
+			case SRTabs.Leaderboard:
+				switchTab(`/leaderboard/${player.gamertag}`, newTab);
 				break;
 			// Patreon exclusives
 			case SRTabs.Patreon:
@@ -153,6 +158,7 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab value={SRTabs.Matches} label={SRTabs.Matches} icon={<MatchesIcon />} iconPosition="start" />
 					<Tab value={SRTabs.BestMatches} label={SRTabs.BestMatches} icon={<BestMatchIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					{/* <Tab value={SRTabs.Patreon} label={SRTabs.Patreon} icon={<EmojiEmotionsIcon />} iconPosition="start" />*/}
+					<Tab value={SRTabs.Leaderboard} label={SRTabs.Leaderboard} icon={<LeaderboardRounded />} iconPosition="start" />
 					<Tab value={SRTabs.SpartanCompany} label={<div>{SRTabs.SpartanCompany}<br/><Box sx={{ fontSize: "0.6rem", textTransform: "uppercase" }}>Beta</Box></div>} icon={<SpartanCompanyIcon />} iconPosition="start" />
 				</Tabs>
 				: player && player.gamertag ?
@@ -170,6 +176,7 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab value={SRTabs.Maps} label={SRTabs.Maps} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab value={SRTabs.MatchOutcome} label={SRTabs.MatchOutcome} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab value={SRTabs.BestMatches} label={SRTabs.BestMatches} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
+					<Tab value={SRTabs.Leaderboard} label={SRTabs.Leaderboard} icon={<LeaderboardRounded />} iconPosition="start" />
 					<Tab value={SRTabs.SpartanCompany} label={<div>{SRTabs.SpartanCompany}<br/><Box sx={{ fontSize: "0.6rem", textTransform: "uppercase" }}>Beta</Box></div>} icon={<SpartanCompanyIcon />} iconPosition="start" />
 				</Tabs>
 				:

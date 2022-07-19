@@ -1,12 +1,12 @@
 import { Box, Divider, Link, Toolbar, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 
-import { GamertagSearch } from "./Subpage/GamertagSearch";
 import { ViewProps } from "./Props/ViewProps";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { Player } from "../Objects/Model/Player";
 import { Cookie } from "../Objects/Helpers/Cookie";
 import { Helmet } from "react-helmet";
+import { GamertagSearch } from "../Assets/Components/ServiceRecord/GamertagSearch";
 
 export function HomeView(props: ViewProps)
 {

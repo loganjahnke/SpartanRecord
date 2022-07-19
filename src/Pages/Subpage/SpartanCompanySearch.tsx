@@ -1,5 +1,5 @@
 import { Box, Typography, TextField, Button } from "@mui/material";
-import { SearchProps } from "./GamertagSearch";
+import { SearchProps } from "../../Assets/Components/ServiceRecord/GamertagSearch";
 
 export function SpartanCompanySearch(props: SearchProps)
 {

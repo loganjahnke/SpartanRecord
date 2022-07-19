@@ -11,15 +11,14 @@ import { ShotsBreakdown } from "../Assets/Components/Breakdowns/ShotsBreakdown";
 import { DamageBreakdown } from "../Assets/Components/Breakdowns/DamageBreakdown";
 import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
 import { LevelBreakdown } from "../Assets/Components/Breakdowns/LevelBreakdown";
+import { ServiceRecordFilters } from "../Assets/Components/ServiceRecord/ServiceRecordFilters";
 import { VehicleBreakdown } from "../Assets/Components/Breakdowns/VehicleBreakdown";
-import { ServiceRecordFilters } from "./Subpage/ServiceRecordFilters";
 import { ViewProps } from "./Props/ViewProps";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { Cookie } from "../Objects/Helpers/Cookie";
 import { KillBreakdownCard } from "../Assets/Components/Breakdowns/KillBreakdownCard";
-import { SeasonChooser } from "./Subpage/SeasonChooser";
+import { SeasonChooser } from "../Assets/Components/ServiceRecord/SeasonChooser";
 import { ServiceRecordChart } from "../Assets/Components/Charts/ServiceRecordChart";
-import { MMRBreakdown } from "../Assets/Components/Breakdowns/MMRBreakdown";
 import { CSRSBreakdown } from "../Assets/Components/Breakdowns/CSRSBreakdown";
 import { TimePlayed } from "../Assets/Components/Breakdowns/TimePlayed";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
@@ -165,9 +164,9 @@ export function PlayerView(props: ViewProps)
 							<Grid item xs={12}>
 								<LevelBreakdown serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />
 							</Grid>
-							{player.mmr && <Grid item xs={12}>
+							{/* {player.mmr && <Grid item xs={12}>
 								<MMRBreakdown mmr={player.mmr} />
-							</Grid>}						
+							</Grid>}						 */}
 							<Grid container item spacing={2} xs={12}>
 								<Grid item xs={12} lg={6}>
 									<TimePlayed serviceRecord={player.serviceRecord} showPerMatch={showPerMatch} />

@@ -5,12 +5,12 @@ import { useParams } from "react-router-dom";
 import { ServiceRecordFilter } from "../Database/ArrowheadFirebase";
 import { ViewProps } from "./Props/ViewProps";
 import { SRFilter } from "../Objects/Pieces/SRFilter";
-import { ChipFilters } from "./Subpage/ChipFilters";
 import { Match } from "../Objects/Model/Match";
 import { MatchSummary } from "../Assets/Components/Match/MatchSummary";
 import { FirebaseBest } from "../Database/Schemas/FirebaseBest";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { Helmet } from "react-helmet";
+import { ChipFilters } from "../Assets/Components/ServiceRecord/ChipFilters";
 
 export function BestMatchesView(props: ViewProps)
 {

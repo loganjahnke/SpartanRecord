@@ -2,10 +2,10 @@ import { Box, Button, Divider, Grid, Toolbar, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { ServiceRecordFilters } from "./Subpage/ServiceRecordFilters";
+import { ServiceRecordFilters } from "../Assets/Components/ServiceRecord/ServiceRecordFilters";
 import { ViewProps } from "./Props/ViewProps";
 import { Cookie } from "../Objects/Helpers/Cookie";
-import { SeasonChooser } from "./Subpage/SeasonChooser";
+import { SeasonChooser } from "../Assets/Components/ServiceRecord/SeasonChooser";
 import { CaptureTheFlagBreakdown } from "../Assets/Components/Breakdowns/CaptureTheFlagBreakdown";
 import { ZoneBreakdown } from "../Assets/Components/Breakdowns/ZoneBreakdown";
 import { StockpileBreakdown } from "../Assets/Components/Breakdowns/StockpileBreakdown";

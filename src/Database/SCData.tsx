@@ -1,13 +1,14 @@
 import { App } from "firebase-admin/app";
 import { Analytics, logEvent } from "firebase/analytics";
 import { Database } from "firebase/database";
+import { Leader, LeaderboardAverages } from "../Objects/Model/Leader";
 import { Match } from "../Objects/Model/Match";
 import { Player } from "../Objects/Model/Player";
 import { PlayerMatch } from "../Objects/Model/PlayerMatch";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { MMR } from "../Objects/Pieces/MMR";
 import { SRFilter } from "../Objects/Pieces/SRFilter";
-import { ServiceRecordFilter } from "./ArrowheadFirebase";
+import { Leaderboard, ServiceRecordFilter } from "./ArrowheadFirebase";
 import { SCAutocode, ServiceRecordType } from "./SCAutocode";
 import { SCFirebase } from "./SCFirebase";
 import { SCHaloDotAPI } from "./SCHaloDotAPI";
@@ -285,7 +286,7 @@ export class SCData
      * @param node the game number
      * @returns the available filters
      */
-     public GetAvailableFilters = async (gamertag: string, node: ServiceRecordFilter): Promise<SRFilter[]> => this.__firebase.GetAvailableFilters(gamertag, node);
+    public GetAvailableFilters = async (gamertag: string, node: ServiceRecordFilter): Promise<SRFilter[]> => this.__firebase.GetAvailableFilters(gamertag, node);
     /** Gets the maps */
 	public GetMaps = async (): Promise<AutocodeMap[]> => this.__halodapi.GetMaps();
 	/** Gets the playlists */
@@ -296,6 +297,30 @@ export class SCData
 	public GetMedals = async (ids: string[] = []): Promise<AutocodeMedal[]> => this.__halodapi.GetMedals(ids);
 	/** Gets the teams */
 	public GetTeams = async (): Promise<AutocodeTeam[]> => this.__halodapi.GetTeams();
+    //#endregion
+
+    //#region Leaderboards
+    /**
+	 * Gets a leaderboard for a certain category
+	 * @param leaderboard the leaderboard to get
+	 * @returns the player's with the highest values in the leaderboard
+	 */
+	public GetLeaderboard = async (leaderboard: Leaderboard): Promise<Leader[]> => this.__firebase.GetLeaderboard(leaderboard);
+
+    /**
+	 * Gets a leader for a certain category
+	 * @param leaderboard the leaderboard to get
+     * @param gamertag the gamertag
+	 * @returns the leader object for the gamertag
+	 */
+	public GetLeader = async (leaderboard: Leaderboard, gamertag: string): Promise<Leader> => this.__firebase.GetLeader(leaderboard, gamertag);
+
+    /**
+	 * Gets leaderboard averages for a certain category
+	 * @param leaderboard the leaderboard to get averages for
+	 * @returns the averages for a leaderboard
+	 */
+	public GetLeaderboardAverages = async (leaderboard: Leaderboard): Promise<LeaderboardAverages> => this.__firebase.GetLeaderboardAverages(leaderboard);
     //#endregion
 
     //#region Event logging

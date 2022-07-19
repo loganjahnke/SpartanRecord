@@ -1,14 +1,15 @@
-import { child, Database, DataSnapshot, get, ref, set, update } from "firebase/database";
+import { child, Database, DatabaseReference, DataSnapshot, get, limitToFirst, limitToLast, onValue, orderByValue, Query, query, ref, set, update } from "firebase/database";
 import { Debugger } from "../Objects/Helpers/Debugger";
 import { Halo5Converter } from "../Objects/Helpers/Halo5Converter";
 import { Appearance } from "../Objects/Model/Appearance";
 import { CSRS } from "../Objects/Model/CSRS";
+import { Leader, LeaderboardAverages } from "../Objects/Model/Leader";
 import { Match } from "../Objects/Model/Match";
 import { Player } from "../Objects/Model/Player";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { MMR } from "../Objects/Pieces/MMR";
 import { SRFilter } from "../Objects/Pieces/SRFilter";
-import { ServiceRecordFilter } from "./ArrowheadFirebase";
+import { Leaderboard, ServiceRecordFilter } from "./ArrowheadFirebase";
 import { AutocodeAppearance } from "./Schemas/AutocodeAppearance";
 import { AutocodeCSRSData } from "./Schemas/AutocodeCSRS";
 import { AutocodeMatch } from "./Schemas/AutocodeMatch";
@@ -42,26 +43,37 @@ export class SCFirebase
 
 		if (historic)
 		{
-			[player.serviceRecord, player.appearance, player.historicStats, player.mmr, player.csrs] = await Promise.all([
+			[player.serviceRecord, player.appearance, player.historicStats, /* player.mmr,*/ player.csrs] = await Promise.all([
 				this.GetServiceRecord(player.gamertag, season),
 				this.GetAppearance(player.gamertag),
 				this.GetHistoricStatistics(player.gamertag),
-				this.GetMMR(player.gamertag),
+				// this.GetMMR(player.gamertag),
 				this.GetCSRS(player.gamertag, season)
 			]);
 		}
 		else
 		{
-			[player.serviceRecord, player.appearance, player.mmr, player.csrs] = await Promise.all([
+			[player.serviceRecord, player.appearance, /* player.mmr,*/ player.csrs] = await Promise.all([
 				this.GetServiceRecord(player.gamertag, season),
 				this.GetAppearance(player.gamertag),
-				this.GetMMR(player.gamertag),
+				// this.GetMMR(player.gamertag),
 				this.GetCSRS(player.gamertag, season)
 			]);
 		}
 	}
 
 	//#region Appearance
+	/**
+	 * Gets the appearance for a leader from Firebase
+	 * @param leader the leader to get the appearance for
+	 */
+	public async GetAppearanceForLeader(leader: Leader): Promise<void>
+	{
+		if (!leader.gamertag) { return; }
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetAppearanceForLeader()", leader.gamertag); }
+		leader.appearance = await this.GetAppearance(leader.gamertag);
+	}
+
 	/**
 	 * Gets the gamertag's appearance from Firebase
 	 * @param gamertag the gamertag to get the appearance of
@@ -110,6 +122,20 @@ export class SCFirebase
 		}
 
 		return new ServiceRecord(snapshot?.val());
+	}
+
+	/**
+	 * Gets the number of matches played for a leader
+	 * @param gamertag the leader to get the number of matches played for
+	 */
+	public async GetMatchesPlayed(gamertag: string): Promise<number>
+	{
+		if (!gamertag) { return 0; }
+
+		const snapshot = await this.__get(`service_record/multiplayer/${gamertag}/data/matches/total`);
+		if (!snapshot || !snapshot.exists()) { return 0; }
+
+		return snapshot.val() as number;
 	}
 
 	/**
@@ -571,9 +597,96 @@ export class SCFirebase
 			await this.__set(`leaderboard/csr/controller_soloduo/${player.gamertag}`, player.GetControllerSoloDuo().ranks.current.value),
 		]);
 	}
+
+	/**
+	 * Gets a leaderboard for a certain category
+	 * @param leaderboard the leaderboard to get
+	 * @returns the player's with the highest values in the leaderboard
+	 */
+	public async GetLeaderboard(leaderboard: Leaderboard): Promise<Leader[]>
+	{
+		// Prepare queries
+		const sort = this.__querySort(`leaderboard/${leaderboard}`);
+		const limit = this.__queryLimit(sort, 25);
+
+		// Get query
+		const snapshot = await get(limit);
+		if (!snapshot || !snapshot.exists()) { return []; }
+
+		// Put the results into an array of leaders
+		const leaders: Leader[] = [];
+		snapshot.forEach(child => 
+		{
+			if (!child.exists()) { return; }
+			leaders.push(new Leader(child.key!, undefined, child.val() as number));
+		});
+
+		// Reverse to get descending order since firebase is dumb
+		leaders.reverse();
+
+		// Get appearance for all leaders
+		await Promise.all(leaders.map((leader => this.GetLeaderProperties(leader))));
+
+		return leaders;
+	}
+
+	/**
+	 * Gets a leader for a certain category and gamertag
+	 * @param leaderboard the leaderboard to get
+	 * @param gamertag the gamertag
+	 * @returns the leader for the player
+	 */
+	public async GetLeader(leaderboard: Leaderboard, gamertag: string): Promise<Leader>
+	{
+		// Get leader
+		const [value, matchesPlayed] = await Promise.all([
+			this.__get(`leaderboard/${leaderboard}/${gamertag}`),
+			this.GetMatchesPlayed(gamertag)
+		]);
+
+		return new Leader(gamertag, undefined, +(value?.val() ?? 0), +(matchesPlayed ?? 0));
+	}
+
+	/**
+	 * Gets leaderboard averages for a certain category
+	 * @param leaderboard the leaderboard to get averages for
+	 * @returns the leaderboard averages
+	 */
+	public async GetLeaderboardAverages(leaderboard: Leaderboard): Promise<LeaderboardAverages>
+	{
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetLeaderboardAverages()", leaderboard); }
+
+		// Prepare queries
+		const snapshot = await this.__get(`averages/${leaderboard}`);
+		if (!snapshot || !snapshot.exists()) { return new LeaderboardAverages(); }
+
+		return new LeaderboardAverages(snapshot.val());
+	}
+
+	/**
+	 * Gets the appearance for a leader from Firebase
+	 * @param leader the leader to get the appearance for
+	 */
+	public async GetLeaderProperties(leader: Leader): Promise<void>
+	{
+		if (!leader.gamertag) { return; }
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetLeaderProperties()", leader.gamertag); }
+
+		[leader.appearance, leader.matchesPlayed] = await Promise.all([
+			this.GetAppearance(leader.gamertag),
+			this.GetMatchesPlayed(leader.gamertag)
+		]);
+	}
 	//#endregion
 
 	//#region Helpers
+	/**
+	 * Creates a child database reference
+	 * @param path the path
+	 * @returns the database reference
+	 */
+	private __child = (path: string): DatabaseReference => child(ref(this.__database), path);
+
 	/**
 	 * Gets the snapshot given the path
 	 * @param path the path to get
@@ -581,7 +694,7 @@ export class SCFirebase
 	 */
 	private async __get(path: string): Promise<DataSnapshot | undefined>
 	{
-		const snapshot = await get(child(ref(this.__database), path));
+		const snapshot = await get(this.__child(path));
 		if (snapshot?.exists()) 
 		{ 
 			return snapshot; 
@@ -593,19 +706,26 @@ export class SCFirebase
 	 * @param path the path
 	 * @param value the value
 	 */
-	private async __set(path: string, value: any): Promise<void>
-	{
-		await set(child(ref(this.__database), path), value);
-	}
+	private __set = async (path: string, value: any): Promise<void> => await set(this.__child(path), value);
 
 	/**
 	 * Updates the value for the path
 	 * @param path the path
 	 * @param value the value
 	 */
-	private async __update(path: string, value: any): Promise<void>
-	{
-		await update(child(ref(this.__database), path), value);
-	}
+	private __update = async (path: string, value: any): Promise<void> => await update(this.__child(path), value);
+
+	/**
+	 * Query sort by value
+	 * @param path the path
+	 */
+	private __querySort = (path: string): Query => query(ref(this.__database, path), orderByValue());
+
+	/**
+	 * Query limit by value
+	 * @param additonalQuery the first query
+	 * @param limit the number to limit to
+	 */
+	private __queryLimit = (additonalQuery: Query, limit: number): Query => query(additonalQuery, limitToLast(limit));
 	//#endregion
 }
