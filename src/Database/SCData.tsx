@@ -145,7 +145,16 @@ export class SCData
      * @param season the season
      * @param mmr the MMR
      */
-	public GetPlayerFromHaloDotAPI = async (gamertag: string, season?: number, mmr?: MMR): Promise<Player> => this.__halodapi.GetPlayer(gamertag, season, mmr);
+	public async GetPlayerFromHaloDotAPI (gamertag: string, season?: number, mmr?: MMR): Promise<Player> 
+    {
+        const player = await this.__halodapi.GetPlayer(gamertag, season, mmr);
+        if ((player.serviceRecordData as any)?.error)
+        {
+            this.LogError(gamertag);
+        }
+
+        return player;
+    }
 
     /**
      * Gets the player from Autocode
@@ -365,6 +374,15 @@ export class SCData
     public LogViewSpartanCompany(company: string): void
     {
         this.LogEvent("view_spartan_company", { spartan_company: company });
+    }
+
+    /**
+     * Logs an error
+     * @param gamertag the gamertag that failed to load
+     */
+    public LogError(gamertag: string): void
+    {
+        this.LogEvent("service_record_error", { gamertag: gamertag });
     }
 
     /**
