@@ -8,6 +8,7 @@ import { MedalType } from "../Objects/Pieces/Medal";
 import { ViewProps } from "./Props/ViewProps";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { Helmet } from "react-helmet";
+import { Cookie } from "../Objects/Helpers/Cookie";
 
 export function MedalsView(props: ViewProps)
 {
@@ -17,7 +18,7 @@ export function MedalsView(props: ViewProps)
 	//#endregion
 	
 	//#region State
-	const [showAll, setShowAll] = useState(false);
+	const [showAll, setShowAll] = useState(Cookie.getShowUnearnedMedals());
 	const [serviceRecord, setServiceRecord] = useState(new ServiceRecord());
 	//#endregion
 
@@ -48,6 +49,7 @@ export function MedalsView(props: ViewProps)
 	function onPressShowAll(event: React.ChangeEvent<HTMLInputElement>)
 	{
 		setShowAll(event.target.checked);
+		Cookie.setShowUnearnedMedals(event.target.checked);
 	}
 
 	return (

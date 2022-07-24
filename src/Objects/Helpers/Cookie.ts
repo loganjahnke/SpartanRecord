@@ -175,6 +175,24 @@ export class Cookie
         this.set("sc-company-name", name);
         this.set("sc-company-medal", medal.toString());
     }
+
+    /** Gets the show unearned stats cookie */
+    public static getShowUnearnedMedals = (): boolean => this.get("sc-show-unearned") === "true";
+
+    /**
+     * Sets the show unearned stats cookie
+     * @param show set the show boolean
+     */
+    public static setShowUnearnedMedals = (show: boolean): void => this.set("sc-show-unearned", show.toString());
+
+    /** Gets the show expanded stats cookie */
+    public static getShowExpanded = (): boolean => this.get("sc-show-expanded") === "true";
+
+    /**
+     * Sets the show expanded stats cookie
+     * @param show set the show boolean
+     */
+    public static setShowExpanded = (show: boolean): void => this.set("sc-show-expanded", show.toString());
     
     /**
      * Deletes a cookie by name

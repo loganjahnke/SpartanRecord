@@ -7,6 +7,9 @@ import { TeamDetails } from "./TeamDetails";
 
 export class PlayerMatchPlayer
 {
+    /** The damage needed for a perfect kill */
+    private readonly PERFECT_KILL_DAMAGE = 225;
+    
     /** Team details */
     public team: TeamDetails;
 	/** Contains summary information */
@@ -25,6 +28,20 @@ export class PlayerMatchPlayer
     public kda: number;
     /** The KDR for the player */
     public kdr: number;
+
+    /** The damage efficiency per kill */
+    public get damageEfficiency(): number
+    {
+        if (this.damage.dealt === 0 || this.summary.kills === 0) { return 0; }
+        return this.PERFECT_KILL_DAMAGE / (this.damage.dealt / this.summary.kills);
+    }
+
+    /** The enemy damage efficiency per death */
+    public get enemyDamageEfficiency(): number
+    {
+        if (this.damage.taken === 0 || this.summary.deaths === 0) { return 0; }
+        return this.PERFECT_KILL_DAMAGE / (this.damage.taken / this.summary.deaths);
+    }
 
     constructor(data?: AutocodePlayerMatchPlayer)
     {

@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, Toolbar } from "@mui/material";
+import { Box, Checkbox, Divider, FormControlLabel, FormGroup, Grid, Toolbar, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -13,6 +13,7 @@ import { PlayerMatch } from "../Objects/Model/PlayerMatch";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { RecentMatchesChart } from "../Assets/Components/Charts/RecentMatchesChart";
 import { Helmet } from "react-helmet";
+import { Cookie } from "../Objects/Helpers/Cookie";
 
 export function MatchesView(props: ViewProps)
 {
@@ -25,6 +26,7 @@ export function MatchesView(props: ViewProps)
 	const [matches, setMatches] = useState<PlayerMatch[]>([]);
 	const [combinedSR, setCombinedSR] = useState(new ServiceRecord());
 	const [loadingMore, setLoadingMore] = useState(false);
+	const [showExpanded, setShowExpanded] = useState(Cookie.getShowExpanded());
 	const offset = useRef<number>(0);
 	//#endregion
 
@@ -86,6 +88,12 @@ export function MatchesView(props: ViewProps)
 		}
     }
 
+	const onPressShowExpanded = useCallback((event: React.ChangeEvent<HTMLInputElement>) =>
+	{
+		setShowExpanded(event.target.checked);
+		Cookie.setShowExpanded(event.target.checked);
+	}, [setShowExpanded]);
+
 	return (
 		<Box component="main" sx={{ flexGrow: 1 }}>
 			<Helmet>
@@ -99,6 +107,15 @@ export function MatchesView(props: ViewProps)
 			<Divider />
 			<Box sx={{ p: 2 }}>
 				<Grid container spacing={2}>
+					{/* Options */}
+					<Grid item xs={12}>
+						<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
+							<Box sx={{ flexGrow: 1 }}></Box>
+							<FormGroup sx={{ textAlign: "right" }}>
+								<FormControlLabel control={<Checkbox checked={showExpanded} onChange={onPressShowExpanded} size="small" />} label={<Typography variant="subtitle1">Show Expanded Statistics</Typography>} />
+							</FormGroup>
+						</Box>
+					</Grid>
 					{/* Top */}
 					<Grid item xs={12} lg={4}>
 						<KDABreakdown serviceRecord={combinedSR} />
@@ -114,7 +131,7 @@ export function MatchesView(props: ViewProps)
 					</Grid>
 				</Grid>
 				<Grid container spacing={2} sx={{ mt: 1 }}>
-					{matches?.length > 0 ? matches.map(match => <PlayerMatchSummary match={match} goToMatch={goToMatch} gamertag={gamertag ?? ""} />) : undefined}
+					{matches?.length > 0 ? matches.map(match => <PlayerMatchSummary match={match} goToMatch={goToMatch} gamertag={gamertag ?? ""} showExpanded={showExpanded} />) : undefined}
 				</Grid>
 				{matches.length > 0 && <Grid item xs={12}>
 					<Box sx={{ display: "flex", justifyContent: "center", width: "100%", mt: 2 }}>

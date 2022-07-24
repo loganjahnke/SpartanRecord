@@ -26,6 +26,8 @@ enum RecentMatchesDataSets
 	Deaths = "Deaths",
 	Assists = "Assists",
 	Damage = "Damage",
+	DamageEfficiency = "Damage Efficiency",
+	EnemyEfficiency = "Enemy Efficiency",
 	Accuracy = "Accuracy"
 }
 
@@ -148,6 +150,12 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 								case RecentMatchesDataSets.Damage: 
 									if (context.tick.value === sr.damagePerGame) { return ArrowheadTheme.selected; }
 									break;
+								case RecentMatchesDataSets.Damage: 
+									if (context.tick.value === sr.damageEfficiency) { return ArrowheadTheme.selected; }
+									break;
+								case RecentMatchesDataSets.Damage: 
+									if (context.tick.value === sr.enemyDamageEfficiency) { return ArrowheadTheme.selected; }
+									break;
 								case RecentMatchesDataSets.Accuracy: 
 									if (context.tick.value === sr.shots.accuracy) { return ArrowheadTheme.selected; }
 									break;
@@ -191,6 +199,8 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 			case RecentMatchesDataSets.Deaths: label = "Deaths"; break;
 			case RecentMatchesDataSets.Assists: label = "Assists"; break;
 			case RecentMatchesDataSets.Damage: label = "Damage"; break;
+			case RecentMatchesDataSets.DamageEfficiency: label = "Damage Efficiency"; break;
+			case RecentMatchesDataSets.EnemyEfficiency: label = "Enemy Efficiency"; break;
 			case RecentMatchesDataSets.Accuracy: label = "Accuracy"; break;
 			default: label = ""; break;
 		}
@@ -211,6 +221,18 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 							case RecentMatchesDataSets.Deaths: return match.player.summary.deaths > sr.deathsPerGame ? ArrowheadTheme.good : ArrowheadTheme.bad;
 							case RecentMatchesDataSets.Assists: return match.player.summary.assists > sr.assistsPerGame ? ArrowheadTheme.good : ArrowheadTheme.bad;
 							case RecentMatchesDataSets.Damage: return match.player.damage.dealt > sr.damagePerGame ? ArrowheadTheme.good : ArrowheadTheme.bad;
+							case RecentMatchesDataSets.DamageEfficiency: 
+								return match.player.damageEfficiency >= 0.8 
+									? ArrowheadTheme.good 
+									: match.player.damageEfficiency >= 0.7
+									? ArrowheadTheme.halo_sunshine
+									: ArrowheadTheme.bad;
+							case RecentMatchesDataSets.EnemyEfficiency: 
+								return match.player.enemyDamageEfficiency >= 0.8 
+									? ArrowheadTheme.bad 
+									: match.player.enemyDamageEfficiency >= 0.7
+									? ArrowheadTheme.halo_sunshine
+									: ArrowheadTheme.good;
 							case RecentMatchesDataSets.Accuracy: return match.player.shots.accuracy > sr.shots.accuracy ? ArrowheadTheme.good : ArrowheadTheme.bad;
 							default: return match.player.won ? ArrowheadTheme.good : ArrowheadTheme.bad;
 						}
@@ -227,6 +249,8 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 							case RecentMatchesDataSets.Deaths: return match.player.summary.deaths;
 							case RecentMatchesDataSets.Assists: return match.player.summary.assists;
 							case RecentMatchesDataSets.Damage: return match.player.damage.dealt;
+							case RecentMatchesDataSets.DamageEfficiency: return Math.round(match.player.damageEfficiency * 100);
+							case RecentMatchesDataSets.EnemyEfficiency: return Math.round(match.player.enemyDamageEfficiency * 100);
 							case RecentMatchesDataSets.Accuracy: return match.player.shots.accuracy;
 							default: return match.player.won ? 1 : -1;
 						}
@@ -269,6 +293,8 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 							<MenuItem value={RecentMatchesDataSets.Deaths}>{RecentMatchesDataSets.Deaths}</MenuItem>
 							<MenuItem value={RecentMatchesDataSets.Assists}>{RecentMatchesDataSets.Assists}</MenuItem>
 							<MenuItem value={RecentMatchesDataSets.Damage}>{RecentMatchesDataSets.Damage}</MenuItem>
+							<MenuItem value={RecentMatchesDataSets.DamageEfficiency}>{RecentMatchesDataSets.DamageEfficiency}</MenuItem>
+							<MenuItem value={RecentMatchesDataSets.EnemyEfficiency}>{RecentMatchesDataSets.EnemyEfficiency}</MenuItem>
 							<MenuItem value={RecentMatchesDataSets.Accuracy}>{RecentMatchesDataSets.Accuracy}</MenuItem>
 						</Select>
 					</FormControl>
