@@ -76,7 +76,7 @@ export function PlayerView(props: ViewProps)
 				}
 			}
 			
-			Cookie.addRecent(newPlayer.gamertag);
+			if (newPlayer.serviceRecordData && !(newPlayer.serviceRecordData as any).error) { Cookie.addRecent(newPlayer.gamertag); }
 			setLoadingMessage("");
 			app.RemoveFromSyncing(gamertag);
 			setBackgroundLoadingProgress(undefined);

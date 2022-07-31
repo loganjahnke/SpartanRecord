@@ -1,7 +1,39 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@font-face {
+  font-family: 'Industry';
+  src: url('../Font/Industry-Book.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Industry';
+  src: url('../Font/Industry-Bold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Industry';
+  src: url('../Font/Industry-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Industry';
+  src: url('../Font/Industry-Light.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NormativePro';
+  src: url('../Font/NormativePro-Regular.otf') format('otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Industry', 'Roboto', sans-serif;
   background-color: #002029; }
 
 .skinny {
@@ -82,5 +114,9 @@ tbody > tr > th {
   text-transform: none !important;
   text-align: left !important;
   justify-content: left !important; }
+
+.cardTitle {
+  font-weight: 600 !important;
+}
 
 /*# sourceMappingURL=index.css.map */

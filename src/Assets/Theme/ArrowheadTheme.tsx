@@ -1,11 +1,5 @@
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 
-// const text_primary = "rgb(213, 216, 221)";
-// const text_secondary = "rgb(130, 133, 140)";
-// const background = "rgb(45, 48, 57)";
-// const box = "rgb(53, 58, 68)";
-// const secondary = "rgb(61, 66, 76)";
-
 export class ArrowheadTheme
 {
 	private static readonly __coolors = ["002029","00303d","004052","74a58b","F9F0FA"];
@@ -76,31 +70,43 @@ export class ArrowheadTheme
 	public static theme = responsiveFontSizes(createTheme({
 		typography:
 		{
+			fontFamily: [
+				'Industry',
+				'Roboto',
+				'"Helvetica Neue"',
+				'Arial',
+				'sans-serif',
+			  ].join(','),
 			h1:
 			{
-				color: this.text_primary
+				color: this.text_primary,
+				fontWeight: 600
 			},
 			h2:
 			{
-				color: this.text_primary
+				color: this.text_primary,
+				fontWeight: 600
 			},
 			h3:
 			{
-				color: this.text_primary
+				color: this.text_primary,
+				fontWeight: 600
 			},
 			h4:
 			{
-				color: this.text_primary
+				color: this.text_primary,
+				fontWeight: 400
 			},
 			h5:
 			{
-				color: this.text_primary
+				color: this.text_primary,
+				fontWeight: 400
 			},
 			h6:
 			{
 				color: this.text_primary,
 				fontSize: "1.1rem",
-				fontWeight: 300
+				fontWeight: 200
 			},
 			body1:
 			{
@@ -112,7 +118,8 @@ export class ArrowheadTheme
 			},
 			caption:
 			{
-				color: this.text_secondary
+				color: this.text_secondary,
+				fontWeight: 200
 			},
 			subtitle1:
 			{
@@ -141,6 +148,6 @@ export class ArrowheadTheme
 				main: this.secondary
 			},
 			divider: this.box
-		}
+		},
 	}));
 }

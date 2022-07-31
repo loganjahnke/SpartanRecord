@@ -17,7 +17,7 @@ export function TitleCard(props: TitleCardProps)
 		<Box sx={{ backgroundColor: secondary ? ArrowheadTheme.secondary : "divider", borderRadius: 3, display: "flex", flexDirection: "column", justifyContent: "space-evenly", alignItems: stretch ? "" : "center" }}>
 			{title &&
 				<Box sx={{ borderRadius: "12px 12px 0 0", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", width: "100%", pt: 2, pb: 2, backgroundColor: !!children ? "secondary.main" : "transparent" }}>
-					<Typography variant="h5">{title}</Typography>
+					<Typography className="cardTitle" variant="h5">{title}</Typography>
 				</Box>
 			}
 			{children}
