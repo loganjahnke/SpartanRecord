@@ -52,7 +52,7 @@ export class MatchPlayer
         this.gamertag = data.details.name;
         this.type = data.details.type;
         this.team = new TeamDetails(data.team);
-        this.stats = new ServiceRecord(AutocodeHelpers.CreateServiceRecordFromMatch(this.gamertag, data, isRanked, timePlayedInSeconds));
+        this.stats = new ServiceRecord(AutocodeHelpers.CreateServiceRecordFromMatch(this.gamertag, data, timePlayedInSeconds));
         this.rank = data.rank;
         this.joinedInProgress = data.participation.joined_in_progress;
         this.progression = new Progression(data.progression);

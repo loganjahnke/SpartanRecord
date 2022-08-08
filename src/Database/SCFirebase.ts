@@ -319,6 +319,34 @@ export class SCFirebase
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetHistoricStatistics()", gamertag); }
 		await this.__update(`service_record/historic/${gamertag}/${matchCount}`, serviceRecord);
 	}
+
+	/**
+	 * Sets the service record for the gamertag for the date into Firebase
+	 * @param gamertag the gamertag
+	 * @param data the service record JSON
+	 * @param date the date string
+	 */
+	public async SetServiceRecordForDate(gamertag: string, data?: AutocodeMultiplayerServiceRecord, date?: string): Promise<void>
+	{
+		if (!data || !date) { return; }
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetServiceRecordForDate()", gamertag); }
+
+		await this.__set(`service_record/date/${date}/${gamertag}`, data);		
+	}
+
+	/**
+	 * Gets the service record for the gamertag for the date into Firebase
+	 * @param gamertag the gamertag
+	 * @param date the date string
+	 */
+	public async GetServiceRecordForDate(gamertag: string, date?: string): Promise<AutocodeMultiplayerServiceRecord | undefined>
+	{
+		if (!date) { return; }
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetServiceRecordForDate()", gamertag); }
+
+		const snapshot = await this.__get(`service_record/date/${date}/${gamertag}`);
+		if (snapshot && snapshot.exists()) { return snapshot.val(); }
+	}
 	//#endregion
 
 	//#region MMR and CSRS

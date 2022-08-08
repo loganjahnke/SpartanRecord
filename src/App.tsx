@@ -30,6 +30,7 @@ import { OtherCreators } from "./Pages/OtherCreators";
 import { Admin } from "./Pages/Admin";
 import { Donate } from "./Pages/Donate";
 import { LeaderboardView } from "./Pages/LeaderboardView";
+import { DayView } from "./Pages/DayView";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -139,6 +140,8 @@ const App = () =>
 					<Route path="/leaderboard" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
 					<Route path="/leaderboard/:gamertag" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
 					<Route path="/leaderboard/:gamertag/:category" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
+					<Route path="/day/:gamertag" element={<DayView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
+					<Route path="/day/:gamertag/:date" element={<DayView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
 					<Route path="/powered_by_halodotapi" element={<OtherCreators />} />
 					<Route path="/donate" element={<Donate />} />
 					<Route path="*" element={<UhOh />} />

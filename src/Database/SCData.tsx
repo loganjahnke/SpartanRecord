@@ -1,6 +1,7 @@
 import { App } from "firebase-admin/app";
 import { Analytics, logEvent } from "firebase/analytics";
 import { Database } from "firebase/database";
+import moment from "moment";
 import { Leader, LeaderboardAverages } from "../Objects/Model/Leader";
 import { Match } from "../Objects/Model/Match";
 import { Player } from "../Objects/Model/Player";
@@ -12,6 +13,8 @@ import { Leaderboard, ServiceRecordFilter } from "./ArrowheadFirebase";
 import { SCAutocode, ServiceRecordType } from "./SCAutocode";
 import { SCFirebase } from "./SCFirebase";
 import { SCHaloDotAPI } from "./SCHaloDotAPI";
+import { AutocodeHelpers } from "./Schemas/AutocodeHelpers";
+import { AutocodeMatch } from "./Schemas/AutocodeMatch";
 import { AutocodeMap, AutocodeMedal, AutocodePlaylist, AutocodeTeam, AutocodeVariant } from "./Schemas/AutocodeMetadata";
 import { FirebaseBest } from "./Schemas/FirebaseBest";
 
@@ -255,6 +258,39 @@ export class SCData
 
         return new Match(result);
     }
+
+    /**
+	 * Gets all the matches for a player for a given date
+	 * @param gamertag the gamertag
+	 * @param date the date
+	 * @returns the array of matches from that day
+	 */
+	public async GetMatchesForDay(gamertag: string, date: Date): Promise<ServiceRecord> 
+    {
+        // Try get from Firebase first
+        const sr = await this.__firebase.GetServiceRecordForDate(gamertag, date.toDateString());
+        if (sr) { return new ServiceRecord(sr); }
+
+        // Otherwise loop through games
+        const overall = AutocodeHelpers.CreateEmptyServiceRecord(gamertag);
+        const matches = await this.__halodapi.GetMatchesForDay(gamertag, date);
+
+        // Add matches together to get service record
+        for (const m of matches)
+		{
+			if (!m || !m.match) { continue; }
+			
+			const details = AutocodeHelpers.GetPlayerDetailsForGamertag(gamertag, m);
+			if (!details) { continue; }
+
+			AutocodeHelpers.AddMatchToServiceRecord(overall, details, m.match.duration.seconds);			
+		}
+
+        // If getting today's stats, don't save into firebase since the player may play more games today
+        if (!moment(date.toDateString()).isSame(new Date())) { await this.__firebase.SetServiceRecordForDate(gamertag, overall, date.toDateString()); }
+
+        return new ServiceRecord(overall);
+    } 
 
     /**
 	 * The current best (or worst) values for the gamer

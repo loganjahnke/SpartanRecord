@@ -1,3 +1,4 @@
+import moment from "moment";
 import { Debugger } from "../Objects/Helpers/Debugger";
 import { Appearance } from "../Objects/Model/Appearance";
 import { CSRS } from "../Objects/Model/CSRS";
@@ -240,19 +241,44 @@ export class SCHaloDotAPI
 	}
 	//#endregion
 
-	//#region Communication with Autocode
+	//#region Matches
 	/**
-	 * Checks if a gamertag is a valid gamertag
+	 * Gets all the matches for a player for a given date
 	 * @param gamertag the gamertag
-	 * @returns the gamertag in its official form if valid, empty string otherwise
+	 * @param date the date
+	 * @returns the array of matches from that day
 	 */
-	public async IsValidGamertag(gamertag: string): Promise<string>
-	{
-		const json = await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].tooling['xbox-network'].players.profile({
-			gamertag: gamertag // required
-		}) as AutocodeXboxProfile;
+	public async GetMatchesForDay(gamertag: string, date: Date): Promise<AutocodeMatch[]>
+	{		  
+		let loadedAllGamesForDay = false;
+		let offset = 0;
+
+		const matches: AutocodeMatch[] = [];
 		
-		return json?.data?.player?.gamertag || "";
+		while (!loadedAllGamesForDay)
+		{
+			if (this.IS_DEBUGGING) { Debugger.Print(true, "SCHaloDotAPI.GetMatchesForDay()", `Gamertag: ${gamertag}, Offset: ${offset}`); }
+
+			const results = await this.GetMatchesForPlayer(gamertag, 25, offset);
+			for (const r of results.data)
+			{
+				if (!r.match) { return matches; }
+
+				const matchDate = new Date(r.match.played_at);
+				if (moment(date.toDateString()).isAfter(matchDate.toDateString()))
+				{
+					loadedAllGamesForDay = true;
+					break;
+				}
+				
+				if (moment(date.toDateString()).isSame(matchDate.toDateString())) { matches.push(r); }
+			}
+
+			offset += 25;
+			if (offset > 125) { return matches; } // too much data!
+		} 
+
+		return matches;
 	}
 
 	/**
@@ -305,6 +331,22 @@ export class SCHaloDotAPI
 			ids: ids,
 			language: 'en-us'
 		});
+	}
+	//#endregion
+
+	//#region Communication with Autocode
+	/**
+	 * Checks if a gamertag is a valid gamertag
+	 * @param gamertag the gamertag
+	 * @returns the gamertag in its official form if valid, empty string otherwise
+	 */
+	public async IsValidGamertag(gamertag: string): Promise<string>
+	{
+		const json = await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].tooling['xbox-network'].players.profile({
+			gamertag: gamertag // required
+		}) as AutocodeXboxProfile;
+		
+		return json?.data?.player?.gamertag || "";
 	}
 
 	/**
