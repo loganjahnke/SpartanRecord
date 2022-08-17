@@ -14,8 +14,11 @@
   },
   "main": "lib/index.js",
   "dependencies": {
+    "@google-cloud/iot": "^3.1.0",
+    "cbor": "^8.1.0",
+    "firebase": "^9.9.2",
     "firebase-admin": "^9.8.0",
-    "firebase-functions": "^3.14.1"
+    "firebase-functions": "^3.22.0"
   },
   "devDependencies": {
     "@types/node-fetch": "^2.6.1",

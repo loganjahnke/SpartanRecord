@@ -339,7 +339,10 @@ const LoopThroughMatches = async (app: admin.app.App, gamertag: string): Promise
 			{
 				matches = autocodeMatches.data;
 				// Add to firebase
-				// for (const autocodeMatch of autocodeMatches.data) { await firebase.SetMatch(app, autocodeMatch.id, autocodeMatch); 
+				if (gamertag === "BoundlessEcho")
+				{
+					for (const autocodeMatch of autocodeMatches.data) { await firebase.SetMatch(app, autocodeMatch.id, autocodeMatch); }
+				}
 			}
 			else
 			{
@@ -351,7 +354,7 @@ const LoopThroughMatches = async (app: admin.app.App, gamertag: string): Promise
 					matches[i] = autocodeMatch;
 	
 					// Add match to firebase
-					// await firebase.SetMatch(app, autocodeMatch.id, autocodeMatch);
+					if (gamertag === "BoundlessEcho") { await firebase.SetMatch(app, autocodeMatch.id, autocodeMatch); }
 				}
 			}
 		}
