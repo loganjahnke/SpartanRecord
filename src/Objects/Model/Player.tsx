@@ -27,7 +27,15 @@ export class Player
     /** The raw appearance data */
     public appearanceData?: AutocodeAppearance;
     /** The raw service record data */
-    public serviceRecordData?: AutocodeMultiplayerServiceRecord;
+    private _serviceRecordData?: AutocodeMultiplayerServiceRecord;
+    public get serviceRecordData() { return this._serviceRecordData; }
+    public set serviceRecordData(value: AutocodeMultiplayerServiceRecord | undefined) 
+    { 
+        this._serviceRecordData = value;
+        this.isPrivate = !(value?.additional?.privacy?.public ?? true);
+    }
+    /** Is this player private? */
+    public isPrivate: boolean = false;
 
     constructor(gamertag?: string, serviceRecord?: ServiceRecord, history?: ServiceRecord[], appearance?: Appearance, mmr?: MMR, csrs?: CSRS[], campaignRecord?: CampaignRecord)
     {
@@ -52,6 +60,7 @@ export class Player
         newPlayer.lastMatchID = player.lastMatchID;
         newPlayer.appearanceData = player.appearanceData;
         newPlayer.serviceRecordData = player.serviceRecordData;
+        newPlayer.isPrivate = player.isPrivate;
         return newPlayer;
     }
 

@@ -1,6 +1,38 @@
 import { AutocodeOutcome } from "./AutocodeMatch";
 
 export type AutocodePlayerMatchResults = {
+	data: Array<AutocodePlayerMatch>;
+	additional: {
+		count: number;
+		paging: {
+			count: number;
+			offset: number;
+		};
+		parameters: {
+			gamertag: string;
+			language:
+				| 'pt-br'
+				| 'fr-fr'
+				| 'de-de'
+				| 'es-es'
+				| 'en-us'
+				| 'it-it'
+				| 'ja-jp'
+				| 'ko-kr'
+				| 'pl-pl'
+				| 'ru-ru'
+				| 'zh-cn'
+				| 'es-mx'
+				| 'zh-hk';
+			type: 'all' | 'matchmaking' | 'custom' | 'local';
+		};
+		privacy: {
+			public: boolean;
+		};
+	};
+};
+
+export type LegacyAutocodePlayerMatchResults = {
 	data: {
 		matches: Array<AutocodePlayerMatch>;
 		privacy: {

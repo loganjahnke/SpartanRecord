@@ -176,6 +176,9 @@ export class AutocodeHelpers
 				parameters: {
 					gamertag: gamertag,
 					filter: "matchmade",
+				},
+				privacy: {
+					public: true
 				}
 			}
 		}

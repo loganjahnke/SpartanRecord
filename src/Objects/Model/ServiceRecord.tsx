@@ -114,6 +114,10 @@ export class ServiceRecord
         {
             this.error = (result as any).error?.message;
         }
+        else if (result && result.additional?.privacy?.public === false)
+        {
+            this.error = `${result.additional?.parameters?.gamertag} is set to private`;
+        }
 
         // Set raw result for future use
         this.data = result?.data;

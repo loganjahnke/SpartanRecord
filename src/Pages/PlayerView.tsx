@@ -52,7 +52,7 @@ export function PlayerView(props: ViewProps)
 			const newPlayer = await app.GetPlayerFromHaloDotAPI(gamertag, season, player.mmr);
 			if (newPlayer)
 			{
-				updatePlayer(newPlayer.gamertag, newPlayer.appearance, newPlayer.serviceRecord, newPlayer.mmr, newPlayer.csrs);
+				updatePlayer(newPlayer.gamertag, newPlayer.appearance, newPlayer.serviceRecord, newPlayer.mmr, newPlayer.csrs, newPlayer.isPrivate);
 				await app.SetPlayerIntoFirebase(newPlayer, season, player.serviceRecord);
 
 				if (newPlayer.gamertag !== gamertag)

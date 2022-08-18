@@ -8,6 +8,9 @@ export type AutocodeMultiplayerServiceRecord = {
 			gamertag: string;
 			filter: 'matchmade' | 'custom';
 		};
+		privacy: {
+			public: boolean;
+		}
 	};
 };
 

@@ -21,15 +21,21 @@ export function AHAppBar(props: AHAppBarProps)
 	return (
 		<AppBar position="fixed" sx={{ width: { sm: `calc(100% - 240px)` }, ml: { sm: `240px` }}}>
 			<Toolbar sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-				<IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2, display: { sm: "none" } }}>
+				<IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} sx={{ display: { sm: "none" } }}>
 					<MenuIcon />
 				</IconButton>
-				{loadingFromAutocode && <>
-				<CircularProgress size={20} variant={loadingFromAutocode === -1 ? "indeterminate" : "determinate"} value={loadingFromAutocode} />
-				<Typography sx={{ ml: 2 }} variant="subtitle1">Getting latest data from HaloDotAPI</Typography>
+				{loadingFromAutocode && 
+				<>
+					<CircularProgress size={20} variant={loadingFromAutocode === -1 ? "indeterminate" : "determinate"} value={loadingFromAutocode} />
+					<Typography sx={{ ml: 2 }} variant="subtitle1">Getting latest data from HaloDotAPI for {player?.gamertag}</Typography>
 				</>}
 				<Box sx={{ flexGrow: 1, ml: 1, mr: 1 }}></Box>
-				{player && <PlayerCard player={player} rightAlign />}
+				<Box sx={{ display: { xs: "none", sm: "block" }}}>
+					{player && <PlayerCard player={player} showNameplate />}
+				</Box>
+				<Box sx={{ display: { sm: "none" }}}>
+					{!loadingFromAutocode && player && <PlayerCard player={player} rightAlign />}
+				</Box>
 			</Toolbar>
 		</AppBar>
 	);

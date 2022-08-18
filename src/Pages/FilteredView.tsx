@@ -18,7 +18,6 @@ import { ChipFilters } from "../Assets/Components/ServiceRecord/ChipFilters";
 import { KillBreakdownCard } from "../Assets/Components/Breakdowns/KillBreakdownCard";
 import { TopMedals } from "../Assets/Components/Medals/TopMedals";
 import { AutocodePlaylist, AutocodeVariant } from "../Database/Schemas/AutocodeMetadata";
-import { ServiceRecordType } from "../Database/SCAutocode";
 import { TitleCard } from "../Assets/Components/Cards/TitleCard";
 import { SeasonChooser } from "../Assets/Components/ServiceRecord/SeasonChooser";
 import { SRFilter } from "../Objects/Pieces/SRFilter";
@@ -27,6 +26,7 @@ import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { VehicleBreakdown } from "../Assets/Components/Breakdowns/VehicleBreakdown";
 import { TimePlayed } from "../Assets/Components/Breakdowns/TimePlayed";
 import { Helmet } from "react-helmet";
+import { ServiceRecordType } from "../Database/SCData";
 
 export function FilteredView(props: ViewProps)
 {

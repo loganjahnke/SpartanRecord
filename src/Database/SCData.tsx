@@ -10,19 +10,26 @@ import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { MMR } from "../Objects/Pieces/MMR";
 import { SRFilter } from "../Objects/Pieces/SRFilter";
 import { Leaderboard, ServiceRecordFilter } from "./ArrowheadFirebase";
-import { SCAutocode, ServiceRecordType } from "./SCAutocode";
 import { SCFirebase } from "./SCFirebase";
 import { SCHaloDotAPI } from "./SCHaloDotAPI";
 import { AutocodeHelpers } from "./Schemas/AutocodeHelpers";
-import { AutocodeMatch } from "./Schemas/AutocodeMatch";
 import { AutocodeMap, AutocodeMedal, AutocodePlaylist, AutocodeTeam, AutocodeVariant } from "./Schemas/AutocodeMetadata";
 import { FirebaseBest } from "./Schemas/FirebaseBest";
+
+/** The types of service records */
+export enum ServiceRecordType
+{
+	all = "ALL",
+	ranked = "RANKED",
+	social = "SOCIAL",
+	local = "LOCAL",
+	custom = "CUSTOM"
+}
 
 export class SCData
 {
     public app: App;
     private __firebase: SCFirebase;
-    private __autocode: SCAutocode;
     private __halodapi: SCHaloDotAPI;
     private __analytics: Analytics;
     private __currentlySyncing: Set<string>;
@@ -37,7 +44,6 @@ export class SCData
         this.app = app;
         this.__analytics = analytics;
         this.__firebase = new SCFirebase(database);
-        this.__autocode = new SCAutocode();
         this.__halodapi = new SCHaloDotAPI();
         this.__currentlySyncing = new Set<string>();
     }
@@ -148,7 +154,7 @@ export class SCData
      * @param season the season
      * @param mmr the MMR
      */
-	public async GetPlayerFromHaloDotAPI (gamertag: string, season?: number, mmr?: MMR): Promise<Player> 
+	public async GetPlayerFromHaloDotAPI(gamertag: string, season?: number, mmr?: MMR): Promise<Player> 
     {
         const player = await this.__halodapi.GetPlayer(gamertag, season, mmr);
         if ((player.serviceRecordData as any)?.error)
@@ -158,14 +164,6 @@ export class SCData
 
         return player;
     }
-
-    /**
-     * Gets the player from Autocode
-     * @param gamertag the gamertag
-     * @param season the season
-     * @param mmr the MMR
-     */
-	public GetPlayerFromAutocode = async (gamertag: string, season: number, mmr: MMR): Promise<Player> => this.__autocode.GetAllPlayerEndpoints(gamertag, season, mmr);
 
     /**
 	 * Gets the service record for the gamertag from Autocode
@@ -215,7 +213,7 @@ export class SCData
         const result = await this.__halodapi.GetPlayerMatches(gamertag, 25, 0);
         
         let playerMatches: PlayerMatch[] = [];
-        for (const match of result.data.matches) { playerMatches.push(new PlayerMatch(match)); }
+        for (const match of result.data) { playerMatches.push(new PlayerMatch(match)); }
 
         return playerMatches;
     }
@@ -231,7 +229,7 @@ export class SCData
         const result = await this.__halodapi.GetPlayerMatches(gamertag, 25, offset);
         
         let playerMatches: PlayerMatch[] = [];
-        for (const match of result.data.matches) { playerMatches.push(new PlayerMatch(match)); }
+        for (const match of result.data) { playerMatches.push(new PlayerMatch(match)); }
 
         return playerMatches;
     }

@@ -8,14 +8,17 @@ export class Appearance
     public emblemURL: string;
     /** The backdrop URL */
     public backdropURL: string;
+    /** The nameplate URL */
+    public nameplateURL: string;
     /** The raw autocode JSON */
     public raw?: AutocodeAppearance;
 
-    constructor(cryptum?: AutocodeAppearance)
+    constructor(appearance?: AutocodeAppearance)
     {
-        this.raw = cryptum;
-        this.serviceTag = cryptum?.data?.service_tag ?? "";
-        this.emblemURL = cryptum?.data?.emblem_url ?? "";
-        this.backdropURL = cryptum?.data?.backdrop_image_url ?? "";
+        this.raw = appearance;
+        this.serviceTag = appearance?.data?.service_tag ?? "";
+        this.emblemURL = appearance?.data?.emblem_url ?? "";
+        this.backdropURL = appearance?.data?.backdrop_image_url ?? "";
+        this.nameplateURL = appearance?.data?.nameplate_url ?? "";
     }
 }

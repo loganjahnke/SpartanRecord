@@ -12,7 +12,7 @@ export interface ViewProps
     setLoadingMessage: (message: string) => void;
     setBackgroundLoadingProgress: (progress: number | undefined) => void;
     player?: Player;
-    updatePlayer: (gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, mmr?: MMR, csrs?: CSRS[]) => void;
+    updatePlayer: (gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, mmr?: MMR, csrs?: CSRS[], isPrivate?: boolean) => void;
     switchTab: (url?: string, tab?: SRTabs) => void;
     isAllowed?: boolean;
 }

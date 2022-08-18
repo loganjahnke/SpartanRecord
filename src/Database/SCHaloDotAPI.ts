@@ -5,6 +5,7 @@ import { CSRS } from "../Objects/Model/CSRS";
 import { Player } from "../Objects/Model/Player";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { MMR } from "../Objects/Pieces/MMR";
+import { ServiceRecordType } from "./SCData";
 import { AutocodeCSRS } from "./Schemas/AutocodeCSRS";
 import { AutocodeMatch, AutocodeMatchResults } from "./Schemas/AutocodeMatch";
 import { AutocodeMap, AutocodeMedal, AutocodePlaylist, AutocodeTeam, AutocodeVariant } from "./Schemas/AutocodeMetadata";
@@ -12,15 +13,6 @@ import { AutocodeMMR } from "./Schemas/AutocodeMMR";
 import { AutocodeMultiplayerServiceRecord } from "./Schemas/AutocodeMultiplayerServiceRecord";
 import { AutocodePlayerMatchResults } from "./Schemas/AutocodePlayerMatch";
 import { AutocodeXboxProfile } from "./Schemas/AutocodeXboxProfile";
-
-export enum ServiceRecordType
-{
-	all = "ALL",
-	ranked = "RANKED",
-	social = "SOCIAL",
-	local = "LOCAL",
-	custom = "CUSTOM"
-}
 
 export class SCHaloDotAPI
 {
@@ -232,9 +224,9 @@ export class SCHaloDotAPI
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCHaloDotAPI.GetLastMatchID()", gamertag); }
 		 
 		const lastMatch = await this.GetPlayerMatches(gamertag, 1, 0);
-		if (lastMatch?.data && lastMatch.data.matches.length > 0)
+		if (lastMatch?.data && lastMatch.data.length > 0)
 		{
-			return lastMatch.data.matches[0].id;
+			return lastMatch.data[0].id;
 		}
 
 		return "";
@@ -305,7 +297,7 @@ export class SCHaloDotAPI
 	public async GetMatchesForPlayer(gamertag: string, count: number, offset: number): Promise<AutocodeMatchResults>
 	{
 		const playerMatches = await this.GetPlayerMatches(gamertag, count, offset);
-		return await this.GetMatches(playerMatches.data.matches.map(match => match.id));
+		return await this.GetMatches(playerMatches.data.map(match => match.id));
 	}
 
 	/**
