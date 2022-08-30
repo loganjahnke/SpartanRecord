@@ -6,7 +6,7 @@ import { AutocodePlayerMatchResults } from "./Schemas/AutocodePlayerMatch";
 import fetch from "node-fetch";
 
 /** The HaloDotAPI version */
-const AUTOCODE_VERSION = "1-5-2";
+const AUTOCODE_VERSION = "1-5-3";
 
 /** The types of service records */
 export enum ServiceRecordType
@@ -73,9 +73,9 @@ export const GetServiceRecord = async (gamertag: string, season?: number, playli
 export const GetLastMatchID = async (gamertag: string): Promise<string> =>
 {		 
 	const lastMatch = await GetPlayerMatches(gamertag, 1, 0);
-	if (lastMatch?.data && lastMatch.data.matches.length > 0)
+	if (lastMatch?.data && lastMatch.data.length > 0)
 	{
-		return lastMatch.data.matches[0].id;
+		return lastMatch.data[0].id;
 	}
 
 	return "";
@@ -133,7 +133,7 @@ export const GetPlayerMatches = async (gamertag: string, count: number, offset: 
 export const GetMatchesForPlayer = async (gamertag: string, count: number, offset: number): Promise<AutocodeMatchResults> =>
 {
 	const playerMatches = await GetPlayerMatches(gamertag, count, offset);
-	return await GetMatches(playerMatches.data.matches.map(match => match.id));
+	return await GetMatches(playerMatches.data.map(match => match.id));
 }
 
 /**

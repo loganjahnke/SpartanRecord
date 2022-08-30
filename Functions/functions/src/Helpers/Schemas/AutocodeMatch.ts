@@ -1,3 +1,5 @@
+import { AutocodeCTFMode, AutocodeEliminationMode, AutocodeOddballMode, AutocodeZoneMode, AutocodeStockpileMode } from "./AutocodeMultiplayerServiceRecord";
+
 export type AutocodeMatchResults = {
 	data: Array<AutocodeMatch>;
 	additional: {
@@ -87,74 +89,14 @@ export type AutocodeMatchTeamDetails = {
 	};
 	stats: {
 		core: {
-			summary: {
-				kills: number;
-				deaths: number;
-				assists: number;
-				betrayals: number;
-				suicides: number;
-				vehicles: {
-					destroys: number;
-					hijacks: number;
-				};
-				medals: number;
-			};
-			damage: {
-				taken: number;
-				dealt: number;
-			};
-			shots: {
-				fired: number;
-				landed: number;
-				missed: number;
-				accuracy: number;
-			};
-			rounds: {
-				won: number;
-				lost: number;
-				tied: number;
-			};
-			breakdowns: {
-				kills: {
-					melee: number;
-					grenades: number;
-					headshots: number;
-					power_weapons: number;
-					assassinations: number;
-					vehicles: {
-						splatters: number;
-					};
-					miscellaneous: {
-						repulsor: number;
-						fusion_coils: number;
-					};
-				};
-				assists: {
-					emp: number;
-					driver: number;
-					callouts: number;
-				};
-				vehicles: {
-					destroys: Array<{
-						value: string;
-						count: number;
-					}>;
-					hijacks: Array<{
-						value: string;
-						count: number;
-					}>;
-				};
-				medals: Array<{
-					id: number;
-					count: number;
-				}>;
-			};
+			summary: AutocodeSRSummary;
+			damage: AutocodeSRDamage;
+			shots: AutocodeSRAccuracy;
+			rounds: AutocodeSRRounds;
+			breakdowns: AutocodeSRBreakdowns;
 			kda: number;
 			kdr: number;
-			scores: {
-				personal: number;
-				points: number;
-			};
+			scores: AutocodeSRScore;
 		};
 		mode: null | Record<string, any>;
 		mmr: number | null;
@@ -179,76 +121,22 @@ export type AutocodeMatchPlayer = {
 	};
 	stats: {
 		core: {
-			summary: {
-				kills: number;
-				deaths: number;
-				assists: number;
-				betrayals: number;
-				suicides: number;
-				vehicles: {
-					destroys: number;
-					hijacks: number;
-				};
-				medals: number;
-			};
-			damage: {
-				taken: number;
-				dealt: number;
-			};
-			shots: {
-				fired: number;
-				landed: number;
-				missed: number;
-				accuracy: number;
-			};
-			rounds: {
-				won: number;
-				lost: number;
-				tied: number;
-			};
-			breakdowns: {
-				kills: {
-					melee: number;
-					grenades: number;
-					headshots: number;
-					power_weapons: number;
-					assassinations: number;
-					vehicles: {
-						splatters: number;
-					};
-					miscellaneous: {
-						repulsor: number;
-						fusion_coils: number;
-					};
-				};
-				assists: {
-					emp: number;
-					driver: number;
-					callouts: number;
-				};
-				vehicles: {
-					destroys: Array<{
-						value: string;
-						count: number;
-					}>;
-					hijacks: Array<{
-						value: string;
-						count: number;
-					}>;
-				};
-				medals: Array<{
-					id: number;
-					count: number;
-				}>;
-			};
+			summary: AutocodeSRSummary;
+			damage: AutocodeSRDamage;
+			shots: AutocodeSRAccuracy;
+			rounds: AutocodeSRRounds;
+			breakdowns: AutocodeSRBreakdowns;
 			kda: number;
 			kdr: number;
-			scores: {
-				personal: number;
-				points: number;
-			};
+			scores: AutocodeSRScore;
 		};
-		mode: null | Record<string, any>;
+		mode?: {
+			capture_the_flag?: AutocodeCTFMode;
+			elimination?: AutocodeEliminationMode;
+			oddball?: AutocodeOddballMode;
+			zones?: AutocodeZoneMode;
+			stockpile?: AutocodeStockpileMode;
+		};
 		mmr: number | null;
 	};
 	rank: number;
@@ -296,3 +184,75 @@ export type AutocodeMatchPlayer = {
 };
 
 export type AutocodeOutcome = 'win' | 'won' | 'left' | 'loss' | 'unknown';
+export type AutocodeSRSummary = {
+	kills: number;
+	deaths: number;
+	assists: number;
+	betrayals: number;
+	suicides: number;
+	max_killing_spree: number;
+	vehicles: {
+		destroys: number;
+		hijacks: number;
+	};
+	medals: number;
+};
+
+export type AutocodeSRDamage = {
+	taken: number;
+	dealt: number;
+};
+
+export type AutocodeSRAccuracy = {
+	fired: number;
+	landed: number;
+	missed: number;
+	accuracy: number;
+};
+
+export type AutocodeSRRounds = {
+	won: number;
+	lost: number;
+	tied: number;
+};
+
+export type AutocodeSRBreakdowns = {
+	kills: {
+		melee: number;
+		grenades: number;
+		headshots: number;
+		power_weapons: number;
+		assassinations: number;
+		vehicles: {
+			splatters: number;
+		};
+		miscellaneous: {
+			repulsor: number;
+			fusion_coils: number;
+		};
+	};
+	assists: {
+		emp: number;
+		driver: number;
+		callouts: number;
+	};
+	vehicles: {
+		destroys: Array<{
+			value: string;
+			count: number;
+		}>;
+		hijacks: Array<{
+			value: string;
+			count: number;
+		}>;
+	};
+	medals: Array<{
+		id: number;
+		count: number;
+	}>;
+};
+
+export type AutocodeSRScore = {
+	personal: number;
+	points: number;
+};

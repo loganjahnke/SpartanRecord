@@ -296,13 +296,13 @@ const LoopThroughMatches = async (app: admin.app.App, gamertag: string): Promise
 		const queryCount = Math.min(remainingMatchesToQuery, 25);
 		const offset = remainingMatchesToQuery - queryCount;
 		const playerMatches = await autocode.GetPlayerMatches(gamertag, queryCount, offset);
-		if (!playerMatches || !playerMatches.data || !playerMatches.data.matches) 
+		if (!playerMatches || !playerMatches.data) 
 		{ 
 			console.error("Player Matches were not returned. Skipping " + gamertag);
 			return; 
 		}
 
-		const playerMatchResults = playerMatches.data.matches;
+		const playerMatchResults = playerMatches.data;
 		const autocodeMatchesToQuery = new Map<string, number>();
 		const matchIDsToGet: string[] = [];
 

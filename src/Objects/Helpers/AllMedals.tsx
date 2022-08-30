@@ -8,9 +8,9 @@ export const AllMedals = {
 		category: MedalType.Skill,
 		sort: 0,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/killjoy.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/killjoy.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/killjoy.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/killjoy.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/killjoy.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/killjoy.png"
 		}
 	},
 	2780740615: {
@@ -20,9 +20,9 @@ export const AllMedals = {
 		category: MedalType.Spree,
 		sort: 0,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/killing-spree.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/killing-spree.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/killing-spree.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/killing-spree.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/killing-spree.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/killing-spree.png"
 		}
 	},
 	4261842076: {
@@ -32,9 +32,9 @@ export const AllMedals = {
 		category: MedalType.Spree,
 		sort: 1,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/killing-frenzy.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/killing-frenzy.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/killing-frenzy.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/killing-frenzy.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/killing-frenzy.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/killing-frenzy.png"
 		}
 	},
 	418532952: {
@@ -44,9 +44,9 @@ export const AllMedals = {
 		category: MedalType.Spree,
 		sort: 2,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/running-riot.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/running-riot.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/running-riot.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/running-riot.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/running-riot.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/running-riot.png"
 		}
 	},
 	1486797009: {
@@ -56,9 +56,9 @@ export const AllMedals = {
 		category: MedalType.Spree,
 		sort: 3,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/rampage.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/rampage.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/rampage.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/rampage.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/rampage.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/rampage.png"
 		}
 	},
 	710323196: {
@@ -68,9 +68,9 @@ export const AllMedals = {
 		category: MedalType.Spree,
 		sort: 4,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/nightmare.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/nightmare.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/nightmare.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/nightmare.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/nightmare.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/nightmare.png"
 		}
 	},
 	1720896992: {
@@ -80,9 +80,9 @@ export const AllMedals = {
 		category: MedalType.Spree,
 		sort: 5,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/boogeyman.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/boogeyman.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/boogeyman.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/boogeyman.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/boogeyman.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/boogeyman.png"
 		}
 	},
 	2567026752: {
@@ -92,9 +92,9 @@ export const AllMedals = {
 		category: MedalType.Spree,
 		sort: 6,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/grim-reaper.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/grim-reaper.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/grim-reaper.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/grim-reaper.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/grim-reaper.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/grim-reaper.png"
 		}
 	},
 	2875941471: {
@@ -104,9 +104,9 @@ export const AllMedals = {
 		category: MedalType.Spree,
 		sort: 7,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/demon.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/demon.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/demon.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/demon.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/demon.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/demon.png"
 		}
 	},
 	1169390319: {
@@ -116,9 +116,9 @@ export const AllMedals = {
 		category: MedalType.GameEnd,
 		sort: 0,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/steaktacular.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/steaktacular.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/steaktacular.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/steaktacular.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/steaktacular.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/steaktacular.png"
 		}
 	},
 	1680000231: {
@@ -128,9 +128,9 @@ export const AllMedals = {
 		category: MedalType.GameEnd,
 		sort: 1,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/flawless-victory.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/flawless-victory.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/flawless-victory.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/flawless-victory.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/flawless-victory.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/flawless-victory.png"
 		}
 	},
 	865763896: {
@@ -140,9 +140,9 @@ export const AllMedals = {
 		category: MedalType.GameEnd,
 		sort: 2,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/perfection.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/perfection.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/perfection.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/perfection.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/perfection.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/perfection.png"
 		}
 	},
 	2976102155: {
@@ -152,9 +152,9 @@ export const AllMedals = {
 		category: MedalType.Assault,
 		sort: 0,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/action-hero.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/action-hero.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/action-hero.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/action-hero.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/action-hero.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/action-hero.png"
 		}
 	},
 	1585298941: {
@@ -164,9 +164,9 @@ export const AllMedals = {
 		category: MedalType.Assault,
 		sort: 1,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/assured-destruction.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/assured-destruction.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/assured-destruction.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/assured-destruction.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/assured-destruction.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/assured-destruction.png"
 		}
 	},
 	1334138090: {
@@ -176,9 +176,9 @@ export const AllMedals = {
 		category: MedalType.Assault,
 		sort: 2,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/late-boomer.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/late-boomer.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/late-boomer.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/late-boomer.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/late-boomer.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/late-boomer.png"
 		}
 	},
 	3488248720: {
@@ -188,9 +188,9 @@ export const AllMedals = {
 		category: MedalType.CTF,
 		sort: 0,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/stopped-short.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/stopped-short.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/stopped-short.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/stopped-short.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/stopped-short.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/stopped-short.png"
 		}
 	},
 	976049027: {
@@ -200,9 +200,9 @@ export const AllMedals = {
 		category: MedalType.CTF,
 		sort: 1,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/flag-joust.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/flag-joust.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/flag-joust.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/flag-joust.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/flag-joust.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/flag-joust.png"
 		}
 	},
 	3227840152: {
@@ -212,9 +212,9 @@ export const AllMedals = {
 		category: MedalType.CTF,
 		sort: 2,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/goal-line-stand.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/goal-line-stand.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/goal-line-stand.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/goal-line-stand.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/goal-line-stand.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/goal-line-stand.png"
 		}
 	},
 	4247875860: {
@@ -224,9 +224,9 @@ export const AllMedals = {
 		category: MedalType.Elimination,
 		sort: 0,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/duelist.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/duelist.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/duelist.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/duelist.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/duelist.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/duelist.png"
 		}
 	},
 	2623698509: {
@@ -236,9 +236,9 @@ export const AllMedals = {
 		category: MedalType.Elimination,
 		sort: 1,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/lone-wolf.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/lone-wolf.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/lone-wolf.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/lone-wolf.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/lone-wolf.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/lone-wolf.png"
 		}
 	},
 	3120600565: {
@@ -248,9 +248,9 @@ export const AllMedals = {
 		category: MedalType.Elimination,
 		sort: 2,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/immortal.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/immortal.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/immortal.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/immortal.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/immortal.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/immortal.png"
 		}
 	},
 	521420212: {
@@ -260,9 +260,9 @@ export const AllMedals = {
 		category: MedalType.Elimination,
 		sort: 3,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/ace.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/ace.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/ace.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/ace.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/ace.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/ace.png"
 		}
 	},
 	3011158621: {
@@ -272,9 +272,9 @@ export const AllMedals = {
 		category: MedalType.Elimination,
 		sort: 4,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/necromancer.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/necromancer.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/necromancer.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/necromancer.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/necromancer.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/necromancer.png"
 		}
 	},
 	4100966367: {
@@ -284,9 +284,9 @@ export const AllMedals = {
 		category: MedalType.Elimination,
 		sort: 5,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/extermination.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/extermination.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/extermination.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/extermination.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/extermination.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/extermination.png"
 		}
 	},
 	2426456555: {
@@ -296,9 +296,9 @@ export const AllMedals = {
 		category: MedalType.Extraction,
 		sort: 0,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/secure-line.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/secure-line.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/secure-line.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/secure-line.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/secure-line.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/secure-line.png"
 		}
 	},
 	3931425309: {
@@ -308,9 +308,9 @@ export const AllMedals = {
 		category: MedalType.Extraction,
 		sort: 1,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/signal-block.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/signal-block.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/signal-block.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/signal-block.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/signal-block.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/signal-block.png"
 		}
 	},
 	2717755703: {
@@ -320,9 +320,9 @@ export const AllMedals = {
 		category: MedalType.Infection,
 		sort: -1,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/sole-survivor.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/sole-survivor.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/sole-survivor.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/sole-survivor.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/sole-survivor.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/sole-survivor.png"
 		}
 	},
 	1025827095: {
@@ -332,9 +332,9 @@ export const AllMedals = {
 		category: MedalType.Infection,
 		sort: 0,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/culling.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/culling.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/culling.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/culling.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/culling.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/culling.png"
 		}
 	},
 	88914608: {
@@ -344,9 +344,9 @@ export const AllMedals = {
 		category: MedalType.Infection,
 		sort: 6,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/blight.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/blight.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/blight.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/blight.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/blight.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/blight.png"
 		}
 	},
 	557309779: {
@@ -356,9 +356,9 @@ export const AllMedals = {
 		category: MedalType.Infection,
 		sort: 12,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/zombie-slayer.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/zombie-slayer.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/zombie-slayer.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/zombie-slayer.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/zombie-slayer.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/zombie-slayer.png"
 		}
 	},
 	3467301935: {
@@ -368,9 +368,9 @@ export const AllMedals = {
 		category: MedalType.Infection,
 		sort: 1,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/purge.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/purge.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/purge.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/purge.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/purge.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/purge.png"
 		}
 	},
 	1155542859: {
@@ -380,9 +380,9 @@ export const AllMedals = {
 		category: MedalType.Infection,
 		sort: 7,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/disease.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/disease.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/disease.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/disease.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/disease.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/disease.png"
 		}
 	},
 	1447057920: {
@@ -392,9 +392,9 @@ export const AllMedals = {
 		category: MedalType.Infection,
 		sort: 13,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/undead-hunter.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/undead-hunter.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/undead-hunter.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/undead-hunter.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/undead-hunter.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/undead-hunter.png"
 		}
 	},
 	1064731598: {
@@ -404,9 +404,9 @@ export const AllMedals = {
 		category: MedalType.Infection,
 		sort: 7,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/untainted.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/untainted.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/untainted.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/untainted.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/untainted.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/untainted.png"
 		}
 	},
 	1765213446: {
@@ -416,9 +416,9 @@ export const AllMedals = {
 		category: MedalType.Infection,
 		sort: 3,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/cleansing.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/cleansing.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/cleansing.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/cleansing.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/cleansing.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/cleansing.png"
 		}
 	},
 	3786134933: {
@@ -428,9 +428,9 @@ export const AllMedals = {
 		category: MedalType.Infection,
 		sort: 8,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/plague.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/plague.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/plague.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/plague.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/plague.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/plague.png"
 		}
 	},
 	217730222: {
@@ -440,9 +440,9 @@ export const AllMedals = {
 		category: MedalType.Infection,
 		sort: 14,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/hells-janitor.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/hells-janitor.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/hells-janitor.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/hells-janitor.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/hells-janitor.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/hells-janitor.png"
 		}
 	},
 	17866865: {
@@ -452,9 +452,9 @@ export const AllMedals = {
 		category: MedalType.Infection,
 		sort: 15,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/the-sickness.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/the-sickness.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/the-sickness.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/the-sickness.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/the-sickness.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/the-sickness.png"
 		}
 	},
 	496411737: {
@@ -464,9 +464,9 @@ export const AllMedals = {
 		category: MedalType.Infection,
 		sort: 4,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/purification.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/purification.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/purification.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/purification.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/purification.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/purification.png"
 		}
 	},
 	1719203329: {
@@ -476,9 +476,9 @@ export const AllMedals = {
 		category: MedalType.Infection,
 		sort: 9,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/pestilence.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/pestilence.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/pestilence.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/pestilence.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/pestilence.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/pestilence.png"
 		}
 	},
 	2164872967: {
@@ -488,9 +488,9 @@ export const AllMedals = {
 		category: MedalType.Infection,
 		sort: 5,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/divine-intervention.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/divine-intervention.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/divine-intervention.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/divine-intervention.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/divine-intervention.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/divine-intervention.png"
 		}
 	},
 	3520382976: {
@@ -500,9 +500,9 @@ export const AllMedals = {
 		category: MedalType.Infection,
 		sort: 10,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/scourge.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/scourge.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/scourge.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/scourge.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/scourge.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/scourge.png"
 		}
 	},
 	3653884673: {
@@ -512,9 +512,9 @@ export const AllMedals = {
 		category: MedalType.Infection,
 		sort: 11,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/apocalypse.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/apocalypse.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/apocalypse.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/apocalypse.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/apocalypse.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/apocalypse.png"
 		}
 	},
 	2005352812: {
@@ -524,9 +524,9 @@ export const AllMedals = {
 		category: MedalType.Juggernaut,
 		sort: 0,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/meganaut.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/meganaut.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/meganaut.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/meganaut.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/meganaut.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/meganaut.png"
 		}
 	},
 	3732790338: {
@@ -536,9 +536,9 @@ export const AllMedals = {
 		category: MedalType.Oddball,
 		sort: 0,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/fumble.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/fumble.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/fumble.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/fumble.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/fumble.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/fumble.png"
 		}
 	},
 	781229683: {
@@ -548,9 +548,9 @@ export const AllMedals = {
 		category: MedalType.Oddball,
 		sort: 1,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/straight-balling.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/straight-balling.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/straight-balling.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/straight-balling.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/straight-balling.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/straight-balling.png"
 		}
 	},
 	1254180082: {
@@ -560,9 +560,9 @@ export const AllMedals = {
 		category: MedalType.Unknown,
 		sort: 0,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/deep-ball.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/deep-ball.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/deep-ball.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/deep-ball.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/deep-ball.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/deep-ball.png"
 		}
 	},
 	2362950720: {
@@ -572,9 +572,9 @@ export const AllMedals = {
 		category: MedalType.Unknown,
 		sort: 1,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/interception.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/interception.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/interception.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/interception.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/interception.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/interception.png"
 		}
 	},
 	4014259917: {
@@ -584,9 +584,9 @@ export const AllMedals = {
 		category: MedalType.Unknown,
 		sort: 2,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/fast-break.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/fast-break.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/fast-break.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/fast-break.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/fast-break.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/fast-break.png"
 		}
 	},
 	1376646881: {
@@ -596,9 +596,9 @@ export const AllMedals = {
 		category: MedalType.Stockpile,
 		sort: 0,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/great-journey.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/great-journey.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/great-journey.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/great-journey.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/great-journey.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/great-journey.png"
 		}
 	},
 	629165579: {
@@ -608,9 +608,9 @@ export const AllMedals = {
 		category: MedalType.Stockpile,
 		sort: 1,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/power-outage.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/power-outage.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/power-outage.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/power-outage.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/power-outage.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/power-outage.png"
 		}
 	},
 	3528500956: {
@@ -620,9 +620,9 @@ export const AllMedals = {
 		category: MedalType.Stockpile,
 		sort: 2,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/all-that-juice.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/all-that-juice.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/all-that-juice.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/all-that-juice.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/all-that-juice.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/all-that-juice.png"
 		}
 	},
 	1053114074: {
@@ -632,9 +632,9 @@ export const AllMedals = {
 		category: MedalType.VIP,
 		sort: 0,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/clash-of-kings.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/clash-of-kings.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/clash-of-kings.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/clash-of-kings.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/clash-of-kings.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/clash-of-kings.png"
 		}
 	},
 	1210968206: {
@@ -644,9 +644,9 @@ export const AllMedals = {
 		category: MedalType.VIP,
 		sort: 1,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/watch-the-throne.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/watch-the-throne.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/watch-the-throne.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/watch-the-throne.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/watch-the-throne.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/watch-the-throne.png"
 		}
 	},
 	3945864962: {
@@ -656,9 +656,9 @@ export const AllMedals = {
 		category: MedalType.VIP,
 		sort: 2,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/fast-lane.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/fast-lane.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/fast-lane.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/fast-lane.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/fast-lane.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/fast-lane.png"
 		}
 	},
 	3041030832: {
@@ -668,9 +668,9 @@ export const AllMedals = {
 		category: MedalType.VIP,
 		sort: 3,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/high-value-target.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/high-value-target.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/high-value-target.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/high-value-target.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/high-value-target.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/high-value-target.png"
 		}
 	},
 	2125906504: {
@@ -680,9 +680,9 @@ export const AllMedals = {
 		category: MedalType.VIP,
 		sort: 4,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/big-deal.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/big-deal.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/big-deal.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/big-deal.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/big-deal.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/big-deal.png"
 		}
 	},
 	590706932: {
@@ -692,9 +692,9 @@ export const AllMedals = {
 		category: MedalType.VIP,
 		sort: 5,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/contract-killer.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/contract-killer.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/contract-killer.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/contract-killer.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/contract-killer.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/contract-killer.png"
 		}
 	},
 	1472686630: {
@@ -704,9 +704,9 @@ export const AllMedals = {
 		category: MedalType.Zone,
 		sort: 0,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/always-rotating.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/always-rotating.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/always-rotating.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/always-rotating.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/always-rotating.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/always-rotating.png"
 		}
 	},
 	3630529364: {
@@ -716,9 +716,9 @@ export const AllMedals = {
 		category: MedalType.Zone,
 		sort: 1,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/clock-stop.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/clock-stop.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/clock-stop.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/clock-stop.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/clock-stop.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/clock-stop.png"
 		}
 	},
 	622331684: {
@@ -728,9 +728,9 @@ export const AllMedals = {
 		category: MedalType.MultiKill,
 		sort: 0,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/double-kill.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/double-kill.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/double-kill.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/double-kill.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/double-kill.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/double-kill.png"
 		}
 	},
 	2063152177: {
@@ -740,9 +740,9 @@ export const AllMedals = {
 		category: MedalType.MultiKill,
 		sort: 1,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/triple-kill.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/triple-kill.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/triple-kill.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/triple-kill.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/triple-kill.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/triple-kill.png"
 		}
 	},
 	835814121: {
@@ -752,9 +752,9 @@ export const AllMedals = {
 		category: MedalType.MultiKill,
 		sort: 2,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/overkill.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/overkill.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/overkill.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/overkill.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/overkill.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/overkill.png"
 		}
 	},
 	2137071619: {
@@ -764,9 +764,9 @@ export const AllMedals = {
 		category: MedalType.MultiKill,
 		sort: 3,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/killtacular.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/killtacular.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/killtacular.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/killtacular.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/killtacular.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/killtacular.png"
 		}
 	},
 	1430343434: {
@@ -776,9 +776,9 @@ export const AllMedals = {
 		category: MedalType.MultiKill,
 		sort: 4,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/killtrocity.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/killtrocity.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/killtrocity.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/killtrocity.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/killtrocity.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/killtrocity.png"
 		}
 	},
 	3835606176: {
@@ -788,9 +788,9 @@ export const AllMedals = {
 		category: MedalType.MultiKill,
 		sort: 5,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/killamanjaro.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/killamanjaro.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/killamanjaro.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/killamanjaro.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/killamanjaro.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/killamanjaro.png"
 		}
 	},
 	2242633421: {
@@ -800,9 +800,9 @@ export const AllMedals = {
 		category: MedalType.MultiKill,
 		sort: 6,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/killtastrophe.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/killtastrophe.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/killtastrophe.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/killtastrophe.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/killtastrophe.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/killtastrophe.png"
 		}
 	},
 	3352648716: {
@@ -812,9 +812,9 @@ export const AllMedals = {
 		category: MedalType.MultiKill,
 		sort: 7,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/killpocalypse.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/killpocalypse.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/killpocalypse.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/killpocalypse.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/killpocalypse.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/killpocalypse.png"
 		}
 	},
 	3233051772: {
@@ -824,9 +824,9 @@ export const AllMedals = {
 		category: MedalType.MultiKill,
 		sort: 8,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/killionaire.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/killionaire.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/killionaire.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/killionaire.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/killionaire.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/killionaire.png"
 		}
 	},
 	2477555653: {
@@ -836,9 +836,9 @@ export const AllMedals = {
 		category: MedalType.Assists,
 		sort: 0,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/spotter.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/spotter.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/spotter.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/spotter.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/spotter.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/spotter.png"
 		}
 	},
 	1685043466: {
@@ -848,9 +848,9 @@ export const AllMedals = {
 		category: MedalType.Assists,
 		sort: 1,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/treasure-hunter.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/treasure-hunter.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/treasure-hunter.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/treasure-hunter.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/treasure-hunter.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/treasure-hunter.png"
 		}
 	},
 	20397755: {
@@ -859,9 +859,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/saboteur.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/saboteur.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/saboteur.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/saboteur.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/saboteur.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/saboteur.png"
 		}
 	},
 	1284032216: {
@@ -870,9 +870,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Assists,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/wingman.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/wingman.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/wingman.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/wingman.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/wingman.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/wingman.png"
 		}
 	},
 	2926348688: {
@@ -881,9 +881,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Assists,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/wheelman.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/wheelman.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/wheelman.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/wheelman.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/wheelman.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/wheelman.png"
 		}
 	},
 	3783455472: {
@@ -892,9 +892,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/gunner.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/gunner.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/gunner.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/gunner.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/gunner.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/gunner.png"
 		}
 	},
 	3027762381: {
@@ -903,9 +903,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/driver.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/driver.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/driver.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/driver.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/driver.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/driver.png"
 		}
 	},
 	2593226288: {
@@ -914,9 +914,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/pilot.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/pilot.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/pilot.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/pilot.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/pilot.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/pilot.png"
 		}
 	},
 	2852571933: {
@@ -925,9 +925,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Weapons,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/rifleman.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/rifleman.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/rifleman.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/rifleman.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/rifleman.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/rifleman.png"
 		}
 	},
 	4086138034: {
@@ -936,9 +936,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Weapons,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/heavy.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/heavy.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/heavy.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/heavy.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/heavy.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/heavy.png"
 		}
 	},
 	2648272972: {
@@ -947,9 +947,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Boom,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/grenadier.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/grenadier.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/grenadier.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/grenadier.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/grenadier.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/grenadier.png"
 		}
 	},
 	1146876011: {
@@ -958,9 +958,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Boom,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/bomber.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/bomber.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/bomber.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/bomber.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/bomber.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/bomber.png"
 		}
 	},
 	269174970: {
@@ -969,9 +969,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Melee,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/boxer.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/boxer.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/boxer.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/boxer.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/boxer.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/boxer.png"
 		}
 	},
 	1210678802: {
@@ -980,9 +980,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Melee,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/warrior.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/warrior.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/warrior.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/warrior.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/warrior.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/warrior.png"
 		}
 	},
 	1172766553: {
@@ -991,9 +991,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Weapons,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/gunslinger.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/gunslinger.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/gunslinger.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/gunslinger.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/gunslinger.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/gunslinger.png"
 		}
 	},
 	3347922939: {
@@ -1002,9 +1002,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Weapons,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/scattergunner.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/scattergunner.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/scattergunner.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/scattergunner.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/scattergunner.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/scattergunner.png"
 		}
 	},
 	2750622016: {
@@ -1013,9 +1013,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Weapons,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/breacher.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/breacher.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/breacher.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/breacher.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/breacher.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/breacher.png"
 		}
 	},
 	4277328263: {
@@ -1024,9 +1024,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Sniper,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/sharpshooter.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/sharpshooter.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/sharpshooter.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/sharpshooter.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/sharpshooter.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/sharpshooter.png"
 		}
 	},
 	2758320809: {
@@ -1035,9 +1035,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Weapons,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/marksman.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/marksman.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/marksman.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/marksman.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/marksman.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/marksman.png"
 		}
 	},
 	2278023431: {
@@ -1046,9 +1046,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/tanker.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/tanker.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/tanker.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/tanker.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/tanker.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/tanker.png"
 		}
 	},
 	555849395: {
@@ -1057,9 +1057,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Skill,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/bodyguard.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/bodyguard.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/bodyguard.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/bodyguard.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/bodyguard.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/bodyguard.png"
 		}
 	},
 	731054446: {
@@ -1068,9 +1068,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/skyjack.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/skyjack.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/skyjack.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/skyjack.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/skyjack.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/skyjack.png"
 		}
 	},
 	1229018603: {
@@ -1079,9 +1079,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/dogfight.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/dogfight.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/dogfight.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/dogfight.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/dogfight.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/dogfight.png"
 		}
 	},
 	2418616582: {
@@ -1090,9 +1090,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Equipment,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/harpoon.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/harpoon.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/harpoon.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/harpoon.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/harpoon.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/harpoon.png"
 		}
 	},
 	3905838030: {
@@ -1101,9 +1101,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Boom,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/cluster-luck.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/cluster-luck.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/cluster-luck.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/cluster-luck.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/cluster-luck.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/cluster-luck.png"
 		}
 	},
 	3655682764: {
@@ -1112,9 +1112,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Boom,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/stick.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/stick.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/stick.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/stick.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/stick.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/stick.png"
 		}
 	},
 	1969067783: {
@@ -1123,9 +1123,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Weapons,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/chain-reaction.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/chain-reaction.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/chain-reaction.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/chain-reaction.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/chain-reaction.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/chain-reaction.png"
 		}
 	},
 	548533137: {
@@ -1134,9 +1134,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Melee,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/back-smack.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/back-smack.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/back-smack.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/back-smack.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/back-smack.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/back-smack.png"
 		}
 	},
 	221693153: {
@@ -1145,9 +1145,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/splatter.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/splatter.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/splatter.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/splatter.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/splatter.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/splatter.png"
 		}
 	},
 	2123530881: {
@@ -1156,9 +1156,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Skill,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/reversal.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/reversal.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/reversal.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/reversal.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/reversal.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/reversal.png"
 		}
 	},
 	4229934157: {
@@ -1167,9 +1167,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Sniper,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/snipe.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/snipe.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/snipe.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/snipe.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/snipe.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/snipe.png"
 		}
 	},
 	3334154676: {
@@ -1178,9 +1178,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Skill,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/guardian-angel.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/guardian-angel.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/guardian-angel.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/guardian-angel.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/guardian-angel.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/guardian-angel.png"
 		}
 	},
 	3546244406: {
@@ -1189,9 +1189,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Boom,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/kong.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/kong.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/kong.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/kong.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/kong.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/kong.png"
 		}
 	},
 	87172902: {
@@ -1200,9 +1200,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Equipment,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/odins-raven.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/odins-raven.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/odins-raven.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/odins-raven.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/odins-raven.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/odins-raven.png"
 		}
 	},
 	1841872491: {
@@ -1211,9 +1211,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Equipment,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/tag-bag.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/tag-bag.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/tag-bag.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/tag-bag.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/tag-bag.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/tag-bag.png"
 		}
 	},
 	656245292: {
@@ -1222,9 +1222,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/rideshare.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/rideshare.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/rideshare.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/rideshare.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/rideshare.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/rideshare.png"
 		}
 	},
 	3876426273: {
@@ -1233,9 +1233,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Equipment,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/pancake.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/pancake.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/pancake.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/pancake.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/pancake.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/pancake.png"
 		}
 	},
 	3114137341: {
@@ -1244,9 +1244,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Skill,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/bulltrue.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/bulltrue.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/bulltrue.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/bulltrue.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/bulltrue.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/bulltrue.png"
 		}
 	},
 	2414983178: {
@@ -1255,9 +1255,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Weapons,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/bank-shot.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/bank-shot.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/bank-shot.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/bank-shot.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/bank-shot.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/bank-shot.png"
 		}
 	},
 	265478668: {
@@ -1266,9 +1266,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Boom,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/nade-shot.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/nade-shot.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/nade-shot.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/nade-shot.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/nade-shot.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/nade-shot.png"
 		}
 	},
 	1512363953: {
@@ -1277,9 +1277,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Skill,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/perfect.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/perfect.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/perfect.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/perfect.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/perfect.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/perfect.png"
 		}
 	},
 	1880789493: {
@@ -1288,9 +1288,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Equipment,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/mind-the-gap.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/mind-the-gap.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/mind-the-gap.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/mind-the-gap.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/mind-the-gap.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/mind-the-gap.png"
 		}
 	},
 	3934547153: {
@@ -1299,9 +1299,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Boom,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/hail-mary.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/hail-mary.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/hail-mary.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/hail-mary.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/hail-mary.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/hail-mary.png"
 		}
 	},
 	988255960: {
@@ -1310,9 +1310,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Boom,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/fire-forget.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/fire-forget.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/fire-forget.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/fire-forget.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/fire-forget.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/fire-forget.png"
 		}
 	},
 	4215552487: {
@@ -1321,9 +1321,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Sniper,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/ballista.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/ballista.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/ballista.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/ballista.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/ballista.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/ballista.png"
 		}
 	},
 	677323068: {
@@ -1332,9 +1332,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/death-race.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/death-race.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/death-race.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/death-race.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/death-race.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/death-race.png"
 		}
 	},
 	2602963073: {
@@ -1343,9 +1343,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Sniper,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/no-scope.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/no-scope.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/no-scope.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/no-scope.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/no-scope.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/no-scope.png"
 		}
 	},
 	1734214473: {
@@ -1354,9 +1354,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Equipment,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/whiplash.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/whiplash.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/whiplash.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/whiplash.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/whiplash.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/whiplash.png"
 		}
 	},
 	2827657131: {
@@ -1365,9 +1365,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Skill,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/windshield-wiper.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/windshield-wiper.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/windshield-wiper.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/windshield-wiper.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/windshield-wiper.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/windshield-wiper.png"
 		}
 	},
 	524758914: {
@@ -1376,9 +1376,9 @@ export const AllMedals = {
 		type: MedalRarity.Legendary,
 		category: MedalType.Equipment,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/boom-block.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/boom-block.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/boom-block.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/boom-block.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/boom-block.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/boom-block.png"
 		}
 	},
 	1646928910: {
@@ -1387,9 +1387,9 @@ export const AllMedals = {
 		type: MedalRarity.Legendary,
 		category: MedalType.Weapons,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/grand-slam.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/grand-slam.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/grand-slam.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/grand-slam.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/grand-slam.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/grand-slam.png"
 		}
 	},
 	3059799290: {
@@ -1398,9 +1398,9 @@ export const AllMedals = {
 		type: MedalRarity.Legendary,
 		category: MedalType.Equipment,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/return-to-sender.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/return-to-sender.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/return-to-sender.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/return-to-sender.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/return-to-sender.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/return-to-sender.png"
 		}
 	},
 	651256911: {
@@ -1409,9 +1409,9 @@ export const AllMedals = {
 		type: MedalRarity.Legendary,
 		category: MedalType.Weapons,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/interlinked.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/interlinked.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/interlinked.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/interlinked.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/interlinked.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/interlinked.png"
 		}
 	},
 	1623236079: {
@@ -1420,9 +1420,9 @@ export const AllMedals = {
 		type: MedalRarity.Legendary,
 		category: MedalType.Sniper,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/autopilot-engaged.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/autopilot-engaged.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/autopilot-engaged.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/autopilot-engaged.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/autopilot-engaged.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/autopilot-engaged.png"
 		}
 	},
 	3217141618: {
@@ -1431,9 +1431,9 @@ export const AllMedals = {
 		type: MedalRarity.Legendary,
 		category: MedalType.Melee,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/achilles-spine.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/achilles-spine.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/achilles-spine.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/achilles-spine.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/achilles-spine.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/achilles-spine.png"
 		}
 	},
 	670606868: {
@@ -1442,9 +1442,9 @@ export const AllMedals = {
 		type: MedalRarity.Legendary,
 		category: MedalType.Melee,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/sneak-king.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/sneak-king.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/sneak-king.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/sneak-king.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/sneak-king.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/sneak-king.png"
 		}
 	},
 	4132863117: {
@@ -1453,9 +1453,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Sniper,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/pull.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/pull.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/pull.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/pull.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/pull.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/pull.png"
 		}
 	},
 	2253222811: {
@@ -1464,9 +1464,9 @@ export const AllMedals = {
 		type: MedalRarity.Legendary,
 		category: MedalType.Skill,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/nuclear-football.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/nuclear-football.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/nuclear-football.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/nuclear-football.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/nuclear-football.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/nuclear-football.png"
 		}
 	},
 	3160646854: {
@@ -1475,9 +1475,9 @@ export const AllMedals = {
 		type: MedalRarity.Mythic,
 		category: MedalType.Boom,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/remote-detonation.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/remote-detonation.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/remote-detonation.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/remote-detonation.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/remote-detonation.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/remote-detonation.png"
 		}
 	},
 	1312042926: {
@@ -1486,9 +1486,9 @@ export const AllMedals = {
 		type: MedalRarity.Mythic,
 		category: MedalType.Sniper,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/quigley.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/quigley.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/quigley.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/quigley.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/quigley.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/quigley.png"
 		}
 	},
 	3085856613: {
@@ -1497,9 +1497,9 @@ export const AllMedals = {
 		type: MedalRarity.Mythic,
 		category: MedalType.Melee,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/ninja.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/ninja.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/ninja.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/ninja.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/ninja.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/ninja.png"
 		}
 	},
 	3739610597: {
@@ -1508,9 +1508,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/flyin-high.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/flyin-high.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/flyin-high.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/flyin-high.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/flyin-high.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/flyin-high.png"
 		}
 	},
 	1065136443: {
@@ -1519,9 +1519,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/mount-up.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/mount-up.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/mount-up.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/mount-up.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/mount-up.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/mount-up.png"
 		}
 	},
 	1445036152: {
@@ -1530,9 +1530,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/reclaimer.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/reclaimer.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/reclaimer.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/reclaimer.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/reclaimer.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/reclaimer.png"
 		}
 	},
 	2625820422: {
@@ -1541,9 +1541,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Skill,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/from-the-grave.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/from-the-grave.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/from-the-grave.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/from-the-grave.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/from-the-grave.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/from-the-grave.png"
 		}
 	},
 	275666139: {
@@ -1552,9 +1552,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Boom,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/special-delivery.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/special-delivery.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/special-delivery.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/special-delivery.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/special-delivery.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/special-delivery.png"
 		}
 	},
 	2861418269: {
@@ -1563,9 +1563,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Weapons,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/quick-draw.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/quick-draw.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/quick-draw.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/quick-draw.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/quick-draw.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/quick-draw.png"
 		}
 	},
 	3091261182: {
@@ -1574,9 +1574,9 @@ export const AllMedals = {
 		type: MedalRarity.Normal,
 		category: MedalType.Weapons,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/last-shot.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/last-shot.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/last-shot.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/last-shot.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/last-shot.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/last-shot.png"
 		}
 	},
 	1331361851: {
@@ -1585,9 +1585,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/mounted-loaded.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/mounted-loaded.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/mounted-loaded.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/mounted-loaded.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/mounted-loaded.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/mounted-loaded.png"
 		}
 	},
 	3583966655: {
@@ -1596,9 +1596,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/partys-over.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/partys-over.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/partys-over.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/partys-over.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/partys-over.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/partys-over.png"
 		}
 	},
 	1298835518: {
@@ -1607,9 +1607,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/ramming-speed.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/ramming-speed.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/ramming-speed.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/ramming-speed.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/ramming-speed.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/ramming-speed.png"
 		}
 	},
 	3588869844: {
@@ -1618,9 +1618,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Skill,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/from-the-void.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/from-the-void.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/from-the-void.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/from-the-void.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/from-the-void.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/from-the-void.png"
 		}
 	},
 	3475540930: {
@@ -1629,9 +1629,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/lawnmower.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/lawnmower.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/lawnmower.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/lawnmower.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/lawnmower.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/lawnmower.png"
 		}
 	},
 	690125105: {
@@ -1640,9 +1640,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Equipment,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/grapple-jack.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/grapple-jack.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/grapple-jack.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/grapple-jack.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/grapple-jack.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/grapple-jack.png"
 		}
 	},
 	175594566: {
@@ -1651,9 +1651,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Skill,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/hold-this.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/hold-this.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/hold-this.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/hold-this.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/hold-this.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/hold-this.png"
 		}
 	},
 	1169571763: {
@@ -1662,9 +1662,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Skill,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/shot-caller.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/shot-caller.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/shot-caller.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/shot-caller.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/shot-caller.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/shot-caller.png"
 		}
 	},
 	1283796619: {
@@ -1673,9 +1673,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Weapons,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/off-the-rack.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/off-the-rack.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/off-the-rack.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/off-the-rack.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/off-the-rack.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/off-the-rack.png"
 		}
 	},
 	1176569867: {
@@ -1684,9 +1684,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Skill,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/yard-sale.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/yard-sale.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/yard-sale.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/yard-sale.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/yard-sale.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/yard-sale.png"
 		}
 	},
 	2019283350: {
@@ -1695,9 +1695,9 @@ export const AllMedals = {
 		type: MedalRarity.Heoric,
 		category: MedalType.Boom,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/pineapple-express.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/pineapple-express.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/pineapple-express.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/pineapple-express.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/pineapple-express.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/pineapple-express.png"
 		}
 	},
 	2396845048: {
@@ -1706,9 +1706,9 @@ export const AllMedals = {
 		type: MedalRarity.Legendary,
 		category: MedalType.Equipment,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/deadly-catch.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/deadly-catch.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/deadly-catch.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/deadly-catch.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/deadly-catch.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/deadly-catch.png"
 		}
 	},
 	1427176344: {
@@ -1717,9 +1717,9 @@ export const AllMedals = {
 		type: MedalRarity.Legendary,
 		category: MedalType.Skill,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/360.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/360.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/360.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/360.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/360.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/360.png"
 		}
 	},
 	2967011722: {
@@ -1728,9 +1728,9 @@ export const AllMedals = {
 		type: MedalRarity.Legendary,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/street-sweeper.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/street-sweeper.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/street-sweeper.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/street-sweeper.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/street-sweeper.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/street-sweeper.png"
 		}
 	},
 	197913196: {
@@ -1739,9 +1739,9 @@ export const AllMedals = {
 		type: MedalRarity.Legendary,
 		category: MedalType.Vehicles,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/driveby.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/driveby.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/driveby.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/driveby.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/driveby.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/driveby.png"
 		}
 	},
 	641726424: {
@@ -1750,9 +1750,9 @@ export const AllMedals = {
 		type: MedalRarity.Legendary,
 		category: MedalType.Skill,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/combat-evolved.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/combat-evolved.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/combat-evolved.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/combat-evolved.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/combat-evolved.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/combat-evolved.png"
 		}
 	},
 	1211820913: {
@@ -1761,9 +1761,9 @@ export const AllMedals = {
 		type: MedalRarity.Mythic,
 		category: MedalType.Boom,
 		image_urls: {
-			small: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/fastball.png",
-			medium: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/fastball.png",
-			large: "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/large/fastball.png"
+			small: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/fastball.png",
+			medium: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/fastball.png",
+			large: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/large/fastball.png"
 		}
 	},
 	1477806194: {
