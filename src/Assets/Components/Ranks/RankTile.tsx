@@ -94,20 +94,20 @@ function HighestSpreeMedal(props: { maxSpree: number })
 
 	return <img alt="Highest Spree Medal" height="32px" src={
 		maxSpree >= 40 
-			? "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/demon.png" :
+			? "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/demon.png" :
 		maxSpree >= 35
-			? "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/grim-reaper.png" :
+			? "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/grim-reaper.png" :
 		maxSpree >= 30
-			? "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/boogeyman.png" :
+			? "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/boogeyman.png" :
 		maxSpree >= 25
-			? "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/nightmare.png" :
+			? "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/nightmare.png" :
 		maxSpree >= 20
-			? "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/rampage.png" :
+			? "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/rampage.png" :
 		maxSpree >= 15
-			? "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/running-riot.png" :
+			? "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/running-riot.png" :
 		maxSpree >= 10
-			? "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/killing-frenzy.png" :
+			? "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/killing-frenzy.png" :
 		maxSpree >= 5
-			? "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/small/killing-spree.png" : ""
+			? "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/killing-spree.png" : ""
 	} />
 }

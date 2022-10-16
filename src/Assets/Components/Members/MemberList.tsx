@@ -18,7 +18,7 @@ export function MemberList(props: { company: SpartanCompany, goToMember: (gamert
 
 	return (
 		<Card sx={{ borderRadius: 3 }}>
-            <CardMedia component="img" height="200" image={"https://assets.halo.autocode.gg/static/infinite/images/multiplayer/playlists/ffa-slayer.jpg"} alt="Members" />
+            <CardMedia component="img" height="200" image={"https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/playlists/ffa-slayer.jpg"} alt="Members" />
             <CardContent sx={{ backgroundColor: "divider", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 				<Typography variant="h6" sx={{ mb: 1 }}>Members</Typography>
 				{company.players.map(player => <MemberComponent player={player} goToMember={goToMember} deleteMember={deleteMember} />)}

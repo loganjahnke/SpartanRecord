@@ -30,7 +30,7 @@ export class SpartanCompany
             }
         }
 
-        return newEmblem || "https://assets.halo.autocode.gg/static/infinite/images/multiplayer/medals/medium/combat-evolved.png";
+        return newEmblem || "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/medium/combat-evolved.png";
     }
     
     /** Index of gamertag to player index */

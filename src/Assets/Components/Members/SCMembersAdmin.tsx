@@ -15,7 +15,7 @@ export function SCMembersAdmin(props: { company: SpartanCompany, deleteExistingM
 
 	return (
 		<Card sx={{ borderRadius: 3 }}>
-            <CardMedia component="img" height="200" image={"https://assets.halo.autocode.gg/static/infinite/images/multiplayer/playlists/ffa-slayer.jpg"} alt="Members" />
+            <CardMedia component="img" height="200" image={"https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/playlists/ffa-slayer.jpg"} alt="Members" />
             <CardContent sx={{ backgroundColor: "divider", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 				<Typography variant="h6" sx={{ mb: 1 }}>Company Members</Typography>
 				{company.members.map(member => <SCMemberAdminComponent member={member} deleteMember={deleteExistingMember} />)}
@@ -30,7 +30,7 @@ export function SCRequestedAdmin(props: { company: SpartanCompany, declineReques
 
 	return (
 		<Card sx={{ borderRadius: 3 }}>
-            <CardMedia component="img" height="200" image={"https://assets.halo.autocode.gg/static/infinite/images/multiplayer/playlists/team-slayer.jpg"} alt="Members" />
+            <CardMedia component="img" height="200" image={"https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/playlists/team-slayer.jpg"} alt="Members" />
             <CardContent sx={{ backgroundColor: "divider", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 				<Typography variant="h6" sx={{ mb: 1 }}>Pending Requests</Typography>
 				{company.requested.length === 0 ? <Typography variant="body1" sx={{ mt: 2 }}>No pending requests!</Typography>
