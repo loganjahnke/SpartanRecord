@@ -1,5 +1,7 @@
 import { Box, Tooltip, Typography } from "@mui/material";
 import React from "react";
+import { Match } from "../../../Objects/Model/Match";
+import { PlayerMatch } from "../../../Objects/Model/PlayerMatch";
 import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 
@@ -12,6 +14,14 @@ export interface BreakdownProps
     small?: boolean;
 }
 
+export interface MatchBreakdownProps
+{
+    image?: string;
+    background?: string;
+    match: PlayerMatch;
+    small?: boolean;
+}
+
 export interface BreakdownTileProps
 {
     title: string;
@@ -21,6 +31,7 @@ export interface BreakdownTileProps
     isPercent?: boolean;
     isHeader?: boolean;
     backgroundColor?: string;
+    borderColor?: string;
     small?: boolean;
     tooltip?: string;
     icon?: JSX.Element;
@@ -28,7 +39,7 @@ export interface BreakdownTileProps
 
 export function BreakdownTile(props: BreakdownTileProps)
 {
-	const { title, value, total, isMainStat, isPercent, isHeader, backgroundColor, small, tooltip, icon } = props;
+	const { title, value, total, isMainStat, isPercent, isHeader, backgroundColor, borderColor, small, tooltip, icon } = props;
 
     const background = backgroundColor ?? (isMainStat && !small ? ArrowheadTheme.box : ArrowheadTheme.secondary);
 
@@ -44,6 +55,7 @@ export function BreakdownTile(props: BreakdownTileProps)
 	return (
         <Tooltip title={tooltip ?? (title + ": " + (typeof value === "number" ? (Math.round(value * 100) / 100).toLocaleString() : value) + (isPercent ? "%" : ""))}>
             <Box sx={{ 
+                border: borderColor ? "2px solid " + borderColor : "",
                 backgroundColor: background, 
                 display: "flex", 
                 flexDirection: "column", 

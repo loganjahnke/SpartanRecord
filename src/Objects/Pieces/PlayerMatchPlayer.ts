@@ -1,5 +1,6 @@
 import { HaloOutcome } from "../../Database/ArrowheadFirebase";
 import { AutocodePlayerMatchPlayer } from "../../Database/Schemas/AutocodePlayerMatch";
+import { MatchCSRSummary } from "../Model/MatchCSRSummary";
 import { Damage } from "./Damage";
 import { Shots } from "./Shots";
 import { Summary } from "./Summary";
@@ -28,6 +29,8 @@ export class PlayerMatchPlayer
     public kda: number;
     /** The KDR for the player */
     public kdr: number;
+    /** The CSR for the player */
+    public csr: MatchCSRSummary;
 
     /** The damage efficiency per kill */
     public get damageEfficiency(): number
@@ -41,6 +44,20 @@ export class PlayerMatchPlayer
     {
         if (this.damage.taken === 0 || this.summary.deaths === 0) { return 0; }
         return this.PERFECT_KILL_DAMAGE / (this.damage.taken / this.summary.deaths);
+    }
+
+    /** The rank of the player in a string format */
+    public get placement(): string
+    {
+        if (this.rank === 1) { return "1st"; }
+        if (this.rank === 2) { return "2nd"; }
+        if (this.rank === 3) { return "3rd"; }
+        if (this.rank < 21) { return this.rank + "th"; }
+        if (this.rank % 10 === 1) { return this.rank + "st"; }
+        if (this.rank % 10 === 2) { return this.rank + "nd"; }
+        if (this.rank % 10 === 3) { return this.rank + "rd"; }
+
+        return this.rank + "th";
     }
 
     constructor(data?: AutocodePlayerMatchPlayer)
@@ -76,6 +93,7 @@ export class PlayerMatchPlayer
             accuracy: data?.stats?.core?.shots?.accuracy ?? 0
         };
 
+        this.csr = new MatchCSRSummary(data?.progression);
         this.kda = data?.stats?.core?.kda ?? 0;
         this.kdr = data?.stats?.core?.kdr ?? 0;
         this.rank = data?.rank ?? -1;

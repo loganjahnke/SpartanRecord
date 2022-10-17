@@ -15,11 +15,11 @@ export const CSRSTooltip = styled(({ className, ...props }: TooltipProps) => (
 }));
 
 
-export function CSRSProgression(props: { pre: Rank, post: Rank })
+export function CSRSProgression(props: { pre: Rank, post: Rank, noBackground?: boolean })
 {
-	const { pre, post } = props;
+	const { pre, post, noBackground } = props;
 
-    const background = ArrowheadTheme.secondary;
+    const background = noBackground ? "" : ArrowheadTheme.secondary;
 	const progress = post.tier === "Unranked" ? (10 - post.measurementMatchesRemaining) * 10
 		: post.tier === "Onyx" ? 100 : (post.value - post.tierStart) * 100 / (post.nextTierStart - post.tierStart);
 	const buffer = post.tier === "Onyx" || post.subTier !== pre.subTier ? undefined 

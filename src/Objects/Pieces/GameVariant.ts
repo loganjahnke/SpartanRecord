@@ -8,6 +8,14 @@ export class GameVariant
     /** Game mode assets */
     public asset: Asset;
 
+    /** Gets the short name */
+    public get short(): string
+    {
+        const colon = this.name.indexOf(":");
+        if (colon === -1) { return this.name; }
+        return this.name.substring(colon + 2);
+    }
+
     constructor(data?: AutocodeGameVariant)
     {
         this.name = data?.name ?? "";

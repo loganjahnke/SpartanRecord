@@ -42,7 +42,7 @@ export function TeamTable(props: TeamTableProps)
 {
 	const { selectedGamertag, ranked, team, best, variant, onGamertagClick, ffa } = props;
 
-	const showPoints = !!variant && (variant.includes("CTF") || variant.includes("Oddball"));
+	const showPoints = !!variant && (variant.includes("CTF") || variant.includes("Oddball") || variant.includes("King of the Hill"));
 
 	return (
 		<TableContainer component={Box} sx={{ backgroundColor: ArrowheadTheme.box, borderRadius: 3 }}>
