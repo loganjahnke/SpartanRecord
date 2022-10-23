@@ -18,6 +18,7 @@ export class ArrowheadTheme
 	public static text_primary = `#${this.__coolors[4]}`;
 	/** #70A288 */
 	public static thin_border = `#${this.__coolors[3]}40`;
+	public static card = `#142b33`;
 
 	public static selected = "#2BC3EB";
 

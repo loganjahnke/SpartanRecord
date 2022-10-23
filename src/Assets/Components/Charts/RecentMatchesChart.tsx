@@ -20,6 +20,11 @@ import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 enum RecentMatchesDataSets
 {
 	WinLoss = "Win / Loss",
+	CSRRankedArenaController = "CSR Arena Controller",
+	CSRRankedArenaMnK = "CSR Arena MnK",
+	CSRRankedArenaOpen = "CSR Arena Open",
+	CSRDoubles = "CSR Doubles",
+	CSRFFA = "CSR FFA",
 	KDA = "KDA",
 	KDR = "KDR",
 	Kills = "Kills",
@@ -193,6 +198,11 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 		switch (dataSet.current)
 		{
 			case RecentMatchesDataSets.WinLoss: label = "Win"; break;
+			case RecentMatchesDataSets.CSRRankedArenaController: label = RecentMatchesDataSets.CSRRankedArenaController; break;
+			case RecentMatchesDataSets.CSRRankedArenaMnK: label = RecentMatchesDataSets.CSRRankedArenaMnK; break;
+			case RecentMatchesDataSets.CSRRankedArenaOpen: label = RecentMatchesDataSets.CSRRankedArenaOpen; break;
+			case RecentMatchesDataSets.CSRDoubles: label = RecentMatchesDataSets.CSRDoubles; break;
+			case RecentMatchesDataSets.CSRFFA: label = RecentMatchesDataSets.CSRFFA; break;
 			case RecentMatchesDataSets.KDA: label = "KDA"; break;
 			case RecentMatchesDataSets.KDR: label = "KDR"; break;
 			case RecentMatchesDataSets.Kills: label = "Kills"; break;
@@ -243,6 +253,13 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 						switch (dataSet.current)
 						{
 							case RecentMatchesDataSets.WinLoss: return match.player.won ? 1 : -1;
+							//queue: "open" | "solo-duo" | null;
+						    //input: "controller" | "mnk" | "crossplay" | null;
+							case RecentMatchesDataSets.CSRRankedArenaController: return match.playlist.queue === "solo-duo" && match.playlist.input === "controller" && match.playlist.name.includes("Arena") ? match.player.csr.post.value : undefined;
+							case RecentMatchesDataSets.CSRRankedArenaMnK: return match.playlist.queue === "solo-duo" && match.playlist.input === "mnk" && match.playlist.name.includes("Arena") ? match.player.csr.post.value : undefined;
+							case RecentMatchesDataSets.CSRRankedArenaOpen: return match.playlist.queue === "open" && match.playlist.input === "crossplay" && match.playlist.name.includes("Arena") ? match.player.csr.post.value : undefined;
+							case RecentMatchesDataSets.CSRDoubles: return match.playlist.queue === "open" && match.playlist.input === "crossplay" && match.playlist.name.includes("Doubles") ? match.player.csr.post.value : undefined;
+							case RecentMatchesDataSets.CSRFFA: return match.playlist.queue === "open" && match.playlist.input === "crossplay" && match.playlist.name.includes("FFA") ? match.player.csr.post.value : undefined;
 							case RecentMatchesDataSets.KDA: return match.player.kda;
 							case RecentMatchesDataSets.KDR: return match.player.kdr;
 							case RecentMatchesDataSets.Kills: return match.player.summary.kills;
@@ -276,6 +293,13 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 		changeDataSet();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [matches]);
+
+	/** Is a CSR category? */
+	const isCSR = () => dataSet.current === RecentMatchesDataSets.CSRRankedArenaOpen || 
+		dataSet.current === RecentMatchesDataSets.CSRRankedArenaController || 
+		dataSet.current === RecentMatchesDataSets.CSRRankedArenaMnK || 
+		dataSet.current === RecentMatchesDataSets.CSRDoubles || 
+		dataSet.current === RecentMatchesDataSets.CSRFFA;
 	
 	return (
 		matches.length > 2 
@@ -287,6 +311,11 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 						<InputLabel id="data-set-label">Data Set</InputLabel>
 						<Select labelId="data-set-label" id="data-set" value={dataSet.current} label="Data Set" onChange={changeDataSet}>
 							<MenuItem value={RecentMatchesDataSets.WinLoss}>{RecentMatchesDataSets.WinLoss}</MenuItem>
+							<MenuItem value={RecentMatchesDataSets.CSRRankedArenaOpen}>{RecentMatchesDataSets.CSRRankedArenaOpen}</MenuItem>
+							<MenuItem value={RecentMatchesDataSets.CSRRankedArenaController}>{RecentMatchesDataSets.CSRRankedArenaController}</MenuItem>
+							<MenuItem value={RecentMatchesDataSets.CSRRankedArenaMnK}>{RecentMatchesDataSets.CSRRankedArenaMnK}</MenuItem>
+							<MenuItem value={RecentMatchesDataSets.CSRDoubles}>{RecentMatchesDataSets.CSRDoubles}</MenuItem>
+							<MenuItem value={RecentMatchesDataSets.CSRFFA}>{RecentMatchesDataSets.CSRFFA}</MenuItem>
 							<MenuItem value={RecentMatchesDataSets.KDA}>{RecentMatchesDataSets.KDA}</MenuItem>
 							<MenuItem value={RecentMatchesDataSets.KDR}>{RecentMatchesDataSets.KDR}</MenuItem>
 							<MenuItem value={RecentMatchesDataSets.Kills}>{RecentMatchesDataSets.Kills}</MenuItem>
@@ -298,7 +327,7 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 							<MenuItem value={RecentMatchesDataSets.Accuracy}>{RecentMatchesDataSets.Accuracy}</MenuItem>
 						</Select>
 					</FormControl>
-					{dataSet.current !== RecentMatchesDataSets.WinLoss && 
+					{dataSet.current !== RecentMatchesDataSets.WinLoss && !isCSR() && 
 						<>
 							<Box sx={{ width: "16px" }} />
 							<FormControl size="small" sx={{ minWidth: "125px" }}>
@@ -310,11 +339,11 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 							</FormControl>
 						</>
 					}
-					<Box sx={{ width: dataSet.current !== RecentMatchesDataSets.WinLoss ? "calc(50% - 266px)" : "calc(50% - 125px)" }} />
+					<Box sx={{ width: (dataSet.current !== RecentMatchesDataSets.WinLoss && !isCSR()) ? "calc(50% - 266px)" : "calc(50% - 125px)" }} />
 				</Box>
 				<Box sx={{ height: "300px" }}>
-					{(dataSet.current === RecentMatchesDataSets.WinLoss || chartType === ChartType.Bar) && <Bar options={options} data={chartData.labels.length === 0 ? initialChartData : chartData} />}
-					{dataSet.current !== RecentMatchesDataSets.WinLoss && chartType === ChartType.Line && <Line options={options} data={chartData.labels.length === 0 ? initialChartData : chartData} />}
+					{(dataSet.current === RecentMatchesDataSets.WinLoss || (!isCSR() && chartType === ChartType.Bar)) && <Bar options={options} data={chartData.labels.length === 0 ? initialChartData : chartData} />}
+					{(isCSR() || (dataSet.current !== RecentMatchesDataSets.WinLoss && chartType === ChartType.Line)) && <Line options={options} data={chartData.labels.length === 0 ? initialChartData : chartData} />}
 				</Box>
 			</Box>
 			: 

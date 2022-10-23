@@ -97,6 +97,9 @@ export class SCHaloDotAPI
 	{
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCHaloDotAPI.GetCSRS()", player.gamertag); }
 
+		// Put this back to where it belongs
+		if (season === -1) { season = undefined; }
+
 		const csrsData = await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].stats.players.csrs({
 			gamertag: player.gamertag,
 			season: season,

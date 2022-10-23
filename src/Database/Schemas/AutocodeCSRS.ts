@@ -10,6 +10,8 @@ export type AutocodeCSRS = {
 };
 
 export type AutocodeCSRSData = {
+	id: string;
+	name: string;
 	queue: "open" | "solo-duo" | null;
 	input: "controller" | "mnk" | "crossplay" | null;
 	response: {

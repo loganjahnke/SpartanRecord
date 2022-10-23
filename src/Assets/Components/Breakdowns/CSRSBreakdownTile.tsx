@@ -22,8 +22,10 @@ export function CSRSBreakdownTile(props: { csrs: CSRS })
 			width: "100%" }}>
 			<img src={csrs.ranks.current.tierImageUrl} alt="Tier" height="48px" width="48px" />
 			<Box sx={{ mb: 1 }}>
-				<Box sx={{ display: "flex", flexDirection: "row", mb: 0.5 }}>
+				<Box sx={{ display: "flex", flexDirection: "row", mb: 0.5, alignItems: "center" }}>
 					<Typography variant={"subtitle1"} sx={{ fontSize: "0.8rem", ml: 1 }}>{csrs.GetHeader()}</Typography>
+					<Box sx={{ ml: 1 }} />
+					{csrs.GetHeaderIcon()}
 					<Box sx={{ flexGrow: 1 }} />
 					<Typography variant="caption" sx={{ display: "block", fontSize: "0.8rem", mr: 1 }}>{csrs.GetSubtitle()}</Typography>
 				</Box>

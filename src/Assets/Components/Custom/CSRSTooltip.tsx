@@ -32,7 +32,7 @@ export function CSRSProgression(props: { pre: Rank, post: Rank, noBackground?: b
 			display: "grid",
 			gridTemplateColumns: "48px 250px",
 			alignItems: "center",
-			width: "100%" }}>
+			width: noBackground ? "auto" : "100%" }}>
 			<img src={post.tierImageUrl} alt="Tier" height="48px" width="48px" />
 			<Box sx={{ mb: 1 }}>
 				<Box sx={{ display: "flex", flexDirection: "row", mb: 0.5 }}>

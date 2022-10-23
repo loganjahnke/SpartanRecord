@@ -1,7 +1,17 @@
+import { ReactElement } from "react";
+
 import { AutocodeCSRSData, AutocodeRank } from "../../Database/Schemas/AutocodeCSRS";
+
+import MouseRoundedIcon from '@mui/icons-material/MouseRounded';
+import SportsEsportsRoundedIcon from '@mui/icons-material/SportsEsportsRounded';
+import ShuffleRoundedIcon from '@mui/icons-material/ShuffleRounded';
+import MilitaryTechRoundedIcon from '@mui/icons-material/MilitaryTechRounded';
+import { Tooltip } from "@mui/material";
 
 export class CSRS
 {
+    /** The name */
+    public name: string;
     /** The ranked queue */
     public queue: string;
     /** The input (mouse/keyboard or controller) */
@@ -11,6 +21,7 @@ export class CSRS
 
     constructor(data?: AutocodeCSRSData)
     {
+        this.name = data?.name ?? "";
         this.queue = data?.queue ?? "Unknown";
         this.input = data?.input ?? "Unknown";
         this.ranks = new Ranks(data?.response);
@@ -19,13 +30,19 @@ export class CSRS
     /** Gets the header */
     public GetHeader(): string
     {
-        //queue: "open" | "solo-duo" | null;
-	    //input: "controller" | "mnk" | "crossplay" | null;
-        
-        const q = this.queue === "open" ? "Open" : this.queue === "solo-duo" ? "Solo-Duo" : "N/A";
-        const i = this.input === "mnk" ? "MNK" : this.input === "controller" ? "Controller" : this.input === "crossplay" ? "Crossplay" : "N/A";
+        if (this.name.startsWith("Ranked")) { return this.name.substring("Ranked ".length); }
+        return this.name;
+    }
 
-        return q + " | " + i;
+    /** Gets the header icon */
+    public GetHeaderIcon(): ReactElement
+    {
+        return <Tooltip title={this.__getIconTooltip()}>
+            {this.queue === "open" ? <ShuffleRoundedIcon fontSize="small" color="primary" /> :
+            this.input === "mnk" ? <MouseRoundedIcon fontSize="small" color="primary" /> :
+            this.input === "controller" ? <SportsEsportsRoundedIcon fontSize="small" color="primary" /> : 
+            <MilitaryTechRoundedIcon fontSize="small" color="primary" />}
+        </Tooltip>
     }
 
     /** Gets the subtitle */
@@ -48,6 +65,18 @@ export class CSRS
                 all_time: this.ranks.allTime.GetJSON()
             }
         }
+    }
+
+    /** Gets the header */
+    private __getIconTooltip(): string
+    {
+        //queue: "open" | "solo-duo" | null;
+	    //input: "controller" | "mnk" | "crossplay" | null;
+        
+        const q = this.queue === "open" ? "Open" : this.queue === "solo-duo" ? "Solo-Duo" : "N/A";
+        const i = this.input === "mnk" ? "MNK" : this.input === "controller" ? "Controller" : this.input === "crossplay" ? "Crossplay" : "N/A";
+
+        return q + " | " + i;
     }
 }
 
