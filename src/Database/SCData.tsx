@@ -14,6 +14,7 @@ import { SCFirebase } from "./SCFirebase";
 import { SCHaloDotAPI } from "./SCHaloDotAPI";
 import { AutocodeHelpers } from "./Schemas/AutocodeHelpers";
 import { AutocodeMap, AutocodeMedal, AutocodePlaylist, AutocodeTeam, AutocodeVariant } from "./Schemas/AutocodeMetadata";
+import { AutocodeMultiplayerServiceRecord } from "./Schemas/AutocodeMultiplayerServiceRecord";
 import { FirebaseBest } from "./Schemas/FirebaseBest";
 
 /** The types of service records */
@@ -95,6 +96,21 @@ export class SCData
 	}
 
     /**
+	 * Determines if the previous season's are cached for a given gamertag
+	 * @param gamertag the gamertag to evaluate
+	 * @returns true if we have these seasons saved in Firebase
+	 */
+    public DoesPlayerHavePrevSeasons = async (gamertag: string): Promise<boolean> => this.__firebase.HasHistoricSeasonsCached(gamertag);
+
+    /**
+	 * Sets a previous season's statistics
+	 * @param gamertag the gamertag to set the historic statistics for
+	 * @param season the season we are saving
+	 * @param sr the service record
+	 */
+	public SetPreviousSeasonStats = async (gamertag: string, season: number, sr: AutocodeMultiplayerServiceRecord): Promise<void> => this.__firebase.SetPreviousSeasonStats(gamertag, season, sr);
+
+    /**
      * Sets a player into firebase
      * @param player the player
      * @param season the multiplayer season
@@ -109,7 +125,6 @@ export class SCData
             await Promise.all([
                 this.__firebase.SetAppearance(player.gamertag, player.appearanceData),
                 this.__firebase.SetServiceRecord(player.gamertag, player.serviceRecordData, season),
-                this.__firebase.SetMMR(player.gamertag, player.mmr),
                 this.__firebase.SetCSRS(player.gamertag, season, player.csrs.map(iter => iter.GetJSON())),
             ]);
         }
@@ -118,7 +133,6 @@ export class SCData
             await Promise.all([
                 this.__firebase.SetAppearance(player.gamertag, player.appearanceData),
                 this.__firebase.SetServiceRecord(player.gamertag, player.serviceRecordData, season),
-                this.__firebase.SetMMR(player.gamertag, player.mmr),
                 this.__firebase.SetCSRS(player.gamertag, season, player.csrs.map(iter => iter.GetJSON())),
                 this.__firebase.UpdateLeaderboard(player)
             ]);
@@ -152,11 +166,10 @@ export class SCData
      * Gets the player from HaloDotAPI
      * @param gamertag the gamertag
      * @param season the season
-     * @param mmr the MMR
      */
-	public async GetPlayerFromHaloDotAPI(gamertag: string, season?: number, mmr?: MMR): Promise<Player> 
+	public async GetPlayerFromHaloDotAPI(gamertag: string, season?: number): Promise<Player> 
     {
-        const player = await this.__halodapi.GetPlayer(gamertag, season, mmr);
+        const player = await this.__halodapi.GetPlayer(gamertag, season);
         if ((player.serviceRecordData as any)?.error)
         {
             this.LogError(gamertag);
@@ -179,6 +192,21 @@ export class SCData
         const player = new Player(gamertag);
         await this.__halodapi.GetServiceRecord(player, season, playlistId, categoryId, type);
         return player.serviceRecord;
+    }
+
+    /**
+	 * Gets the service record data for the gamertag from HaloDotAPI
+	 * @param player the gamertag to get the service record of
+	 * @param season the season number
+	 * @param playlistId the playlist ID
+	 * @param categoryId the category ID
+	 * @param type the type of service record to get
+	 * @returns the service record for the gamertag
+	 */
+	public async GetServiceRecordData(gamertag: string, season?: number, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<AutocodeMultiplayerServiceRecord> 
+    {
+        const player = new Player(gamertag);
+        return await this.__halodapi.GetServiceRecordData(player, season, playlistId, categoryId, type);
     }
 
     /**
@@ -247,7 +275,7 @@ export class SCData
         let match = await this.__firebase.GetMatch(matchID);
         if (match) { return match; }
 
-        // Now check autocode
+        // Now check HaloDotAPI
         const result = await this.__halodapi.GetMatch(matchID);
         if (!result) { return new Match(); }
 
@@ -297,7 +325,7 @@ export class SCData
 	 */
 	public async GetBest(gamertag: string): Promise<FirebaseBest>
     {
-        return await this.__firebase.GetBest(gamertag);
+        return await this.__firebase.GetBestMatches(gamertag);
     }
 
     /**
@@ -308,7 +336,7 @@ export class SCData
 	 */
 	public async GetBestForMap(gamertag: string, map: string): Promise<FirebaseBest>
     {
-        return await this.__firebase.GetBestForMap(gamertag, map);
+        return await this.__firebase.GetBestMatchesForMap(gamertag, map);
     }
 
     /**
@@ -318,7 +346,7 @@ export class SCData
 	 */
 	public async GetIsAllowed(gamertag: string): Promise<boolean>
     {
-        return await this.__firebase.GetIsAllowed(gamertag);
+        return await this.__firebase.GetIsPremiumUser(gamertag);
     }
     //#endregion
 
@@ -371,19 +399,13 @@ export class SCData
      * Logs an event in Firebase analytics for viewing the gamertag's medals
      * @param gamertag the gamertag
      */
-    public LogViewMedals(gamertag: string): void
-    {
-        this.LogEvent("view_medals", { gamertag: gamertag });
-    }
+    public LogViewMedals = (gamertag: string): void => this.LogEvent("view_medals", { gamertag: gamertag });
 
     /**
      * Logs an event in Firebase analytics for viewing the gamertag's matches
      * @param gamertag the gamertag
      */
-    public LogViewMatches(gamertag: string): void
-    {
-        this.LogEvent("view_matches", { gamertag: gamertag });
-    }
+    public LogViewMatches = (gamertag: string): void => this.LogEvent("view_matches", { gamertag: gamertag });
 
     /**
      * Logs an event in Firebase analytics for viewing the gamertag's service record
@@ -405,28 +427,19 @@ export class SCData
      * Logs an event in Firebase analytics for viewing the spartan company
      * @param company the spartan company
      */
-    public LogViewSpartanCompany(company: string): void
-    {
-        this.LogEvent("view_spartan_company", { spartan_company: company });
-    }
+    public LogViewSpartanCompany = (company: string): void => this.LogEvent("view_spartan_company", { spartan_company: company });
 
     /**
      * Logs an error
      * @param gamertag the gamertag that failed to load
      */
-    public LogError(gamertag: string): void
-    {
-        this.LogEvent("service_record_error", { gamertag: gamertag });
-    }
+    public LogError = (gamertag: string): void => this.LogEvent("service_record_error", { gamertag: gamertag });
 
     /**
      * Logs an event in Firebase analytics
      * @param event the event name
      * @param params the optional parameters
      */
-    public LogEvent(event: string, params?: any): void
-    {
-        logEvent(this.__analytics, event, params);
-    }
+    public LogEvent = (event: string, params?: any): void => logEvent(this.__analytics, event, params);
     //#endregion
 }

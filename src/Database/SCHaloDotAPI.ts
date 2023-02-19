@@ -1,5 +1,6 @@
 import moment from "moment";
 import { Debugger } from "../Objects/Helpers/Debugger";
+import { SR } from "../Objects/Helpers/Statics/SR";
 import { Appearance } from "../Objects/Model/Appearance";
 import { CSRS } from "../Objects/Model/CSRS";
 import { Player } from "../Objects/Model/Player";
@@ -30,16 +31,14 @@ export class SCHaloDotAPI
 	 * Gets the player from HaloDotAPI
 	 * @param gamertag the gamertag
 	 * @param season the season
-	 * @param mmr the existing MMR
 	 * @returns the player
 	 */
-	public async GetPlayer(gamertag: string, season?: number, mmr?: MMR): Promise<Player>
+	public async GetPlayer(gamertag: string, season?: number): Promise<Player>
 	{
-		const player = new Player(gamertag, undefined, undefined, undefined, mmr);
+		const player = new Player(gamertag);
 		await Promise.all([
 			this.GetAppearance(player), 
-			this.GetServiceRecord(player, season), 
-			//this.GetMMR(player), 
+			this.GetServiceRecord(player, season),
 			this.GetCSRS(player, season)
 		]).catch(error => {
 			player.serviceRecord.error = error?.message ?? "Could not load player";
@@ -138,9 +137,53 @@ export class SCHaloDotAPI
 	public async GetServiceRecord(player: Player, season?: number, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<void>
 	{
 		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCHaloDotAPI.GetServiceRecord()", player.gamertag); }
-		player.serviceRecordData = await this.__getServiceRecordFromHaloDotAPI(player.gamertag, season === -1 ? undefined : season, playlistId, categoryId, type);
+		player.serviceRecordData = await this.GetServiceRecordData(player, season === -1 ? undefined : season, playlistId, categoryId, type);
 		player.serviceRecord = new ServiceRecord(player.serviceRecordData);
 		player.gamertag = player.serviceRecordData?.additional?.parameters?.gamertag ?? player.gamertag;
+	}
+
+	/**
+	 * Gets the service record for the gamertag from Autocode
+	 * @param player the gamertag to get the service record of
+	 * @param season the season number
+	 * @param playlistId the playlist ID
+	 * @param categoryId the category ID
+	 * @param type the type of service record to get
+	 * @returns the service record for the gamertag
+	 */
+	public async GetServiceRecordData(player: Player, season?: number, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<AutocodeMultiplayerServiceRecord>
+	{
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCHaloDotAPI.GetServiceRecordData()", player.gamertag); }
+		return await this.__getServiceRecordFromHaloDotAPI(player.gamertag, season === -1 ? undefined : season, playlistId, categoryId, type);
+	}
+
+	/**
+	 * Gets the previous seasons' service records for the gamertag from Autocode
+	 * @param player the player to get the service records of
+	 * @returns the service records for the player
+	 */
+	public async GetOldSeasons(player: Player): Promise<AutocodeMultiplayerServiceRecord[]>
+	{
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCHaloDotAPI.GetOldSeasons()", player.gamertag); }
+		
+		const srData: AutocodeMultiplayerServiceRecord[] = [];
+		for (let i = 0; i < SR.Season - 1; i++)
+		{
+			srData.push(await this.__getServiceRecordFromHaloDotAPI(player.gamertag, i + 1));
+		}
+		
+		return srData;
+	}
+
+	/**
+	 * Gets the current season's service record for the gamertag from Autocode
+	 * @param player the player to get the current season's service record of
+	 * @returns the service record for the player
+	 */
+	public async GetCurrentSeason(player: Player): Promise<AutocodeMultiplayerServiceRecord>
+	{
+		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCHaloDotAPI.GetCurrentSeason()", player.gamertag); }
+		return this.__getServiceRecordFromHaloDotAPI(player.gamertag, SR.Season);
 	}
 	//#endregion
  
@@ -373,7 +416,7 @@ export class SCHaloDotAPI
 	{
 		const params: any = {};
 		params.gamertag = gamertag;
-		if (season && season !== -1) { params.season = season; }
+		if (season !== undefined && season !== -1) { params.season = season; }
 		if (playlistId) { params.playlist_id = playlistId; }
 		if (categoryId) { params.category_id = +categoryId; }
 		  

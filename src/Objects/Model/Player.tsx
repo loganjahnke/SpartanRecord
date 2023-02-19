@@ -26,6 +26,8 @@ export class Player
     public lastMatchID: string;
     /** The raw appearance data */
     public appearanceData?: AutocodeAppearance;
+    /** A hashset with the seasons that a player has statistics for in Firebase */
+    public hasStatsForSeason: Set<number>;
     /** The raw service record data */
     private _serviceRecordData?: AutocodeMultiplayerServiceRecord;
     public get serviceRecordData() { return this._serviceRecordData; }
@@ -47,6 +49,7 @@ export class Player
         this.csrs = csrs ?? [];
         this.campaignRecord = campaignRecord;
         this.lastMatchID = "";
+        this.hasStatsForSeason = new Set<number>();
     }
 
     /**

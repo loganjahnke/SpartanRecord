@@ -46,6 +46,9 @@ export const KillBreakdownChart = (props: { currentSR: ServiceRecord }) =>
 			title: {
 				display: false,
 				text: "Kills Breakdown",
+			},
+			datalabels: {
+				display: false
 			}
 		},
 		elements: {

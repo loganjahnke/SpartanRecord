@@ -73,10 +73,10 @@ const App = () =>
 	 * @param gamertag the new gamertag of the player
 	 * @param appearance the new appearance of the player
 	 * @param serviceRecord the new service record for the player
-	 * @param season the season
-	 * @param mmr the MMR
+	 * @param csrs the ranked ranks
+	 * @param isPrivate is the gamertag private?
 	 */
-	const updatePlayer = useCallback(async (gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, mmr?: MMR, csrs?: CSRS[], isPrivate?: boolean) =>
+	const updatePlayer = useCallback(async (gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, csrs?: CSRS[], isPrivate?: boolean) =>
 	{
 		const newPlayer = Player.Copy(player);
 
@@ -85,7 +85,6 @@ const App = () =>
 			newPlayer.gamertag = gamertag;
 			newPlayer.appearance = appearance ?? new Appearance();
 			newPlayer.serviceRecord = serviceRecord ?? new ServiceRecord();
-			newPlayer.mmr = mmr ?? new MMR();
 			newPlayer.csrs = csrs ?? [];
 			newPlayer.isPrivate = isPrivate !== undefined ? isPrivate : false;
 		}
@@ -93,7 +92,6 @@ const App = () =>
 		{
 			if (appearance) { newPlayer.appearance = appearance; }
 			if (serviceRecord) { newPlayer.serviceRecord = serviceRecord; }
-			if (mmr) { newPlayer.mmr = mmr; }
 			if (csrs) { newPlayer.csrs = csrs; }
 			if (isPrivate !== undefined) { newPlayer.isPrivate = isPrivate; }
 		}

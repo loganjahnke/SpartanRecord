@@ -44,7 +44,7 @@ export function MatchesView(props: ViewProps)
 			if (!player || !player.appearance || !player.serviceRecord || !player.appearance.emblemURL)
 			{
 				const p = await app.GetPlayerFromFirebase(gamertag);
-				updatePlayer(p.gamertag, p.appearance, p.serviceRecord, p.mmr, p.csrs);
+				updatePlayer(p.gamertag, p.appearance, p.serviceRecord, p.csrs);
 			}
 
 			const serviceRecord = new ServiceRecord();

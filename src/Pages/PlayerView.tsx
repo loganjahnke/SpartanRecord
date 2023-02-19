@@ -8,6 +8,7 @@ import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { Cookie } from "../Objects/Helpers/Cookie";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { ServiceRecordGrid } from "../Assets/Components/ServiceRecord/ServiceRecordGrid";
+import { SR } from "../Objects/Helpers/Statics/SR";
 
 export function PlayerView(props: ViewProps)
 {
@@ -30,9 +31,9 @@ export function PlayerView(props: ViewProps)
 		setLoadingMessage("Loading " + gamertag);
 		
 		// Get the player from firebase and show on screen
-		const player = await app.GetPlayerFromFirebase(gamertag, season, isAllowed);
-		updatePlayer(player.gamertag, player.appearance, player.serviceRecord, player.mmr, player.csrs);
-		if (isAllowed) { setHistoricStats(player.historicStats ?? []); }
+		const player = await app.GetPlayerFromFirebase(gamertag, season, true);
+		updatePlayer(player.gamertag, player.appearance, player.serviceRecord, player.csrs);
+		setHistoricStats(player.historicStats ?? [new ServiceRecord(), new ServiceRecord(), new ServiceRecord()]);
 
 		if (!player.serviceRecord.IsEmpty() && season === -1)
 		{
@@ -49,10 +50,10 @@ export function PlayerView(props: ViewProps)
 			app.AddToSyncing(gamertag);
 
 			// Sync into firebase
-			const newPlayer = await app.GetPlayerFromHaloDotAPI(gamertag, season, player.mmr);
+			const newPlayer = await app.GetPlayerFromHaloDotAPI(gamertag, season);
 			if (newPlayer)
 			{
-				updatePlayer(newPlayer.gamertag, newPlayer.appearance, newPlayer.serviceRecord, newPlayer.mmr, newPlayer.csrs, newPlayer.isPrivate);
+				updatePlayer(newPlayer.gamertag, newPlayer.appearance, newPlayer.serviceRecord, newPlayer.csrs, newPlayer.isPrivate);
 				await app.SetPlayerIntoFirebase(newPlayer, season, player.serviceRecord);
 
 				if (newPlayer.gamertag !== gamertag)
@@ -61,8 +62,22 @@ export function PlayerView(props: ViewProps)
 					await app.UpdateGamertagReference(newPlayer.gamertag, gamertag);
 				}
 			}
+
+			// Check if we actually have the previous season statistics
+			if (!await app.DoesPlayerHavePrevSeasons(gamertag))
+			{
+				const prevSRs = [];
+				for (let i = 1; i <= SR.Season; i++)
+				{
+					const sr = await app.GetServiceRecordData(gamertag, i);
+					await app.SetPreviousSeasonStats(gamertag, i, sr);
+					prevSRs.push(new ServiceRecord(sr));
+				}
+				setHistoricStats(prevSRs);
+			}
 			
 			if (newPlayer.serviceRecordData && !(newPlayer.serviceRecordData as any).error) { Cookie.addRecent(newPlayer.gamertag); }
+
 			setLoadingMessage("");
 			app.RemoveFromSyncing(gamertag);
 			setBackgroundLoadingProgress(undefined);
@@ -72,7 +87,7 @@ export function PlayerView(props: ViewProps)
 			setLoadingMessage("");
 			setBackgroundLoadingProgress(undefined); 
 		}
-	}, [app, gamertag, updatePlayer, setBackgroundLoadingProgress, season, switchTab, isAllowed, setLoadingMessage]);
+	}, [app, gamertag, updatePlayer, setBackgroundLoadingProgress, season, switchTab, setLoadingMessage]);
 	
 	useEffect(() =>
 	{

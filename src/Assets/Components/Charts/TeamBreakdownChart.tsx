@@ -46,6 +46,9 @@ export const TeamBreakdownChart = (props: { players: MatchPlayer[] }) =>
 			title: {
 				display: true,
 				text: "Kills",
+			},
+			datalabels: {
+				display: false
 			}
 		},
 		elements: {

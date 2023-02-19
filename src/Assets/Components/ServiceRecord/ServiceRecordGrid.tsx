@@ -12,7 +12,7 @@ import { MatchesBreakdown } from "../Breakdowns/MatchesBreakdown";
 import { ShotsBreakdown } from "../Breakdowns/ShotsBreakdown";
 import { TimePlayed } from "../Breakdowns/TimePlayed";
 import { VehicleBreakdown } from "../Breakdowns/VehicleBreakdown";
-import { ServiceRecordChart } from "../Charts/ServiceRecordChart";
+import { SeasonsChart } from "../Charts/SeasonsChart";
 import { TopMedals } from "../Medals/TopMedals";
 import { SeasonChooser } from "./SeasonChooser";
 import { ServiceRecordFilters } from "./ServiceRecordFilters";
@@ -86,9 +86,6 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 				<Grid item xs={12}>
 					<LevelBreakdown serviceRecord={serviceRecord} showPerMatch={showPerMatch} />
 				</Grid>
-				{/* {player.mmr && <Grid item xs={12}>
-					<MMRBreakdown mmr={player.mmr} />
-				</Grid>}						 */}
 				<Grid container item spacing={2} xs={12}>
 					<Grid item xs={12} lg={6}>
 						<TimePlayed serviceRecord={serviceRecord} showPerMatch={showPerMatch} />
@@ -97,12 +94,9 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 						<VehicleBreakdown serviceRecord={serviceRecord} showPerMatch={showPerMatch} />
 					</Grid>
 				</Grid>
-				{isAllowed && (season === undefined || season === -1) && historicStats && <Grid item xs={12}>
-					<ServiceRecordChart historicServiceRecords={historicStats} currentSR={serviceRecord} />
+				{historicStats && <Grid item xs={12}>
+					<SeasonsChart historicServiceRecords={historicStats} />
 				</Grid>}
-				{/* <Grid item xs={12}>
-					<CampaignBreakdown campaignRecord={player.campaignRecord} />
-				</Grid> */}
 			</Grid>						
 		</Grid>
 	)

@@ -107,6 +107,17 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 				title: {
 					display: false,
 					text: dataSet.current,
+				},
+				datalabels: {
+					display: newDataSet !== RecentMatchesDataSets.WinLoss,
+					color: "#FFFFFF",
+					font: {
+						family: "Industry",
+						weight: "600"
+					},
+					formatter: function(value: number) {
+						return Math.round(value * 100) / 100;
+					}
 				}
 			},
 			elements: {
@@ -234,14 +245,10 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 							case RecentMatchesDataSets.DamageEfficiency: 
 								return match.player.damageEfficiency >= 0.8 
 									? ArrowheadTheme.good 
-									: match.player.damageEfficiency >= 0.7
-									? ArrowheadTheme.halo_sunshine
 									: ArrowheadTheme.bad;
 							case RecentMatchesDataSets.EnemyEfficiency: 
 								return match.player.enemyDamageEfficiency >= 0.8 
 									? ArrowheadTheme.bad 
-									: match.player.enemyDamageEfficiency >= 0.7
-									? ArrowheadTheme.halo_sunshine
 									: ArrowheadTheme.good;
 							case RecentMatchesDataSets.Accuracy: return match.player.shots.accuracy > sr.shots.accuracy ? ArrowheadTheme.good : ArrowheadTheme.bad;
 							default: return match.player.won ? ArrowheadTheme.good : ArrowheadTheme.bad;
