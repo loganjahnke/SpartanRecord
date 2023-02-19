@@ -190,6 +190,7 @@ export const SeasonsChart = (props: { historicServiceRecords: ServiceRecord[] })
 				{
 					backgroundColor: ArrowheadTheme.good,
 					borderColor: ArrowheadTheme.good,
+					borderRadius: 5,
 					data: historicServiceRecords.map(sr => 
 					{
 						switch (dataSet.current)

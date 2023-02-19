@@ -7,7 +7,7 @@ import PrimaryLogo from "../../Images/Primary/Spartan-Record-Logo-Primary-White.
 
 import { BestMatchIcon, MapIcon, MatchesIcon, MatchOutcomeIcon, MedalsIcon, ModesIcon, PlaylistsIcon, RankedIcon, SearchIcon, ServiceRecordIcon, SocialIcon, VariantsIcon, SpartanCompanyIcon } from "../../Icons/CustomIcons";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
-import { LeaderboardRounded, LockOutlined } from "@mui/icons-material";
+import { EventRepeat, LeaderboardRounded, LockOutlined } from "@mui/icons-material";
 
 export enum SRTabs
 {
@@ -27,7 +27,8 @@ export enum SRTabs
 	MatchOutcome = "Match Outcome",
 	Modes = "Modes",
 	Patreon = "Patreon",
-	Leaderboard = "Leaderboards"
+	Leaderboard = "Leaderboards",
+	Yesterday = "Yesterday"
 }
 
 interface AHDrawerProps
@@ -113,6 +114,9 @@ export function AHDrawer(props: AHDrawerProps)
 				if (!isAllowed) { switchTab(`/patreon/${player.gamertag}`, newTab); break; }
 				switchTab(`/best/matches/${player.gamertag}`, newTab);
 				break;
+			case SRTabs.Yesterday:
+				switchTab(`/yesterday/${player.gamertag}`, newTab);
+				break;
 			default: 
 				console.log("Something unexpected was pressed in the tabs: " + newTab);
 				break;
@@ -151,6 +155,7 @@ export function AHDrawer(props: AHDrawerProps)
 				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
 					<Tab value={SRTabs.Search} label={SRTabs.Search} icon={<SearchIcon />} iconPosition="start" />
 					<Tab value={SRTabs.ServiceRecord} label={SRTabs.ServiceRecord} icon={<ServiceRecordIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Yesterday} label={SRTabs.Yesterday} icon={<EventRepeat fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab value={SRTabs.Playlists} label={SRTabs.Playlists} icon={<PlaylistsIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab value={SRTabs.Variants} label={SRTabs.Variants} icon={<VariantsIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab value={SRTabs.Social} label={SRTabs.Social} icon={<SocialIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
@@ -175,6 +180,7 @@ export function AHDrawer(props: AHDrawerProps)
 				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
 					<Tab value="Search" label="Search" icon={<SearchIcon />} iconPosition="start" />
 					<Tab value={SRTabs.ServiceRecord} label={SRTabs.ServiceRecord} icon={<ServiceRecordIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Yesterday} label={SRTabs.Yesterday} icon={<EventRepeat fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab value={SRTabs.Playlists} label={SRTabs.Playlists} icon={<PlaylistsIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab value={SRTabs.Variants} label={SRTabs.Variants} icon={<VariantsIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab value={SRTabs.Social} label={SRTabs.Social} icon={<SocialIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />

@@ -1,5 +1,8 @@
 export class Debugger
 {
+    /** Turns on or off debugging mode */
+	private static readonly IS_DEBUGGING = process.env.NODE_ENV !== "production";
+
     /**
      * Gets the rough byte estimate for an object
      * @param object the object
@@ -63,22 +66,28 @@ export class Debugger
      */
     public static Size(object: any, description?: string)
     {
+        if (!Debugger.IS_DEBUGGING) { return; }
         console.log(`Size of ${description || "object"}: ${this.FormatByteSize(this.RoughSizeOfObject(object))}`);
     }
 
     /**
      * Prints a debug message to the console
-     * @param start is this the start or end of a method
-     * @param caller the caller function
+     * @param tsClass the class
+     * @param tsMethod the method
      * @param message the message details (optional)
      * @param object should show object details? (optional)
      */
-    public static Print(start: boolean, caller: string, message?: string, object?: any)
+    public static Print(tsClass: string, tsMethod: string, message?: string, object?: any)
     {
-        let result = start ? "START " : "END ";
-        result += caller;
+        if (!Debugger.IS_DEBUGGING) { return; }
 
-        if (message) { result += " - " + message; }
+        let result = tsClass;
+        result += "".padStart(20 - tsClass.length, " ");
+        
+        result += tsMethod;
+        result += "".padStart(30 - tsMethod.length, " ");
+
+        if (message) { result += message; }
         if (object) 
         { 
             let key: keyof any;
@@ -93,10 +102,32 @@ export class Debugger
 
     /**
      * Prints a debug message to the console
+     * @param tsClass the class
+     * @param tsMethod the method
+     * @param message the message details (optional)
+     */
+    public static Simple(tsClass: string, tsMethod: string, message?: string)
+    {
+        if (!Debugger.IS_DEBUGGING) { return; }
+        
+        let result = tsClass;
+        result += "".padStart(20 - tsClass.length, " ");
+        
+        result += tsMethod;
+        result += "".padStart(30 - tsMethod.length, " ");
+
+        if (message) { result += message; }
+        
+        console.log(result);
+    }
+
+    /**
+     * Prints a debug message to the console
      * @param message the message details
      */
-        public static Continue(message: string)
-        {
-            console.log(`\t${message}`);
-        }
+    public static Continue(message: string)
+    {
+        if (!Debugger.IS_DEBUGGING) { return; }
+        console.log("".padStart(50, " ") + message);
+    }
 }

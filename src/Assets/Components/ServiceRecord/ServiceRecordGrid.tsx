@@ -1,4 +1,4 @@
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, Typography } from "@mui/material";
 import { CSRS } from "../../../Objects/Model/CSRS";
 import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import { AssistBreakdown } from "../Breakdowns/AssistBreakdown";
@@ -27,11 +27,12 @@ interface ServiceRecordGridProps
 	historicStats?: ServiceRecord[];
 	isAllowed?: boolean;
 	season?: number;
+	title?: string;
 }
 
 export function ServiceRecordGrid(props: ServiceRecordGridProps)
 {
-	const { setSeason, setShowPerMatch, showPerMatch, serviceRecord, csrs, historicStats, isAllowed, season } = props;
+	const { setSeason, setShowPerMatch, showPerMatch, serviceRecord, csrs, historicStats, season, title } = props;
 
 	if (!serviceRecord || serviceRecord.IsEmpty() || serviceRecord.error) { return <></>; }
 
@@ -41,6 +42,7 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 			<Grid item xs={12}>
 				<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
 					{setSeason && <SeasonChooser setSeason={setSeason} />}
+					{title && <Typography variant="h5">{title}</Typography>}
 					<Box sx={{ flexGrow: 1 }}></Box>
 					<ServiceRecordFilters setPerMatch={setShowPerMatch} />
 				</Box>
@@ -86,6 +88,9 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 				<Grid item xs={12}>
 					<LevelBreakdown serviceRecord={serviceRecord} showPerMatch={showPerMatch} />
 				</Grid>
+				{historicStats && (season === undefined || season === -1) && <Grid item xs={12}>
+					<SeasonsChart historicServiceRecords={historicStats} />
+				</Grid>}
 				<Grid container item spacing={2} xs={12}>
 					<Grid item xs={12} lg={6}>
 						<TimePlayed serviceRecord={serviceRecord} showPerMatch={showPerMatch} />
@@ -94,9 +99,6 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 						<VehicleBreakdown serviceRecord={serviceRecord} showPerMatch={showPerMatch} />
 					</Grid>
 				</Grid>
-				{historicStats && <Grid item xs={12}>
-					<SeasonsChart historicServiceRecords={historicStats} />
-				</Grid>}
 			</Grid>						
 		</Grid>
 	)

@@ -10,7 +10,7 @@ export interface ViewProps
 {
     app: SCData;
     setLoadingMessage: (message: string) => void;
-    setBackgroundLoadingProgress: (progress: number | undefined) => void;
+    setBackgroundLoadingProgress: (progress: string) => void;
     player?: Player;
     updatePlayer: (gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, csrs?: CSRS[], isPrivate?: boolean) => void;
     switchTab: (url?: string, tab?: SRTabs) => void;

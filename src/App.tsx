@@ -59,7 +59,7 @@ const App = () =>
 	const [mobileOpen, setMobileOpen] = useState(false);
 	const [tab, setTab] = useState("Search");
 	const [loadingMessage, setLoadingMessage] = useState("");
-	const [backgroundLoadingProgress, setBackgroundLoadingProgress] = useState<number | undefined>(undefined);
+	const [backgroundLoadingProgress, setBackgroundLoadingProgress] = useState<string>("");
 	const [isAllowed, setIsAllowed] = useState(true);
 	//#endregion
 
@@ -120,7 +120,7 @@ const App = () =>
 	return (
 		<ThemeProvider theme={ArrowheadTheme.theme}>
 			<Box sx={{ display: "flex", backgroundColor: "background.paper", height: "calc(100vh - 34px)" }}>
-				<AHAppBar player={player} handleDrawerToggle={handleDrawerToggle} loadingFromAutocode={backgroundLoadingProgress} />
+				<AHAppBar player={player} handleDrawerToggle={handleDrawerToggle} backgroundLoadingMessage={backgroundLoadingProgress} />
 				<AHDrawer player={player} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={switchTab} handleDrawerToggle={handleDrawerToggle} isAllowed={isAllowed} />
 				<AHLoading loadingMessage={loadingMessage} />
 				<Routes>
@@ -140,7 +140,7 @@ const App = () =>
 					<Route path="/leaderboard" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
 					<Route path="/leaderboard/:gamertag" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
 					<Route path="/leaderboard/:gamertag/:category" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
-					<Route path="/day/:gamertag" element={<DayView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
+					<Route path="/yesterday/:gamertag" element={<DayView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
 					<Route path="/day/:gamertag/:date" element={<DayView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
 					<Route path="/powered_by_halodotapi" element={<OtherCreators />} />
 					<Route path="/donate" element={<Donate />} />

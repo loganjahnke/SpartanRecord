@@ -1,4 +1,4 @@
-import { Box, Divider, Toolbar } from "@mui/material";
+import { Box, Button, Divider, Toolbar, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
@@ -7,42 +7,45 @@ import { ViewProps } from "./Props/ViewProps";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { ServiceRecordGrid } from "../Assets/Components/ServiceRecord/ServiceRecordGrid";
-import { AutocodeHelpers } from "../Database/Schemas/AutocodeHelpers";
-import { AutocodeMultiplayerServiceRecord } from "../Database/Schemas/AutocodeMultiplayerServiceRecord";
+
 import moment from "moment";
 
 export function DayView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setBackgroundLoadingProgress, player, updatePlayer, switchTab, isAllowed } = props;
+	const { app, setLoadingMessage, player, switchTab, isAllowed } = props;
 	const { gamertag, date } = useParams();
 	//#endregion
 	
 	//#region State
-	const [serviceRecord, setServiceRecord] = useState<ServiceRecord>(new ServiceRecord());
+	const [serviceRecord, setServiceRecord] = useState<ServiceRecord | undefined>();
 	const [showPerMatch, setShowPerMatch] = useState(false);
+	const [dateObj, setDateObj] = useState(new Date(Date.now() - 86400000));
 	//#endregion
 
 	const loadData = useCallback(async () => 
 	{		
 		if (!gamertag) { switchTab("/", SRTabs.Search); return; }
-
-		// Set page gamertag and show loading message
-		setLoadingMessage("Loading " + gamertag);
-
-		// Parse date string if passed in
-		let dateObj = new Date();
+		
+		// Parse date string if passed in (yesterday is default)
+		let tempDateObj = new Date(Date.now() - 86400000);
 		if (date && moment(date).isValid())
 		{
-			dateObj = moment(date).toDate();
+			tempDateObj = moment(date).toDate();
 		}
+
+		// Update state
+		setDateObj(tempDateObj);
+
+		// Set page gamertag and show loading message
+		setLoadingMessage("Generating service record for " + tempDateObj.toLocaleDateString() + " for " + gamertag);
 		
 		// Get the matches from firebase and show on screen
-		setServiceRecord(await app.GetMatchesForDay(gamertag, dateObj));
+		setServiceRecord(await app.GetMatchesForDay(gamertag, tempDateObj));
 		setLoadingMessage("");
 
-		switchTab(undefined, SRTabs.ServiceRecord);
-	}, [app, gamertag, updatePlayer, setBackgroundLoadingProgress, switchTab, isAllowed, setLoadingMessage, date]);
+		switchTab(undefined, SRTabs.Yesterday);
+	}, [app, gamertag, date, switchTab, setLoadingMessage, setDateObj]);
 	
 	useEffect(() =>
 	{
@@ -62,11 +65,29 @@ export function DayView(props: ViewProps)
 			<Toolbar />
 			<Divider />
 			<Box sx={{ p: player ? 2 : 0, height: "calc(100% - 64px)" }}>
+				{serviceRecord && serviceRecord.error !== undefined &&
+					<Box sx={{ m: 10, color: "primary.main" }}>
+						<Typography variant="h3">Couldn't load {gamertag}</Typography>
+						<Typography variant="h6">{serviceRecord.error}</Typography>
+						<Button sx={{ mt: 4 }} onClick={() => switchTab("/", SRTabs.Search)} variant="contained">Back to Search</Button>
+					</Box>
+				}
+				{serviceRecord && serviceRecord.IsEmpty() &&
+					<Box sx={{ m: 10, color: "primary.main" }}>
+						<Typography variant="h3">Nothing to show!</Typography>
+						<Typography variant="h6">No matches played on {dateObj.toLocaleDateString()} for {gamertag}</Typography>
+						<Button sx={{ mt: 4 }} onClick={() => switchTab("/", SRTabs.Search)} variant="contained">Back to Search</Button>
+					</Box>
+				}
 				{serviceRecord && <ServiceRecordGrid 
 					serviceRecord={serviceRecord} 
 					isAllowed={isAllowed}
 					showPerMatch={showPerMatch}
-					setShowPerMatch={setShowPerMatch} />}
+					setShowPerMatch={setShowPerMatch}
+					title={`${dateObj.toLocaleDateString("en-US", { 
+						dateStyle: "full"
+					})}`}
+				/>}
 			</Box>
 		</Box>
 	);

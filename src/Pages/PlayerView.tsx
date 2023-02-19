@@ -9,6 +9,8 @@ import { Cookie } from "../Objects/Helpers/Cookie";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { ServiceRecordGrid } from "../Assets/Components/ServiceRecord/ServiceRecordGrid";
 import { SR } from "../Objects/Helpers/Statics/SR";
+import { Player } from "../Objects/Model/Player";
+import { Debugger } from "../Objects/Helpers/Debugger";
 
 export function PlayerView(props: ViewProps)
 {
@@ -23,71 +25,172 @@ export function PlayerView(props: ViewProps)
 	const [season, setSeason] = useState(-1);
 	//#endregion
 
-	const loadData = useCallback(async () => 
-	{		
-		if (!gamertag) { switchTab("/", SRTabs.Search); return; }
+	/**
+	 * Clears the loading messages
+	 */
+	const clearLoadingMessages = useCallback(() =>
+	{
+		setLoadingMessage("");
+		setBackgroundLoadingProgress("");
+	}, [setLoadingMessage, setBackgroundLoadingProgress]);
+
+	/**
+	 * Loads the player from firebase
+	 * @returns the player object
+	 */
+	const loadFromFirebase = useCallback(async () =>
+	{
+		if (!gamertag) { return new Player(); }
 
 		// Set page gamertag and show loading message
 		setLoadingMessage("Loading " + gamertag);
-		
+				
 		// Get the player from firebase and show on screen
 		const player = await app.GetPlayerFromFirebase(gamertag, season, true);
+
+		// Update state
 		updatePlayer(player.gamertag, player.appearance, player.serviceRecord, player.csrs);
 		setHistoricStats(player.historicStats ?? [new ServiceRecord(), new ServiceRecord(), new ServiceRecord()]);
 
-		if (!player.serviceRecord.IsEmpty() && season === -1)
-		{
-			// Set loading message to nada, start background load
-			setLoadingMessage("");
-			setBackgroundLoadingProgress(-1);
+		return player;
+
+	}, [gamertag, app, season, setLoadingMessage, updatePlayer, setHistoricStats]);
+
+	/**
+	 * Loads the player from HaloDotAPI
+	 * @param currSR the current service record from Firebase
+	 */
+	const loadFromHaloDotAPI = useCallback(async (currSR: ServiceRecord) =>
+	{
+		// If we are already syncing this gamertag, quit early
+		if (!gamertag || app.IsSyncing(gamertag)) 
+		{ 
+			clearLoadingMessages(); 
+			return; 
 		}
 
+		// If we already have this data, don't bother reloading from HaloDotAPI
+		if (season !== undefined && season !== -1 && season < SR.Season && await app.DoesPlayerHavePrevSeasons(gamertag))
+		{ 
+			clearLoadingMessages();
+			return; 
+		}
+
+		// Show background loading message
+		setLoadingMessage("");
+		setBackgroundLoadingProgress(SR.DefaultLoading);
+
+		// Otherwise get latest data from HaloDotAPI
+		app.AddToSyncing(gamertag);
+
+		// Get updated player
+		const haloDotAPIPlayer = await app.GetPlayerFromHaloDotAPI(gamertag, season);
+		if (!haloDotAPIPlayer) 
+		{
+			clearLoadingMessages();
+			app.RemoveFromSyncing(gamertag);
+			return;
+		}
+
+		// Update state
+		updatePlayer(haloDotAPIPlayer.gamertag, haloDotAPIPlayer.appearance, haloDotAPIPlayer.serviceRecord, haloDotAPIPlayer.csrs, haloDotAPIPlayer.isPrivate);
+
+		// Store into Firebase
+		await app.SetPlayerIntoFirebase(haloDotAPIPlayer, season, currSR);
+
+		// Check if HaloDotAPI automatically corrected the gamertag
+		// Make sure we point Firebase to the right gamertag
+		if (haloDotAPIPlayer.gamertag !== gamertag)
+		{
+			await app.UpdateGamertagReference(haloDotAPIPlayer.gamertag, gamertag);
+		}
+
+		// Remove from syncing tracker
+		app.RemoveFromSyncing(gamertag);
+
+		// Add to recent players cookie
+		if (haloDotAPIPlayer.serviceRecordData && !(haloDotAPIPlayer.serviceRecordData as any).error) { Cookie.addRecent(haloDotAPIPlayer.gamertag); }
+
+	}, [gamertag, app, season, setLoadingMessage, updatePlayer, setBackgroundLoadingProgress, clearLoadingMessages]);
+
+	/**
+	 * Loads historic season statistics
+	 */
+	const loadHistoricStatistics = useCallback(async (currHistoricStats?: ServiceRecord[]) =>
+	{
+		// If we are already syncing this gamertag, quit early
+		if (!gamertag || (season !== undefined && season !== -1)) 
+		{ 
+			clearLoadingMessages();
+			return; 
+		}
+
+		// Update loading message
+		setBackgroundLoadingProgress("Loading historic statistics");
+
+		// Only update current season since we have the previous ones
+		if (currHistoricStats && currHistoricStats.length > 0 && await app.DoesPlayerHavePrevSeasons(gamertag))
+		{
+			Debugger.Simple("PlayerView", "loadHistoricStatistics()", "Previous statistics already cached");
+
+			// Add old ones, remove newest one
+			const prevSRs = Array.from(currHistoricStats);
+			prevSRs.pop();
+
+			// Get data from HaloDotAPI, update Firebase
+			const sr = await app.GetServiceRecordData(gamertag, SR.Season);
+			await app.SetPreviousSeasonStats(gamertag, SR.Season, sr);
+
+			// Add to prevSRs
+			prevSRs.push(new ServiceRecord(sr));
+
+			// Update state
+			setHistoricStats(prevSRs);
+			clearLoadingMessages();
+			return;
+		}
+
+		// Loop through all old seasons if we don't have this cached in Firebase
+		const prevSRs = [];
+		for (let i = 1; i <= SR.Season; i++)
+		{
+			Debugger.Simple("PlayerView", "loadHistoricStatistics()", "Getting season " + i + " from HaloDotAPI");
+
+			const sr = await app.GetServiceRecordData(gamertag, i);
+			await app.SetPreviousSeasonStats(gamertag, i, sr);
+			prevSRs.push(new ServiceRecord(sr));
+		}
+		
+		// Show background loading message
+		setHistoricStats(prevSRs);
+		clearLoadingMessages();
+
+	}, [gamertag, app, season, setBackgroundLoadingProgress, setHistoricStats, clearLoadingMessages]);
+
+	/**
+	 * Loads the data for the view
+	 */
+	const loadData = useCallback(async () => 
+	{		
+		// Gamertag is required
+		if (!gamertag) { switchTab("/", SRTabs.Search); return; }
+
+		// Update tab
 		switchTab(undefined, SRTabs.ServiceRecord);
 
-		// If they are, sync with autocode
-		if (!app.IsSyncing(gamertag))
-		{
-			app.AddToSyncing(gamertag);
+		// Get from firebase
+		const firebasePlayer = await loadFromFirebase();
 
-			// Sync into firebase
-			const newPlayer = await app.GetPlayerFromHaloDotAPI(gamertag, season);
-			if (newPlayer)
-			{
-				updatePlayer(newPlayer.gamertag, newPlayer.appearance, newPlayer.serviceRecord, newPlayer.csrs, newPlayer.isPrivate);
-				await app.SetPlayerIntoFirebase(newPlayer, season, player.serviceRecord);
+		// Load from HaloDotAPI
+		await loadFromHaloDotAPI(firebasePlayer.serviceRecord);
 
-				if (newPlayer.gamertag !== gamertag)
-				{
-					// Autocode automatically corrected the gamertag, make sure we point Firebase to the right gamertag
-					await app.UpdateGamertagReference(newPlayer.gamertag, gamertag);
-				}
-			}
+		// Update historic statistics
+		await loadHistoricStatistics(firebasePlayer.historicStats);
 
-			// Check if we actually have the previous season statistics
-			if (!await app.DoesPlayerHavePrevSeasons(gamertag))
-			{
-				const prevSRs = [];
-				for (let i = 1; i <= SR.Season; i++)
-				{
-					const sr = await app.GetServiceRecordData(gamertag, i);
-					await app.SetPreviousSeasonStats(gamertag, i, sr);
-					prevSRs.push(new ServiceRecord(sr));
-				}
-				setHistoricStats(prevSRs);
-			}
-			
-			if (newPlayer.serviceRecordData && !(newPlayer.serviceRecordData as any).error) { Cookie.addRecent(newPlayer.gamertag); }
+		// Clear loading messages
+		clearLoadingMessages();
 
-			setLoadingMessage("");
-			app.RemoveFromSyncing(gamertag);
-			setBackgroundLoadingProgress(undefined);
-		}
-		else 
-		{ 
-			setLoadingMessage("");
-			setBackgroundLoadingProgress(undefined); 
-		}
-	}, [app, gamertag, updatePlayer, setBackgroundLoadingProgress, season, switchTab, setLoadingMessage]);
+	}, [gamertag, switchTab, loadFromFirebase, loadFromHaloDotAPI, loadHistoricStatistics, clearLoadingMessages]);
 	
 	useEffect(() =>
 	{

@@ -21,9 +21,6 @@ import { FirebaseHistoricServiceRecord } from "./Schemas/FirebaseHistoricService
 
 export class SCFirebase
 {
-	/** Turns on or off debugging mode */
-	private readonly IS_DEBUGGING = process.env.NODE_ENV !== "production";
-	
 	/** The firebase database */
 	private __database: Database;
 
@@ -73,7 +70,7 @@ export class SCFirebase
 	public async GetAppearanceForLeader(leader: Leader): Promise<void>
 	{
 		if (!leader.gamertag) { return; }
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetAppearanceForLeader()", leader.gamertag); }
+		Debugger.Print("SCFirebase", "GetAppearanceForLeader()", leader.gamertag);
 		leader.appearance = await this.GetAppearance(leader.gamertag);
 	}
 
@@ -84,7 +81,7 @@ export class SCFirebase
 	 */
 	public async GetAppearance(gamertag: string): Promise<Appearance>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetAppearance()", gamertag); }
+		Debugger.Print("SCFirebase", "GetAppearance()", gamertag);
 
 		const snapshot = await this.__get(`appearance/${gamertag}`);
 		return new Appearance(snapshot?.val());
@@ -100,7 +97,7 @@ export class SCFirebase
 	 */
 	public async GetServiceRecord(gamertag: string, season?: number): Promise<ServiceRecord>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetServiceRecord()", gamertag); }
+		Debugger.Print("SCFirebase", "GetServiceRecord()", gamertag);
 
 		let snapshot: DataSnapshot | undefined;
 		if (!season || season === -1)
@@ -122,7 +119,7 @@ export class SCFirebase
 	 */
 	public async GetFilteredServiceRecord(gamertag: string, tree: ServiceRecordFilter, filter: string): Promise<ServiceRecord | undefined>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetFilteredServiceRecord()", `${gamertag} - ${filter}`); }
+		Debugger.Print("SCFirebase", "GetFilteredServiceRecord()", `${gamertag} - ${filter}`);
 
 		const node = tree === ServiceRecordFilter.Maps ? "map" : tree === ServiceRecordFilter.Modes ? "mode" : "outcome";
 		const snapshot = await this.__get(`service_record/filtered/${gamertag}/${node}/${filter}`);
@@ -139,7 +136,7 @@ export class SCFirebase
 	 */
 	public async GetAllFilteredServiceRecordsInRawJSON(gamertag: string): Promise<any>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetAllFilteredServiceRecordsInRawJSON()", `${gamertag}`); }
+		Debugger.Print("SCFirebase", "GetAllFilteredServiceRecordsInRawJSON()", `${gamertag}`);
 
 		const snapshot = await this.__get(`service_record/filtered/${gamertag}`);
 		if (snapshot)
@@ -155,7 +152,7 @@ export class SCFirebase
 	 */
 	public async GetHistoricStatisticsForGameNumber(gamertag: string, game: number): Promise<ServiceRecord>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetHistoricStatisticsForGameNumber()", gamertag); }
+		Debugger.Print("SCFirebase", "GetHistoricStatisticsForGameNumber()", gamertag);
 		const snapshot = await this.__get(`service_record/historic/${gamertag}/${game}`);
 		if (!snapshot) { return new ServiceRecord(); }
 
@@ -189,7 +186,7 @@ export class SCFirebase
 	 */
 	public async HasHistoricSeasonsCached(gamertag: string): Promise<boolean>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.HasHistoricSeasonsCached()", gamertag); }
+		Debugger.Print("SCFirebase", "HasHistoricSeasonsCached()", gamertag);
 		
 		const snapshot = await this.__get(`service_record/historic/cached/${gamertag}`);
 		if (!snapshot) { return false; }
@@ -199,6 +196,7 @@ export class SCFirebase
 
 		for (let i = 1; i < SR.Season; i++)
 		{
+			Debugger.Continue("Season " + i + ": " + result[i]);
 			if (!result[i]) { return false; }
 		}
 
@@ -212,7 +210,7 @@ export class SCFirebase
 	 */
 	public async GetAllSeasonsStats(gamertag: string): Promise<ServiceRecord[]>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetAllSeasonsStats()", gamertag); }
+		Debugger.Print("SCFirebase", "GetAllSeasonsStats()", gamertag);
 
 		const historicSRs: ServiceRecord[] = [];
 
@@ -236,7 +234,7 @@ export class SCFirebase
 	 */
 	public async GetHistoricStatistics(gamertag: string): Promise<ServiceRecord[]>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetHistoricStatistics()", gamertag); }
+		Debugger.Print("SCFirebase", "GetHistoricStatistics()", gamertag);
 
 		let historicSRs: ServiceRecord[] = [];
 
@@ -271,7 +269,7 @@ export class SCFirebase
 	public async GetServiceRecordForDate(gamertag: string, date?: string): Promise<AutocodeMultiplayerServiceRecord | undefined>
 	{
 		if (!date) { return; }
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetServiceRecordForDate()", gamertag); }
+		Debugger.Print("SCFirebase", "GetServiceRecordForDate()", gamertag);
 
 		const snapshot = await this.__get(`service_record/date/${date}/${gamertag}`);
 		if (snapshot && snapshot.exists()) { return snapshot.val(); }
@@ -302,7 +300,7 @@ export class SCFirebase
 	 */
 	public async GetMatch(matchID: string): Promise<Match | undefined>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetMatch()", matchID); }
+		Debugger.Print("SCFirebase", "GetMatch()", matchID);
 
 		const snapshot = await this.__get(`match/${matchID}`);
 		if (!snapshot) { return undefined; }
@@ -316,7 +314,7 @@ export class SCFirebase
 	 */
 	public async GetBestMatches(gamertag: string): Promise<FirebaseBest>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetBestMatches()", gamertag); }
+		Debugger.Print("SCFirebase", "GetBestMatches()", gamertag);
 		const result = await this.__get(`best/${gamertag}/all`);
 		let best = result?.val();
 
@@ -354,7 +352,7 @@ export class SCFirebase
 	 */
 	public async GetBestMatchesForMap(gamertag: string, map: string): Promise<FirebaseBest>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetBestMatchesForMap()", gamertag + " - " + map); }
+		Debugger.Print("SCFirebase", "GetBestMatchesForMap()", gamertag + " - " + map);
 		const result = await this.__get(`best/${gamertag}/maps/${map}`);
 		let best = result?.val();
 
@@ -393,7 +391,7 @@ export class SCFirebase
 	 */
 	public async GetAvailableFilters(gamertag: string, node: ServiceRecordFilter): Promise<SRFilter[]>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetAvailableFilters()", `${gamertag} - ${node}`); }
+		Debugger.Print("SCFirebase", "GetAvailableFilters()", `${gamertag} - ${node}`);
 
 		const n = node === ServiceRecordFilter.Maps ? "map" : node === ServiceRecordFilter.Modes ? "mode" : "outcome";
 		const filters: SRFilter[] = [];
@@ -420,7 +418,7 @@ export class SCFirebase
 	 */
 	public async GetCSRS(gamertag: string, season?: number): Promise<CSRS[]>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetCSRS()", gamertag); }
+		Debugger.Print("SCFirebase", "GetCSRS()", gamertag);
 
 		let snapshot: DataSnapshot | undefined;
 
@@ -496,7 +494,7 @@ export class SCFirebase
 	 */
 	public async GetLeaderboardAverages(leaderboard: Leaderboard): Promise<LeaderboardAverages>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetLeaderboardAverages()", leaderboard); }
+		Debugger.Print("SCFirebase", "GetLeaderboardAverages()", leaderboard);
 
 		// Prepare queries
 		const snapshot = await this.__get(`averages/${leaderboard}`);
@@ -512,7 +510,7 @@ export class SCFirebase
 	public async GetLeaderProperties(leader: Leader): Promise<void>
 	{
 		if (!leader.gamertag) { return; }
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetLeaderProperties()", leader.gamertag); }
+		Debugger.Print("SCFirebase", "GetLeaderProperties()", leader.gamertag);
 
 		[leader.appearance, leader.matchesPlayed] = await Promise.all([
 			this.GetAppearance(leader.gamertag),
@@ -529,7 +527,7 @@ export class SCFirebase
 	 */
 	public async GetIsPremiumUser(gamertag: string): Promise<boolean>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetIsPremiumUser()", gamertag); }
+		Debugger.Print("SCFirebase", "GetIsPremiumUser()", gamertag);
 
 		const snapshot = await this.__get(`allowed/${gamertag}`);
 		return snapshot?.val() ?? false;
@@ -544,7 +542,7 @@ export class SCFirebase
 	 */
 	public async GetGamertag(input: string): Promise<string>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.GetGamertag()", `${input}`); }
+		Debugger.Print("SCFirebase", "GetGamertag()", `${input}`);
 		const snapshot = await this.__get(`gamertag/${input}`);
 		if (!snapshot || !snapshot.val()) { return input; }
 		return snapshot.val();
@@ -562,7 +560,7 @@ export class SCFirebase
 	public async SetAppearance(gamertag: string, data?: AutocodeAppearance): Promise<void>
 	{
 		if (!data) { return; }
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetAppearance()", gamertag); }
+		Debugger.Print("SCFirebase", "SetAppearance()", gamertag);
 		await this.__set(`appearance/${gamertag}`, data);
 	}
 	//#endregion
@@ -577,7 +575,7 @@ export class SCFirebase
 	public async SetServiceRecord(gamertag: string, data?: AutocodeMultiplayerServiceRecord, season?: number): Promise<void>
 	{
 		if (!data) { return; }
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetServiceRecord()", gamertag); }
+		Debugger.Print("SCFirebase", "SetServiceRecord()", gamertag);
 
 		if (!season || season === -1)
 		{
@@ -597,7 +595,7 @@ export class SCFirebase
 	public async SetFilteredServiceRecord(gamertag: string, tree: ServiceRecordFilter, data?: Map<string, AutocodeMultiplayerServiceRecord>): Promise<void>
 	{
 		if (!data) { return; }
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetFilteredServiceRecord()", `${gamertag} - ${tree}`); }
+		Debugger.Print("SCFirebase", "SetFilteredServiceRecord()", `${gamertag} - ${tree}`);
 		await this.__update(`service_record/filtered/${gamertag}/${tree}`, Object.fromEntries(data));
 	}
 
@@ -609,7 +607,7 @@ export class SCFirebase
 	 */
 	public async SetPreviousSeasonStats(gamertag: string, season: number, sr: AutocodeMultiplayerServiceRecord): Promise<void>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetPreviousSeasonStats()", gamertag); }
+		Debugger.Print("SCFirebase", "SetPreviousSeasonStats()", gamertag);
 
 		await Promise.all([
 			this.__set(`service_record/season/${season}/${gamertag}`, sr), 										  // set full SR into season node
@@ -627,7 +625,7 @@ export class SCFirebase
 	public async SetServiceRecordForDate(gamertag: string, data?: AutocodeMultiplayerServiceRecord, date?: string): Promise<void>
 	{
 		if (!data || !date) { return; }
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetServiceRecordForDate()", gamertag); }
+		Debugger.Print("SCFirebase", "SetServiceRecordForDate()", gamertag);
 
 		await this.__set(`service_record/date/${date}/${gamertag}`, data);		
 	}
@@ -641,7 +639,7 @@ export class SCFirebase
 	 */
 	public async SetMatch(matchID: string, match: AutocodeMatch): Promise<void>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetMatch()", matchID); }
+		Debugger.Print("SCFirebase", "SetMatch()", matchID);
 		await this.__update(`match/${matchID}`, match);
 	}
 	//#endregion
@@ -656,7 +654,7 @@ export class SCFirebase
 	public async SetAvailableFilters(gamertag: string, tree: ServiceRecordFilter, data?: Map<string, boolean>): Promise<void>
 	{
 		if (!data) { return; }
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetFiltersForGamertag()", `${gamertag} - ${tree}`); }
+		Debugger.Print("SCFirebase", "SetFiltersForGamertag()", `${gamertag} - ${tree}`);
 		await this.__update(`filters/${gamertag}/${tree}`, Object.fromEntries(data));
 	}
 	//#endregion
@@ -671,7 +669,7 @@ export class SCFirebase
 	public async SetCSRS(gamertag: string, season?: number, data?: Partial<AutocodeCSRSData>[]): Promise<void>
 	{
 		if (!data) { return; }
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetCSRS()", gamertag); }
+		Debugger.Print("SCFirebase", "SetCSRS()", gamertag);
 		
 		if (!season || season === -1) { await this.__set(`csrs/${gamertag}/current`, data); }
 		else { await this.__set(`csrs/${gamertag}/season/${season}`, data); }
@@ -717,7 +715,7 @@ export class SCFirebase
 	public async SetGamertagPointer(correct: string, incorrect: string): Promise<void>
 	{
 		if (correct === incorrect) { return; }
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCFirebase.SetGamertagPointer()", `${incorrect} -> ${correct}`); }
+		Debugger.Print("SCFirebase", "SetGamertagPointer()", `${incorrect} -> ${correct}`);
 
 		await this.__set(`gamertag/${incorrect}`, correct);	
 	}

@@ -17,9 +17,6 @@ import { AutocodeXboxProfile } from "./Schemas/AutocodeXboxProfile";
 
 export class SCHaloDotAPI
 {
-	/** Turns on or off debugging mode */
-	private readonly IS_DEBUGGING = process.env.NODE_ENV !== "production";
-
 	private __lib: any;
 
 	constructor() 
@@ -67,7 +64,7 @@ export class SCHaloDotAPI
 	 */
 	public async GetMMR(player: Player): Promise<void>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCHaloDotAPI.GetMMR()", player.gamertag); }
+		Debugger.Print("SCHaloDotAPI", "GetMMR()", player.gamertag);
 
 		const mmrData = await this.__lib.halo.infinite["@" + (process.env.REACT_APP_HALO_API_VERSION ?? "1.4.0")].stats.players.mmr({
 			gamertag: player.gamertag,
@@ -94,7 +91,7 @@ export class SCHaloDotAPI
 	 */
 	public async GetCSRS(player: Player, season?: number): Promise<void>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCHaloDotAPI.GetCSRS()", player.gamertag); }
+		Debugger.Print("SCHaloDotAPI", "GetCSRS()", player.gamertag);
 
 		// Put this back to where it belongs
 		if (season === -1) { season = undefined; }
@@ -118,7 +115,7 @@ export class SCHaloDotAPI
 	 */
 	public async GetAppearance(player: Player): Promise<void>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCHaloDotAPI.GetAppearance()", player.gamertag); }
+		Debugger.Print("SCHaloDotAPI", "GetAppearance()", player.gamertag);
 		player.appearanceData = await this.__getPlayerAppearanceFromHaloDotAPI(player.gamertag);
 		player.appearance = new Appearance(player.appearanceData);
 	}
@@ -136,7 +133,7 @@ export class SCHaloDotAPI
 	 */
 	public async GetServiceRecord(player: Player, season?: number, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<void>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCHaloDotAPI.GetServiceRecord()", player.gamertag); }
+		Debugger.Print("SCHaloDotAPI", "GetServiceRecord()", player.gamertag);
 		player.serviceRecordData = await this.GetServiceRecordData(player, season === -1 ? undefined : season, playlistId, categoryId, type);
 		player.serviceRecord = new ServiceRecord(player.serviceRecordData);
 		player.gamertag = player.serviceRecordData?.additional?.parameters?.gamertag ?? player.gamertag;
@@ -153,7 +150,7 @@ export class SCHaloDotAPI
 	 */
 	public async GetServiceRecordData(player: Player, season?: number, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<AutocodeMultiplayerServiceRecord>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCHaloDotAPI.GetServiceRecordData()", player.gamertag); }
+		Debugger.Print("SCHaloDotAPI", "GetServiceRecordData()", player.gamertag);
 		return await this.__getServiceRecordFromHaloDotAPI(player.gamertag, season === -1 ? undefined : season, playlistId, categoryId, type);
 	}
 
@@ -164,7 +161,7 @@ export class SCHaloDotAPI
 	 */
 	public async GetOldSeasons(player: Player): Promise<AutocodeMultiplayerServiceRecord[]>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCHaloDotAPI.GetOldSeasons()", player.gamertag); }
+		Debugger.Print("SCHaloDotAPI", "GetOldSeasons()", player.gamertag);
 		
 		const srData: AutocodeMultiplayerServiceRecord[] = [];
 		for (let i = 0; i < SR.Season - 1; i++)
@@ -182,7 +179,7 @@ export class SCHaloDotAPI
 	 */
 	public async GetCurrentSeason(player: Player): Promise<AutocodeMultiplayerServiceRecord>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCHaloDotAPI.GetCurrentSeason()", player.gamertag); }
+		Debugger.Print("SCHaloDotAPI", "GetCurrentSeason()", player.gamertag);
 		return this.__getServiceRecordFromHaloDotAPI(player.gamertag, SR.Season);
 	}
 	//#endregion
@@ -267,7 +264,7 @@ export class SCHaloDotAPI
 	 */
 	public async GetLastMatchID(gamertag: string): Promise<string>
 	{
-		if (this.IS_DEBUGGING) { Debugger.Print(true, "SCHaloDotAPI.GetLastMatchID()", gamertag); }
+		Debugger.Print("SCHaloDotAPI", "GetLastMatchID()", gamertag);
 		 
 		const lastMatch = await this.GetPlayerMatches(gamertag, 1, 0);
 		if (lastMatch?.data && lastMatch.data.length > 0)
@@ -295,7 +292,7 @@ export class SCHaloDotAPI
 		
 		while (!loadedAllGamesForDay)
 		{
-			if (this.IS_DEBUGGING) { Debugger.Print(true, "SCHaloDotAPI.GetMatchesForDay()", `Gamertag: ${gamertag}, Offset: ${offset}`); }
+			Debugger.Print("SCHaloDotAPI", "GetMatchesForDay()", `Gamertag: ${gamertag}, Offset: ${offset}`);
 
 			const results = await this.GetMatchesForPlayer(gamertag, 25, offset);
 			for (const r of results.data)

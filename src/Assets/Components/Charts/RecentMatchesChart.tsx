@@ -16,6 +16,8 @@ import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Typo
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PlayerMatch } from "../../../Objects/Model/PlayerMatch";
 import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
+import useWindowDimensions from "../../../Objects/Helpers/Hooks/UseWindowDimensions";
+import { Debugger } from "../../../Objects/Helpers/Debugger";
 
 enum RecentMatchesDataSets
 {
@@ -58,17 +60,23 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 		Legend
 	);
 
+	//#region Props
 	const { matches, sr, openMatch } = props;
+	//#endregion
+
+	//#region Hooks
+	const { height, width } = useWindowDimensions();
+	//#endregion
+
+	//#region Refs
 	const dataSet = useRef<RecentMatchesDataSets>(RecentMatchesDataSets.WinLoss);
+	//#endregion
+
+	//#region State
 	const [chartType, setChartType] = useState(ChartType.Bar);
-	const [options, setOptions] = useState<any>({
-		responsive: true
-	});
-	
-	const [chartData, setChartData] = useState<any>({
-		labels: [],
-		datasets: []
-	});
+	const [options, setOptions] = useState<any>({ responsive: true });	
+	const [chartData, setChartData] = useState<any>({ labels: [], datasets: [] });
+	//#endregion
 
 	/**
 	 * Changes the data set
@@ -88,6 +96,9 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 		const newDataSet = event?.target.value as RecentMatchesDataSets ?? RecentMatchesDataSets.WinLoss;
 		if (event && dataSet.current === newDataSet) { return; }
 		dataSet.current = newDataSet;
+
+		const displayDataLabels = width > 500 && newDataSet !== RecentMatchesDataSets.WinLoss;
+		Debugger.Simple("RecentMatchesChart", "changeDataSet()", displayDataLabels ? "YES Display Labels" : "NO Display Labels");
 
 		setOptions({
 			responsive: true,
@@ -109,7 +120,7 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 					text: dataSet.current,
 				},
 				datalabels: {
-					display: newDataSet !== RecentMatchesDataSets.WinLoss,
+					display: displayDataLabels,
 					color: "#FFFFFF",
 					font: {
 						family: "Industry",
@@ -239,7 +250,7 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 							case RecentMatchesDataSets.KDA: return match.player.kda > sr.kda ? ArrowheadTheme.good : ArrowheadTheme.bad;
 							case RecentMatchesDataSets.KDR: return match.player.kdr > sr.kdr ? ArrowheadTheme.good : ArrowheadTheme.bad;
 							case RecentMatchesDataSets.Kills: return match.player.summary.kills > sr.killsPerGame ? ArrowheadTheme.good : ArrowheadTheme.bad;
-							case RecentMatchesDataSets.Deaths: return match.player.summary.deaths > sr.deathsPerGame ? ArrowheadTheme.good : ArrowheadTheme.bad;
+							case RecentMatchesDataSets.Deaths: return match.player.summary.deaths < sr.deathsPerGame ? ArrowheadTheme.good : ArrowheadTheme.bad;
 							case RecentMatchesDataSets.Assists: return match.player.summary.assists > sr.assistsPerGame ? ArrowheadTheme.good : ArrowheadTheme.bad;
 							case RecentMatchesDataSets.Damage: return match.player.damage.dealt > sr.damagePerGame ? ArrowheadTheme.good : ArrowheadTheme.bad;
 							case RecentMatchesDataSets.DamageEfficiency: 

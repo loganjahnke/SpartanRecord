@@ -122,7 +122,7 @@ export function LeaderboardView(props: ViewProps)
 		}
 
 		setLoadingMessage("");
-	}, [app, category, gamertag, player, setLoadingMessage, setLeaders, setLeaderboardAverages, setMyLeader]);
+	}, [app, category, gamertag, player, setLoadingMessage, setLeaders, setLeaderboardAverages, setMyLeader, switchTab, updatePlayer]);
 	
 	useEffect(() =>
 	{
