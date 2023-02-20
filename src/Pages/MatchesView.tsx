@@ -32,6 +32,16 @@ export function MatchesView(props: ViewProps)
 	//#endregion
 
 	/**
+	 * Creates a combined service record from the matches
+	 */
+	const createServiceRecord = useCallback((recents: PlayerMatch[]) =>
+	{
+		const serviceRecord = new ServiceRecord();
+		for (const match of recents) { serviceRecord.AddPlayerMatch(match); }
+		setCombinedSR(serviceRecord);
+	}, [setCombinedSR]);
+
+	/**
 	 * Loads the recent matches from Firebase
 	 */
 	const loadFromFirebase = useCallback(async () =>
@@ -44,9 +54,10 @@ export function MatchesView(props: ViewProps)
 		
 		// Set state
 		setMatches(recent);
+		createServiceRecord(recent);
 		return true;
 
-	}, [app, gamertag, setMatches]);
+	}, [app, gamertag, setMatches, createServiceRecord]);
 
 	/**
 	 * Loads the recent matches from HaloDotAPI
@@ -61,14 +72,20 @@ export function MatchesView(props: ViewProps)
 		const recent = recentJSON.data.map(m => new PlayerMatch(m));
 
 		// Set state
-		if (append) { setMatches(matches.concat(recent)); }
+		if (append) 
+		{ 
+			const newMatches = matches.concat(recent);
+			setMatches(newMatches); 
+			createServiceRecord(newMatches);
+		}
 		else 
 		{ 
 			await app.firebase.SetRecentMatches(gamertag, recentJSON.data);
 			setMatches(recent); 
+			createServiceRecord(recent);
 		}
 
-	}, [app, gamertag, matches, setMatches]);
+	}, [app, gamertag, matches, setMatches, createServiceRecord]);
 
 	/**
 	 * Sets the appearance for the gamertag, if needed
@@ -82,16 +99,6 @@ export function MatchesView(props: ViewProps)
 			updatePlayer(p.gamertag, p.appearance, p.serviceRecord, p.csrs);
 		}
 	}, [app, gamertag, player, updatePlayer]);
-
-	/**
-	 * Creates a combined service record from the matches
-	 */
-	const createServiceRecord = useCallback(() =>
-	{
-		const serviceRecord = new ServiceRecord();
-		for (const match of matches) { serviceRecord.AddPlayerMatch(match); }
-		setCombinedSR(serviceRecord);
-	}, [matches, setCombinedSR]);
 
 	/**
 	 * Loads the data for the view
@@ -116,9 +123,8 @@ export function MatchesView(props: ViewProps)
 		// Load from HaloDotAPI
 		await loadFromHaloDotAPI(!!append);
 		
-		// Appearance and service record
+		// Set appearance
 		await setAppearance();
-		createServiceRecord();
 		
 		// Log
 		app.logger.LogViewMatches();
@@ -130,7 +136,7 @@ export function MatchesView(props: ViewProps)
 		setLoadingMessage("");
 		setBackgroundLoadingProgress("");
 
-	}, [app, gamertag, switchTab, setLoadingMessage, setBackgroundLoadingProgress, loadFromFirebase, loadFromHaloDotAPI, setAppearance, createServiceRecord]);
+	}, [app, gamertag, switchTab, setLoadingMessage, setBackgroundLoadingProgress, loadFromFirebase, loadFromHaloDotAPI, setAppearance]);
 
 	const loadMore = useCallback(async () =>
 	{
