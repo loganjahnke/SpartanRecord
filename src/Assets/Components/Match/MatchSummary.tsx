@@ -60,6 +60,13 @@ export function MatchSummary(props: MatchSummaryProps)
 		window.open(`https://halodatahive.com/Infinite/Match/${match.id}?gamertag=${gamertag}&page=0`, "_blank");
 	};
 
+	/** Open in HaloWaypoint */
+	const openInHaloWaypoint = () =>
+	{
+		closeContextMenu();
+		window.open(`https://www.halowaypoint.com/halo-infinite/players/${gamertag}/matches/${match!.id}`, "_blank");
+	};
+
 	return (
 		<Grid item xs={12} md={4} lg={3}>
 			<Card>
@@ -102,6 +109,7 @@ export function MatchSummary(props: MatchSummaryProps)
 				<MenuItem onClick={copyMatchID}>Copy Match ID</MenuItem>
 				<MenuItem onClick={openInLeafApp}>Open in leafapp.co</MenuItem>
 				<MenuItem onClick={openInHaloDataHive}>Open in HaloDataHive.com</MenuItem>
+				<MenuItem onClick={openInHaloWaypoint}>Open in HaloWaypoint</MenuItem>
 			</Menu>
 			<Snackbar
 				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}

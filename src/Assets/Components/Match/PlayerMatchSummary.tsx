@@ -72,6 +72,13 @@ export function PlayerMatchSummary(props: MatchSummaryProps)
 		window.open(`https://halodatahive.com/Infinite/Match/${match!.id}?gamertag=${gamertag}&page=0`, "_blank");
 	};
 
+	/** Open in HaloWaypoint */
+	const openInHaloWaypoint = () =>
+	{
+		closeContextMenu();
+		window.open(`https://www.halowaypoint.com/halo-infinite/players/${gamertag}/matches/${match!.id}`, "_blank");
+	};
+
 	/** Share the match link on Twitter */
 	const shareWithTwitter = () =>
 	{
@@ -181,6 +188,7 @@ export function PlayerMatchSummary(props: MatchSummaryProps)
 				<MenuItem onClick={openInLeafApp}>Open in leafapp.co</MenuItem>
 				<MenuItem onClick={openInHaloDataHive}>Open in HaloDataHive.com</MenuItem>
 				<MenuItem onClick={openInHaloSouthAfrica}>Open in Halo South Africa</MenuItem>
+				<MenuItem onClick={openInHaloWaypoint}>Open in HaloWaypoint</MenuItem>
 			</Menu>
 			<Snackbar
 				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}

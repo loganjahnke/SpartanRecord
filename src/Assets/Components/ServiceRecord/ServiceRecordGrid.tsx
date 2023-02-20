@@ -28,11 +28,12 @@ interface ServiceRecordGridProps
 	isAllowed?: boolean;
 	season?: number;
 	title?: string;
+	onMetricChanged: () => void;
 }
 
 export function ServiceRecordGrid(props: ServiceRecordGridProps)
 {
-	const { setSeason, setShowPerMatch, showPerMatch, serviceRecord, csrs, historicStats, season, title } = props;
+	const { setSeason, setShowPerMatch, showPerMatch, serviceRecord, csrs, historicStats, season, title, onMetricChanged } = props;
 
 	if (!serviceRecord || serviceRecord.IsEmpty() || serviceRecord.error) { return <></>; }
 
@@ -89,7 +90,7 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 					<LevelBreakdown serviceRecord={serviceRecord} showPerMatch={showPerMatch} />
 				</Grid>
 				{historicStats && (season === undefined || season === -1) && <Grid item xs={12}>
-					<SeasonsChart historicServiceRecords={historicStats} />
+					<SeasonsChart historicServiceRecords={historicStats} onMetricChanged={onMetricChanged} />
 				</Grid>}
 				<Grid container item spacing={2} xs={12}>
 					<Grid item xs={12} lg={6}>

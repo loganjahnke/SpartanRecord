@@ -14,11 +14,12 @@ import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { RecentMatchesChart } from "../Assets/Components/Charts/RecentMatchesChart";
 import { Helmet } from "react-helmet";
 import { Cookie } from "../Objects/Helpers/Cookie";
+import { SR } from "../Objects/Helpers/Statics/SR";
 
 export function MatchesView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, switchTab, player, updatePlayer } = props;
+	const { app, setLoadingMessage, setBackgroundLoadingProgress, switchTab, player, updatePlayer } = props;
 	const { gamertag } = useParams();
 	//#endregion
 	
@@ -30,33 +31,106 @@ export function MatchesView(props: ViewProps)
 	const offset = useRef<number>(0);
 	//#endregion
 
-	const loadData = useCallback(async (hideLoading?: boolean) => 
-	{		
-		// Get player's service record
-		if (gamertag)
-		{
-			if (!hideLoading) { setLoadingMessage("Loading matches for " + gamertag); }
+	/**
+	 * Loads the recent matches from Firebase
+	 */
+	const loadFromFirebase = useCallback(async () =>
+	{
+		if (!gamertag) { return; }
+		
+		// Get from Firebase
+		const recent = await app.firebase.GetRecentMatches(gamertag);
+		if (!recent || recent.length === 0) { return false; }
+		
+		// Set state
+		setMatches(recent);
+		return true;
 
-			const additionalMatches = await app.GetPlayerMatches(gamertag, offset.current);
-			const newMatches = matches.concat(additionalMatches);
-			setMatches(newMatches);
+	}, [app, gamertag, setMatches]);
 
-			if (!player || !player.appearance || !player.serviceRecord || !player.appearance.emblemURL)
-			{
-				const p = await app.GetPlayerFromFirebase(gamertag);
-				updatePlayer(p.gamertag, p.appearance, p.serviceRecord, p.csrs);
-			}
+	/**
+	 * Loads the recent matches from HaloDotAPI
+	 * @param append are we appending to existing data?
+	 */
+	const loadFromHaloDotAPI = useCallback(async (append: boolean) =>
+	{
+		if (!gamertag) { return; }
+		
+		// Get from HaloDotAPI
+		const recentJSON = await app.halodapi.GetPlayerMatches(gamertag, 25, offset.current);
+		const recent = recentJSON.data.map(m => new PlayerMatch(m));
 
-			const serviceRecord = new ServiceRecord();
-			for (const match of newMatches) { serviceRecord.AddPlayerMatch(match); }
-
-			setCombinedSR(serviceRecord);
-			app.LogViewMatches(gamertag);
+		// Set state
+		if (append) { setMatches(matches.concat(recent)); }
+		else 
+		{ 
+			await app.firebase.SetRecentMatches(gamertag, recentJSON.data);
+			setMatches(recent); 
 		}
 
+	}, [app, gamertag, matches, setMatches]);
+
+	/**
+	 * Sets the appearance for the gamertag, if needed
+	 */
+	const setAppearance = useCallback(async () =>
+	{
+		if (!gamertag) { return; }
+		if (!player || !player.appearance || !player.serviceRecord || !player.appearance.emblemURL)
+		{
+			const p = await app.GetPlayerFromFirebase(gamertag);
+			updatePlayer(p.gamertag, p.appearance, p.serviceRecord, p.csrs);
+		}
+	}, [app, gamertag, player, updatePlayer]);
+
+	/**
+	 * Creates a combined service record from the matches
+	 */
+	const createServiceRecord = useCallback(() =>
+	{
+		const serviceRecord = new ServiceRecord();
+		for (const match of matches) { serviceRecord.AddPlayerMatch(match); }
+		setCombinedSR(serviceRecord);
+	}, [matches, setCombinedSR]);
+
+	/**
+	 * Loads the data for the view
+	 * @param append are we adding more matches to the view?
+	 */
+	const loadData = useCallback(async (append?: boolean) => 
+	{
+		if (!gamertag) { return; }
+
+		// Set loading message
+		append
+			? setBackgroundLoadingProgress("Loading additional matches")
+			: setLoadingMessage("Loading matches for " + gamertag);
+
+		// Load from Firebase
+		if (!append && await loadFromFirebase())
+		{
+			setLoadingMessage("");
+			setBackgroundLoadingProgress(SR.DefaultLoading);
+		}
+
+		// Load from HaloDotAPI
+		await loadFromHaloDotAPI(!!append);
+		
+		// Appearance and service record
+		await setAppearance();
+		createServiceRecord();
+		
+		// Log
+		app.logger.LogViewMatches();
+
+		// Set tab
 		switchTab(undefined, SRTabs.Matches);
-		if (!hideLoading) { setLoadingMessage(""); }
-	}, [app, gamertag, matches, setMatches, setCombinedSR, offset, switchTab, player, updatePlayer, setLoadingMessage]);
+		
+		// Clear loading messages
+		setLoadingMessage("");
+		setBackgroundLoadingProgress("");
+
+	}, [app, gamertag, switchTab, setLoadingMessage, setBackgroundLoadingProgress, loadFromFirebase, loadFromHaloDotAPI, setAppearance, createServiceRecord]);
 
 	const loadMore = useCallback(async () =>
 	{
@@ -127,7 +201,7 @@ export function MatchesView(props: ViewProps)
 						<KillDeathCard serviceRecord={combinedSR} />
 					</Grid>
 					<Grid item xs={12}>
-						<RecentMatchesChart matches={matches} sr={player?.serviceRecord ?? new ServiceRecord()} openMatch={goToMatch} />
+						<RecentMatchesChart matches={matches} sr={player?.serviceRecord ?? new ServiceRecord()} openMatch={goToMatch} onMetricChanged={() => app.logger.LogChangeSeasonMetric()} />
 					</Grid>
 				</Grid>
 				<Grid container spacing={2} sx={{ mt: 1 }}>

@@ -73,7 +73,7 @@ export function SpartanCompanyView(props: ViewProps)
 		}
 
 		const sr = sc.GetServiceRecord();
-		app.LogViewSpartanCompany(sc.name);
+		app.logger.LogViewSpartanCompany();
 
 		setSpartanCompany(sc);
 		setSharedSR(sr);

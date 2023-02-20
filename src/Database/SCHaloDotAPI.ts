@@ -5,7 +5,6 @@ import { Appearance } from "../Objects/Model/Appearance";
 import { CSRS } from "../Objects/Model/CSRS";
 import { Player } from "../Objects/Model/Player";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
-import { MMR } from "../Objects/Pieces/MMR";
 import { ServiceRecordType } from "./SCData";
 import { AutocodeCSRS } from "./Schemas/AutocodeCSRS";
 import { AutocodeMatch, AutocodeMatchResults } from "./Schemas/AutocodeMatch";

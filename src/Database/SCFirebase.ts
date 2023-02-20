@@ -1,4 +1,4 @@
-import { child, Database, DatabaseReference, DataSnapshot, get, limitToFirst, limitToLast, onValue, orderByValue, Query, query, ref, set, update } from "firebase/database";
+import { child, Database, DatabaseReference, DataSnapshot, get, limitToLast, orderByValue, Query, query, ref, set, update } from "firebase/database";
 import { Debugger } from "../Objects/Helpers/Debugger";
 import { Halo5Converter } from "../Objects/Helpers/Halo5Converter";
 import { Converter } from "../Objects/Helpers/Statics/Converter";
@@ -8,16 +8,16 @@ import { CSRS } from "../Objects/Model/CSRS";
 import { Leader, LeaderboardAverages } from "../Objects/Model/Leader";
 import { Match } from "../Objects/Model/Match";
 import { Player } from "../Objects/Model/Player";
+import { PlayerMatch } from "../Objects/Model/PlayerMatch";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
-import { MMR } from "../Objects/Pieces/MMR";
 import { SRFilter } from "../Objects/Pieces/SRFilter";
 import { Leaderboard, ServiceRecordFilter } from "./ArrowheadFirebase";
 import { AutocodeAppearance } from "./Schemas/AutocodeAppearance";
 import { AutocodeCSRSData } from "./Schemas/AutocodeCSRS";
 import { AutocodeMatch } from "./Schemas/AutocodeMatch";
 import { AutocodeMultiplayerServiceRecord } from "./Schemas/AutocodeMultiplayerServiceRecord";
+import { AutocodePlayerMatch } from "./Schemas/AutocodePlayerMatch";
 import { FirebaseBest } from "./Schemas/FirebaseBest";
-import { FirebaseHistoricServiceRecord } from "./Schemas/FirebaseHistoricServiceRecord";
 
 export class SCFirebase
 {
@@ -305,6 +305,24 @@ export class SCFirebase
 		const snapshot = await this.__get(`match/${matchID}`);
 		if (!snapshot) { return undefined; }
 		return new Match(snapshot.val());
+	}
+
+	/**
+	 * Gets an array of recent matches for the given gamertag
+	 * @param gamertag the gamertag to set the recent matches for
+	 * @returns an array of recent matches
+	 */
+	public async GetRecentMatches(gamertag: string): Promise<PlayerMatch[]>
+	{
+		Debugger.Print("SCFirebase", "GetRecentMatches()", gamertag);
+		
+		const snapshot = await this.__get(`recent/${gamertag}`);
+		if (!snapshot) { return []; }
+
+		const data = snapshot.val();
+		if (!data) { return []; }
+
+		return data.map((match: any) => new PlayerMatch(match));
 	}
 
 	/**
@@ -641,6 +659,18 @@ export class SCFirebase
 	{
 		Debugger.Print("SCFirebase", "SetMatch()", matchID);
 		await this.__update(`match/${matchID}`, match);
+	}
+
+	/**
+	 * Sets an array of recent matches for the given gamertag
+	 * @param gamertag the gamertag to set the recent matches for
+	 * @param matches the array of Autocode player matches
+	 */
+	public async SetRecentMatches(gamertag: string, matches: AutocodePlayerMatch[]): Promise<void>
+	{
+		Debugger.Print("SCFirebase", "SetRecentMatches()", gamertag);
+		const abridged = matches.map(match => Converter.PlayerMatchToRecentMatch(match));
+		await this.__set(`recent/${gamertag}`, abridged);
 	}
 	//#endregion
 

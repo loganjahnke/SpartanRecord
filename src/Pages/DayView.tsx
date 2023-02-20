@@ -44,6 +44,7 @@ export function DayView(props: ViewProps)
 		setServiceRecord(await app.GetMatchesForDay(gamertag, tempDateObj));
 		setLoadingMessage("");
 
+		app.logger.LogViewYesterday();
 		switchTab(undefined, SRTabs.Yesterday);
 	}, [app, gamertag, date, switchTab, setLoadingMessage, setDateObj]);
 	
@@ -84,6 +85,7 @@ export function DayView(props: ViewProps)
 					isAllowed={isAllowed}
 					showPerMatch={showPerMatch}
 					setShowPerMatch={setShowPerMatch}
+					onMetricChanged={() => app.logger.LogChangeSeasonMetric()} 
 					title={`${dateObj.toLocaleDateString("en-US", { 
 						dateStyle: "full"
 					})}`}

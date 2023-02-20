@@ -190,7 +190,10 @@ export function PlayerView(props: ViewProps)
 		// Clear loading messages
 		clearLoadingMessages();
 
-	}, [gamertag, switchTab, loadFromFirebase, loadFromHaloDotAPI, loadHistoricStatistics, clearLoadingMessages]);
+		// Log event
+		app.logger.LogViewServiceRecord();
+
+	}, [app, gamertag, switchTab, loadFromFirebase, loadFromHaloDotAPI, loadHistoricStatistics, clearLoadingMessages]);
 	
 	useEffect(() =>
 	{
@@ -225,7 +228,9 @@ export function PlayerView(props: ViewProps)
 					showPerMatch={showPerMatch}
 					setSeason={setSeason}
 					setShowPerMatch={setShowPerMatch}
-					season={season} />}
+					season={season}
+					onMetricChanged={() => app.logger.LogChangeSeasonMetric()} 
+				/>}
 			</Box>
 		</Box>
 	);

@@ -118,7 +118,7 @@ export function FilteredView(props: ViewProps)
 			const myPlayer = await app.GetPlayerAppearanceOnly(gamertag);
 			updatePlayer(gamertag, myPlayer.appearance);
             
-			app.LogViewServiceRecord(gamertag, node as ServiceRecordFilter, node);
+			app.logger.LogViewServiceRecord(true);
 		}
 
 		setLoadingMessage("");

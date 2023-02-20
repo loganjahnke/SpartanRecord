@@ -36,7 +36,7 @@ enum SeasonsDataSets
 	DamageEfficiency = "Damage Efficiency"
 }
 
-export const SeasonsChart = (props: { historicServiceRecords: ServiceRecord[] }) =>
+export const SeasonsChart = (props: { historicServiceRecords: ServiceRecord[], onMetricChanged: () => void }) =>
 {
 	ChartJS.defaults.font.family = "Roboto";
 	ChartJS.defaults.font.weight = "100";
@@ -52,7 +52,7 @@ export const SeasonsChart = (props: { historicServiceRecords: ServiceRecord[] })
 		ChartDataLabels
 	);
 
-	const { historicServiceRecords } = props;
+	const { historicServiceRecords, onMetricChanged } = props;
 	const dataSet = useRef<SeasonsDataSets>(SeasonsDataSets.Matches);
 	const [options, setOptions] = useState<any>({
 		responsive: true,
@@ -120,6 +120,7 @@ export const SeasonsChart = (props: { historicServiceRecords: ServiceRecord[] })
 	 */
 	const changeDataSet = useCallback((event?: SelectChangeEvent): void =>
 	{
+		onMetricChanged();
 		const newDataSet = event?.target.value as SeasonsDataSets ?? SeasonsDataSets.Matches;
 		if (event && dataSet.current === newDataSet) { return; }
 		dataSet.current = newDataSet;
@@ -216,7 +217,7 @@ export const SeasonsChart = (props: { historicServiceRecords: ServiceRecord[] })
 				}
 			]
 		});
-	}, [historicServiceRecords]);
+	}, [historicServiceRecords, onMetricChanged]);
 
 	const initialChartData = {
 		labels: historicServiceRecords.map((_sr, index) => "Season " + (index + 1)),

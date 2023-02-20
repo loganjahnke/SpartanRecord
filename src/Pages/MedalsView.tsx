@@ -36,6 +36,7 @@ export function MedalsView(props: ViewProps)
 			setServiceRecord(player.serviceRecord);
 		}
 
+		app.logger.LogViewMedals();
 		switchTab(undefined, SRTabs.Medals);
 		setLoadingMessage("");
 	}, [app, gamertag, setServiceRecord, switchTab, setGamertag, setLoadingMessage]);
