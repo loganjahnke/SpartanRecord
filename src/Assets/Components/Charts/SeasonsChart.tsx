@@ -120,7 +120,7 @@ export const SeasonsChart = (props: { historicServiceRecords: ServiceRecord[], o
 	 */
 	const changeDataSet = useCallback((event?: SelectChangeEvent): void =>
 	{
-		onMetricChanged();
+		if (event) { onMetricChanged(); }
 		const newDataSet = event?.target.value as SeasonsDataSets ?? SeasonsDataSets.Matches;
 		if (event && dataSet.current === newDataSet) { return; }
 		dataSet.current = newDataSet;
