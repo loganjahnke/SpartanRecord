@@ -88,6 +88,30 @@ export class ServiceRecord
         return this.PERFECT_KILL_DAMAGE / (this.damage.taken / this.summary.deaths);
     }
 
+    /** The kill death spread */
+    public get killDeathSpread(): string
+    {
+        return (this.summary.kills - this.summary.deaths > 0 ? "+" : "") + (this.killDeathSpreadVal).toLocaleString();
+    }
+
+    /** The kill death spread per game */
+    public get killDeathSpreadPerGame(): string
+    {
+        return (this.summary.kills - this.summary.deaths > 0 ? "+" : "") + (this.killDeathSpreadPerGameVal).toLocaleString();
+    }
+
+    /** The kill death spread */
+    public get killDeathSpreadVal(): number
+    {
+        return this.summary.kills - this.summary.deaths;
+    }
+
+    /** The kill death spread per game */
+    public get killDeathSpreadPerGameVal(): number
+    {
+        return this.killDeathSpreadVal / this.matchesPlayed;
+    }
+
     /** KDA */
     public kda: number = 0;
     /** K/D */

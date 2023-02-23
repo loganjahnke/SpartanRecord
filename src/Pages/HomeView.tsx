@@ -7,6 +7,7 @@ import { Player } from "../Objects/Model/Player";
 import { Cookie } from "../Objects/Helpers/Cookie";
 import { Helmet } from "react-helmet";
 import { GamertagSearch } from "../Assets/Components/ServiceRecord/GamertagSearch";
+import { Grow } from "../Assets/Components/Common/Grow";
 
 export function HomeView(props: ViewProps)
 {
@@ -85,13 +86,12 @@ export function HomeView(props: ViewProps)
 			<Toolbar />
 			<Divider />
 			<Box sx={{ backgroundColor: "secondary.main", height: "100%", display: "flex", flexDirection: "column" }}>
-				<Box sx={{ flexGrow: 1 }} />
+				<Grow />
 				<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} />
-				<Box sx={{ flexGrow: 1 }} />
+				<Grow />
 				<Box sx={{ backgroundColor: "secondary.main", textAlign: "center", mt: 18 }}>
 					<Typography variant="subtitle1" sx={{ textAlign: "center" }}>Powered by <Link sx={{ cursor: "pointer" }} onClick={() => switchTab("/powered_by_halodotapi")}>HaloDotAPI</Link> v{process.env.REACT_APP_HALO_API_VERSION} | Spartan Record v{process.env.REACT_APP_VERSION}</Typography>
 				</Box>
-
 			</Box>
 		</Box>
 	);

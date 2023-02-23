@@ -10,7 +10,7 @@ export function KillDeathCard(props: BreakdownProps)
 	return (
 		<TitleCard title="Kills & Deaths">
 			<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", width: "100%" }}>
-				<BreakdownTile title="Kill Death Spread" value={(serviceRecord.summary.kills - serviceRecord.summary.deaths > 0 ? "+" : "") + (showPerMatch ? (serviceRecord.summary.kills - serviceRecord.summary.deaths) / serviceRecord.matchesPlayed : (serviceRecord.summary.kills - serviceRecord.summary.deaths)).toLocaleString()} isMainStat />
+				<BreakdownTile title="Kill Death Spread" value={showPerMatch ? serviceRecord.killDeathSpreadPerGame : serviceRecord.killDeathSpread} isMainStat />
 			</Box>
 			<Box sx={{ display: "flex", flexDirection: "row", width: "95%", mb: 1,
 				".MuiBox-root:first-child": { borderRadius: "8px 0 0 8px", mr: "1px" }, 

@@ -16,37 +16,36 @@ export class Logger
 
 	/**
      * Logs an event in Firebase analytics for viewing the gamertag's yesterday statistics
-     * @param gamertag the gamertag
      */
     public LogViewYesterday = (): void => this.__logEvent("view_yesterday");
 
 	/**
      * Logs an event in Firebase analytics for changing the season's chart metric
-     * @param gamertag the gamertag
      */
     public LogChangeSeasonMetric = (): void => this.__logEvent("change_season_metric");
 
 	/**
      * Logs an event in Firebase analytics for changing the recent match's metric
-     * @param gamertag the gamertag
      */
     public LogChangeRecentMatchesMetric = (): void => this.__logEvent("change_matches_metric");
 
 	/**
      * Logs an event in Firebase analytics for viewing the gamertag's medals
-     * @param gamertag the gamertag
      */
     public LogViewMedals = (): void => this.__logEvent("view_medals");
 
     /**
      * Logs an event in Firebase analytics for viewing the gamertag's matches
-     * @param gamertag the gamertag
      */
     public LogViewMatches = (): void => this.__logEvent("view_recent_matches");
 
     /**
+     * Logs an event in Firebase analytics for comparing two gamertags
+     */
+    public LogCompare = (): void => this.__logEvent("compare_sr");
+
+    /**
      * Logs an event in Firebase analytics for viewing the gamertag's service record
-     * @param gamertag the gamertag
      */
     public LogViewServiceRecord(filtered?: boolean): void
     {
@@ -61,8 +60,7 @@ export class Logger
     public LogViewSpartanCompany = (): void => this.__logEvent("view_spartan_company");
 
     /**
-     * Logs an error
-     * @param gamertag the gamertag that failed to load
+     * Logs an error that failed to load
      */
     public LogError = (): void => this.__logEvent("error");
 

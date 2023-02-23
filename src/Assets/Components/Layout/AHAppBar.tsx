@@ -2,9 +2,8 @@ import { AppBar, Toolbar, IconButton, Typography, CircularProgress, Box } from "
 
 import MenuIcon from '@mui/icons-material/Menu';
 import { Player } from "../../../Objects/Model/Player";
-import { PlayerCard } from "../Cards/PlayerCard";
+import { DynamicPlayerCard } from "../PlayerAppearance/PlayerCard";
 import { SR } from "../../../Objects/Helpers/Statics/SR";
-import { HaloDotAPIIcon } from "../../Icons/CustomIcons";
 
 interface AHAppBarProps
 {
@@ -40,12 +39,7 @@ export function AHAppBar(props: AHAppBarProps)
 					}
 				</>}
 				<Box sx={{ flexGrow: 1, ml: 1, mr: 1 }}></Box>
-				<Box sx={{ display: { xs: "none", sm: "block" }}}>
-					{player && <PlayerCard player={player} showNameplate />}
-				</Box>
-				<Box sx={{ display: { sm: "none" }}}>
-					{!backgroundLoadingMessage && player && <PlayerCard player={player} rightAlign />}
-				</Box>
+				<DynamicPlayerCard player={player} rightAlign />
 			</Toolbar>
 		</AppBar>
 	);

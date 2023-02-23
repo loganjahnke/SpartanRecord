@@ -65,7 +65,7 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 	//#endregion
 
 	//#region Hooks
-	const { height, width } = useWindowDimensions();
+	const { width } = useWindowDimensions();
 	//#endregion
 
 	//#region Refs
@@ -178,10 +178,10 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 								case RecentMatchesDataSets.Damage: 
 									if (context.tick.value === sr.damagePerGame) { return ArrowheadTheme.selected; }
 									break;
-								case RecentMatchesDataSets.Damage: 
+								case RecentMatchesDataSets.DamageEfficiency: 
 									if (context.tick.value === sr.damageEfficiency) { return ArrowheadTheme.selected; }
 									break;
-								case RecentMatchesDataSets.Damage: 
+								case RecentMatchesDataSets.EnemyEfficiency: 
 									if (context.tick.value === sr.enemyDamageEfficiency) { return ArrowheadTheme.selected; }
 									break;
 								case RecentMatchesDataSets.Accuracy: 
@@ -294,7 +294,7 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 				}
 			]
 		});
-	}, [matches, openMatch, sr, onMetricChanged]);
+	}, [matches, openMatch, sr, onMetricChanged, width]);
 
 	const initialChartData = {
 		labels: matches.map((_, index) => matches.length - index),

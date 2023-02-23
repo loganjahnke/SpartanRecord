@@ -1,4 +1,3 @@
-import { Icon, IconProps } from '@mui/material';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 
 export function ServiceRecordIcon(props: SvgIconProps)

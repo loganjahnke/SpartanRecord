@@ -36,3 +36,28 @@ export const BorderLinearProgressMatches = styled(LinearProgress)(({ theme }) =>
 		backgroundColor: ArrowheadTheme.leftEarlyText,
 	},
 }));
+
+export const CompareBarLeft = styled(LinearProgress)(({ theme }) => ({
+	height: 15,
+	borderRadius: 5,
+	[`&.${linearProgressClasses.colorPrimary}`]: {
+		backgroundColor: ArrowheadTheme.background,
+	},
+	[`& .${linearProgressClasses.bar}`]: {
+		borderRadius: 0,
+		backgroundColor: ArrowheadTheme.good,
+	},
+}));
+
+export const CompareBarRight = styled(LinearProgress)(({ theme }) => ({
+	height: 15,
+	borderRadius: 5,
+	[`&.${linearProgressClasses.colorPrimary}`]: {
+		backgroundColor: ArrowheadTheme.background,
+	},
+	[`& .${linearProgressClasses.bar}`]: {
+		borderRadius: 0,
+		left: "100%",
+		backgroundColor: ArrowheadTheme.bad,
+	},
+}));

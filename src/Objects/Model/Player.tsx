@@ -67,6 +67,46 @@ export class Player
         return newPlayer;
     }
 
+    /**
+     * Gets the player's current best CSR
+     * @returns the player's current best CSR
+     */
+    public GetBestCurrentCSR(): CSRS
+    {
+        let max = 0;
+        let best = new CSRS();
+        for (const csr of this.csrs)
+        {
+            if (max < csr.ranks.current.value)
+            {
+                max = csr.ranks.current.value;
+                best = csr;
+            }
+        }
+
+        return best;
+    }
+
+    /**
+     * Gets the player's all-time best CSR
+     * @returns the player's all-time best CSR
+     */
+    public GetBestAllTimeCSR(): CSRS
+    {
+        let max = 0;
+        let best = new CSRS();
+        for (const csr of this.csrs)
+        {
+            if (max < csr.ranks.allTime.value)
+            {
+                max = csr.ranks.allTime.value;
+                best = csr;
+            }
+        }
+
+        return best;
+    }
+
     /** Gets the open crossplay CSR */
     public GetOpenCrossplay(): CSRS
     {

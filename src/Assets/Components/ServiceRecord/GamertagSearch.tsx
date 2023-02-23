@@ -1,5 +1,6 @@
-import { Box, Typography, TextField, Button, Chip } from "@mui/material";
+import { Box, Typography, TextField, Button } from "@mui/material";
 import { Player } from "../../../Objects/Model/Player";
+import { PlayerChip } from "../PlayerAppearance/PlayerChip";
 
 export interface SearchProps
 {
@@ -10,6 +11,7 @@ export interface SearchProps
     onSearch: React.MouseEventHandler<HTMLButtonElement>;
     openRecent?: (gamertag: string) => void;
     error?: string;
+    showSearchButton?: boolean;
 }
 
 export function GamertagSearch(props: SearchProps)
@@ -27,13 +29,7 @@ export function GamertagSearch(props: SearchProps)
             {recentPlayers.length > 0 &&
                 <Box sx={{ mt: 1 }}>
                     <Typography variant="caption" sx={{ color: "white" }}>Recents: </Typography>
-                    {recentPlayers.map(player => <Chip sx={{ backgroundImage: `url(${player.appearance.nameplateURL})`, margin: "4px 4px", p: 0.5, height: "36px" }} icon={<img  height="24px" src={player.appearance.emblemURL} alt="Emblem" />} onClick={openRecent ? () => openRecent(player.gamertag) : undefined} 
-                        label={
-                            <Box sx={{ textAlign: "left", mt: 0.5, mixBlendMode: "difference" }}>
-                                <Typography variant="subtitle1" sx={{ lineHeight: 1 }}>{player.gamertag}</Typography>
-                                <Typography variant="caption" sx={{ fontSize: "0.7rem" }}>{player.appearance.serviceTag}</Typography>
-                            </Box>
-                        } />)}
+                    {recentPlayers.map(player => <PlayerChip player={player} onClick={openRecent} />)}
                 </Box>
             }
         </Box>

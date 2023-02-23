@@ -136,6 +136,13 @@ export class Rank
             : this.tier + " " + this.subTier;
     }
 
+    /** Gets the inline display */
+    public GetDisplay(): string
+    {
+        if (this.tier === "Unranked") { return this.GetTitle(); }
+        return this.GetTitle() + " - " + this.value.toLocaleString();
+    }
+
     /** Gets the JSON representation of the rank */
     public GetJSON(): Partial<AutocodeRank>
     {

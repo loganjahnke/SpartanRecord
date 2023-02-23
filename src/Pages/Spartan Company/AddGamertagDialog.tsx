@@ -1,5 +1,6 @@
 import { LoadingButton } from "@mui/lab";
-import { Box, TextField, Button, Typography, Chip, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Box, TextField, Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { PlayerChip } from "../../Assets/Components/PlayerAppearance/PlayerChip";
 import { SearchProps } from "../../Assets/Components/ServiceRecord/GamertagSearch";
 import { ArrowheadTheme } from "../../Assets/Theme/ArrowheadTheme";
 import { Player } from "../../Objects/Model/Player";
@@ -20,19 +21,20 @@ export function AddGamertag(props: SearchProps)
 	);
 }
 
-function AddGamertagInline(props: SearchProps & { loading?: boolean })
+export function AddGamertagInline(props: SearchProps & { loading?: boolean })
 {
-	const { search, onValueChanged, onKeyPress, openRecent, error, loading, recentPlayers } = props;
+	const { search, onValueChanged, onKeyPress, openRecent, onSearch, error, loading, recentPlayers, showSearchButton } = props;
 	
 	return (
 		<Box sx={{ backgroundColor: "transparent", height: "100%", display: "flex", flexDirection: "column", textAlign: "center", alignItems: "center", p: 1 }}>
 			<Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mt: 3 }}>
 				<TextField label="Gamertag" variant="outlined" size="small" value={search} onChange={onValueChanged} onKeyPress={onKeyPress} disabled={loading} error={!!error} />
+				{showSearchButton && <LoadingButton loading={loading} variant="contained" sx={{ ml: 2 }} onClick={onSearch}>Search</LoadingButton>}
 			</Box>
 			{recentPlayers.length === 0 ? undefined :
                 <Box sx={{ mt: 1 }}>
                     <Typography variant="caption" sx={{ color: "white" }}>Recents: </Typography>
-                    {recentPlayers.map(player => <Chip sx={{ margin: "4px 4px" }} icon={<img  height="24px" src={player.appearance.emblemURL} alt="Emblem" />} label={player.gamertag} onClick={openRecent ? () => openRecent(player.gamertag) : undefined} />)}
+                    {recentPlayers.map(player => <PlayerChip player={player} onClick={openRecent} />)}
                 </Box>
             }
 			{!!error && <Typography variant="caption" sx={{ mt: 1, color: ArrowheadTheme.text_primary }}>{error}</Typography>}

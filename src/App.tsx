@@ -24,13 +24,13 @@ import { Appearance } from "./Objects/Model/Appearance";
 import { ServiceRecord } from "./Objects/Model/ServiceRecord";
 import { PatreonView } from "./Pages/PatreonView";
 import { ModesView } from "./Pages/ModesView";
-import { MMR } from "./Objects/Pieces/MMR";
 import { CSRS } from "./Objects/Model/CSRS";
 import { OtherCreators } from "./Pages/OtherCreators";
 import { Admin } from "./Pages/Admin";
 import { Donate } from "./Pages/Donate";
 import { LeaderboardView } from "./Pages/LeaderboardView";
 import { DayView } from "./Pages/DayView";
+import { CompareView } from "./Pages/Compare/CompareView";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -126,6 +126,8 @@ const App = () =>
 				<Routes>
 					<Route path="/" element={<HomeView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
 					<Route path="/service_record/:gamertag" element={<PlayerView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
+					<Route path="/compare/:gamertag1" element={<CompareView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
+					<Route path="/compare/:gamertag1/:gamertag2" element={<CompareView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
 					<Route path="/modes/:gamertag" element={<ModesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
 					<Route path="/service_record/:node/:gamertag" element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
 					<Route path="/service_record/:node/:gamertag/:filter" element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />

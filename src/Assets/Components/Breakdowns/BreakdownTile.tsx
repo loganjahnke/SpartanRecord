@@ -1,6 +1,5 @@
 import { Box, Tooltip, Typography } from "@mui/material";
 import React from "react";
-import { Match } from "../../../Objects/Model/Match";
 import { PlayerMatch } from "../../../Objects/Model/PlayerMatch";
 import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
