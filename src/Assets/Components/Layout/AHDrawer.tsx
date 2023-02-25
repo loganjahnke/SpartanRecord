@@ -30,6 +30,8 @@ export enum SRTabs
 	Leaderboard = "Leaderboards",
 	Yesterday = "Yesterday",
 	Compare = "Compare",
+
+	None = "",
 }
 
 interface AHDrawerProps
@@ -120,6 +122,8 @@ export function AHDrawer(props: AHDrawerProps)
 				break;
 			case SRTabs.Compare:
 				switchTab(`/compare/${player.gamertag}`, newTab);
+				break;
+			case SRTabs.None:
 				break;
 			default: 
 				console.log("Something unexpected was pressed in the tabs: " + newTab);

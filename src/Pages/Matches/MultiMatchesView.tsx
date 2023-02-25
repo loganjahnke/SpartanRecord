@@ -3,20 +3,20 @@ import { LoadingButton } from "@mui/lab";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { PlayerMatchSummary } from "../Assets/Components/Match/PlayerMatchSummary";
-import { ViewProps } from "./Props/ViewProps";
-import { ServiceRecord } from "../Objects/Model/ServiceRecord";
-import { MatchesBreakdown } from "../Assets/Components/Breakdowns/MatchesBreakdown";
-import { KillDeathCard } from "../Assets/Components/Breakdowns/KillDeathCard";
-import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
-import { PlayerMatch } from "../Objects/Model/PlayerMatch";
-import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
-import { RecentMatchesChart } from "../Assets/Components/Charts/RecentMatchesChart";
+import { PlayerMatchSummary } from "../../Assets/Components/Match/PlayerMatchSummary";
+import { ViewProps } from "../Props/ViewProps";
+import { ServiceRecord } from "../../Objects/Model/ServiceRecord";
+import { MatchesBreakdown } from "../../Assets/Components/Breakdowns/MatchesBreakdown";
+import { KillDeathCard } from "../../Assets/Components/Breakdowns/KillDeathCard";
+import { KDABreakdown } from "../../Assets/Components/Breakdowns/KDABreakdown";
+import { PlayerMatch } from "../../Objects/Model/PlayerMatch";
+import { SRTabs } from "../../Assets/Components/Layout/AHDrawer";
+import { RecentMatchesChart } from "../../Assets/Components/Charts/RecentMatchesChart";
 import { Helmet } from "react-helmet";
-import { Cookie } from "../Objects/Helpers/Cookie";
-import { SR } from "../Objects/Helpers/Statics/SR";
+import { Cookie } from "../../Objects/Helpers/Cookie";
+import { SR } from "../../Objects/Helpers/Statics/SR";
 
-export function MatchesView(props: ViewProps)
+export function MultiMatchesView(props: ViewProps)
 {
 	//#region Props and Navigate
 	const { app, setLoadingMessage, setBackgroundLoadingProgress, switchTab, player, updatePlayer } = props;
