@@ -39,7 +39,7 @@ export function AHAppBar(props: AHAppBarProps)
 					}
 				</>}
 				<Box sx={{ flexGrow: 1, ml: 1, mr: 1 }}></Box>
-				<DynamicPlayerCard player={player} rightAlign />
+				<DynamicPlayerCard player={player} loading={!!backgroundLoadingMessage} rightAlign />
 			</Toolbar>
 		</AppBar>
 	);

@@ -10,13 +10,15 @@ interface PlayerCardProps
     showNameplate?: boolean;
     topDown?: boolean;
     noMargin?: boolean;
+    loading?: boolean;
 }
 
 export function DynamicPlayerCard(props: PlayerCardProps)
 {
+    const { loading } = props;
     return <>
         <Box sx={{ display: { xs: "none", sm: "block" }}}><PlayerCard {...props} showNameplate={true} /></Box>
-        <Box sx={{ display: { sm: "none" }}}><PlayerCard {...props} showNameplate={false} /></Box>
+        {!loading && <Box sx={{ display: { sm: "none" }}}><PlayerCard {...props} showNameplate={false} /></Box>}
     </>;
 }
 

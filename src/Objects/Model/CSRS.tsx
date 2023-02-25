@@ -139,8 +139,9 @@ export class Rank
     /** Gets the inline display */
     public GetDisplay(): string
     {
-        if (this.tier === "Unranked") { return this.GetTitle(); }
-        return this.GetTitle() + " - " + this.value.toLocaleString();
+        if (this.tier === "Unranked") { return this.tier; }
+        if (this.tier === "Onyx") { return this.tier + " - " + this.value.toLocaleString(); }
+        return this.tier + " " + this.subTier + " - " + this.value.toLocaleString();
     }
 
     /** Gets the JSON representation of the rank */
@@ -162,6 +163,31 @@ export class Rank
             next_tier_start: this.nextTierStart,
             next_sub_tier: this.nextSubTier
         }
+    }
+
+    /** Gets the outline color for a tier */
+    public GetOutline(): string
+    {
+        return this.tier === "Onyx" ? "1px solid #5E3D19 !important" : "";
+    }
+
+    /** Gets the background gradient for a tier */
+    public GetBackground(): string
+    {
+        return this.tier === "Bronze" 
+            ? "linear-gradient(to right, #a16447 0%, #a16447 20%, #633522 50%, #7e462e 80%, #7e462e 100%)" :
+        this.tier === "Silver" 
+            ? "linear-gradient(to right, #d3d3d3 0%, #d3d3d3 20%, #a6a6a6 50%, #b8b8b8 80%, #b8b8b8 100%)" :
+        this.tier === "Gold" 
+            ? "linear-gradient(to right, #b9aa57 0%, #b9aa57 20%, #583e1b 50%, #a2854e 80%, #a2854e 100%)" :
+        this.tier === "Platinum" 
+            ? "linear-gradient(to right, #8e93cc 0%, #8e93cc 20%, #c1d0d0 50%, #5a6276 80%, #5a6276 100%)" :
+        this.tier === "Diamond" 
+            ? "linear-gradient(to right, #88c6f9 0%, #88c6f9 20%, #58beed 50%, #5078c0 80%, #5078c0 100%)" :
+        this.tier === "Onyx" 
+            ? "linear-gradient(to left, #bb8c41 0%, #bb8c41 20%, #8c6e34 50%, #ffffba 80%, #ffffba 100%)"
+        /* Unranked */ 
+            : "#FFFFFF"
     }
 }
 

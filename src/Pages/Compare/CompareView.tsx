@@ -160,6 +160,7 @@ export function CompareView(props: ViewProps)
 	}, [closeAddGamertagDialog]);
 	//#endregion
 
+	//#region Loading
 	/**
 	 * Clears the loading messages
 	 */
@@ -283,11 +284,14 @@ export function CompareView(props: ViewProps)
 		loadData();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [gamertag1, gamertag2]);
+	//#endregion
 
 	const bestCurCSR1 = player?.GetBestCurrentCSR();
 	const bestCurCSR2 = player2?.GetBestCurrentCSR();
+	const bestCurBack = (bestCurCSR1?.ranks.current.value ?? 0) > (bestCurCSR2?.ranks.current.value ?? 0) ? bestCurCSR1?.ranks.current.GetBackground() : bestCurCSR2?.ranks.current.GetBackground();
 	const bestAllCSR1 = player?.GetBestAllTimeCSR();
 	const bestAllCSR2 = player2?.GetBestAllTimeCSR();
+	const bestAllBack = (bestAllCSR1?.ranks.allTime.value ?? 0) > (bestAllCSR2?.ranks.allTime.value ?? 0) ? bestAllCSR1?.ranks.allTime.GetBackground() : bestAllCSR2?.ranks.allTime.GetBackground();
 
 	return (
 		<Box component="main" sx={{ flexGrow: 1, height: gamertag1 && gamertag2 ? "auto" : "calc(100% - 32px)" }}>
@@ -337,8 +341,8 @@ export function CompareView(props: ViewProps)
 										<Compare category="Deaths / Game" value1={player?.serviceRecord.deathsPerGame} value2={player2.serviceRecord.deathsPerGame} lessIsBetter />
 										<Compare category="Assists / Game" value1={player?.serviceRecord.assistsPerGame} value2={player2.serviceRecord.assistsPerGame} />
 										<Compare category="Kill Death Spread / Game" value1={player?.serviceRecord.killDeathSpreadPerGameVal} value2={player2.serviceRecord.killDeathSpreadPerGameVal} />
-										<Compare category="Current CSR" display1={bestCurCSR1?.ranks.current.GetDisplay()} value1={bestCurCSR1?.ranks.current.value} display2={bestCurCSR2?.ranks.current.GetDisplay()} value2={bestCurCSR2?.ranks.current.value} />
-										<Compare category="All-Time CSR" display1={bestAllCSR1?.ranks.allTime.GetDisplay()} value1={bestAllCSR1?.ranks.allTime.value} display2={bestAllCSR2?.ranks.allTime.GetDisplay()} value2={bestAllCSR2?.ranks.allTime.value} />
+										<Compare category="Current CSR" display1={bestCurCSR1?.ranks.current.GetDisplay()} value1={bestCurCSR1?.ranks.current.value} display2={bestCurCSR2?.ranks.current.GetDisplay()} value2={bestCurCSR2?.ranks.current.value} background={bestCurBack} />
+										<Compare category="All-Time CSR" display1={bestAllCSR1?.ranks.allTime.GetDisplay()} value1={bestAllCSR1?.ranks.allTime.value} display2={bestAllCSR2?.ranks.allTime.GetDisplay()} value2={bestAllCSR2?.ranks.allTime.value} background={bestAllBack} />
 										<Compare category="Damage / Game" value1={player?.serviceRecord.damagePerGame} value2={player2.serviceRecord.damagePerGame} />
 										<Compare category="Accuracy" value1={player?.serviceRecord.shots.accuracy} value2={player2.serviceRecord.shots.accuracy} isPercent />
 										<Compare category="Damage Efficiency" value1={player ? player?.serviceRecord.damageEfficiency * 100 : 0} value2={player2.serviceRecord.damageEfficiency * 100} isPercent />
