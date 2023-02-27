@@ -1,0 +1,12 @@
+.winnerGrid {
+	align-self: stretch;
+	align-items: center;
+	justify-content: center;
+}
+
+.winnerIcon {
+	color: #00303D;
+	font-size: 32rem !important;
+	margin-right: -48px;
+	z-index: 1;
+}

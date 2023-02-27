@@ -160,8 +160,7 @@ export function MultiMatchesView(props: ViewProps)
     {
 		if (gamertag)
 		{
-			if (gamertag === "BoundlessEcho") { switchTab(`/beta/match/${id}/${gamertag}`, SRTabs.Matches); }
-			else { switchTab(`/match/${id}/${gamertag}`, SRTabs.Matches); }
+			switchTab(`/match/${id}/${gamertag}`, SRTabs.Matches);
 		}
 		else 
 		{

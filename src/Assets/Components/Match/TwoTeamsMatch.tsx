@@ -4,6 +4,8 @@ import { CompareHeader } from "../Compare/CompareHeader";
 import { DynamicTeamCard } from "../TeamAppearance/TeamCard";
 import { TeamTable } from "../../../Pages/Subpage/TeamTable";
 import { TeamsMatch } from "./MultiTeamMatch";
+import { MatchTitleCard } from "./MatchTitleCard";
+import { BackgroundWinnerIcon } from "./BackgroundWinnerIcon";
 
 import "../../Styles/Views/SingleMatch.css";
 
@@ -13,8 +15,8 @@ export function TwoTeamsMatch(props: TeamsMatch)
 
 	return (
 		<>
-			<Grid item sm={0} md={3} />
-			<Grid container item spacing={2} xs={12} xl={6}>
+			<BackgroundWinnerIcon winner={match.teams[0].details.name === match.winner} />
+			<Grid container item sx={{ zIndex: 5 }} spacing={2} xs={12} xl={6}>
 				<Grid item xs={12}>
 					<Card sx={{ height: "100%", width: "100%", borderRadius: 3 }}>
 						<CardContent className="teamCompareSection">
@@ -22,6 +24,8 @@ export function TwoTeamsMatch(props: TeamsMatch)
 								compare1={<DynamicTeamCard team={match?.teams[0]} winner={match.teams[0].details.name === match.winner} topDown noMargin rightAlign />}
 								compare2={<DynamicTeamCard team={match?.teams[1]} winner={match.teams[1].details.name === match.winner} topDown noMargin />}
 								icon={<Typography variant="body1">vs</Typography>}
+								backgroundURL={`url(${match.map.asset.thumbnail})`}
+								subtitle={<MatchTitleCard match={match} />}
 							/>
 							<Compare category="Kills" value1={match.teams[0].statistics.summary.kills} value2={match.teams[1].statistics.summary.kills} value1back={match.teams[0].color} value2back={match.teams[1].color} />
 							<Compare category="Damage" value1={match.teams[0].statistics.damage.dealt} value2={match.teams[1].statistics.damage.dealt} value1back={match.teams[0].color} value2back={match.teams[1].color} />
@@ -31,7 +35,7 @@ export function TwoTeamsMatch(props: TeamsMatch)
 					</Card>
 				</Grid>
 			</Grid>
-			<Grid item sm={0} md={3} />
+			<BackgroundWinnerIcon winner={match.teams[1].details.name === match.winner} />
 			<Grid container item spacing={2}>
 				{match.teams.map(team => (
 					<Grid item xs={12} lg={6}>

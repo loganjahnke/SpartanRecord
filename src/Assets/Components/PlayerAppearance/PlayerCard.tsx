@@ -4,6 +4,8 @@ import { Converter } from "../../../Objects/Helpers/Statics/Converter";
 import { Player } from "../../../Objects/Model/Player";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 
+import '../../Styles/Components/PlayerCard.css';
+
 interface PlayerCardProps
 {
 	player?: Player;
@@ -13,6 +15,7 @@ interface PlayerCardProps
     topDown?: boolean;
     noMargin?: boolean;
     loading?: boolean;
+    winner?: boolean;
 }
 
 export function DynamicPlayerCard(props: PlayerCardProps)
@@ -26,7 +29,7 @@ export function DynamicPlayerCard(props: PlayerCardProps)
 
 export function PlayerCard(props: PlayerCardProps)
 {
-	const { player, noImages, rightAlign, showNameplate, topDown, noMargin } = props;
+	const { player, noImages, rightAlign, showNameplate, topDown, noMargin, winner } = props;
 
     const [textColor, setTextColor] = useState(ArrowheadTheme.text_primary);
     const nameplateRef = useRef<HTMLImageElement>(null);
@@ -61,11 +64,11 @@ export function PlayerCard(props: PlayerCardProps)
             {rightAlign && !noImages && player.appearance?.emblemURL && <img src={player.appearance.emblemURL} alt="emblem" height="48px" />}
         </Box>
     ) : (
-        <Box className="playerCard" sx={{ backgroundColor: "transparent", display: "flex", flexDirection: "column", alignItems: "center", textAlign: rightAlign ? "right" : noImages ? "center" : "left" }}>
+        <Box className={`${winner ? "topdownWinner" : ""}`} sx={{ backgroundColor: "transparent", display: "flex", flexDirection: "column", alignItems: "center", textAlign: rightAlign ? "right" : noImages ? "center" : "left" }}>
             {!noImages && player.appearance?.emblemURL && <img src={player.appearance.emblemURL} alt="emblem" height="48px" crossOrigin="anonymous" />}
             <Box sx={{ mt: 1 }} />
-            <Typography variant="body1">{player.gamertag}</Typography>
-            <Typography variant="body2" sx={{ fontWeight: 100 }}>{player.appearance?.serviceTag}</Typography>
+            <Typography className="playerNameGT" variant="body1">{player.gamertag}</Typography>
+            <Typography className="playerNameST" variant="body2" sx={{ fontWeight: 100 }}>{player.appearance?.serviceTag}</Typography>
         </Box>
     );
 }

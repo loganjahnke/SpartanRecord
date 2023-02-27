@@ -192,7 +192,6 @@ export function BetaSingleMatchView(props: ViewProps)
 								</FormControl>
 						</Box>
 					</Grid>
-					<MatchTitleCard match={match} />
 					{match && match.teams.length === 2 && <TwoTeamsMatch match={match} myGamertag={gamertag} onGamertagClick={onGamertagClick} />} {/* 8e55d32a-3f23-445e-9e9b-07e14c01f7bc */}
 					{match && match.teams.length > 2 && <MultiTeamsMatch match={match} myGamertag={gamertag} onGamertagClick={onGamertagClick} />} {/* de9ff755-17bd-4e14-a0c2-668f3bda4fe2 */}
 					{match && !match.teamGame && <FFAMatch app={app} match={match} myGamertag={gamertag} onGamertagClick={onGamertagClick} />}     {/* 05a68b81-8b14-489b-82e4-4a57df911334 */}

@@ -2,16 +2,17 @@ import { Grid, Card, CardContent, Typography, LinearProgress } from "@mui/materi
 import { Match } from "../../../Objects/Model/Match";
 import { Compare } from "../Compare/Compare";
 import { CompareHeader } from "../Compare/CompareHeader";
-import { DynamicTeamCard } from "../TeamAppearance/TeamCard";
 import { TeamTable } from "../../../Pages/Subpage/TeamTable";
-
-import "../../Styles/Views/SingleMatch.css";
 import { Team } from "../../../Objects/Pieces/Team";
 import { DynamicPlayerCard } from "../PlayerAppearance/PlayerCard";
 import { Player } from "../../../Objects/Model/Player";
 import { useCallback, useEffect, useState } from "react";
 import { SCData } from "../../../Database/SCData";
 import { MatchPlayer } from "../../../Objects/Pieces/MatchPlayer";
+import { MatchTitleCard } from "./MatchTitleCard";
+import { BackgroundWinnerIcon } from "./BackgroundWinnerIcon";
+
+import "../../Styles/Views/SingleMatch.css";
 
 export interface TeamsMatch
 {
@@ -64,15 +65,18 @@ export function FFAMatch(props: TeamsMatch)
 
 	return (
 		<>
-			<Grid item sm={0} md={3} />
-			<Grid container item spacing={2} xs={12} xl={6}>
+			<BackgroundWinnerIcon winner={myMatchPlayer.gamertag === match.winner} />
+			<Grid container item sx={{ zIndex: 5 }} spacing={2} xs={12} xl={6}>
 				<Grid item xs={12}>
 					<Card sx={{ height: "100%", width: "100%", borderRadius: 3 }}>
 						<CardContent className="teamCompareSection">
 							{loadingPlayerAppearance ? <LinearProgress variant="indeterminate" /> : 
 								<CompareHeader stretch
-									compare1={<DynamicPlayerCard player={myPlayer} topDown noMargin rightAlign />}
-									compare2={<DynamicPlayerCard player={comparePlayer} topDown noMargin />}
+									compare1={<DynamicPlayerCard player={myPlayer} winner={myMatchPlayer.gamertag === match.winner} topDown noMargin rightAlign />}
+									compare2={<DynamicPlayerCard player={comparePlayer} winner={comparePlayer.gamertag === match.winner} topDown noMargin />}
+									icon={<Typography variant="body1">vs</Typography>}
+									backgroundURL={`url(${match.map.asset.thumbnail})`}
+									subtitle={<MatchTitleCard match={match} />}
 								/>
 							}
 							<Compare category="Kills" value1={myMatchPlayer.stats.summary.kills} value2={compareMatchPlayer.stats.summary.kills} />
@@ -85,7 +89,7 @@ export function FFAMatch(props: TeamsMatch)
 					</Card>
 				</Grid>
 			</Grid>
-			<Grid item sm={0} md={3} />
+			<BackgroundWinnerIcon winner={compareMatchPlayer.gamertag === match.winner} />
 			<Grid container item spacing={2}>
 				<Grid item xs={12}>
 					<TeamTable team={new Team(undefined, undefined, match.players)} match={match} onGamertagClick={onGamertagClick} selectedGamertag={myGamertag} ffa />
