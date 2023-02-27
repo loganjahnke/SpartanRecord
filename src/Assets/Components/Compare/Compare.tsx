@@ -12,11 +12,13 @@ export interface CompareProps
 	lessIsBetter?: boolean;
 	isPercent?: boolean;
 	background?: string;
+	value1back?: string;
+	value2back?: string;
 }
 
 export function Compare(props: CompareProps)
 {
-	const { category, value1 = 0, value2 = 0, display1, display2, lessIsBetter, isPercent, background } = props;
+	const { category, value1 = 0, value2 = 0, display1, display2, lessIsBetter, isPercent, background, value1back, value2back } = props;
 
 	return (
 		<Box sx={{ p: 2 }}>
@@ -29,7 +31,7 @@ export function Compare(props: CompareProps)
 				<Typography variant="h5" sx={{ textAlign: "right", width: "calc(50% - 16px)", pr: 2 }}>{display1 ?? (Math.round(value1 * 100) / 100).toLocaleString()}{isPercent ? "%" : ""}</Typography>
 				<Typography variant="h5" sx={{ textAlign: "left", width: "calc(50% - 16px)", pl: 2 }}>{display2 ?? (Math.round(value2 * 100) / 100).toLocaleString()}{isPercent ? "%" : ""}</Typography>
 			</Box>
-			<CompareBar value1={value1} value2={value2} lessIsBetter={lessIsBetter} background={background} />
+			<CompareBar {...props} />
 		</Box>
 	);
 }

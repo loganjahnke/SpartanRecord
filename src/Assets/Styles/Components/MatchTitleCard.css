@@ -1,0 +1,14 @@
+.matchTitleCardContent {
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+}
+
+.matchTitleCardLabel {
+	display: block;
+}
+
+.matchTitleCardOn {
+	color: #989898;
+	font-size: 0.95rem;
+}

@@ -15,14 +15,14 @@ import StarIcon from '@mui/icons-material/Star';
 import { ExpectationBreakdown } from "../../Assets/Components/Breakdowns/ExpectationBreakdown";
 import { GetColorForTeam } from "../../Objects/Helpers/AllTeams";
 import { CSRSProgression, CSRSTooltip } from "../../Assets/Components/Custom/CSRSTooltip";
+import { Match } from "../../Objects/Model/Match";
+import { Converter } from "../../Objects/Helpers/Statics/Converter";
 
 interface TeamTableProps
 {
+	match?: Match;
 	selectedGamertag?: string;
-	ranked?: boolean;
 	team: Team;
-	variant?: string;
-	best: { score: number, points: number, kills: number, deaths: number, assists: number };
 	onGamertagClick: (gamertag: string) => void;
 	ffa?: boolean;
 }
@@ -40,30 +40,31 @@ interface TeamTableRowProps
 
 export function TeamTable(props: TeamTableProps)
 {
-	const { selectedGamertag, ranked, team, best, variant, onGamertagClick, ffa } = props;
+	const { selectedGamertag, team, match, onGamertagClick, ffa } = props;
 
-	const showPoints = !!variant && (variant.includes("CTF") || variant.includes("Oddball") || variant.includes("King of the Hill"));
+	const bestTextColor = Converter.GetBestTextColor(team.color);
 
+	if (!match) { return <></>; }
 	return (
 		<TableContainer component={Box} sx={{ backgroundColor: ArrowheadTheme.box, borderRadius: 3 }}>
-			<Table>
-				<TableHead sx={{ backgroundColor: GetColorForTeam(team.details.name) }}>
+			<Table size="small">
+				<TableHead sx={{ backgroundColor: team.color }}>
 					<TableRow>
 						<TableCell />
-						{ranked && <TableCell sx={{ pr: 2 }} align="right">Rank</TableCell>}
-						<TableCell sx={{ pl: 2, pr: 2, position: "sticky", left: 0, backgroundColor: GetColorForTeam(team.details.name) }}>Gamertag</TableCell>
-						<TableCell sx={{ pl: 2, pr: 2 }} align="right">Total Score</TableCell>
-						{showPoints &&  <TableCell sx={{ pl: 2, pr: 2 }} align="right">Points</TableCell>}
-						<TableCell sx={{ pl: 2, pr: 2 }} align="right">Kills</TableCell>
-						<TableCell sx={{ pl: 2, pr: 2 }} align="right">Deaths</TableCell>
-						<TableCell sx={{ pl: 2, pr: 2 }} align="right">Assists</TableCell>
-						<TableCell sx={{ pl: 2, pr: 2 }} align="right">KDA</TableCell>
-						{ffa && <TableCell sx={{ pl: 2, pr: 2 }} align="right">MMR</TableCell>}
+						{match.playlist.ranked && <TableCell sx={{ color: bestTextColor, pr: 2 }} align="right">Rank</TableCell>}
+						<TableCell sx={{ color: bestTextColor, pl: 2, pr: 2, position: "sticky", left: 0, backgroundColor: team.color }}>Gamertag</TableCell>
+						<TableCell sx={{ color: bestTextColor, pl: 2, pr: 2 }} align="right">Score</TableCell>
+						{match.showPoints &&  <TableCell sx={{ color: bestTextColor, pl: 2, pr: 2 }} align="right">Points</TableCell>}
+						<TableCell sx={{ color: bestTextColor, pl: 2, pr: 2 }} align="right">Kills</TableCell>
+						<TableCell sx={{ color: bestTextColor, pl: 2, pr: 2 }} align="right">Deaths</TableCell>
+						<TableCell sx={{ color: bestTextColor, pl: 2, pr: 2 }} align="right">Assists</TableCell>
+						<TableCell sx={{ color: bestTextColor, pl: 2, pr: 2 }} align="right">KDA</TableCell>
+						{ffa && <TableCell sx={{ color: bestTextColor, pl: 2, pr: 2 }} align="right">MMR</TableCell>}
 					</TableRow>
 				</TableHead>
 				<TableBody>
 					{team.players.sort((a, b) => b.stats.totalScore - a.stats.totalScore).map((player, index) => (
-						<Row key={index} player={player} topSR={best} showPoints={showPoints} showRank={ranked} onGamertagClick={onGamertagClick} selectedGamertag={selectedGamertag} ffa={ffa} />
+						<Row key={index} player={player} topSR={match.best} showPoints={match.showPoints} showRank={match.playlist.ranked} onGamertagClick={onGamertagClick} selectedGamertag={selectedGamertag} ffa={ffa} />
 					))}
 				</TableBody>
 			</Table>
@@ -85,11 +86,13 @@ function Row(props: TeamTableRowProps)
 	return (
 		<React.Fragment>
 		<TableRow sx={{ ".MuiTableCell-body": { verticalAlign: "middle", color: player.outcome === HaloOutcome.Left ? ArrowheadTheme.leftEarlyText : ArrowheadTheme.text_primary } }}>
+				{/* Expansion Button */}
 				<TableCell width={"32px"}>
 					<IconButton size="small" onClick={() => setExpanded(!expanded)}>
 						{expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
 					</IconButton>
 				</TableCell>
+				{/* Rank */}
 				{showRank &&
 						<TableCell sx={{ pl: 2, pr: 2, pt: 0, pb: 0 }} align="right" width={"64px"}>
 							<CSRSTooltip title={
@@ -99,13 +102,14 @@ function Row(props: TeamTableRowProps)
 							</CSRSTooltip>
 						</TableCell> 
 				}
+				{/* Gamertag */}
 				<TableCell 
-					sx={{ pl: 2, pr: 2, position: "sticky", cursor: player.type === "bot" ? "default" : "pointer", left: 0, backgroundColor: selectedGamertag === player.gamertag ? ArrowheadTheme.good : ArrowheadTheme.box }} 
+					sx={{ pl: 2, pr: 2, position: "sticky", cursor: player.type === "bot" ? "default" : "pointer", left: 0 }} 
 					component="th" 
 					scope="row" 
 					onClick={player.type === "player" ? () => onGamertagClick(player.gamertag) : undefined} 
 					width={"150px"}>
-						{player.gamertag}
+						<Typography sx={{ fontWeight: selectedGamertag === player.gamertag ? 900 : 500, color: selectedGamertag === player.gamertag ? ArrowheadTheme.halo_grass : ArrowheadTheme.text_primary }} variant="body2">{player.gamertag}</Typography>
 				</TableCell>
 				<TableCell sx={{ pl: 2, pr: 2 }} width={"80px"} align="right">
 					<Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>

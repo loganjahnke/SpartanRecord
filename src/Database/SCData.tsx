@@ -78,7 +78,19 @@ export class SCData
     public async GetPlayerAppearanceOnly(gamertag: string): Promise<Player>
     {
         const player = new Player(gamertag);
-        player.appearance = await this.firebase.GetAppearance(gamertag);
+        
+        // Try to get from firebase
+        const firebaseAppearance = await this.firebase.GetAppearance(gamertag);
+        if (firebaseAppearance) 
+        { 
+            player.appearance = firebaseAppearance; 
+            return player;
+        }
+
+        // Otherwise get from HaloDotAPI
+        await this.halodapi.GetAppearance(player);
+        if (player.appearanceData) { this.firebase.SetAppearance(gamertag, player.appearanceData); }
+        
         return player;
     }
 

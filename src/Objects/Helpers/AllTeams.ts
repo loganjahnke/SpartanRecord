@@ -2,7 +2,7 @@ import { ArrowheadTheme } from "../../Assets/Theme/ArrowheadTheme";
 
 export function GetColorForTeam(name: string): string
 {
-	if (!name) { return ArrowheadTheme.halo_cerulean; }
+	if (!name) { return ArrowheadTheme.card; }
 	return (AllTeams as any)[name]?.color ?? ArrowheadTheme.halo_cerulean;
 }
 
@@ -23,7 +23,7 @@ export const AllTeams = {
 	{
 		id: 2,
 		emblem_url: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/teams/hades.png",
-		color: ArrowheadTheme.halo_tangelo
+		color: ArrowheadTheme.halo_jade
 	},
 	Valkyrie:
 	{
@@ -35,13 +35,13 @@ export const AllTeams = {
 	{
 		id: 4,
 		emblem_url: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/teams/rampart.png",
-		color: ArrowheadTheme.halo_jade
+		color: ArrowheadTheme.halo_sky
 	},
 	Cutlass:
 	{
 		id: 5,
 		emblem_url: "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/teams/cutlass.png",
-		color: ArrowheadTheme.halo_sky
+		color: ArrowheadTheme.halo_tangelo
 	},
 	Valor:
 	{

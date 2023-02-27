@@ -34,6 +34,42 @@ export class Match
     /** High scores */
     public best: { score: number, points: number, kills: number, deaths: number, assists: number };
 
+    /** The title of the match */
+    public get title(): string
+    {
+        return this.mode.name + " on " + this.map.name;
+    }
+
+    /** Gets the name of the winning team/player */
+    public get winner(): string
+    {
+        if (this.teamGame)
+        {
+            // Team game winner
+            if (!this.teams || this.teams.length < 1) { return ""; }
+            
+            const copy = [...this.teams];
+            copy.sort((a, b) => a.statistics.totalPoints < b.statistics.totalPoints ? 1 : -1);
+            if (!copy || copy.length < 1) { return ""; }
+            
+            return copy[0].details.name;
+        }
+
+        // FFA winner
+        if (!this.players || this.players.length < 1) { return ""; }
+            
+        const winners = this.players.filter(p => p.won);
+        if (!winners || winners.length < 1) { return ""; }
+
+        return winners[0].gamertag;
+    }
+
+    /** Should we show points separate from kills? */
+    public get showPoints(): boolean
+    {
+        return !!this.mode.name && (this.mode.name.includes("CTF") || this.mode.name.includes("Oddball") || this.mode.name.includes("King of the Hill"));
+    }
+
     constructor(match?: AutocodeMatch)
     {
         this.id = match?.id ?? "";
@@ -86,5 +122,45 @@ export class Match
                 this.best.assists = mp.stats.summary.assists > this.best.assists ? mp.stats.summary.assists : this.best.assists;
             }
         }
+    }
+
+    /**
+     * Gets a reference to the winning player in the match
+     * @returns the winning match player
+     */
+    public GetWinningPlayer(): MatchPlayer
+    {
+        const gamertag = this.winner;
+        const filtered = this.players.filter(player => player.gamertag === gamertag);
+        if (!filtered || filtered.length < 1) { return new MatchPlayer(); }
+        return filtered[0];
+    }
+
+    /**
+     * Gets a reference to the 2nd place player in the match
+     * @returns the 2nd place match player
+     */
+    public GetSecondPlacePlayer(): MatchPlayer
+    {
+        // Team game winner
+        if (!this.players || this.players.length < 2) { return new MatchPlayer(); }
+            
+        const copy = [...this.players];
+        copy.sort((a, b) => a.stats.totalPoints < b.stats.totalPoints ? 1 : -1);
+        if (!copy || copy.length < 2) { return new MatchPlayer(); }
+        
+        return copy[1];
+    }
+
+    /**
+     * Gets a reference to a specific player in the match
+     * @param gamertag the gamertag to get the player for
+     * @returns the match player for the gamertag
+     */
+    public GetMyPlayer(gamertag: string): MatchPlayer
+    {
+        const filtered = this.players.filter(player => player.gamertag === gamertag);
+        if (!filtered || filtered.length < 1) { return new MatchPlayer(); }
+        return filtered[0];
     }
 }

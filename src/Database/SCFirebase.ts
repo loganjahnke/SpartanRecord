@@ -41,10 +41,11 @@ export class SCFirebase
 	public async GetPlayer(player: Player, season?: number, historic?: boolean): Promise<void>
 	{
 		if (!player.gamertag) { return; }
-
+		
+		let appearance;
 		if (historic)
 		{
-			[player.serviceRecord, player.appearance, player.historicStats, player.csrs] = await Promise.all([
+			[player.serviceRecord, appearance, player.historicStats, player.csrs] = await Promise.all([
 				this.GetServiceRecord(player.gamertag, season),
 				this.GetAppearance(player.gamertag),
 				this.GetAllSeasonsStats(player.gamertag),
@@ -53,12 +54,14 @@ export class SCFirebase
 		}
 		else
 		{
-			[player.serviceRecord, player.appearance, player.csrs] = await Promise.all([
+			[player.serviceRecord, appearance, player.csrs] = await Promise.all([
 				this.GetServiceRecord(player.gamertag, season),
 				this.GetAppearance(player.gamertag),
 				this.GetCSRS(player.gamertag, season)
 			]);
 		}
+
+		player.appearance = appearance ?? new Appearance();
 	}
 	//#endregion
 
@@ -71,7 +74,7 @@ export class SCFirebase
 	{
 		if (!leader.gamertag) { return; }
 		Debugger.Print("SCFirebase", "GetAppearanceForLeader()", leader.gamertag);
-		leader.appearance = await this.GetAppearance(leader.gamertag);
+		leader.appearance = await this.GetAppearance(leader.gamertag) ?? new Appearance();
 	}
 
 	/**
@@ -79,12 +82,13 @@ export class SCFirebase
 	 * @param gamertag the gamertag to get the appearance of
 	 * @returns the appearance
 	 */
-	public async GetAppearance(gamertag: string): Promise<Appearance>
+	public async GetAppearance(gamertag: string): Promise<Appearance | null>
 	{
 		Debugger.Print("SCFirebase", "GetAppearance()", gamertag);
 
 		const snapshot = await this.__get(`appearance/${gamertag}`);
-		return new Appearance(snapshot?.val());
+		if (!snapshot || !snapshot.val()) { return null; }
+		return new Appearance(snapshot.val());
 	}
 	//#endregion
 	
@@ -530,10 +534,14 @@ export class SCFirebase
 		if (!leader.gamertag) { return; }
 		Debugger.Print("SCFirebase", "GetLeaderProperties()", leader.gamertag);
 
-		[leader.appearance, leader.matchesPlayed] = await Promise.all([
+		let appearance;
+
+		[appearance, leader.matchesPlayed] = await Promise.all([
 			this.GetAppearance(leader.gamertag),
 			this.GetMatchesPlayed(leader.gamertag)
 		]);
+
+		leader.appearance = appearance ?? new Appearance();
 	}
 	//#endregion
 	

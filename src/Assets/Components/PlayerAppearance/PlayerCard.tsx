@@ -46,7 +46,7 @@ export function PlayerCard(props: PlayerCardProps)
                 <Box sx={{ ml: 1, display: "flex", alignItems: "center", position: "absolute" }}>{!noImages && player.appearance?.emblemURL && <img src={player.appearance.emblemURL} alt="emblem" height="44px" crossOrigin="anonymous" />}</Box>
                 <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1, position: "absolute", ml: "72px" }}>
                     <Typography variant="body1" sx={{ color: textColor }}>{player.gamertag}</Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 100, color: textColor }}>{player.appearance?.serviceTag}</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 100, color: textColor, fontStyle: "italic", letterSpacing: "1px" }}>{player.appearance?.serviceTag}</Typography>
                 </Box>
             </Box>
         </Box>

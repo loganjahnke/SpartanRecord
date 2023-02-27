@@ -45,7 +45,7 @@ export const CompareBarLeft = styled(LinearProgress)(({ theme }) => ({
 	},
 	[`& .${linearProgressClasses.bar}`]: {
 		borderRadius: 0,
-		backgroundColor: ArrowheadTheme.good,
+		backgroundColor: ArrowheadTheme.eagle,
 	},
 }));
 
@@ -58,6 +58,6 @@ export const CompareBarRight = styled(LinearProgress)(({ theme }) => ({
 	[`& .${linearProgressClasses.bar}`]: {
 		borderRadius: 0,
 		left: "100%",
-		backgroundColor: ArrowheadTheme.bad,
+		backgroundColor: ArrowheadTheme.cobra,
 	},
 }));

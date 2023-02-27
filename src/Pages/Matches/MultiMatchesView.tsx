@@ -19,7 +19,7 @@ import { SR } from "../../Objects/Helpers/Statics/SR";
 export function MultiMatchesView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setBackgroundLoadingProgress, switchTab, player, updatePlayer } = props;
+	const { app, setLoadingMessage, setBackgroundLoadingProgress, switchTab, player, updatePlayer, isAllowed } = props;
 	const { gamertag } = useParams();
 	//#endregion
 	
@@ -160,7 +160,8 @@ export function MultiMatchesView(props: ViewProps)
     {
 		if (gamertag)
 		{
-			switchTab(`/match/${id}/${gamertag}`, SRTabs.Matches);
+			if (gamertag === "BoundlessEcho") { switchTab(`/beta/match/${id}/${gamertag}`, SRTabs.Matches); }
+			else { switchTab(`/match/${id}/${gamertag}`, SRTabs.Matches); }
 		}
 		else 
 		{

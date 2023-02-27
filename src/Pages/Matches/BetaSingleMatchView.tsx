@@ -10,11 +10,17 @@ import { DamageMatchRanks } from "../../Assets/Components/Ranks/DamageRanks";
 import { KDAMatchRanks } from "../../Assets/Components/Ranks/KDARanks";
 import { TopSpreeRanks } from "../../Assets/Components/Ranks/TopSpreeRanks";
 
+import { TwoTeamsMatch } from "../../Assets/Components/Match/TwoTeamsMatch";
 import { Match } from "../../Objects/Model/Match";
 import { MatchPlayer } from "../../Objects/Pieces/MatchPlayer";
 import { Team } from "../../Objects/Pieces/Team";
 import { ViewProps } from "../Props/ViewProps";
 import { TeamTable } from "../Subpage/TeamTable";
+
+import "../../Assets/Styles/Views/SingleMatch.css";
+import { MatchTitleCard } from "../../Assets/Components/Match/MatchTitleCard";
+import { MultiTeamsMatch } from "../../Assets/Components/Match/MultiTeamMatch";
+import { FFAMatch } from "../../Assets/Components/Match/FFAMatch";
 
 export function BetaSingleMatchView(props: ViewProps)
 {
@@ -186,44 +192,23 @@ export function BetaSingleMatchView(props: ViewProps)
 								</FormControl>
 						</Box>
 					</Grid>
-					<Grid item sm={0} md={3} />
-					<Grid container item spacing={2} xs={12} xl={6}>
-						<Grid item xs={12}>
-							<ImageCard image={match?.map?.asset.thumbnail} 
-								titles={[match?.map?.name || "", match?.mode?.name || "", match?.playlist?.name || match?.type || ""]} 
-								headers={["Map", "Variant", "Playlist"]} />
-						</Grid>
-						<Grid item xs={12}>
+					<MatchTitleCard match={match} />
+					{match && match.teams.length === 2 && <TwoTeamsMatch match={match} myGamertag={gamertag} onGamertagClick={onGamertagClick} />} {/* 8e55d32a-3f23-445e-9e9b-07e14c01f7bc */}
+					{match && match.teams.length > 2 && <MultiTeamsMatch match={match} myGamertag={gamertag} onGamertagClick={onGamertagClick} />} {/* de9ff755-17bd-4e14-a0c2-668f3bda4fe2 */}
+					{match && !match.teamGame && <FFAMatch app={app} match={match} myGamertag={gamertag} onGamertagClick={onGamertagClick} />}     {/* 05a68b81-8b14-489b-82e4-4a57df911334 */}
+					<Grid container item spacing={2} xs={12}>
+						<Grid item xs={12} md={6} xl={3}>
 							<KDAMatchRanks players={players} myGamertag={gamertag} goToMember={onGamertagClick} />
 						</Grid>
-						<Grid item xs={12}>
+						<Grid item xs={12} md={6} xl={3}>
 							<AccuracyMatchRanks players={players} myGamertag={gamertag} goToMember={onGamertagClick} />
 						</Grid>
-						<Grid item xs={12}>
+						<Grid item xs={12} md={6} xl={3}>
 							<DamageMatchRanks players={players} myGamertag={gamertag} goToMember={onGamertagClick} />
 						</Grid>
-						<Grid item xs={12}>
+						<Grid item xs={12} md={6} xl={3}>
 							<TopSpreeRanks players={players} myGamertag={gamertag} goToMember={onGamertagClick} />
 						</Grid>
-					</Grid>
-					<Grid item sm={0} md={3} />
-					<Grid container item spacing={2} xs={12} xl={8}>
-						{match?.teams && match.teams.length > 0 
-								? match?.teams?.map(team => (
-									<>
-										<Grid item xs={12}>
-											<TeamResultBreakdown team={team} />
-										</Grid>
-										<Grid item xs={12}>
-											<TeamTable team={team} best={match.best} variant={match.mode.name} onGamertagClick={onGamertagClick} ranked={match.playlist.ranked} selectedGamertag={gamertag} />
-										</Grid>
-									</>
-								))
-								: match?.players && match.players.length > 0 && (
-									<Grid item xs={12}>
-										<TeamTable team={new Team(undefined, undefined, match.players)} variant={match.mode.name} best={match.best} onGamertagClick={onGamertagClick} ranked={match.playlist.ranked} selectedGamertag={gamertag} ffa />
-									</Grid>
-							)}
 					</Grid>
 				</Grid>
 			</Box>

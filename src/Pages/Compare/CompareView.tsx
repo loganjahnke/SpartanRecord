@@ -15,6 +15,7 @@ import { DynamicPlayerCard } from "../../Assets/Components/PlayerAppearance/Play
 import { ChangeCircle, CompareArrows } from "@mui/icons-material";
 import { AddGamertagDialog, AddGamertagInline } from "../Spartan Company/AddGamertagDialog";
 import { ArrowheadTheme } from "../../Assets/Theme/ArrowheadTheme";
+import { CompareHeader } from "../../Assets/Components/Compare/CompareHeader";
 
 export function CompareView(props: ViewProps)
 {
@@ -321,17 +322,12 @@ export function CompareView(props: ViewProps)
 					<Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", pt: 1, pb: 4 }}>
 						<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", flexGrow: 1 }}>
 								<>
-									<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: ArrowheadTheme.secondary, maxWidth: "800px", width: "100%", borderRadius: "12px 12px 0 0" }}>
-										{gamertag2 && <Button startIcon={<ChangeCircle />} sx={{ mt: 2 }} size="small" variant="text" onClick={openAddGamertag}>Change Gamertag</Button>}
-										<Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mt: 2,  mb: 2, width: "100%" }}>
-											<Box sx={{ width: "calc(50% - 50px)", flexGrow: 1 }}><DynamicPlayerCard player={player} topDown rightAlign noMargin /></Box>
-											<Box sx={{ width: "50px", textAlign: "center" }}><CompareArrows sx={{ color: ArrowheadTheme.leftEarlyText }} /></Box>
-											<Box sx={{ width: "calc(50% - 50px)", flexGrow: 1 }}>
-												{gamertag2 && <DynamicPlayerCard player={player2} topDown noMargin />}
-												{!gamertag2 && <Button startIcon={<CompareArrows />} size="small" variant="contained" onClick={openAddGamertag}>Compare</Button>}
-											</Box>
-										</Box>
-									</Box>
+									<CompareHeader
+										changeButton={!gamertag2 ? undefined : <Button startIcon={<ChangeCircle />} sx={{ mt: 2 }} size="small" variant="text" onClick={openAddGamertag}>Change Gamertag</Button>}
+										compare1={<DynamicPlayerCard player={player} topDown rightAlign noMargin />}
+										compare2={gamertag2 ? <DynamicPlayerCard player={player2} topDown noMargin /> : <Button startIcon={<CompareArrows />} size="small" variant="contained" onClick={openAddGamertag}>Compare</Button>}
+										icon={<CompareArrows sx={{ color: ArrowheadTheme.leftEarlyText }} />}
+									/>
 									<Box sx={{ maxWidth: "800px", width: "100%", backgroundColor: ArrowheadTheme.box, borderRadius: "0 0 12px 12px" }}>
 										<Compare category="Matches" value1={player?.serviceRecord.matchesPlayed} value2={player2.serviceRecord.matchesPlayed} />
 										<Compare category="Win Percentage" value1={player?.serviceRecord.winRate} value2={player2.serviceRecord.winRate} isPercent />

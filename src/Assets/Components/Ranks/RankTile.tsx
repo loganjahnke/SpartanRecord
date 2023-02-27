@@ -65,8 +65,8 @@ export function MatchRankTile(props: { player: MatchPlayer, value: number, myGam
 	const { player, value, myGamertag, isPercent, goToMember, isSpree } = props;
 
 	return (
-		<Box sx={{ backgroundColor: "secondary.main", borderRadius: 3, display: "flex", flexDirection: "row", alignItems: "center", width: "90%", margin: 1, padding: 0, height: "48px" }}>
-			<Button disabled={player.type === "bot"} onClick={() => goToMember(player.gamertag)} sx={{ width: "100%", height: "100%", justifyContent: "flex-start", p: 0, borderRadius: 2, textTransform: "none", textAlign: "left", backgroundColor: myGamertag === player.gamertag ? ArrowheadTheme.good : "" }}>
+		<Box sx={{ backgroundColor: "secondary.main", borderRadius: 3, display: "flex", flexDirection: "row", alignItems: "center", width: "90%", margin: 1, padding: 0, height: "48px", border: myGamertag === player.gamertag ? `1px solid ${ArrowheadTheme.halo_grass}` : "none" }}>
+			<Button disabled={player.type === "bot"} onClick={() => goToMember(player.gamertag)} sx={{ width: "100%", height: "100%", justifyContent: "flex-start", p: 0, borderRadius: 2, textTransform: "none", textAlign: "left" }}>
 				{player.team.emblem && <Box sx={{ 
 					backgroundImage: `url(${player.team.emblem})`, 
 					backgroundColor: GetColorForTeam(player.team.name), 
@@ -76,13 +76,13 @@ export function MatchRankTile(props: { player: MatchPlayer, value: number, myGam
 					height: "48px", 
 					backgroundPosition: "center", 
 					objectFit: "contain", 
-					borderRadius: "8px 0px 0px 8px" }} />}
+					borderRadius: "12px 0px 0px 12px" }} />}
 				<Box sx={{ ml: 1, display: "flex", flexDirection: "column", fontSize: "0.8rem" }}>
-					<Typography variant="h6">{player.gamertag}</Typography>
+					<Typography sx={{ fontWeight: myGamertag === player.gamertag ? 900 : 500, color: myGamertag === player.gamertag ? ArrowheadTheme.halo_grass : ArrowheadTheme.text_primary }} variant="h6">{player.gamertag}</Typography>
 				</Box>
 				<Box sx={{ flexGrow: 1 }} />
 				{isSpree && value >=5 && <HighestSpreeMedal maxSpree={value} />}
-                <Typography variant="h5" sx={{ textAlign: "right", ml: 2, mr: 2 }}>{(Math.round(value * 100) / 100).toLocaleString()}{isPercent ? "%" : ""}</Typography>
+                <Typography variant="h5" sx={{ textAlign: "right", ml: 2, mr: 2, fontWeight: myGamertag === player.gamertag ? 900 : 500, color: myGamertag === player.gamertag ? ArrowheadTheme.halo_grass : ArrowheadTheme.text_primary }}>{(Math.round(value * 100) / 100).toLocaleString()}{isPercent ? "%" : ""}</Typography>
 			</Button>
 		</Box>
 	);
