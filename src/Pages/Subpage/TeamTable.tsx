@@ -104,7 +104,7 @@ function Row(props: TeamTableRowProps)
 				}
 				{/* Gamertag */}
 				<TableCell 
-					sx={{ pl: 2, pr: 2, position: "sticky", cursor: player.type === "bot" ? "default" : "pointer", left: 0 }} 
+					sx={{ pl: 2, pr: 2, position: "sticky", cursor: player.type === "bot" ? "default" : "pointer", left: 0, background: ArrowheadTheme.box }} 
 					component="th" 
 					scope="row" 
 					onClick={player.type === "player" ? () => onGamertagClick(player.gamertag) : undefined} 
