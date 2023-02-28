@@ -11,16 +11,17 @@ interface CompareHeaderProps
 	stretch?: boolean;
 	backgroundURL?: string;
 	subtitle?: ReactElement;
+	topOfImage?: boolean;
 }
 
 export function CompareHeader(props: CompareHeaderProps)
 {
-	const { changeButton, compare1, compare2, icon, stretch, backgroundURL, subtitle } = props;
+	const { changeButton, compare1, compare2, icon, stretch, backgroundURL, subtitle, topOfImage } = props;
 
 	return (
 
-		<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: backgroundURL ?? ArrowheadTheme.secondary, backgroundPosition: "center", backgroundSize: "cover", maxWidth: stretch ? "none" : "800px", width: "100%", borderRadius: "12px 12px 0 0" }}>
-			<Box sx={{ width: "100%", height: "100%", backgroundColor: "rgba(20,43,51, 0.75)" }}>
+		<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: backgroundURL ?? ArrowheadTheme.secondary, backgroundPosition: topOfImage ? "top" : "center", backgroundSize: "cover", maxWidth: stretch ? "none" : "800px", width: "100%", borderRadius: "12px 12px 0 0" }}>
+			<Box sx={{ width: "100%", height: "100%", backgroundColor: "rgba(20,43,51, 0.75)", textAlign: "center" }}>
 				{changeButton}
 				<Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mt: 2,  mb: 2, width: "100%" }}>
 					<Box sx={{ width: "calc(50% - 50px)", flexGrow: 1 }}>{compare1}</Box>

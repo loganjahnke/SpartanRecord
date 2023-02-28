@@ -322,11 +322,12 @@ export function CompareView(props: ViewProps)
 					<Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", pt: 1, pb: 4 }}>
 						<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", flexGrow: 1 }}>
 								<>
-									<CompareHeader
+									<CompareHeader topOfImage
 										changeButton={!gamertag2 ? undefined : <Button startIcon={<ChangeCircle />} sx={{ mt: 2 }} size="small" variant="text" onClick={openAddGamertag}>Change Gamertag</Button>}
 										compare1={<DynamicPlayerCard player={player} topDown rightAlign noMargin />}
 										compare2={gamertag2 ? <DynamicPlayerCard player={player2} topDown noMargin /> : <Button startIcon={<CompareArrows />} size="small" variant="contained" onClick={openAddGamertag}>Compare</Button>}
 										icon={<CompareArrows sx={{ color: ArrowheadTheme.leftEarlyText }} />}
+										backgroundURL="url(https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/playlists/ffa-slayer.jpg)"
 									/>
 									<Box sx={{ maxWidth: "800px", width: "100%", backgroundColor: ArrowheadTheme.box, borderRadius: "0 0 12px 12px" }}>
 										<Compare category="Matches" value1={player?.serviceRecord.matchesPlayed} value2={player2.serviceRecord.matchesPlayed} />
