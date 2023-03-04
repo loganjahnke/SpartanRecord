@@ -34,6 +34,7 @@ export function MultiTeamsMatch(props: TeamsMatch)
 								backgroundURL={`url(${match.map.asset.thumbnail})`}
 								subtitle={<MatchTitleCard match={match} />}
 							/>
+							{match.showPoints && <Compare category="Points" value1={match.teams[0].statistics.totalPoints} value2={match.teams[1].statistics.totalPoints} value1back={match.teams[0].color} value2back={match.teams[1].color} />}
 							<Compare category="Kills" value1={match.teams[0].statistics.summary.kills} value2={match.teams[1].statistics.summary.kills} value1back={match.teams[0].color} value2back={match.teams[1].color} />
 							<Compare category="Damage" value1={match.teams[0].statistics.damage.dealt} value2={match.teams[1].statistics.damage.dealt} value1back={match.teams[0].color} value2back={match.teams[1].color} />
 							<Compare category="MMR" value1={match.teams[0].mmr} value2={match.teams[1].mmr} value1back={match.teams[0].color} value2back={match.teams[1].color} />

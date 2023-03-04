@@ -79,6 +79,7 @@ export function FFAMatch(props: TeamsMatch)
 									subtitle={<MatchTitleCard match={match} />}
 								/>
 							}
+							{match.showPoints && <Compare category="Points" value1={myMatchPlayer.stats.totalPoints} value2={compareMatchPlayer.stats.totalPoints} />}
 							<Compare category="Kills" value1={myMatchPlayer.stats.summary.kills} value2={compareMatchPlayer.stats.summary.kills} />
 							<Compare category="Expected Kills" value1={myMatchPlayer.killExpectations.expected} value2={compareMatchPlayer.killExpectations.expected} />
 							<Compare category="Assists" value1={myMatchPlayer.stats.summary.assists} value2={compareMatchPlayer.stats.summary.assists} />
