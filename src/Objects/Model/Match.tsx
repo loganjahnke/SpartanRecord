@@ -67,7 +67,12 @@ export class Match
     /** Should we show points separate from kills? */
     public get showPoints(): boolean
     {
-        return !!this.mode.name && (this.mode.name.includes("CTF") || this.mode.name.includes("Oddball") || this.mode.name.includes("King of the Hill"));
+        if (this.teamGame)
+        {
+            return this.teams.some(team => team.statistics.summary.kills !== team.statistics.totalPoints);
+        }
+        
+        return this.players.some(player => player.stats.summary.kills !== player.stats.totalPoints);
     }
 
     constructor(match?: AutocodeMatch)
