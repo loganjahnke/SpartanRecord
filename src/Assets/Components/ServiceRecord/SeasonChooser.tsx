@@ -32,6 +32,7 @@ export function SeasonChooser(props: ServiceRecordFiltersProps)
 				<MenuItem value={-1}>All</MenuItem>
 				<MenuItem value={1}>Season 1</MenuItem>
 				<MenuItem value={2}>Season 2</MenuItem>
+				<MenuItem value={3}>Season 3</MenuItem>
 			</Select>
 		</FormControl>
 	);

@@ -483,13 +483,13 @@ const CalculateLeaderboardAverages = async (app: admin.app.App, leaderboard: str
 
 /**
  * Updates the additional statistics for allowed players
- * Runs every day at 12:00p
+ * Runs every day at 2:00a
  */
 export const UpdatePlayerFilters = functions
 	.runWith({ 
 		timeoutSeconds: 540, 
 		memory: "512MB" 
-	}).pubsub.schedule("every day 12:00")
+	}).pubsub.schedule("every day 02:00")
 	.timeZone("America/Chicago")
 	.onRun(async (context) =>
 {
@@ -515,13 +515,13 @@ export const UpdatePlayerFilters = functions
 
 /**
  * Updates the leaderboard graphs
- * Runs every Tuesday at 10:00a
+ * Runs every Tuesday at 4:00a
  */
 export const UpdateLeaderboardGraph = functions
 	.runWith({ 
 		timeoutSeconds: 540, 
 		memory: "512MB" 
-	}).pubsub.schedule("every Tuesday 10:00")
+	}).pubsub.schedule("every Tuesday 4:00")
 	.timeZone("America/Chicago")
 	.onRun(async (context) =>
 {
