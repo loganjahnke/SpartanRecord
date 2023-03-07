@@ -20,10 +20,10 @@ export function CSRSProgression(props: { pre: Rank, post: Rank, noBackground?: b
 	const { pre, post, noBackground } = props;
 
     const background = noBackground ? "" : ArrowheadTheme.secondary;
-	const progress = post.tier === "Unranked" ? (10 - post.measurementMatchesRemaining) * 10
+	const progress = post.tier === "Unranked" ? (5 - post.measurementMatchesRemaining) * 20
 		: post.tier === "Onyx" ? 100 : (post.value - post.tierStart) * 100 / (post.nextTierStart - post.tierStart);
 	const buffer = post.tier === "Onyx" || post.subTier !== pre.subTier ? undefined 
-		: pre.tier === "Unranked" ? (10 - pre.measurementMatchesRemaining) * 10
+		: pre.tier === "Unranked" ? (5 - pre.measurementMatchesRemaining) * 20
 		: (pre.value - pre.tierStart) * 100 / (pre.nextTierStart - pre.tierStart);
 
 	return (
@@ -39,7 +39,7 @@ export function CSRSProgression(props: { pre: Rank, post: Rank, noBackground?: b
 					<Typography variant={"subtitle1"} sx={{ fontSize: "0.8rem", ml: 1 }}>{post.GetTitle()}</Typography>
 					<Box sx={{ flexGrow: 1 }} />
 					{post.tier === "Unranked" ?
-						<Typography variant={"caption"} sx={{ fontSize: "0.8rem", mr: 1, textAlign: "right" }}>{10 - post.measurementMatchesRemaining + " matches remaining"}</Typography>
+						<Typography variant={"caption"} sx={{ fontSize: "0.8rem", mr: 1, textAlign: "right" }}>{post.measurementMatchesRemaining + " matches remaining"}</Typography>
 					:
 						<Typography variant={"subtitle1"} sx={{ pl: "8px", pr: "8px", borderRadius: "8px", fontSize: "0.8rem", mr: 1, textAlign: "right", backgroundColor: post.value - pre.value < 0 ? ArrowheadTheme.bad : ArrowheadTheme.good }}>{(post.value - pre.value < 0 ? "" : "+") + (post.value - pre.value)}</Typography>
 					}

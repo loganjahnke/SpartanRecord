@@ -6,7 +6,7 @@ import { AutocodePlayerMatchResults } from "./Schemas/AutocodePlayerMatch";
 import fetch from "node-fetch";
 
 /** The HaloDotAPI version */
-const AUTOCODE_VERSION = "1-5-6";
+//const AUTOCODE_VERSION = "1-5-6";
 
 /** The types of service records */
 export enum ServiceRecordType
@@ -26,7 +26,7 @@ export enum ServiceRecordType
  */
 export const GetAppearance = async (gamertag: string): Promise<AutocodeAppearance> =>
 {
-	const response = await fetch(`https://${AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/appearance`, {
+	const response = await fetch(`https://loganjahnke.autocode.dev/arrowheadcompany/appearance`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify({gamertag: gamertag})
@@ -48,7 +48,7 @@ export const GetAppearance = async (gamertag: string): Promise<AutocodeAppearanc
  */
 export const GetServiceRecord = async (gamertag: string, season?: number, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<AutocodeMultiplayerServiceRecord> =>
 {
-	const response = await fetch(`https://${AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/service_record`, {
+	const response = await fetch(`https://loganjahnke.autocode.dev/arrowheadcompany/service_record`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify({
@@ -91,7 +91,7 @@ export const GetLastMatchID = async (gamertag: string): Promise<string> =>
  */
 export const GetCSRS = async (gamertag: string, season: number): Promise<any> =>
 {
-	const response = await fetch(`https://${AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/csrs`, {
+	const response = await fetch(`https://loganjahnke.autocode.dev/arrowheadcompany/csrs`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify({
@@ -111,7 +111,7 @@ export const GetCSRS = async (gamertag: string, season: number): Promise<any> =>
  */
 export const GetPlayerMatches = async (gamertag: string, count: number, offset: number): Promise<AutocodePlayerMatchResults> =>
 {
-	const response = await fetch(`https://${AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/matches`, {
+	const response = await fetch(`https://loganjahnke.autocode.dev/arrowheadcompany/matches`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify({
@@ -157,7 +157,7 @@ export const GetMatch = async (id: string): Promise<AutocodeMatch | undefined> =
  */
 export const GetMatches = async (ids: string[]): Promise<AutocodeMatchResults> =>
 {
-	const response = await fetch(`https://${AUTOCODE_VERSION}--ArrowheadCompany.loganjahnke.autocode.gg/match`, {
+	const response = await fetch(`https://loganjahnke.autocode.dev/arrowheadcompany/match`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify({

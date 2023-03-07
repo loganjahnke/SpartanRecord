@@ -8,7 +8,7 @@ export function CSRSBreakdownTile(props: { csrs: CSRS })
 	const { csrs } = props;
 
     const background = ArrowheadTheme.box;
-	const progress = csrs.ranks.current.tier === "Unranked" ? (10 - csrs.ranks.current.measurementMatchesRemaining) * 10
+	const progress = csrs.ranks.current.tier === "Unranked" ? (5 - csrs.ranks.current.measurementMatchesRemaining) * 20
 		: csrs.ranks.current.tier === "Onyx" ? 100 : (csrs.ranks.current.value - csrs.ranks.current.tierStart) * 100 / (csrs.ranks.current.nextTierStart - csrs.ranks.current.tierStart);
 
 	return (
@@ -59,7 +59,7 @@ export function CSRSBreakdownTile(props: { csrs: CSRS })
 									csrs.ranks.current.tier === "Onyx" 
 										? { background: "linear-gradient(to left, #bb8c41 0%, #bb8c41 20%, #8c6e34 50%, #ffffba 80%, #ffffba 100%)" }
 									/* Unranked */ 
-										: { background: "#FFFFFF" } 
+										: { background: "linear-gradient(to left, #FFFFFF 0%, #ffffda 20%, #EFEFEF 50%, #ffffda 80%, #FCFCFC 100%)" } 
 							}} />
 					</Tooltip>
 				</Box>

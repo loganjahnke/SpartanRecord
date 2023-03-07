@@ -187,7 +187,7 @@ export class Rank
         this.tier === "Onyx" 
             ? "linear-gradient(to left, #bb8c41 0%, #bb8c41 20%, #8c6e34 50%, #ffffba 80%, #ffffba 100%)"
         /* Unranked */ 
-            : "#FFFFFF"
+            : "linear-gradient(to left, #FFFFFF 0%, #ffffda 20%, #EFEFEF 50%, #ffffda 80%, #FCFCFC 100%)"
     }
 }
 
