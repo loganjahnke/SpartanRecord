@@ -80,7 +80,7 @@ export function MultiMatchesView(props: ViewProps)
 		}
 		else 
 		{ 
-			await app.firebase.SetRecentMatches(gamertag, recentJSON.data);
+			//await app.firebase.SetRecentMatches(gamertag, recentJSON.data);
 			setMatches(recent); 
 			createServiceRecord(recent);
 		}
@@ -109,18 +109,19 @@ export function MultiMatchesView(props: ViewProps)
 		if (!gamertag) { return; }
 
 		// Set loading message
-		append
-			? setBackgroundLoadingProgress("Loading additional matches")
-			: setLoadingMessage("Loading matches for " + gamertag);
+		// append
+		// 	? setBackgroundLoadingProgress("Loading additional matches")
+		// 	: setLoadingMessage("Loading matches for " + gamertag);
 
-		// Load from Firebase
-		if (!append && await loadFromFirebase())
-		{
-			setLoadingMessage("");
-			setBackgroundLoadingProgress(SR.DefaultLoading);
-		}
+		// // Load from Firebase
+		// if (!append && await loadFromFirebase())
+		// {
+		// 	setLoadingMessage("");
+		// 	setBackgroundLoadingProgress(SR.DefaultLoading);
+		// }
 
 		// Load from HaloDotAPI
+		setLoadingMessage("Loading matches for " + gamertag);
 		await loadFromHaloDotAPI(!!append);
 		
 		// Set appearance
