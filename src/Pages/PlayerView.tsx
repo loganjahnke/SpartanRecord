@@ -111,6 +111,8 @@ export function PlayerView(props: ViewProps)
 		// Add to recent players cookie
 		if (haloDotAPIPlayer.serviceRecordData && !(haloDotAPIPlayer.serviceRecordData as any).error) { Cookie.addRecent(haloDotAPIPlayer.gamertag); }
 
+		return haloDotAPIPlayer.serviceRecordData && !(haloDotAPIPlayer.serviceRecordData as any).error;
+
 	}, [gamertag, app, season, setLoadingMessage, updatePlayer, setBackgroundLoadingProgress, clearLoadingMessages]);
 
 	/**
@@ -182,10 +184,11 @@ export function PlayerView(props: ViewProps)
 		const firebasePlayer = await loadFromFirebase();
 
 		// Load from HaloDotAPI
-		await loadFromHaloDotAPI(firebasePlayer.serviceRecord);
-
-		// Update historic statistics
-		await loadHistoricStatistics(firebasePlayer.historicStats);
+		if (await loadFromHaloDotAPI(firebasePlayer.serviceRecord))
+		{
+			// Update historic statistics
+			await loadHistoricStatistics(firebasePlayer.historicStats);
+		}
 
 		// Clear loading messages
 		clearLoadingMessages();

@@ -1,3 +1,5 @@
+import { Debugger } from "./Debugger";
+
 export class Cookie
 {
     /**
@@ -38,6 +40,8 @@ export class Cookie
      */
     public static addRecent(gamertag: string): void
     {
+        if (this.isFavorite(gamertag)) { return; }
+
         const recents = this.getRecents();
         if (recents.includes(gamertag))
         {
@@ -208,4 +212,83 @@ export class Cookie
         // Set it
         document.cookie = name+"=; expires="+date.toUTCString()+"; path=/";
     }
+
+    //#region Favorites
+    /**
+     * Gets all favorites as a Set
+     */
+    public static getFavorites(): string[]
+    {
+        const all = this.__getFavorites();
+        Debugger.Simple("Cookie", "getFavorites()", all);
+        if (!all) { return []; }
+        return all.split("|");
+    }
+
+    /**
+     * Gets all favorites as a Set
+     */
+    public static allFavorites(): Set<string>
+    {
+        const all = this.__getFavorites();
+        return this.__convertFavoritesToSet(all);
+    }
+
+    /**
+     * Determines if a gamertag is a favorite
+     * @param gamertag the gamertag to check
+     */
+    public static isFavorite(gamertag: string): boolean
+    {
+        const all = this.allFavorites();
+        return all.has(gamertag);
+    }
+
+    /**
+     * Adds a favorite
+     * @param gamertag the gamertag to add as a favorite
+     */
+    public static addFavorite(gamertag: string): void
+    {
+        let all = this.__getFavorites();
+        const set = this.__convertFavoritesToSet(all);
+        if (set.has(gamertag)) { return; }
+
+        if (!all) { all = gamertag; }
+        else { all += "|" + gamertag; }
+
+        this.set("favs", all);
+    }
+
+    /**
+     * Removes a favorite
+     * @param gamertag the gamertag to remove as a favorite
+     */
+    public static removeFavorite(gamertag: string): void
+    {
+        const all = this.__getFavorites();
+        const set = this.__convertFavoritesToSet(all);
+        if (!set.has(gamertag)) { return; }
+
+        set.delete(gamertag);
+        const str = Array.from(set).join("|");
+
+        Debugger.Simple("Cookie", "removeFavorite()", str);
+        
+        this.set("favs", str);
+    }
+
+    /** Gets all favorites in the cookie */
+    private static __getFavorites(): string
+    {
+        return this.get("favs") ?? "";
+    }
+
+    /** Converts the favorites to a set */
+    private static __convertFavoritesToSet(favs: string): Set<string>
+    {
+        const allArray = favs.split("|");
+        return new Set<string>(allArray);
+    }
+    //#endregion
 }

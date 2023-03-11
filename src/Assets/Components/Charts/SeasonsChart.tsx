@@ -20,20 +20,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 enum SeasonsDataSets
 {
 	Matches = "Matches",
-	Wins = "Wins",
-	Losses = "Losses",
 	WinRate = "Win Rate",
 	KDA = "KDA",
 	KDR = "KDR",
 	Accuracy = "Accuracy",
-	Kills = "Kills",
-	Deaths = "Deaths",
-	Assists = "Assists",
 	KillsPerGame = "Kills / Game",
 	DeathsPerGame = "Deaths / Game",
 	AssistsPerGame = "Assists / Game",
-	DamagePerGame = "Damage / Game",
-	DamageEfficiency = "Damage Efficiency"
 }
 
 export const SeasonsChart = (props: { historicServiceRecords: ServiceRecord[], onMetricChanged: () => void }) =>
@@ -144,7 +137,7 @@ export const SeasonsChart = (props: { historicServiceRecords: ServiceRecord[], o
 						weight: "600"
 					},
 					formatter: function(value: number) {
-						if (newDataSet === SeasonsDataSets.DamageEfficiency) { return (Math.round(value * 10000) / 100) + "%"; }
+						// if (newDataSet === SeasonsDataSets.DamageEfficiency) { return (Math.round(value * 10000) / 100) + "%"; }
 						return (Math.round(value * 100) / 100) + 
 							(newDataSet === SeasonsDataSets.WinRate || newDataSet === SeasonsDataSets.Accuracy
 								? "%" : "");
@@ -197,20 +190,20 @@ export const SeasonsChart = (props: { historicServiceRecords: ServiceRecord[], o
 						switch (dataSet.current)
 						{
 							case SeasonsDataSets.Matches: return sr.matchesPlayed;
-							case SeasonsDataSets.Wins: return sr.breakdowns.matches.wins;
-							case SeasonsDataSets.Losses: return sr.breakdowns.matches.losses;
+							// case SeasonsDataSets.Wins: return sr.breakdowns.matches.wins;
+							// case SeasonsDataSets.Losses: return sr.breakdowns.matches.losses;
 							case SeasonsDataSets.WinRate: return sr.winRate;
-							case SeasonsDataSets.Kills: return sr.summary.kills;
-							case SeasonsDataSets.Deaths: return sr.summary.deaths;
-							case SeasonsDataSets.Assists: return sr.summary.assists;
+							// case SeasonsDataSets.Kills: return sr.summary.kills;
+							// case SeasonsDataSets.Deaths: return sr.summary.deaths;
+							// case SeasonsDataSets.Assists: return sr.summary.assists;
 							case SeasonsDataSets.KDA: return sr.kda;
 							case SeasonsDataSets.KDR: return sr.kdr;
 							case SeasonsDataSets.Accuracy: return sr.shots.accuracy;
 							case SeasonsDataSets.KillsPerGame: return sr.summary.kills / sr.matchesPlayed;
 							case SeasonsDataSets.DeathsPerGame: return sr.summary.deaths / sr.matchesPlayed;
 							case SeasonsDataSets.AssistsPerGame: return sr.summary.assists / sr.matchesPlayed;
-							case SeasonsDataSets.DamagePerGame: return sr.damage.dealt / sr.matchesPlayed;
-							case SeasonsDataSets.DamageEfficiency: return sr.damageEfficiency;
+							// case SeasonsDataSets.DamagePerGame: return sr.damage.dealt / sr.matchesPlayed;
+							// case SeasonsDataSets.DamageEfficiency: return sr.damageEfficiency;
 							default: return sr.matchesPlayed;
 						}
 					}),

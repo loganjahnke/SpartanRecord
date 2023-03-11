@@ -30,9 +30,9 @@ export function SeasonChooser(props: ServiceRecordFiltersProps)
 			<InputLabel>Season</InputLabel>
 			<Select value={season} label="Season" onChange={handleSeasonChange}>
 				<MenuItem value={-1}>All</MenuItem>
-				<MenuItem value={1}>Season 1</MenuItem>
-				<MenuItem value={2}>Season 2</MenuItem>
-				<MenuItem value={3}>Season 3</MenuItem>
+				<MenuItem value={1}>Season 1: Heroes of Reach</MenuItem>
+				<MenuItem value={2}>Season 2: Lone Wolves</MenuItem>
+				<MenuItem value={3}>Season 3: Echoes Within</MenuItem>
 			</Select>
 		</FormControl>
 	);

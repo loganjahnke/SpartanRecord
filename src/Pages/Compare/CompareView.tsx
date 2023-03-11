@@ -355,7 +355,7 @@ export function CompareView(props: ViewProps)
 					<Box sx={{ backgroundColor: "secondary.main", display: "flex", flexDirection: "column", textAlign: "center", alignItems: "center", pl: 4, pr: 4 }}>
 						<Typography variant="h3">Compare Service Records</Typography>
 						<Typography variant="h6">Search for a gamertag to compare Halo Infinite statistics such as KDA, KDR, and more</Typography>
-						<AddGamertagInline showSearchButton search={gamertagToAdd} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} onValueChanged={onGamertagTextChange} openRecent={addRecent} loading={loadingProfile} error={errorMessage} recentPlayers={recentPlayers} />
+						<AddGamertagInline showSearchButton search={gamertagToAdd} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} onValueChanged={onGamertagTextChange} openRecent={addRecent} loading={loadingProfile} error={errorMessage} recentPlayers={recentPlayers} favoritePlayers={[]} />
 					</Box>
 					<Grow />
 					<Box sx={{ backgroundColor: "secondary.main", textAlign: "center", mt: 18 }}>

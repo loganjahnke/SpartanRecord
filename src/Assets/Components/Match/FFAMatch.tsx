@@ -61,6 +61,7 @@ export function FFAMatch(props: TeamsMatch)
 	useEffect(() =>
 	{
 		loadData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [match, myGamertag]);
 
 	return (

@@ -357,7 +357,7 @@ export function SpartanCompanyView(props: ViewProps)
 				</Grid>
 			</Box>
 			: 
-			<AddGamertag search={gamertagToAdd} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} onValueChanged={onGamertagTextChange} recentPlayers={recentPlayers} />
+			<AddGamertag search={gamertagToAdd} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} onValueChanged={onGamertagTextChange} recentPlayers={recentPlayers} favoritePlayers={[]} />
 			}
 		</Box>
 	);

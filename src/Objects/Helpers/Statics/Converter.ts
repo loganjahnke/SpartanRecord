@@ -30,10 +30,6 @@ export class Converter
 					deaths: sr.data.core.summary.deaths,
 					assists: sr.data.core.summary.assists,
 				},
-				damage: {
-					taken: sr.data.core.damage.taken,
-					dealt: sr.data.core.damage.dealt,
-				},
 				shots: {
 					accuracy: sr.data.core.shots.accuracy,
 				},
@@ -41,10 +37,6 @@ export class Converter
 				kdr: sr.data.core.kdr,
 			},
 			matches: {
-				outcomes: {
-					wins: sr.data.matches.outcomes.wins,
-					losses: sr.data.matches.outcomes.losses,
-				},
 				total: sr.data.matches.total,
 				win_rate: sr.data.matches.win_rate,
 			},

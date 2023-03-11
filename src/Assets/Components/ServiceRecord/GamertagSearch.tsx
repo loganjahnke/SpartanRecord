@@ -12,11 +12,12 @@ export interface SearchProps
     openRecent?: (gamertag: string) => void;
     error?: string;
     showSearchButton?: boolean;
+    favoritePlayers: Player[];
 }
 
 export function GamertagSearch(props: SearchProps)
 {
-    const { recentPlayers, search, onValueChanged, onKeyPress, onSearch, openRecent } = props;
+    const { recentPlayers, search, favoritePlayers, onValueChanged, onKeyPress, onSearch, openRecent } = props;
     
     return (
         <Box sx={{ backgroundColor: "secondary.main", display: "flex", flexDirection: "column", textAlign: "center", alignItems: "center", pl: 4, pr: 4 }}>
@@ -26,7 +27,13 @@ export function GamertagSearch(props: SearchProps)
                 <TextField label="Gamertag" variant="outlined" size="small" value={search} onChange={onValueChanged} onKeyPress={onKeyPress} />
                 <Button variant="contained" sx={{ ml: 2 }} onClick={onSearch}>Search</Button>
             </Box>
-            {recentPlayers.length > 0 &&
+            {favoritePlayers.length > 0 &&
+                <Box sx={{ mt: 1 }}>
+                    <Typography variant="caption" sx={{ color: "white" }}>Favorites: </Typography>
+                    {favoritePlayers.map(player => <PlayerChip player={player} onClick={openRecent} />)}
+                </Box>
+            }
+            {favoritePlayers.length === 0 && recentPlayers.length > 0 &&
                 <Box sx={{ mt: 1 }}>
                     <Typography variant="caption" sx={{ color: "white" }}>Recents: </Typography>
                     {recentPlayers.map(player => <PlayerChip player={player} onClick={openRecent} />)}

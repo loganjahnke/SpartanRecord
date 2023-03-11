@@ -18,6 +18,7 @@ export function HomeView(props: ViewProps)
 	//#region State
  	const [localGamertag, setLocalGamertag] = useState("");
 	const [recentPlayers, setRecentPlayers] = useState<Player[]>(Cookie.getRecents().map(gamertag => new Player(gamertag)));
+	const [favoritePlayers, setFavoritePlayers] = useState<Player[]>([]);
 	//#endregion
 
 	/** Controlled search component */
@@ -66,9 +67,30 @@ export function HomeView(props: ViewProps)
 
 	}, [app, setRecentPlayers]);
 
+	/** Loads the favorite players and their appearance */
+	const loadFavoritePlayers = useCallback(async () =>
+	{
+		const favorites = Cookie.getFavorites();
+		if (!favorites || favorites.length === 0) { return false; }
+
+		const players: Player[] = [];
+		for (const gamertag of favorites)
+		{
+			players.push(await app.GetPlayerAppearanceOnly(gamertag));
+		}
+
+		setFavoritePlayers(players);
+
+		return players.length > 0;
+
+	}, [app, setFavoritePlayers]);
+
 	useEffect(() =>
 	{
-		loadRecentPlayers();
+		if (!loadFavoritePlayers())
+		{
+			loadRecentPlayers();
+		}
 		document.title = "Spartan Record";
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -87,7 +109,7 @@ export function HomeView(props: ViewProps)
 			<Divider />
 			<Box sx={{ backgroundColor: "secondary.main", height: "100%", display: "flex", flexDirection: "column" }}>
 				<Grow />
-				<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} />
+				<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} />
 				<Grow />
 				<Box sx={{ backgroundColor: "secondary.main", textAlign: "center", mt: 18 }}>
 					<Typography variant="subtitle1" sx={{ textAlign: "center" }}>Powered by <Link sx={{ cursor: "pointer" }} onClick={() => switchTab("/powered_by_halodotapi")}>HaloDotAPI</Link> v{process.env.REACT_APP_HALO_API_VERSION} | Spartan Record v{process.env.REACT_APP_VERSION}</Typography>

@@ -4,6 +4,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Player } from "../../../Objects/Model/Player";
 import { DynamicPlayerCard } from "../PlayerAppearance/PlayerCard";
 import { SR } from "../../../Objects/Helpers/Statics/SR";
+import { useCallback, useEffect, useState } from "react";
+import { Cookie } from "../../../Objects/Helpers/Cookie";
 
 interface AHAppBarProps
 {
@@ -18,6 +20,28 @@ interface AHAppBarProps
 export function AHAppBar(props: AHAppBarProps)
 {
 	const { handleDrawerToggle, backgroundLoadingMessage, player } = props;
+
+	const [favorite, setFavorite] = useState(false);
+
+	const onFavorite = useCallback((gamertag: string) =>
+	{
+		if (favorite) 
+		{ 
+			Cookie.removeFavorite(gamertag); 
+			setFavorite(false);
+		}
+		else 
+		{ 
+			Cookie.addFavorite(gamertag); 
+			setFavorite(true);
+		}
+	}, [favorite]);
+
+	useEffect(() =>
+	{
+		if (!player) { return; }
+		setFavorite(Cookie.isFavorite(player.gamertag));
+	}, [player]);
 
 	return (
 		<AppBar position="fixed" sx={{ width: { sm: `calc(100% - 240px)` }, ml: { sm: `240px` }}}>
@@ -39,7 +63,7 @@ export function AHAppBar(props: AHAppBarProps)
 					}
 				</>}
 				<Box sx={{ flexGrow: 1, ml: 1, mr: 1 }}></Box>
-				<DynamicPlayerCard player={player} loading={!!backgroundLoadingMessage} rightAlign />
+				<DynamicPlayerCard player={player} loading={!!backgroundLoadingMessage} onFavorite={onFavorite} isFavorite={favorite} rightAlign />
 			</Toolbar>
 		</AppBar>
 	);

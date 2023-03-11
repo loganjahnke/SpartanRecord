@@ -65,7 +65,7 @@ export function AddGamertagDialog(props: AddGamertagDialogProps)
 		<Dialog open={!!open} onClose={cancel}>
 			<DialogTitle sx={{ color: ArrowheadTheme.text_primary, backgroundColor: ArrowheadTheme.secondary }}>Add a Gamertag to your Spartan Company</DialogTitle>		
 			<DialogContent sx={{ backgroundColor: ArrowheadTheme.box }}>
-				<AddGamertagInline search={gamertag} onKeyPress={searchViaEnter} onSearch={search} onValueChanged={onChange} openRecent={addRecent} loading={loading} error={error} recentPlayers={recentPlayers} />
+				<AddGamertagInline search={gamertag} onKeyPress={searchViaEnter} onSearch={search} onValueChanged={onChange} openRecent={addRecent} loading={loading} error={error} recentPlayers={recentPlayers} favoritePlayers={[]} />
 			</DialogContent>
 			<DialogActions sx={{ backgroundColor: ArrowheadTheme.box }}>
 				<Button onClick={cancel}>Cancel</Button>
