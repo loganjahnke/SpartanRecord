@@ -312,6 +312,20 @@ export class SCFirebase
 	}
 
 	/**
+	 * Determines if a match is stored in Firebase
+	 * @param matchID the match ID
+	 * @returns true if it is in Firebase
+	 */
+	public async GetMatchIsStored(matchID: string): Promise<boolean>
+	{
+		Debugger.Print("SCFirebase", "GetMatchIsStored()", matchID);
+
+		const snapshot = await this.__get(`match/${matchID}/success`);
+		if (!snapshot) { return false; }
+		return snapshot.val();
+	}
+
+	/**
 	 * Gets an array of recent matches for the given gamertag
 	 * @param gamertag the gamertag to set the recent matches for
 	 * @returns an array of recent matches

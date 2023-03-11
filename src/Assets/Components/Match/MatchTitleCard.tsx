@@ -1,4 +1,4 @@
-import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { Match } from "../../../Objects/Model/Match";
 
 import "../../Styles/Components/MatchTitleCard.css";

@@ -1,0 +1,23 @@
+.smallHeader {
+	position: relative;
+	overflow: hidden;
+	display: block;
+	text-align: center;
+	z-index: 2;
+}
+
+.smallHeader:before, .smallHeader:after {
+	position: absolute;
+	top: 51%;
+	overflow: hidden;
+    width: 50%;
+    height: 1px;
+    content: '\a0';
+    background-color: #666666;
+	z-index: 1;
+}
+
+.smallHeader:before {
+    margin-left: -50%;
+    text-align: right;
+}

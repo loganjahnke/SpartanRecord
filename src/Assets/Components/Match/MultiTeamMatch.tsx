@@ -1,4 +1,4 @@
-import { Grid, Card, CardContent, Typography, Box } from "@mui/material";
+import { Grid, Card, CardContent, Typography } from "@mui/material";
 import { Match } from "../../../Objects/Model/Match";
 import { Compare } from "../Compare/Compare";
 import { CompareHeader } from "../Compare/CompareHeader";

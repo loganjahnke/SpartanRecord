@@ -1,13 +1,17 @@
 import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, Menu, MenuItem, Snackbar, Typography } from "@mui/material";
 import { useState } from "react";
 import { PlayerMatch } from "../../../Objects/Model/PlayerMatch";
+import { MatchPlayer } from "../../../Objects/Pieces/MatchPlayer";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { MatchBreakdown } from "../Breakdowns/Templates/MatchBreakdown";
 import { CSRSProgression } from "../Custom/CSRSTooltip";
 
+import "../../Styles/Components/PlayerMatchSummary.css";
+
 interface MatchSummaryProps
 {
 	match: PlayerMatch;
+	player?: MatchPlayer;
 	goToMatch: Function;
 	gamertag: string;
 	showExpanded?: boolean;
@@ -15,7 +19,7 @@ interface MatchSummaryProps
 
 export function PlayerMatchSummary(props: MatchSummaryProps)
 {
-	const { match, goToMatch, gamertag, showExpanded } = props;
+	const { match, player, goToMatch, gamertag, showExpanded } = props;
 
 	const [contextMenu, setContextMenu] = useState<{mouseX: number; mouseY: number;} | null>(null);
 	const [snacking, setSnacking] = useState(false);
@@ -119,6 +123,7 @@ export function PlayerMatchSummary(props: MatchSummaryProps)
 							<Typography fontSize="small" sx={{ textAlign: "center" }}>{match.player.placement}</Typography>
 						</Box>
 						<Box sx={{ backgroundColor: ArrowheadTheme.card, width: "100%", ml: "-16px", padding: "8px 16px" }}>
+							{player && player.gamertag && showExpanded && <Typography className="smallHeader" variant="subtitle1">Actual</Typography>}
 							<Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
 								<Box sx={{ display: "flex", width: "75px", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 									<Typography variant="caption">Kills</Typography>
@@ -134,6 +139,22 @@ export function PlayerMatchSummary(props: MatchSummaryProps)
 								</Box>
 							</Box>
 						</Box>
+						{player && player.gamertag && showExpanded &&
+							<Box sx={{ backgroundColor: ArrowheadTheme.card, width: "100%", ml: "-16px", padding: "8px 16px" }}>
+								<Typography className="smallHeader" variant="subtitle1">Expected</Typography>
+								<Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
+									<Box sx={{ display: "flex", width: "75px", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Typography variant="caption">Kills</Typography>
+										<Typography variant="body1">{Math.round(player.killExpectations.expected * 10) / 10}</Typography>
+									</Box>
+									<Box sx={{ display: "flex", width: "75px", flexDirection: "column", justifyContent: "center", alignItems: "center" }}></Box>
+									<Box sx={{ display: "flex", width: "75px", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Typography variant="caption">Deaths</Typography>
+										<Typography variant="body1">{Math.round(player.deathExpectations.expected * 10) / 10}</Typography>
+									</Box>
+								</Box>
+							</Box>
+						}
 						{showExpanded && <>
 							<Box sx={{ backgroundColor: ArrowheadTheme.box, width: "100%", marginLeft: "-16px", padding: "8px 16px" }}>
 								<Box sx={{ mb: 1, display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>

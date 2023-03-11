@@ -9,7 +9,6 @@ import { PlayerView } from "./Pages/PlayerView";
 import { MedalsView } from "./Pages/MedalsView";
 import { useCallback, useMemo, useState } from "react";
 import { MultiMatchesView } from "./Pages/Matches/MultiMatchesView";
-import { SingleMatchView } from "./Pages/Matches/SingleMatchView";
 import { FilteredView } from "./Pages/FilteredView";
 import { SCData } from "./Database/SCData";
 import { HomeView } from "./Pages/HomeView";
@@ -150,9 +149,9 @@ const App = () =>
 					<Route path="/medals/:gamertag" element={<MedalsView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
 					
 					{/* Matches Views */}
-					<Route path="/matches/:gamertag" element={<MultiMatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
-					<Route path="/match/:id" element={<BetaSingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
-					<Route path="/match/:id/:gamertag" element={<BetaSingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
+					<Route path="/matches/:gamertag" element={<MultiMatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
+					<Route path="/match/:id" element={<BetaSingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
+					<Route path="/match/:id/:gamertag" element={<BetaSingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
 					
 					{/* Leaderboard Views */}
 					<Route path="/leaderboard" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />

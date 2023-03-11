@@ -1,6 +1,5 @@
 import { Grid, Box } from "@mui/material";
 import { RankedIcon } from "../../Icons/CustomIcons";
-import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 
 import "../../Styles/Components/BackgroundWinnerIcon.css";
 

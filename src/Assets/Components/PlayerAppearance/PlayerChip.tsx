@@ -28,7 +28,7 @@ export function PlayerChip(props: PlayerChipProps)
 		<Chip sx={{ backgroundPosition: "center", backgroundImage: `url(${player.appearance.nameplateURL})`, margin: "4px 4px", p: 0.5, height: "36px" }} icon={<img  height="24px" src={player.appearance.emblemURL} alt="Emblem" crossOrigin="anonymous" />} onClick={onClick ? () => onClick(player.gamertag) : undefined} 
 			label={
 				<>
-					<Box sx={{ display: "none" }}><img ref={nameplateRef} src={player.appearance.nameplateURL} width="256px" height="48px" onLoad={onImageLoad} crossOrigin="anonymous" /></Box>
+					<Box sx={{ display: "none" }}><img ref={nameplateRef} src={player.appearance.nameplateURL} alt="nameplate" width="256px" height="48px" onLoad={onImageLoad} crossOrigin="anonymous" /></Box>
 					<Box sx={{ textAlign: "left", mt: 0.5 }}>
 						<Typography variant="subtitle1" sx={{ color: textColor, lineHeight: 1 }}>{player.gamertag}</Typography>
 						<Typography variant="caption" sx={{ color: textColor, fontSize: "0.7rem" }}>{player.appearance.serviceTag}</Typography>

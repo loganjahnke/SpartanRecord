@@ -90,7 +90,7 @@ export class SCData
         // Otherwise get from HaloDotAPI
         await this.halodapi.GetAppearance(player);
         if (player.appearanceData) { this.firebase.SetAppearance(gamertag, player.appearanceData); }
-        
+
         return player;
     }
 
@@ -293,6 +293,29 @@ export class SCData
         await this.firebase.SetMatch(matchID, result);
 
         return new Match(result);
+    }
+
+    /**
+     * Gets the matches and saves them to Firebase
+     * @param ids the match IDs
+     * @returns the matches
+     */
+    public async GetMatches(ids: string[]): Promise<Match[]>
+    {
+        if (!ids) { return []; }
+
+        // Check with HaloDotAPI
+        const matches = await this.halodapi.GetMatches(ids);
+        if (!matches) { return []; }
+
+        // Store into Firebase if appropriate
+        for (const match of matches.data)
+        {
+            if (await this.firebase.GetMatchIsStored(match.id)) { continue; }
+            await this.firebase.SetMatch(match.id, match);
+        }
+
+        return matches.data.map(m => new Match(m));
     }
 
     /**

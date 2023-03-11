@@ -14,7 +14,6 @@ import { SRTabs } from "../../Assets/Components/Layout/AHDrawer";
 import { RecentMatchesChart } from "../../Assets/Components/Charts/RecentMatchesChart";
 import { Helmet } from "react-helmet";
 import { Cookie } from "../../Objects/Helpers/Cookie";
-import { SR } from "../../Objects/Helpers/Statics/SR";
 
 export function MultiMatchesView(props: ViewProps)
 {
@@ -85,7 +84,24 @@ export function MultiMatchesView(props: ViewProps)
 			createServiceRecord(recent);
 		}
 
-	}, [app, gamertag, matches, setMatches, createServiceRecord]);
+		if (!isAllowed || append) { return; }
+
+		setLoadingMessage("");
+		setBackgroundLoadingProgress("Loading player expectations");
+
+		// Get additional match details
+		const expanded = await app.GetMatches(recent.map(m => m.id));
+		
+		// Set expanded player into recent matches
+		for (let i = 0; i < expanded.length; i++)
+		{
+			recent[i].expandedPlayer = expanded[i].GetMyPlayer(gamertag);
+		}
+
+		// Reset matches
+		setMatches([...recent]); 
+
+	}, [app, gamertag, matches, isAllowed, setMatches, createServiceRecord, setLoadingMessage, setBackgroundLoadingProgress]);
 
 	/**
 	 * Sets the appearance for the gamertag, if needed
@@ -108,6 +124,10 @@ export function MultiMatchesView(props: ViewProps)
 	{
 		if (!gamertag) { return; }
 
+		// Clear messages from other views
+		setLoadingMessage("");
+		setBackgroundLoadingProgress("");
+
 		// Set loading message
 		// append
 		// 	? setBackgroundLoadingProgress("Loading additional matches")
@@ -122,10 +142,12 @@ export function MultiMatchesView(props: ViewProps)
 
 		// Load from HaloDotAPI
 		setLoadingMessage("Loading matches for " + gamertag);
-		await loadFromHaloDotAPI(!!append);
 		
 		// Set appearance
 		await setAppearance();
+		
+		// Get matches
+		await loadFromHaloDotAPI(!!append);		
 		
 		// Log
 		app.logger.LogViewMatches();
@@ -212,7 +234,7 @@ export function MultiMatchesView(props: ViewProps)
 					</Grid>
 				</Grid>
 				<Grid container spacing={2} sx={{ mt: 1 }}>
-					{matches?.length > 0 ? matches.map(match => <PlayerMatchSummary match={match} goToMatch={goToMatch} gamertag={gamertag ?? ""} showExpanded={showExpanded} />) : undefined}
+					{matches?.length > 0 ? matches.map(match => <PlayerMatchSummary match={match} player={match.expandedPlayer} goToMatch={goToMatch} gamertag={gamertag ?? ""} showExpanded={showExpanded} />) : undefined}
 				</Grid>
 				{matches.length > 0 && <Grid item xs={12}>
 					<Box sx={{ display: "flex", justifyContent: "center", width: "100%", mt: 2 }}>

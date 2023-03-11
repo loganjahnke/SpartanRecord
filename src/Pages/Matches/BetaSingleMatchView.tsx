@@ -2,8 +2,6 @@ import { Box, Divider, FormControl, Grid, InputLabel, MenuItem, Select, SelectCh
 import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
-import { TeamResultBreakdown } from "../../Assets/Components/Breakdowns/TeamResultBreakdown";
-import { ImageCard } from "../../Assets/Components/Cards/ImageCard";
 import { SRTabs } from "../../Assets/Components/Layout/AHDrawer";
 import { AccuracyMatchRanks } from "../../Assets/Components/Ranks/AccuracyRanks";
 import { DamageMatchRanks } from "../../Assets/Components/Ranks/DamageRanks";
@@ -13,14 +11,11 @@ import { TopSpreeRanks } from "../../Assets/Components/Ranks/TopSpreeRanks";
 import { TwoTeamsMatch } from "../../Assets/Components/Match/TwoTeamsMatch";
 import { Match } from "../../Objects/Model/Match";
 import { MatchPlayer } from "../../Objects/Pieces/MatchPlayer";
-import { Team } from "../../Objects/Pieces/Team";
 import { ViewProps } from "../Props/ViewProps";
-import { TeamTable } from "../Subpage/TeamTable";
-
-import "../../Assets/Styles/Views/SingleMatch.css";
-import { MatchTitleCard } from "../../Assets/Components/Match/MatchTitleCard";
 import { MultiTeamsMatch } from "../../Assets/Components/Match/MultiTeamMatch";
 import { FFAMatch } from "../../Assets/Components/Match/FFAMatch";
+
+import "../../Assets/Styles/Views/SingleMatch.css";
 
 export function BetaSingleMatchView(props: ViewProps)
 {

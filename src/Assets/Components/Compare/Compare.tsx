@@ -18,7 +18,7 @@ export interface CompareProps
 
 export function Compare(props: CompareProps)
 {
-	const { category, value1 = 0, value2 = 0, display1, display2, lessIsBetter, isPercent, background, value1back, value2back } = props;
+	const { category, value1 = 0, value2 = 0, display1, display2, isPercent } = props;
 
 	return (
 		<Box sx={{ p: 2 }}>

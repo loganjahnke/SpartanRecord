@@ -45,7 +45,7 @@ export function PlayerCard(props: PlayerCardProps)
 	return showNameplate ? (
         <Box className="playerCard" sx={{ backgroundColor: "transparent", display: "flex", alignItems: "center", justifyContent: rightAlign ? "flex-end" : "flex-start", textAlign: "left", height: "100%", mr: noMargin ? 0 : -1 }}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
-                {!noImages && player.appearance?.nameplateURL && <img ref={nameplateRef} src={player.appearance.nameplateURL} width="256px" height="48px" onLoad={onImageLoad} crossOrigin="anonymous" />}
+                {!noImages && player.appearance?.nameplateURL && <img ref={nameplateRef} src={player.appearance.nameplateURL} alt="nameplate" width="256px" height="48px" onLoad={onImageLoad} crossOrigin="anonymous" />}
                 <Box sx={{ ml: 1, display: "flex", alignItems: "center", position: "absolute" }}>{!noImages && player.appearance?.emblemURL && <img src={player.appearance.emblemURL} alt="emblem" height="44px" crossOrigin="anonymous" />}</Box>
                 <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1, position: "absolute", ml: "72px" }}>
                     <Typography variant="body1" sx={{ color: textColor }}>{player.gamertag}</Typography>

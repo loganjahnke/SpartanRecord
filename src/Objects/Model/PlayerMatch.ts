@@ -1,6 +1,7 @@
 import { AutocodePlayerMatch } from "../../Database/Schemas/AutocodePlayerMatch";
 import { GameVariant } from "../Pieces/GameVariant";
 import { Map } from "../Pieces/Map";
+import { MatchPlayer } from "../Pieces/MatchPlayer";
 import { PlayerMatchPlayer } from "../Pieces/PlayerMatchPlayer";
 import { Playlist } from "../Pieces/Playlist";
 import { TimePlayed } from "../Pieces/TimePlayed";
@@ -25,6 +26,8 @@ export class PlayerMatch
     public date: Date;
     /** The total duration of the match */
     public duration: TimePlayed;
+    /** Expanded player details */
+    public expandedPlayer: MatchPlayer;
 
     constructor(match?: AutocodePlayerMatch)
     {
@@ -37,5 +40,6 @@ export class PlayerMatch
         this.experience = match?.experience ?? "";
         this.date = match?.played_at ? new Date(match.played_at) : new Date();
         this.duration = new TimePlayed(match?.duration);
+        this.expandedPlayer = new MatchPlayer();
     }
 }

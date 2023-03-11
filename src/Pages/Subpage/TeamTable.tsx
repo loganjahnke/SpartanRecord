@@ -13,7 +13,6 @@ import { ShotsBreakdown } from "../../Assets/Components/Breakdowns/ShotsBreakdow
 
 import StarIcon from '@mui/icons-material/Star';
 import { ExpectationBreakdown } from "../../Assets/Components/Breakdowns/ExpectationBreakdown";
-import { GetColorForTeam } from "../../Objects/Helpers/AllTeams";
 import { CSRSProgression, CSRSTooltip } from "../../Assets/Components/Custom/CSRSTooltip";
 import { Match } from "../../Objects/Model/Match";
 import { Converter } from "../../Objects/Helpers/Statics/Converter";
