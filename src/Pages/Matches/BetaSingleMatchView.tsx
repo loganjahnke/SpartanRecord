@@ -25,7 +25,7 @@ export function BetaSingleMatchView(props: ViewProps)
 	//#endregion
 	
 	//#region State
-    const [match, setMatch] = useState<Match | undefined>(new Match());
+    const [match, setMatch] = useState<Match | undefined>();
 	const [players, setPlayers] = useState<MatchPlayer[]>([]);
 	const [snacking, setSnacking] = useState(false);
 	const [menu, setMenu] = useState(-1);
@@ -153,8 +153,8 @@ export function BetaSingleMatchView(props: ViewProps)
 	return (
 		<Box component="main" sx={{ flexGrow: 1, width: "100%" }}>
 			<Helmet>
-				<title>{`Spartan Record | ${match!.mode.name} on ${match!.map.name}`}</title>
-				<meta name="description" content={`${gamertag} - ${match!.mode.name} on ${match!.map.name}`} />
+				<title>{`Spartan Record | ${match?.mode.name} on ${match?.map.name}`}</title>
+				<meta name="description" content={`${gamertag} - ${match?.mode.name} on ${match?.map.name}`} />
 				<meta property="og:title" content="Spartan Record" />
 				<meta property="og:image" content={match?.map?.asset.thumbnail} />
 				<link rel="canonical" href={`https://spartanrecord.com/beta/match/${match?.id}/${gamertag}`} />

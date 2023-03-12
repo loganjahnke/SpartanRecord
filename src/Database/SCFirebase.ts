@@ -88,6 +88,9 @@ export class SCFirebase
 
 		const snapshot = await this.__get(`appearance/${gamertag}`);
 		if (!snapshot || !snapshot.val()) { return null; }
+
+		this.__setReadSize("GetAppearance", snapshot.val());
+
 		return new Appearance(snapshot.val());
 	}
 	//#endregion
@@ -113,6 +116,8 @@ export class SCFirebase
 			snapshot = await this.__get(`service_record/season/${season}/${gamertag}`);
 		}
 
+		if (snapshot) { this.__setReadSize("GetServiceRecord", snapshot.val()); }
+
 		return new ServiceRecord(snapshot?.val());
 	}
 
@@ -129,6 +134,7 @@ export class SCFirebase
 		const snapshot = await this.__get(`service_record/filtered/${gamertag}/${node}/${filter}`);
 		if (snapshot)
 		{
+			this.__setReadSize("GetFilteredServiceRecord", snapshot.val());
 			return new ServiceRecord(snapshot.val());
 		}
 	}
@@ -198,6 +204,8 @@ export class SCFirebase
 		const result = snapshot.val();
 		if (!result) { return false; }
 
+		this.__setReadSize("HasHistoricSeasonsCached", result);
+
 		for (let i = 1; i < SR.Season; i++)
 		{
 			Debugger.Continue("Season " + i + ": " + result[i]);
@@ -222,6 +230,8 @@ export class SCFirebase
 		if (!snapshot) { return [new ServiceRecord(), new ServiceRecord(), new ServiceRecord()]; } // 3 empties for 3 seasons
 		
 		const result = snapshot.val();
+		this.__setReadSize("GetAllSeasonsStats", result);
+
 		for (const key in result)
 		{
 			const autocodeSR: any = { data: result[key] };
@@ -276,7 +286,11 @@ export class SCFirebase
 		Debugger.Print("SCFirebase", "GetServiceRecordForDate()", gamertag);
 
 		const snapshot = await this.__get(`service_record/date/${date}/${gamertag}`);
-		if (snapshot && snapshot.exists()) { return snapshot.val(); }
+		if (snapshot && snapshot.exists()) 
+		{ 
+			this.__setReadSize("GetServiceRecordForDate", snapshot.val());
+			return snapshot.val(); 
+		}
 	}
 	//#endregion
 	
@@ -308,6 +322,7 @@ export class SCFirebase
 
 		const snapshot = await this.__get(`match/${matchID}`);
 		if (!snapshot) { return undefined; }
+		this.__setReadSize("GetMatch", snapshot.val());
 		return new Match(snapshot.val());
 	}
 
@@ -322,6 +337,7 @@ export class SCFirebase
 
 		const snapshot = await this.__get(`match/${matchID}/success`);
 		if (!snapshot) { return false; }
+		this.__setReadSize("GetMatchIsStored", snapshot.val());
 		return snapshot.val();
 	}
 
@@ -340,6 +356,8 @@ export class SCFirebase
 		const data = snapshot.val();
 		if (!data) { return []; }
 
+		this.__setReadSize("GetRecentMatches", data);
+
 		return data.map((match: any) => new PlayerMatch(match));
 	}
 
@@ -353,6 +371,7 @@ export class SCFirebase
 		Debugger.Print("SCFirebase", "GetBestMatches()", gamertag);
 		const result = await this.__get(`best/${gamertag}/all`);
 		let best = result?.val();
+		this.__setReadSize("GetBestMatches", best);
 
 		if (!best)
 		{
@@ -391,6 +410,7 @@ export class SCFirebase
 		Debugger.Print("SCFirebase", "GetBestMatchesForMap()", gamertag + " - " + map);
 		const result = await this.__get(`best/${gamertag}/maps/${map}`);
 		let best = result?.val();
+		this.__setReadSize("GetBestMatchesForMap", best);
 
 		if (!best)
 		{
@@ -439,6 +459,8 @@ export class SCFirebase
 				const count = snapshot.val()[name];
 				filters.push(new SRFilter(name, name, count ?? 0));
 			}
+			
+			this.__setReadSize("GetAvailableFilters", snapshot.val());
 		}
 
 		return filters;
@@ -464,6 +486,8 @@ export class SCFirebase
 		const data = snapshot?.val();
 		const csrs: CSRS[] = [];
 
+		this.__setReadSize("GetCSRS", data);
+
 		if (data && data.length > 0)
 		{
 			for (const iter of data) { csrs.push(new CSRS(iter)); }
@@ -488,6 +512,8 @@ export class SCFirebase
 		// Get query
 		const snapshot = await get(limit);
 		if (!snapshot || !snapshot.exists()) { return []; }
+
+		this.__setReadSize("GetLeaderboard", snapshot.val());
 
 		// Put the results into an array of leaders
 		const leaders: Leader[] = [];
@@ -536,6 +562,8 @@ export class SCFirebase
 		const snapshot = await this.__get(`averages/${leaderboard}`);
 		if (!snapshot || !snapshot.exists()) { return new LeaderboardAverages(); }
 
+		this.__setReadSize("GetLeaderboard", snapshot.val());
+
 		return new LeaderboardAverages(snapshot.val());
 	}
 
@@ -570,6 +598,7 @@ export class SCFirebase
 		Debugger.Print("SCFirebase", "GetIsPremiumUser()", gamertag);
 
 		const snapshot = await this.__get(`allowed/${gamertag}`);
+		if (snapshot) { this.__setReadSize("GetIsPremiumUser", snapshot.val()); }
 		return snapshot?.val() ?? false;
 	}
 	//#endregion
@@ -585,6 +614,7 @@ export class SCFirebase
 		Debugger.Print("SCFirebase", "GetGamertag()", `${input}`);
 		const snapshot = await this.__get(`gamertag/${input}`);
 		if (!snapshot || !snapshot.val()) { return input; }
+		if (snapshot) { this.__setReadSize("GetGamertag", snapshot.val()); }
 		return snapshot.val();
 	}
 	//#endregion
@@ -601,7 +631,7 @@ export class SCFirebase
 	{
 		if (!data) { return; }
 		Debugger.Print("SCFirebase", "SetAppearance()", gamertag);
-		await this.__set(`appearance/${gamertag}`, data);
+		await this.__set(`appearance/${gamertag}`, Converter.ReducedAutocodeAppearance(data));
 	}
 	//#endregion
 
@@ -771,6 +801,30 @@ export class SCFirebase
 
 		await this.__set(`gamertag/${incorrect}`, correct);	
 	}
+	//#endregion
+	
+	//#region Get Cost Investigation
+	/**
+	 * Sets the read size into Firebase for investigation
+	 * @param method the method doing the read
+	 * @param data the data being read
+	 */
+	private async __setReadSize(method: string, data: any): Promise<void>
+	{
+		const size = Debugger.Size(data);
+
+		// Get line count
+		const snapshot = await this.__get(`debug/${method}/0`);
+		
+		let num = 0;
+		if (snapshot && snapshot.val()) { num = snapshot.val(); }
+		
+		num += 1;
+
+		// Set size and update line count
+		await this.__set(`debug/${method}/${num}`, size);
+		await this.__set(`debug/${method}/0`, num);
+	} 
 	//#endregion
 	//#endregion
 

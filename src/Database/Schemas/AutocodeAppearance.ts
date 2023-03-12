@@ -5,7 +5,7 @@ export type AutocodeAppearance = {
 		nameplate_url: string;
 		service_tag: string;
 	};
-	additional: {
+	additional?: {
 		parameters: {
 			gamertag: string;
 		};

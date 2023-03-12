@@ -1,8 +1,10 @@
+import { AutocodeAppearance } from "../../../Database/Schemas/AutocodeAppearance";
 import { AutocodeMultiplayerServiceRecord } from "../../../Database/Schemas/AutocodeMultiplayerServiceRecord";
 import { AutocodePlayerMatch } from "../../../Database/Schemas/AutocodePlayerMatch";
 import { FirebaseRecentMatch } from "../../../Database/Schemas/FirebaseRecentMatch";
 import { FirebaseSeasonServiceRecord } from "../../../Database/Schemas/FirebaseSeasonServiceRecord";
 import { Debugger } from "../Debugger";
+import { URLReducer } from "./URLReducer";
 
 interface RGB
 {
@@ -41,6 +43,22 @@ export class Converter
 				win_rate: sr.data.matches.win_rate,
 			},
 		}
+	}
+
+	/**
+	 * Reduces the appearance object to store into Firebase
+	 * @param appearance the full appearance object
+	 * @returns the reduced appearance object
+	 */
+	public static ReducedAutocodeAppearance(appearance: AutocodeAppearance): AutocodeAppearance
+	{
+		delete appearance.additional;
+
+		appearance.data.nameplate_url = URLReducer.ReduceAppearanceURL(appearance.data.nameplate_url);
+		appearance.data.emblem_url = URLReducer.ReduceAppearanceURL(appearance.data.emblem_url);
+		appearance.data.backdrop_image_url = URLReducer.ReduceAppearanceURL(appearance.data.backdrop_image_url);
+
+		return appearance;
 	}
 
 	/**

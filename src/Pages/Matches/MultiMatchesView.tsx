@@ -14,6 +14,7 @@ import { SRTabs } from "../../Assets/Components/Layout/AHDrawer";
 import { RecentMatchesChart } from "../../Assets/Components/Charts/RecentMatchesChart";
 import { Helmet } from "react-helmet";
 import { Cookie } from "../../Objects/Helpers/Cookie";
+import { SR } from "../../Objects/Helpers/Statics/SR";
 
 export function MultiMatchesView(props: ViewProps)
 {
@@ -79,7 +80,7 @@ export function MultiMatchesView(props: ViewProps)
 		}
 		else 
 		{ 
-			//await app.firebase.SetRecentMatches(gamertag, recentJSON.data);
+			await app.firebase.SetRecentMatches(gamertag, recentJSON.data);
 			setMatches(recent); 
 			createServiceRecord(recent);
 		}

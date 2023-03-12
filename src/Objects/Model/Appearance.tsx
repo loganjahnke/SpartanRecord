@@ -1,7 +1,11 @@
 import { AutocodeAppearance } from "../../Database/Schemas/AutocodeAppearance";
+import { URLReducer } from "../Helpers/Statics/URLReducer";
 
 export class Appearance
 {
+    /** The prefix of the URLs */
+    private readonly __prefix: string = "https://assets.halo.autocode.gg/externals/infinite/cms-images/?hash=";
+
     /** The four character service tag */
     public serviceTag: string;
     /** The emblem URL */
@@ -17,8 +21,8 @@ export class Appearance
     {
         this.raw = appearance;
         this.serviceTag = appearance?.data?.service_tag ?? "";
-        this.emblemURL = appearance?.data?.emblem_url ?? "";
-        this.backdropURL = appearance?.data?.backdrop_image_url ?? "";
-        this.nameplateURL = appearance?.data?.nameplate_url ?? "";
+        this.emblemURL = URLReducer.ConstructAppearanceURL(appearance?.data?.emblem_url ?? "");
+        this.backdropURL = URLReducer.ConstructAppearanceURL(appearance?.data?.backdrop_image_url ?? "");
+        this.nameplateURL = URLReducer.ConstructAppearanceURL(appearance?.data?.nameplate_url ?? "");
     }
 }

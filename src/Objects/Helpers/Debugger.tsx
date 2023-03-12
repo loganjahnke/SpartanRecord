@@ -58,16 +58,25 @@ export class Debugger
     }
 
     /**
+     * Gets the size of an object
+     * @param object the object to get the size of
+     */
+    public static Size(object: any): string
+    {
+        return this.FormatByteSize(this.RoughSizeOfObject(object));
+    }
+
+    /**
      * Prints a debug message to the console
      * @param start is this the start or end of a method
      * @param caller the caller function
      * @param message the message details (optional)
      * @param object should show object details? (optional)
      */
-    public static Size(object: any, description?: string)
+    public static PrintSize(object: any, description?: string): void
     {
         if (!Debugger.IS_DEBUGGING) { return; }
-        console.log(`Size of ${description || "object"}: ${this.FormatByteSize(this.RoughSizeOfObject(object))}`);
+        console.log(`Size of ${description || "object"}: ${this.Size(object)}`);
     }
 
     /**
