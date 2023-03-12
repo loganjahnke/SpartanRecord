@@ -205,10 +205,10 @@ export class ServiceRecord
             },
             matches:
             {
-                wins: matches?.outcomes.wins ?? 0,
-                losses: matches?.outcomes.losses ?? 0,
-                left: matches?.outcomes.left ?? 0,
-                draws: matches?.outcomes.draws ?? 0
+                wins: matches?.outcomes?.wins ?? 0,
+                losses: matches?.outcomes?.losses ?? 0,
+                left: matches?.outcomes?.left ?? 0,
+                draws: matches?.outcomes?.draws ?? 0
             }
         };
 
