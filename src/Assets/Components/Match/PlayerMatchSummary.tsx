@@ -109,7 +109,8 @@ export function PlayerMatchSummary(props: MatchSummaryProps)
 					<CardMedia component="img" height="200" image={match.map.asset.thumbnail} alt={match.map.name} title={match.map.name} />
 					<CardContent>
 						<Box sx={{ backgroundColor: ArrowheadTheme.box, width: "100%", ml: "-16px", padding: "8px 16px 4px 16px", mt: -2 }}>
-							<Typography variant="h5" component="div" sx={{ textAlign: "center" }}>{match.playlist.name}</Typography>
+							<Typography variant="h5" component="div" sx={{ textAlign: "center" }}>{match.variant.name}</Typography>
+							<Typography variant="h6" component="div" sx={{ textAlign: "center" }}>{match.playlist.name}</Typography>
 							<Typography variant="body1" sx={{ color: match.player.outcome === "win" ? ArrowheadTheme.good : match.player.outcome === "loss" ? ArrowheadTheme.bad : ArrowheadTheme.text_primary, textAlign: "center" }}>
 								{match.player.outcome === "win" 
 									? "Win"
