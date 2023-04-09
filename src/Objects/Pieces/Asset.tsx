@@ -1,16 +1,18 @@
+import { ImagesSchema } from "../../Database/Schemas/PlayerMatchSchema";
+
 export class Asset
 {
-    /** Asset ID */
-    public id: string;
-    /** Version of the asset */
-    public version: string;
+    /** The big image? */
+    public hero: string;
     /** Asset thumbnail */
     public thumbnail: string;
+    /** Array of screenshots */
+    public screenshots: string[];
 
-    constructor(data?: any)
+    constructor(data?: ImagesSchema)
     {
-        this.id = data?.id ?? ""; 
-        this.version = data?.version ?? ""; 
-        this.thumbnail = data?.thumbnail_url ?? "";
+        this.hero = data?.hero ?? ""; 
+        this.thumbnail = data?.thumbnail ?? "";
+        this.screenshots = data?.screenshots ?? [];
     }
 }

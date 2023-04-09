@@ -13,6 +13,7 @@ import { OddballBreakdown } from "../Assets/Components/Breakdowns/OddballBreakdo
 import { EliminationBreakdown } from "../Assets/Components/Breakdowns/EliminationBreakdown";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { Helmet } from "react-helmet";
+import { HaloDotAPISeason } from "../Database/Schemas/AutocodeMetadata";
 
 export function ModesView(props: ViewProps)
 {
@@ -23,7 +24,8 @@ export function ModesView(props: ViewProps)
 	
 	//#region State
 	const [showPerMatch, setShowPerMatch] = useState(false);
-	const [season, setSeason] = useState(-1);
+	const [season, setSeason] = useState("");
+	const [seasons, setSeasons] = useState<HaloDotAPISeason[]>([]);
 	//#endregion
 
 	//useScript("//pl17321505.safestgatetocontent.com/a7b55266c8d1e7c39ed0ac2f85cf49fa/invoke.js");
@@ -35,6 +37,13 @@ export function ModesView(props: ViewProps)
 		// Set page gamertag and show loading message
 		setLoadingMessage("Loading " + gamertag);
 		Cookie.addRecent(gamertag);
+
+		// Load available seasons
+		if (!seasons || seasons.length === 0) 
+		{ 
+			const allSeasons = await app.GetSeasons();
+			setSeasons(allSeasons);
+		}
 		
 		// Get the player from firebase and show on screen
 		const player = await app.GetPlayerFromFirebase(gamertag, season);
@@ -42,7 +51,7 @@ export function ModesView(props: ViewProps)
 		
 		switchTab(undefined, SRTabs.Modes);
 		setLoadingMessage("");
-	}, [app, gamertag, updatePlayer, season, switchTab, setLoadingMessage]);
+	}, [app, gamertag, season, seasons, updatePlayer, setSeasons, switchTab, setLoadingMessage]);
 	
 	useEffect(() =>
 	{
@@ -74,7 +83,7 @@ export function ModesView(props: ViewProps)
 						{/* Top */}
 						<Grid item xs={12}>
 							<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
-								<SeasonChooser setSeason={setSeason} />
+								<SeasonChooser season={season} seasons={seasons} setSeason={setSeason} />
 								<Box sx={{ flexGrow: 1 }}></Box>
 								<ServiceRecordFilters setPerMatch={setShowPerMatch} />
 							</Box>

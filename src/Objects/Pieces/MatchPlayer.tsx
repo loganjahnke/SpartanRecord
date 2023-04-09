@@ -1,6 +1,5 @@
 import { HaloOutcome } from "../../Database/ArrowheadFirebase";
-import { AutocodeHelpers } from "../../Database/Schemas/AutocodeHelpers";
-import { AutocodeMatchPlayer } from "../../Database/Schemas/AutocodeMatch";
+import { MatchPlayerSchema } from "../../Database/Schemas/MatchSchema";
 import { ServiceRecord } from "../Model/ServiceRecord";
 import { Expectation } from "./Expectation";
 import { Progression } from "./Progression";
@@ -11,7 +10,7 @@ export class MatchPlayer
     /** The player's gamertag */
     public gamertag: string;
     /** Player type */
-    public type: "bot" | "player";
+    public type: string;
     /** Team details */
     public team: TeamDetails;
     /** Player statistics */
@@ -32,8 +31,10 @@ export class MatchPlayer
     public killExpectations: Expectation;
     /** Expected death performance */
     public deathExpectations: Expectation;
+    /** Left early? */
+    public leftEarly: boolean;
 
-    constructor(data?: AutocodeMatchPlayer, isRanked: boolean = false, timePlayedInSeconds: number = 0)
+    constructor(data?: MatchPlayerSchema, isRanked: boolean = false, timePlayedInSeconds: number = 0)
     {
         this.gamertag = "";
         this.type = "player";
@@ -46,13 +47,14 @@ export class MatchPlayer
         this.progression = new Progression();
         this.killExpectations = new Expectation();
         this.deathExpectations = new Expectation();
+        this.leftEarly = false;
         
         if (!data) { return; }
         
-        this.gamertag = data.details.name;
-        this.type = data.details.type;
-        this.team = new TeamDetails(data.team);
-        this.stats = new ServiceRecord(AutocodeHelpers.CreateServiceRecordFromMatch(this.gamertag, data, timePlayedInSeconds));
+        this.gamertag = data.name;
+        this.type = data.properties.type;
+        this.team = new TeamDetails(data.properties.team);
+        this.stats = new ServiceRecord(data.stats);
         this.rank = data.rank;
         this.joinedInProgress = data.participation.joined_in_progress;
         this.progression = new Progression(data.progression);
@@ -60,6 +62,7 @@ export class MatchPlayer
         this.deathExpectations = new Expectation(data.performances?.deaths);
         this.mmr = data.stats.mmr ?? 0;
         this.won = data.outcome === "win" || data.outcome === "won";
+        this.leftEarly = !data.participation.presence.completion;
         this.outcome = this.won ? HaloOutcome.Win
             : data?.outcome === "left" ? HaloOutcome.Left
             : data?.outcome === "loss" ? HaloOutcome.Loss

@@ -84,7 +84,7 @@ function Row(props: TeamTableRowProps)
 
 	return (
 		<React.Fragment>
-		<TableRow sx={{ ".MuiTableCell-body": { verticalAlign: "middle", color: player.outcome === HaloOutcome.Left ? ArrowheadTheme.leftEarlyText : ArrowheadTheme.text_primary } }}>
+		<TableRow sx={{ ".MuiTableCell-body": { verticalAlign: "middle", color: player.leftEarly ? ArrowheadTheme.leftEarlyText : ArrowheadTheme.text_primary } }}>
 				{/* Expansion Button */}
 				<TableCell width={"32px"}>
 					<IconButton size="small" onClick={() => setExpanded(!expanded)}>
@@ -108,7 +108,7 @@ function Row(props: TeamTableRowProps)
 					scope="row" 
 					onClick={player.type === "player" ? () => onGamertagClick(player.gamertag) : undefined} 
 					width={"150px"}>
-						<Typography sx={{ fontWeight: selectedGamertag === player.gamertag ? 900 : 500, color: selectedGamertag === player.gamertag ? ArrowheadTheme.halo_grass : ArrowheadTheme.text_primary }} variant="body2">{player.gamertag}</Typography>
+						<Typography sx={{ fontWeight: selectedGamertag === player.gamertag ? 900 : 500, color: selectedGamertag === player.gamertag ? ArrowheadTheme.halo_grass : player.leftEarly ? ArrowheadTheme.leftEarlyText : ArrowheadTheme.text_primary }} variant="body2">{player.gamertag}</Typography>
 				</TableCell>
 				<TableCell sx={{ pl: 2, pr: 2 }} width={"80px"} align="right">
 					<Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>

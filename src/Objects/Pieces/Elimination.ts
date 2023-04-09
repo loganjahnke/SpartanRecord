@@ -1,4 +1,4 @@
-import { AutocodeEliminationMode } from "../../Database/Schemas/AutocodeMultiplayerServiceRecord";
+import { EliminationSchema } from "../../Database/Schemas/ServiceRecordSchema";
 
 export class Elimination
 {
@@ -12,7 +12,7 @@ export class Elimination
 	public roundsSurvived: number = 0;
 	public timesRevivedByAlly: number = 0;
 
-	constructor(data?: AutocodeEliminationMode)
+	constructor(data?: EliminationSchema)
 	{
 		if (!data) { return; }
 		this.alliesRevived = data.allies_revived;

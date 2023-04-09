@@ -16,6 +16,7 @@ import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { HaloDotAPISeason } from "../../../Database/Schemas/AutocodeMetadata";
 
 enum SeasonsDataSets
 {
@@ -29,7 +30,7 @@ enum SeasonsDataSets
 	AssistsPerGame = "Assists / Game",
 }
 
-export const SeasonsChart = (props: { historicServiceRecords: ServiceRecord[], onMetricChanged: () => void }) =>
+export const SeasonsChart = (props: { seasons: HaloDotAPISeason[], historicServiceRecords: ServiceRecord[], onMetricChanged: () => void }) =>
 {
 	ChartJS.defaults.font.family = "Roboto";
 	ChartJS.defaults.font.weight = "100";
@@ -45,7 +46,7 @@ export const SeasonsChart = (props: { historicServiceRecords: ServiceRecord[], o
 		ChartDataLabels
 	);
 
-	const { historicServiceRecords, onMetricChanged } = props;
+	const { seasons, historicServiceRecords, onMetricChanged } = props;
 	const dataSet = useRef<SeasonsDataSets>(SeasonsDataSets.Matches);
 	const [options, setOptions] = useState<any>({
 		responsive: true,
@@ -178,14 +179,27 @@ export const SeasonsChart = (props: { historicServiceRecords: ServiceRecord[], o
 			}
 		});
 
+		// Sort the SRs
+		const historic = [];
+		const labels = [];
+		for (let i = 0; i < seasons.length; i++)
+		{
+			labels.push("Season " + seasons[i].id + "." + seasons[i].version);
+			for (let j = 0; j < historicServiceRecords.length; j++)
+			{
+				if (historicServiceRecords[j].season !== seasons[i].properties.identifier) { continue; }
+				historic.push(historicServiceRecords[j]);
+			}
+		}
+
 		setChartData({
-			labels: historicServiceRecords.map((_sr, index) => "Season " + (index + 1)),
+			labels: seasons.map((season) => "Season " + (season.id) + "." + season.version),
 			datasets: [
 				{
 					backgroundColor: ArrowheadTheme.good,
 					borderColor: ArrowheadTheme.good,
 					borderRadius: 5,
-					data: historicServiceRecords.map(sr => 
+					data: historic.map(sr => 
 					{
 						switch (dataSet.current)
 						{

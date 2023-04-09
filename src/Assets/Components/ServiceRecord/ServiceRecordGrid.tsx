@@ -16,24 +16,26 @@ import { SeasonsChart } from "../Charts/SeasonsChart";
 import { TopMedals } from "../Medals/TopMedals";
 import { SeasonChooser } from "./SeasonChooser";
 import { ServiceRecordFilters } from "./ServiceRecordFilters";
+import { HaloDotAPISeason } from "../../../Database/Schemas/AutocodeMetadata";
 
 interface ServiceRecordGridProps
 {
-	setSeason?: (season: number) => void;
+	seasons: HaloDotAPISeason[];
+	setSeason?: (season: string) => void;
 	setShowPerMatch: (show: boolean) => void;
 	showPerMatch: boolean;
 	serviceRecord: ServiceRecord;
 	csrs?: CSRS[];
 	historicStats?: ServiceRecord[];
 	isAllowed?: boolean;
-	season?: number;
+	season?: string;
 	title?: string;
 	onMetricChanged: () => void;
 }
 
 export function ServiceRecordGrid(props: ServiceRecordGridProps)
 {
-	const { setSeason, setShowPerMatch, showPerMatch, serviceRecord, csrs, historicStats, season, title, onMetricChanged } = props;
+	const { seasons, setSeason, setShowPerMatch, showPerMatch, serviceRecord, csrs, historicStats, season, title, onMetricChanged } = props;
 
 	if (!serviceRecord || serviceRecord.IsEmpty() || serviceRecord.error) { return <></>; }
 
@@ -42,7 +44,7 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 			{/* Top */}
 			<Grid item xs={12}>
 				<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
-					{setSeason && <SeasonChooser setSeason={setSeason} />}
+					{setSeason && <SeasonChooser season={season ?? "All"} setSeason={setSeason} seasons={seasons} />}
 					{title && <Typography variant="h5">{title}</Typography>}
 					<Box sx={{ flexGrow: 1 }}></Box>
 					<ServiceRecordFilters setPerMatch={setShowPerMatch} />
@@ -89,8 +91,8 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 				<Grid item xs={12}>
 					<LevelBreakdown serviceRecord={serviceRecord} showPerMatch={showPerMatch} />
 				</Grid>
-				{historicStats && (season === undefined || season === -1) && <Grid item xs={12}>
-					<SeasonsChart historicServiceRecords={historicStats} onMetricChanged={onMetricChanged} />
+				{historicStats && (!season) && <Grid item xs={12}>
+					<SeasonsChart seasons={seasons} historicServiceRecords={historicStats} onMetricChanged={onMetricChanged} />
 				</Grid>}
 				<Grid container item spacing={2} xs={12}>
 					<Grid item xs={12} lg={6}>

@@ -1,4 +1,4 @@
-import { AutocodeStockpileMode } from "../../Database/Schemas/AutocodeMultiplayerServiceRecord";
+import { StockpileSchema } from "../../Database/Schemas/ServiceRecordSchema";
 
 export class Stockpile
 {
@@ -9,7 +9,7 @@ export class Stockpile
 	timeAsPowerSeedCarrier: string = "";
 	timeAsPowerSeedDriver: string = "";
 
-	constructor(data?: AutocodeStockpileMode)
+	constructor(data?: StockpileSchema)
 	{
 		if (!data) { return; }
 		this.killsAsPowerSeedCarrier = data.kills_as_power_seed_carrier;

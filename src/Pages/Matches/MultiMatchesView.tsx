@@ -14,12 +14,17 @@ import { SRTabs } from "../../Assets/Components/Layout/AHDrawer";
 import { RecentMatchesChart } from "../../Assets/Components/Charts/RecentMatchesChart";
 import { Helmet } from "react-helmet";
 import { Cookie } from "../../Objects/Helpers/Cookie";
-import { SR } from "../../Objects/Helpers/Statics/SR";
 
-export function MultiMatchesView(props: ViewProps)
+interface MultiMatchesViewProps extends ViewProps
+{
+	customs?: boolean;
+	local?: boolean;
+}
+
+export function MultiMatchesView(props: MultiMatchesViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setBackgroundLoadingProgress, switchTab, player, updatePlayer, isAllowed } = props;
+	const { app, setLoadingMessage, setBackgroundLoadingProgress, switchTab, player, updatePlayer, isAllowed, customs, local } = props;
 	const { gamertag } = useParams();
 	//#endregion
 	
@@ -27,7 +32,6 @@ export function MultiMatchesView(props: ViewProps)
 	const [matches, setMatches] = useState<PlayerMatch[]>([]);
 	const [combinedSR, setCombinedSR] = useState(new ServiceRecord());
 	const [loadingMore, setLoadingMore] = useState(false);
-	const [showExpanded, setShowExpanded] = useState(Cookie.getShowExpanded());
 	const offset = useRef<number>(0);
 	//#endregion
 
@@ -42,24 +46,6 @@ export function MultiMatchesView(props: ViewProps)
 	}, [setCombinedSR]);
 
 	/**
-	 * Loads the recent matches from Firebase
-	 */
-	const loadFromFirebase = useCallback(async () =>
-	{
-		if (!gamertag) { return; }
-		
-		// Get from Firebase
-		const recent = await app.firebase.GetRecentMatches(gamertag);
-		if (!recent || recent.length === 0) { return false; }
-		
-		// Set state
-		setMatches(recent);
-		createServiceRecord(recent);
-		return true;
-
-	}, [app, gamertag, setMatches, createServiceRecord]);
-
-	/**
 	 * Loads the recent matches from HaloDotAPI
 	 * @param append are we appending to existing data?
 	 */
@@ -68,8 +54,8 @@ export function MultiMatchesView(props: ViewProps)
 		if (!gamertag) { return; }
 		
 		// Get from HaloDotAPI
-		const recentJSON = await app.halodapi.GetPlayerMatches(gamertag, 25, offset.current);
-		const recent = recentJSON.data.map(m => new PlayerMatch(m));
+		const recentJSON = await app.halodapi.GetPlayerMatches(gamertag, 25, offset.current, customs, local);
+		const recent = recentJSON.map(m => new PlayerMatch(m));
 
 		// Set state
 		if (append) 
@@ -80,29 +66,11 @@ export function MultiMatchesView(props: ViewProps)
 		}
 		else 
 		{ 
-			await app.firebase.SetRecentMatches(gamertag, recentJSON.data);
 			setMatches(recent); 
 			createServiceRecord(recent);
 		}
 
-		if (!isAllowed || append) { return; }
-
-		setLoadingMessage("");
-		setBackgroundLoadingProgress("Loading player expectations");
-
-		// Get additional match details
-		const expanded = await app.GetMatches(recent.map(m => m.id));
-		
-		// Set expanded player into recent matches
-		for (let i = 0; i < expanded.length; i++)
-		{
-			recent[i].expandedPlayer = expanded[i].GetMyPlayer(gamertag);
-		}
-
-		// Reset matches
-		setMatches([...recent]); 
-
-	}, [app, gamertag, matches, isAllowed, setMatches, createServiceRecord, setLoadingMessage, setBackgroundLoadingProgress]);
+	}, [app, gamertag, matches, isAllowed, customs, local, setMatches, createServiceRecord, setLoadingMessage, setBackgroundLoadingProgress]);
 
 	/**
 	 * Sets the appearance for the gamertag, if needed
@@ -129,18 +97,6 @@ export function MultiMatchesView(props: ViewProps)
 		setLoadingMessage("");
 		setBackgroundLoadingProgress("");
 
-		// Set loading message
-		// append
-		// 	? setBackgroundLoadingProgress("Loading additional matches")
-		// 	: setLoadingMessage("Loading matches for " + gamertag);
-
-		// // Load from Firebase
-		// if (!append && await loadFromFirebase())
-		// {
-		// 	setLoadingMessage("");
-		// 	setBackgroundLoadingProgress(SR.DefaultLoading);
-		// }
-
 		// Load from HaloDotAPI
 		setLoadingMessage("Loading matches for " + gamertag);
 		
@@ -154,13 +110,13 @@ export function MultiMatchesView(props: ViewProps)
 		app.logger.LogViewMatches();
 
 		// Set tab
-		switchTab(undefined, SRTabs.Matches);
+		switchTab(undefined, customs ? SRTabs.MatchesCustoms : local ? SRTabs.MatchesLocal : SRTabs.Matches);
 		
 		// Clear loading messages
 		setLoadingMessage("");
 		setBackgroundLoadingProgress("");
 
-	}, [app, gamertag, switchTab, setLoadingMessage, setBackgroundLoadingProgress, loadFromFirebase, loadFromHaloDotAPI, setAppearance]);
+	}, [app, gamertag, customs, switchTab, setLoadingMessage, setBackgroundLoadingProgress, loadFromHaloDotAPI, setAppearance]);
 
 	const loadMore = useCallback(async () =>
 	{
@@ -178,7 +134,7 @@ export function MultiMatchesView(props: ViewProps)
 		setMatches([]);
 		loadData();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [gamertag]);
+	}, [gamertag, customs, local]);
 
     function goToMatch(id: string): void
     {
@@ -191,12 +147,6 @@ export function MultiMatchesView(props: ViewProps)
 			switchTab(`/match/${id}`, SRTabs.Matches);
 		}
     }
-
-	const onPressShowExpanded = useCallback((event: React.ChangeEvent<HTMLInputElement>) =>
-	{
-		setShowExpanded(event.target.checked);
-		Cookie.setShowExpanded(event.target.checked);
-	}, [setShowExpanded]);
 
 	return (
 		<Box component="main" sx={{ flexGrow: 1 }}>
@@ -211,21 +161,12 @@ export function MultiMatchesView(props: ViewProps)
 			<Divider />
 			<Box sx={{ p: 2 }}>
 				<Grid container spacing={2}>
-					{/* Options */}
-					<Grid item xs={12}>
-						<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
-							<Box sx={{ flexGrow: 1 }}></Box>
-							<FormGroup sx={{ textAlign: "right" }}>
-								<FormControlLabel control={<Checkbox checked={showExpanded} onChange={onPressShowExpanded} size="small" />} label={<Typography variant="subtitle1">Show Expanded Statistics</Typography>} />
-							</FormGroup>
-						</Box>
-					</Grid>
 					{/* Top */}
 					<Grid item xs={12} lg={4}>
 						<KDABreakdown serviceRecord={combinedSR} />
 					</Grid>
 					<Grid item xs={12} lg={4}>
-						<MatchesBreakdown serviceRecord={combinedSR} />
+						<MatchesBreakdown serviceRecord={combinedSR} matchesPlayedTitle={`Last ${combinedSR.matchesPlayed} Matches`} />
 					</Grid>
 					<Grid item xs={12} lg={4}>
 						<KillDeathCard serviceRecord={combinedSR} />
@@ -235,7 +176,7 @@ export function MultiMatchesView(props: ViewProps)
 					</Grid>
 				</Grid>
 				<Grid container spacing={2} sx={{ mt: 1 }}>
-					{matches?.length > 0 ? matches.map(match => <PlayerMatchSummary match={match} player={match.expandedPlayer} goToMatch={goToMatch} gamertag={gamertag ?? ""} showExpanded={showExpanded} />) : undefined}
+					{matches?.length > 0 ? matches.map(match => <PlayerMatchSummary match={match} player={match.expandedPlayer} goToMatch={goToMatch} gamertag={gamertag ?? ""} showExpanded hideExpected={customs || local} />) : undefined}
 				</Grid>
 				{matches.length > 0 && <Grid item xs={12}>
 					<Box sx={{ display: "flex", justifyContent: "center", width: "100%", mt: 2 }}>

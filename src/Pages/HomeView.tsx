@@ -8,6 +8,7 @@ import { Cookie } from "../Objects/Helpers/Cookie";
 import { Helmet } from "react-helmet";
 import { GamertagSearch } from "../Assets/Components/ServiceRecord/GamertagSearch";
 import { Grow } from "../Assets/Components/Common/Grow";
+import { HaloDotAPISeason } from "../Database/Schemas/AutocodeMetadata";
 
 export function HomeView(props: ViewProps)
 {
@@ -16,9 +17,11 @@ export function HomeView(props: ViewProps)
 	//#endregion
 	
 	//#region State
+	const [halodotapiVersion, setVersion] = useState("");
  	const [localGamertag, setLocalGamertag] = useState("");
 	const [recentPlayers, setRecentPlayers] = useState<Player[]>(Cookie.getRecents().map(gamertag => new Player(gamertag)));
 	const [favoritePlayers, setFavoritePlayers] = useState<Player[]>([]);
+	const [currSeason, setCurrSeason] = useState<HaloDotAPISeason>();
 	//#endregion
 
 	/** Controlled search component */
@@ -69,7 +72,7 @@ export function HomeView(props: ViewProps)
 
 	/** Loads the favorite players and their appearance */
 	const loadFavoritePlayers = useCallback(async () =>
-	{
+	{		
 		const favorites = Cookie.getFavorites();
 		if (!favorites || favorites.length === 0) { return false; }
 
@@ -85,19 +88,27 @@ export function HomeView(props: ViewProps)
 
 	}, [app, setFavoritePlayers]);
 
-	useEffect(() =>
+	const loadData = useCallback(async () => 
 	{
+		setVersion(await app.halodapi.GetVersion());
+		setCurrSeason(await app.GetCurrentSeason());
+
 		if (!loadFavoritePlayers())
 		{
 			loadRecentPlayers();
 		}
-		document.title = "Spartan Record";
+
+	}, [app, setCurrSeason, setVersion, loadFavoritePlayers, loadRecentPlayers]);
+
+	useEffect(() =>
+	{
+		loadData();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 
 	return (
-		<Box component="main" sx={{ flexGrow: 1, height: "calc(100% - 32px)" }}>
+		<Box component="main" sx={{ flexGrow: 1, height: {xs: "calc(100% - 24px)", md: "calc(100% - 32px)"}}}>
 			<Helmet>
 				<title>{`Spartan Record`}</title>
 				<meta name="description" content={`Halo Infinite statistics such as KDA, KDR, and more`} />
@@ -107,12 +118,23 @@ export function HomeView(props: ViewProps)
 			</Helmet>
 			<Toolbar />
 			<Divider />
-			<Box sx={{ backgroundColor: "secondary.main", height: "100%", display: "flex", flexDirection: "column" }}>
-				<Grow />
-				<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} />
-				<Grow />
-				<Box sx={{ backgroundColor: "secondary.main", textAlign: "center", mt: 18 }}>
-					<Typography variant="subtitle1" sx={{ textAlign: "center" }}>Powered by <Link sx={{ cursor: "pointer" }} onClick={() => switchTab("/powered_by_halodotapi")}>HaloDotAPI</Link> v{process.env.REACT_APP_HALO_API_VERSION} | Spartan Record v{process.env.REACT_APP_VERSION}</Typography>
+			<Box sx={{ 
+				height: "100%", 
+				backgroundPosition: "center", 
+				backgroundSize: "cover", 
+				backgroundImage: currSeason 
+					? `url(${currSeason.image_urls.battlepass_background})`
+					: "url(https://api.halodotapi.com/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU2NyZWVuQmFja2dyb3VuZHMvc2Vhc29uX3Vwc2VsbF9iYWNrZ3JvdW5kX1MzLnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D)" 
+			}}>
+				<Box sx={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", backgroundColor: "rgba(1,64,82, 0.9)", textAlign: "center" }}>
+					<Grow />
+					<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} />
+					<Grow />
+					<Box sx={{ textAlign: "center", mt: 18 }}>
+						<Typography variant="subtitle1" sx={{ textAlign: "center" }}>
+							Powered by <Link sx={{ cursor: "pointer" }} onClick={() => switchTab("/powered_by_halodotapi")}>HaloDotAPI</Link>{halodotapiVersion ? ` v${halodotapiVersion} ` : " "}| Spartan Record v{process.env.REACT_APP_VERSION}
+						</Typography>
+					</Box>
 				</Box>
 			</Box>
 		</Box>

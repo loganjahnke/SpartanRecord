@@ -3,16 +3,21 @@ import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { TitleCard } from "../Cards/TitleCard";
 import { BreakdownProps, BreakdownTile } from "./BreakdownTile";
 
-export function MatchesBreakdown(props: BreakdownProps)
+interface MatchesBreakdownProps extends BreakdownProps
 {
-	const { serviceRecord } = props;
+	matchesPlayedTitle?: string;
+}
+
+export function MatchesBreakdown(props: MatchesBreakdownProps)
+{
+	const { serviceRecord, matchesPlayedTitle } = props;
 
 	const total = serviceRecord.matchesPlayed - serviceRecord.breakdowns.matches.left - serviceRecord.breakdowns.matches.draws;
 
 	return (
-		<TitleCard title="Matches">
+		<TitleCard title={matchesPlayedTitle || "Matches"}>
 			<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", width: "100%" }}>
-				<BreakdownTile title="Matches Played" value={serviceRecord.matchesPlayed} isMainStat />
+				{!matchesPlayedTitle && <BreakdownTile title={matchesPlayedTitle || "Matches Played"} value={serviceRecord.matchesPlayed} isMainStat />}
 				<BreakdownTile title="Win Rate" value={serviceRecord.winRate} isMainStat isPercent />
 			</Box>
 			<Box sx={{ display: "flex", flexDirection: "row", width: "95%", mb: 1,

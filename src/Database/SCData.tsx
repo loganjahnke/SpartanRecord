@@ -11,11 +11,10 @@ import { SRFilter } from "../Objects/Pieces/SRFilter";
 import { Leaderboard, ServiceRecordFilter } from "./ArrowheadFirebase";
 import { Logger } from "./Logger";
 import { SCFirebase } from "./SCFirebase";
-import { SCHaloDotAPI } from "./SCHaloDotAPI";
-import { AutocodeHelpers } from "./Schemas/AutocodeHelpers";
-import { AutocodeMap, AutocodeMedal, AutocodePlaylist, AutocodeTeam, AutocodeVariant } from "./Schemas/AutocodeMetadata";
-import { AutocodeMultiplayerServiceRecord } from "./Schemas/AutocodeMultiplayerServiceRecord";
+import { AutocodeMap, AutocodeMedal, HaloDotAPIPlaylist, AutocodeTeam, HaloDotAPICategory, HaloDotAPISeason } from "./Schemas/AutocodeMetadata";
+import { ServiceRecordSchema } from "./Schemas/ServiceRecordSchema";
 import { FirebaseBest } from "./Schemas/FirebaseBest";
+import { SCPostman } from "./SCPostman";
 
 /** The types of service records */
 export enum ServiceRecordType
@@ -32,7 +31,8 @@ export class SCData
     public app: App;
     public logger: Logger;
     public firebase: SCFirebase;
-    public halodapi: SCHaloDotAPI;
+    public halodapi: SCPostman;
+    private __seasons: HaloDotAPISeason[];
 
     private __currentlySyncing: Set<string>;
 
@@ -47,7 +47,8 @@ export class SCData
         this.app = app;
         this.logger = new Logger(analytics);
         this.firebase = new SCFirebase(database);
-        this.halodapi = new SCHaloDotAPI();
+        this.halodapi = new SCPostman();
+        this.__seasons = [];
         this.__currentlySyncing = new Set<string>();
     }
 
@@ -97,11 +98,11 @@ export class SCData
     /**
      * Gets a player from firebase
      * @param gamertag the gamertag
-     * @param season the season
+     * @param season the season identifier
      * @param historic the historic SRs
      * @returns player object
      */
-    public async GetPlayerFromFirebase(gamertag: string, season?: number, historic?: boolean): Promise<Player>
+    public async GetPlayerFromFirebase(gamertag: string, season?: string, historic?: boolean): Promise<Player>
 	{
         const correct = await this.firebase.GetGamertag(gamertag);
 		const player = new Player(correct);
@@ -114,27 +115,31 @@ export class SCData
 	 * @param gamertag the gamertag to evaluate
 	 * @returns true if we have these seasons saved in Firebase
 	 */
-    public DoesPlayerHavePrevSeasons = async (gamertag: string): Promise<boolean> => this.firebase.HasHistoricSeasonsCached(gamertag);
+    public async DoesPlayerHavePrevSeasons(gamertag: string): Promise<boolean> 
+    {
+        const seasons = await this.GetSeasons();
+        return await this.firebase.HasHistoricSeasonsCached(gamertag, seasons);
+    }
 
     /**
 	 * Sets a previous season's statistics
 	 * @param gamertag the gamertag to set the historic statistics for
-	 * @param season the season we are saving
+	 * @param season the season identifier we are saving
 	 * @param sr the service record
 	 */
-	public SetPreviousSeasonStats = async (gamertag: string, season: number, sr: AutocodeMultiplayerServiceRecord): Promise<void> => this.firebase.SetPreviousSeasonStats(gamertag, season, sr);
+	public SetPreviousSeasonStats = async (gamertag: string, season: string, sr: ServiceRecordSchema): Promise<void> => this.firebase.SetPreviousSeasonStats(gamertag, season, (await this.GetCurrentSeason())!.properties.identifier, sr);
 
     /**
      * Sets a player into firebase
      * @param player the player
-     * @param season the multiplayer season
+     * @param season the multiplayer season identifier
      * @param oldSR the old service record
      */
-    public async SetPlayerIntoFirebase(player: Player, season?: number, oldSR?: ServiceRecord): Promise<void>
+    public async SetPlayerIntoFirebase(player: Player, season?: string, oldSR?: ServiceRecord): Promise<void>
 	{
         if (!player.gamertag) { return; }
 
-        if (season !== undefined && season !== -1 && season !== 0)
+        if (season)
         {
             await Promise.all([
                 this.firebase.SetAppearance(player.gamertag, player.appearanceData),
@@ -179,9 +184,9 @@ export class SCData
     /**
      * Gets the player from HaloDotAPI
      * @param gamertag the gamertag
-     * @param season the season
+     * @param season the season identifier
      */
-	public async GetPlayerFromHaloDotAPI(gamertag: string, season?: number): Promise<Player> 
+	public async GetPlayerFromHaloDotAPI(gamertag: string, season?: string): Promise<Player> 
     {
         const player = await this.halodapi.GetPlayer(gamertag, season);
         if ((player.serviceRecordData as any)?.error) { this.logger.LogError(); }
@@ -191,13 +196,13 @@ export class SCData
     /**
 	 * Gets the service record for the gamertag from Autocode
 	 * @param player the gamertag to get the service record of
-	 * @param season the season number
+	 * @param season the season identifier
 	 * @param playlistId the playlist ID
 	 * @param categoryId the category ID
 	 * @param type the type of service record to get
 	 * @returns the service record for the gamertag
 	 */
-	public async GetServiceRecordFromAutocode(gamertag: string, season?: number, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<ServiceRecord> 
+	public async GetServiceRecordFromAutocode(gamertag: string, season?: string, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<ServiceRecord> 
     {
         const player = new Player(gamertag);
         await this.halodapi.GetServiceRecord(player, season, playlistId, categoryId, type);
@@ -207,13 +212,13 @@ export class SCData
     /**
 	 * Gets the service record data for the gamertag from HaloDotAPI
 	 * @param player the gamertag to get the service record of
-	 * @param season the season number
+	 * @param season the season identifier
 	 * @param playlistId the playlist ID
 	 * @param categoryId the category ID
 	 * @param type the type of service record to get
 	 * @returns the service record for the gamertag
 	 */
-	public async GetServiceRecordData(gamertag: string, season?: number, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<AutocodeMultiplayerServiceRecord> 
+	public async GetServiceRecordData(gamertag: string, season?: string, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<ServiceRecordSchema> 
     {
         const player = new Player(gamertag);
         return await this.halodapi.GetServiceRecordData(player, season, playlistId, categoryId, type);
@@ -251,7 +256,7 @@ export class SCData
         const result = await this.halodapi.GetPlayerMatches(gamertag, 25, 0);
         
         let playerMatches: PlayerMatch[] = [];
-        for (const match of result.data) { playerMatches.push(new PlayerMatch(match)); }
+        for (const match of result) { playerMatches.push(new PlayerMatch(match)); }
 
         return playerMatches;
     }
@@ -267,7 +272,7 @@ export class SCData
         const result = await this.halodapi.GetPlayerMatches(gamertag, 25, offset);
         
         let playerMatches: PlayerMatch[] = [];
-        for (const match of result.data) { playerMatches.push(new PlayerMatch(match)); }
+        for (const match of result) { playerMatches.push(new PlayerMatch(match)); }
 
         return playerMatches;
     }
@@ -309,47 +314,14 @@ export class SCData
         if (!matches) { return []; }
 
         // Store into Firebase if appropriate
-        for (const match of matches.data)
+        for (const match of matches)
         {
-            if (await this.firebase.GetMatchIsStored(match.id)) { continue; }
-            await this.firebase.SetMatch(match.id, match);
+            if (await this.firebase.GetMatchIsStored(match.data.id)) { continue; }
+            await this.firebase.SetMatch(match.data.id, match);
         }
 
-        return matches.data.map(m => new Match(m));
+        return matches.map(m => new Match(m));
     }
-
-    /**
-	 * Gets all the matches for a player for a given date
-	 * @param gamertag the gamertag
-	 * @param date the date
-	 * @returns the array of matches from that day
-	 */
-	public async GetMatchesForDay(gamertag: string, date: Date): Promise<ServiceRecord> 
-    {
-        // Try get from Firebase first
-        const sr = await this.firebase.GetServiceRecordForDate(gamertag, date.toDateString());
-        if (sr) { return new ServiceRecord(sr); }
-
-        // Otherwise loop through games
-        const overall = AutocodeHelpers.CreateEmptyServiceRecord(gamertag);
-        const matches = await this.halodapi.GetMatchesForDay(gamertag, date);
-
-        // Add matches together to get service record
-        for (const m of matches)
-		{
-			if (!m || !m.match) { continue; }
-			
-			const details = AutocodeHelpers.GetPlayerDetailsForGamertag(gamertag, m);
-			if (!details) { continue; }
-
-			AutocodeHelpers.AddMatchToServiceRecord(overall, details, m.match.duration.seconds);			
-		}
-
-        // If getting today's stats, don't save into firebase since the player may play more games today
-        if (!moment(date.toDateString()).isSame(new Date())) { await this.firebase.SetServiceRecordForDate(gamertag, overall, date.toDateString()); }
-
-        return new ServiceRecord(overall);
-    } 
 
     /**
 	 * The current best (or worst) values for the gamer
@@ -381,6 +353,53 @@ export class SCData
     {
         return await this.firebase.GetIsPremiumUser(gamertag);
     }
+
+    /**
+     * Get all available seasons
+     * @returns the available seasons in an array
+     */
+    public async GetSeasons(): Promise<HaloDotAPISeason[]>
+    {
+        if (this.__seasons && this.__seasons.length > 0) { return this.__seasons; }
+        this.__seasons = await this.halodapi.GetSeasons();
+
+        // Add Season1-1 manually since 343i took it out
+        const season1dash1: HaloDotAPISeason = {
+            id: 1,
+            version: 1,
+            name: "Heroes of Reach Part I",
+            description: "",
+            narrative_blurb: "",
+            image_urls: this.__seasons[0].image_urls,
+            properties: {
+                identifier: "Season1",
+                csr: "CsrSeason1"
+            },
+            availability: [
+                {
+                    start_date: new Date(),
+                    end_date: new Date()
+                }
+            ]
+        }
+
+        // Insert and rename Season1-2
+        this.__seasons.splice(0, 0, season1dash1);
+        this.__seasons[1].name += " Part II";
+
+        return this.__seasons;
+    }
+
+    /**
+     * Get the current season
+     * @returns the current season
+     */
+    public async GetCurrentSeason(): Promise<HaloDotAPISeason | undefined>
+    {
+        const seasons = await this.GetSeasons();
+        if (!seasons || seasons.length === 0) { return; }
+        return seasons[seasons.length - 1];
+    }
     //#endregion
 
     //#region Filters
@@ -394,11 +413,11 @@ export class SCData
     /** Gets the maps */
 	public GetMaps = async (): Promise<AutocodeMap[]> => this.halodapi.GetMaps();
 	/** Gets the playlists */
-	public GetPlaylists = async (): Promise<AutocodePlaylist[]> => this.halodapi.GetPlaylists();
+	public GetPlaylists = async (): Promise<HaloDotAPIPlaylist[]> => this.halodapi.GetPlaylists();
 	/** Gets the game variants */
-	public GetVariants = async (): Promise<AutocodeVariant[]> => this.halodapi.GetVariants();
+	public GetVariants = async (): Promise<HaloDotAPICategory[]> => this.halodapi.GetVariants();
 	/** Gets the medals */
-	public GetMedals = async (ids: string[] = []): Promise<AutocodeMedal[]> => this.halodapi.GetMedals(ids);
+	public GetMedals = async (): Promise<AutocodeMedal[]> => this.halodapi.GetMedals();
 	/** Gets the teams */
 	public GetTeams = async (): Promise<AutocodeTeam[]> => this.halodapi.GetTeams();
     //#endregion

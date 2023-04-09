@@ -33,6 +33,8 @@ class BreakdownKills
     public repulsor: number = 0;
     /** Kong */
     public fusionCoil: number = 0;
+    /** Plasma sticks */
+    public sticks: number = 0;
 
     constructor()
     {

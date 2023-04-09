@@ -1,4 +1,4 @@
-import { AutocodeZoneMode } from "../../Database/Schemas/AutocodeMultiplayerServiceRecord";
+import { ZoneSchema } from "../../Database/Schemas/ServiceRecordSchema";
 
 export class Zone
 {
@@ -9,7 +9,7 @@ export class Zone
 	public zoneScoringTicks: number = 0;
 	public zoneSecures: number = 0;
 
-	constructor(data?: AutocodeZoneMode)
+	constructor(data?: ZoneSchema)
 	{
 		if (!data) { return; }
 		this.zoneOccupationTime = data.total_zone_occupation_time?.human ?? "";

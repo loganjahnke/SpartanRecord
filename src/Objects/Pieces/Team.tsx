@@ -1,5 +1,4 @@
-import { AutocodeHelpers } from "../../Database/Schemas/AutocodeHelpers";
-import { AutocodeMatchPlayer, AutocodeMatchTeamDetails } from "../../Database/Schemas/AutocodeMatch";
+import { MatchPlayerSchema, MatchTeamSchema } from "../../Database/Schemas/MatchSchema";
 import { GetColorForTeam } from "../Helpers/AllTeams";
 import { ServiceRecord } from "../Model/ServiceRecord";
 import { MatchPlayer } from "./MatchPlayer";
@@ -19,16 +18,16 @@ export class Team
         return GetColorForTeam(this.details.name);
     }
 
-    constructor(teamData?: AutocodeMatchTeamDetails | undefined, playersData?: AutocodeMatchPlayer[] | undefined, players?: MatchPlayer[])
+    constructor(team?: MatchTeamSchema | undefined, playersData?: MatchPlayerSchema[] | undefined, players?: MatchPlayer[])
     {
-        this.details = new TeamDetails(teamData?.team);
-        this.statistics = new ServiceRecord(AutocodeHelpers.CreateServiceRecordFromTeam(teamData, 0));
-        this.mmr = teamData?.stats?.mmr ?? 0;
-        this.oddsToWin = teamData?.odds?.winning ?? 0;
+        this.details = new TeamDetails(team);
+        this.statistics = new ServiceRecord(team?.stats);
+        this.mmr = team?.stats?.mmr ?? 0;
+        this.oddsToWin = team?.odds?.winning ?? 0;
 
         if (playersData)
         {
-            const filtered = playersData.filter((playerData: any) => playerData.team?.id === this.details.id);
+            const filtered = playersData.filter((playerData: any) => playerData.properties?.team?.id === this.details.id);
             if (filtered.length > 0)
             {
                 this.players = filtered.map((playerData: any) => new MatchPlayer(playerData));

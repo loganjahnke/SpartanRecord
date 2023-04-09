@@ -1,10 +1,13 @@
-import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, Menu, MenuItem, Snackbar, Typography } from "@mui/material";
+import { Box, Card, CardActionArea, CardContent, CardMedia, Chip, Grid, Menu, MenuItem, Snackbar, Typography } from "@mui/material";
 import { useState } from "react";
 import { PlayerMatch } from "../../../Objects/Model/PlayerMatch";
 import { MatchPlayer } from "../../../Objects/Pieces/MatchPlayer";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { MatchBreakdown } from "../Breakdowns/Templates/MatchBreakdown";
 import { CSRSProgression } from "../Custom/CSRSTooltip";
+
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import "../../Styles/Components/PlayerMatchSummary.css";
 
@@ -15,11 +18,12 @@ interface MatchSummaryProps
 	goToMatch: Function;
 	gamertag: string;
 	showExpanded?: boolean;
+	hideExpected?: boolean;
 }
 
 export function PlayerMatchSummary(props: MatchSummaryProps)
 {
-	const { match, player, goToMatch, gamertag, showExpanded } = props;
+	const { match, player, goToMatch, gamertag, showExpanded, hideExpected } = props;
 
 	const [contextMenu, setContextMenu] = useState<{mouseX: number; mouseY: number;} | null>(null);
 	const [snacking, setSnacking] = useState(false);
@@ -109,53 +113,92 @@ export function PlayerMatchSummary(props: MatchSummaryProps)
 					<CardMedia component="img" height="200" image={match.map.asset.thumbnail} alt={match.map.name} title={match.map.name} />
 					<CardContent>
 						<Box sx={{ backgroundColor: ArrowheadTheme.box, width: "100%", ml: "-16px", padding: "8px 16px 4px 16px", mt: -2 }}>
-							<Typography variant="h5" component="div" sx={{ textAlign: "center" }}>{match.variant.name}</Typography>
-							<Typography variant="h6" component="div" sx={{ textAlign: "center" }}>{match.playlist.name}</Typography>
-							<Typography variant="body1" sx={{ color: match.player.outcome === "win" ? ArrowheadTheme.good : match.player.outcome === "loss" ? ArrowheadTheme.bad : ArrowheadTheme.text_primary, textAlign: "center" }}>
-								{match.player.outcome === "win" 
-									? "Win"
-									: match.player.outcome === "loss" 
-									? "Loss"
-									: match.player.outcome === "draw"
-									? "Tie"
-									: "Left Early" 
+							<Typography variant="h5" component="div" sx={{ textAlign: "center" }}>{match.playlist.name}</Typography>
+							<Typography variant="h6" component="div" sx={{ textAlign: "center" }}>{match.variant.name.indexOf(":") !== -1 ? match.variant.name.substring(match.variant.name.indexOf(":") + 1) : match.variant.name}</Typography>
+							<Typography variant="caption" component="div" sx={{ textAlign: "center" }}>Game Mode Odds: <Typography variant="subtitle1" component="span">{match.odds}%</Typography></Typography>
+						</Box>
+						<Box sx={{
+							pt: 1,
+							pb: 1,
+							width: "100%",
+							display: "flex", 
+							flexDirection: "row", 
+							justifyContent: "space-evenly", 
+							alignItems: "center",
+						}}>
+							<Chip 
+								label={
+									<Typography sx={{ display: "flex", alignItems: "center", pl: 2, pr: 2 }}>
+										<Typography component="span" variant="h6" sx={
+											{ 
+												fontWeight: 900,
+												mr: 3,
+											}
+										}>
+											{match.player.outcome === "win" 
+												? "WIN"
+												: match.player.outcome === "loss" 
+												? "LOSS"
+												: match.player.outcome === "draw"
+												? "Tie"
+												: "Left Early"}
+										</Typography>
+										<Box sx={{ textAlign: "center" }}>
+											<Typography variant="caption" component="div" sx={{ mb: "-3px" }}>Placement</Typography>
+											<Typography fontSize="small" component="div">{match.player.placement}</Typography>
+										</Box>
+									</Typography>
 								}
-							</Typography>
-							<Typography fontSize="small" sx={{ textAlign: "center" }}>{match.player.placement}</Typography>
+								sx={{
+									pt: 3,
+									pb: 3,
+									border: "2px solid",
+									borderColor: match.player.outcome === "win" 
+										? ArrowheadTheme.good
+										: match.player.outcome === "loss" 
+										? ArrowheadTheme.bad
+										: match.player.outcome === "draw"
+										? "initial"
+										: ArrowheadTheme.leftEarlyText
+								}}
+							/>
 						</Box>
 						<Box sx={{ backgroundColor: ArrowheadTheme.card, width: "100%", ml: "-16px", padding: "8px 16px" }}>
-							{player && player.gamertag && showExpanded && <Typography className="smallHeader" variant="subtitle1">Actual</Typography>}
 							<Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
 								<Box sx={{ display: "flex", width: "75px", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 									<Typography variant="caption">Kills</Typography>
-									<Typography variant="body1">{match.player.summary.kills}</Typography>
+									<Box sx={{ display: "flex", alignItems: "center" }}>
+										<Typography variant="h4" sx={{ ml: hideExpected ? 0 : 1 }}>{match.player.summary.kills}</Typography>
+										{!hideExpected && <Box sx={{ ml: "2px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+											{match.player.summary.kills < match.player.killExpectations.expected && <Typography sx={{ fontSize: "10px", mb: "-4px", mt: "4px" }}>{Math.round(match.player.summary.kills - match.player.killExpectations.expected)}</Typography>}
+											{match.player.summary.kills < match.player.killExpectations.expected 
+												? <KeyboardArrowDownIcon fontSize="small" sx={{ color: ArrowheadTheme.bad }} /> 
+												: <KeyboardArrowUpIcon fontSize="small" sx={{ color: ArrowheadTheme.good }} />
+											}
+											{match.player.summary.kills >= match.player.killExpectations.expected && <Typography sx={{ fontSize: "10px", mt: "-4px", mb: "2px" }}>+{Math.round(match.player.summary.kills - match.player.killExpectations.expected)}</Typography>}
+										</Box>}
+									</Box>
 								</Box>
 								<Box sx={{ display: "flex", width: "75px", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 									<Typography variant="caption">Assists</Typography>
-									<Typography variant="body1">{match.player.summary.assists}</Typography>
+									<Typography variant="h4">{match.player.summary.assists}</Typography>
 								</Box>
 								<Box sx={{ display: "flex", width: "75px", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 									<Typography variant="caption">Deaths</Typography>
-									<Typography variant="body1">{match.player.summary.deaths}</Typography>
+									<Box sx={{ display: "flex", alignItems: "center" }}>
+										<Typography variant="h4" sx={{ ml: hideExpected ? 0 : 1 }}>{match.player.summary.deaths}</Typography>
+										{!hideExpected && <Box sx={{ ml: "2px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+											{match.player.summary.deaths >= match.player.deathExpectations.expected && <Typography sx={{ fontSize: "10px", mb: "-4px", mt: "4px" }}>-{Math.round(match.player.summary.deaths - match.player.deathExpectations.expected)}</Typography>}
+											{match.player.summary.deaths > match.player.deathExpectations.expected 
+												? <KeyboardArrowDownIcon fontSize="small" sx={{ color: ArrowheadTheme.good }} /> 
+												: <KeyboardArrowUpIcon fontSize="small" sx={{ color: ArrowheadTheme.bad }} />
+											}
+											{match.player.summary.deaths < match.player.deathExpectations.expected && <Typography sx={{ fontSize: "10px", mt: "-4px", mb: "2px" }}>+{Math.round(match.player.deathExpectations.expected - match.player.summary.deaths)}</Typography>}
+										</Box>}
+									</Box>									
 								</Box>
 							</Box>
 						</Box>
-						{player && player.gamertag && showExpanded &&
-							<Box sx={{ backgroundColor: ArrowheadTheme.card, width: "100%", ml: "-16px", padding: "8px 16px" }}>
-								<Typography className="smallHeader" variant="subtitle1">Expected</Typography>
-								<Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
-									<Box sx={{ display: "flex", width: "75px", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-										<Typography variant="caption">Kills</Typography>
-										<Typography variant="body1">{Math.round(player.killExpectations.expected * 10) / 10}</Typography>
-									</Box>
-									<Box sx={{ display: "flex", width: "75px", flexDirection: "column", justifyContent: "center", alignItems: "center" }}></Box>
-									<Box sx={{ display: "flex", width: "75px", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-										<Typography variant="caption">Deaths</Typography>
-										<Typography variant="body1">{Math.round(player.deathExpectations.expected * 10) / 10}</Typography>
-									</Box>
-								</Box>
-							</Box>
-						}
 						{showExpanded && <>
 							<Box sx={{ backgroundColor: ArrowheadTheme.box, width: "100%", marginLeft: "-16px", padding: "8px 16px" }}>
 								<Box sx={{ mb: 1, display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>

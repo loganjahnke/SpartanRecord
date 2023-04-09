@@ -1,12 +1,12 @@
 import { ReactElement } from "react";
 
-import { AutocodeCSRSData, AutocodeRank } from "../../Database/Schemas/AutocodeCSRS";
+import { CSRDataSchema, AutocodeRank } from "../../Database/Schemas/CSRSchema";
+import { Tooltip } from "@mui/material";
 
 import MouseRoundedIcon from '@mui/icons-material/MouseRounded';
 import SportsEsportsRoundedIcon from '@mui/icons-material/SportsEsportsRounded';
 import ShuffleRoundedIcon from '@mui/icons-material/ShuffleRounded';
 import MilitaryTechRoundedIcon from '@mui/icons-material/MilitaryTechRounded';
-import { Tooltip } from "@mui/material";
 
 export class CSRS
 {
@@ -19,11 +19,11 @@ export class CSRS
     /** The three different types of ranks */
     public ranks: Ranks;
 
-    constructor(data?: AutocodeCSRSData)
+    constructor(data?: CSRDataSchema)
     {
         this.name = data?.name ?? "";
-        this.queue = data?.queue ?? "Unknown";
-        this.input = data?.input ?? "Unknown";
+        this.queue = data?.properties.queue ?? "Unknown";
+        this.input = data?.properties.input ?? "Unknown";
         this.ranks = new Ranks(data?.response);
     }
 
@@ -38,7 +38,7 @@ export class CSRS
     public GetHeaderIcon(): ReactElement
     {
         return <Tooltip title={this.__getIconTooltip()}>
-            {this.queue === "open" ? <ShuffleRoundedIcon fontSize="small" color="primary" /> :
+            {this.queue === "open-queue" ? <ShuffleRoundedIcon fontSize="small" color="primary" /> :
             this.input === "mnk" ? <MouseRoundedIcon fontSize="small" color="primary" /> :
             this.input === "controller" ? <SportsEsportsRoundedIcon fontSize="small" color="primary" /> : 
             <MilitaryTechRoundedIcon fontSize="small" color="primary" />}
@@ -54,11 +54,14 @@ export class CSRS
     }
 
     /** Gets the JSON representation of the CSRS */
-    public GetJSON(): Partial<AutocodeCSRSData>
+    public GetJSON(): Partial<CSRDataSchema>
     {
         return {
-            queue: (this.queue as any),
-            input: (this.input as any),
+            properties: {
+                queue: (this.queue as any),
+                input: (this.input as any),
+                experience: "",
+            },
             response: {
                 current: this.ranks.current.GetJSON(),
                 season: this.ranks.season.GetJSON(),
@@ -70,10 +73,10 @@ export class CSRS
     /** Gets the header */
     private __getIconTooltip(): string
     {
-        //queue: "open" | "solo-duo" | null;
+        //queue: "open-queue" | "solo-duo" | null;
 	    //input: "controller" | "mnk" | "crossplay" | null;
         
-        const q = this.queue === "open" ? "Open" : this.queue === "solo-duo" ? "Solo-Duo" : "N/A";
+        const q = this.queue === "open-queue" ? "Open" : this.queue === "solo-duo" ? "Solo-Duo" : "N/A";
         const i = this.input === "mnk" ? "MNK" : this.input === "controller" ? "Controller" : this.input === "crossplay" ? "Crossplay" : "N/A";
 
         return q + " | " + i;

@@ -1,6 +1,6 @@
 export class URLReducer
 {
-	private static readonly __appearancePrefix = "https://assets.halo.autocode.gg/externals/infinite/cms-images/?hash=";
+	private static readonly __appearancePrefix = "https://api.halodotapi.com/games/halo-infinite/tooling/cms-images?hash=";
 
 	/**
 	 * Constructs the appearance URL

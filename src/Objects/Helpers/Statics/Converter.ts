@@ -1,7 +1,5 @@
-import { AutocodeAppearance } from "../../../Database/Schemas/AutocodeAppearance";
-import { AutocodeMultiplayerServiceRecord } from "../../../Database/Schemas/AutocodeMultiplayerServiceRecord";
-import { AutocodePlayerMatch } from "../../../Database/Schemas/AutocodePlayerMatch";
-import { FirebaseRecentMatch } from "../../../Database/Schemas/FirebaseRecentMatch";
+import { AppearanceSchema } from "../../../Database/Schemas/AppearanceSchema";
+import { ServiceRecordSchema } from "../../../Database/Schemas/ServiceRecordSchema";
 import { FirebaseSeasonServiceRecord } from "../../../Database/Schemas/FirebaseSeasonServiceRecord";
 import { Debugger } from "../Debugger";
 import { URLReducer } from "./URLReducer";
@@ -23,24 +21,26 @@ export class Converter
 	 * @param sr the autocode multiplayer service record
 	 * @returns the firebase seasons service record
 	 */
-	public static AutocodeToSeasons(sr: AutocodeMultiplayerServiceRecord): FirebaseSeasonServiceRecord
+	public static AutocodeToSeasons(sr: ServiceRecordSchema): FirebaseSeasonServiceRecord
 	{
 		return {
-			core: {
-				summary: {
-					kills: sr.data.core.summary.kills,
-					deaths: sr.data.core.summary.deaths,
-					assists: sr.data.core.summary.assists,
+			stats: {
+				core: {
+					summary: {
+						kills: sr.data.stats.core.summary.kills,
+						deaths: sr.data.stats.core.summary.deaths,
+						assists: sr.data.stats.core.summary.assists,
+					},
+					shots: {
+						accuracy: sr.data.stats.core.shots.accuracy,
+					},
+					kda: sr.data.stats.core.kda,
+					kdr: sr.data.stats.core.kdr,
 				},
-				shots: {
-					accuracy: sr.data.core.shots.accuracy,
-				},
-				kda: sr.data.core.kda,
-				kdr: sr.data.core.kdr,
 			},
 			matches: {
-				total: sr.data.matches.total,
-				win_rate: sr.data.matches.win_rate,
+				completed: sr.data.matches.completed,
+				wins: sr.data.matches.wins,
 			},
 		}
 	}
@@ -50,54 +50,16 @@ export class Converter
 	 * @param appearance the full appearance object
 	 * @returns the reduced appearance object
 	 */
-	public static ReducedAutocodeAppearance(appearance: AutocodeAppearance): AutocodeAppearance
+	public static ReducedAutocodeAppearance(appearance: AppearanceSchema): AppearanceSchema
 	{
-		delete appearance.additional;
+		if ((appearance as any).additional) { delete (appearance as any).additional; }
 
-		appearance.data.nameplate_url = URLReducer.ReduceAppearanceURL(appearance.data.nameplate_url);
-		appearance.data.emblem_url = URLReducer.ReduceAppearanceURL(appearance.data.emblem_url);
-		appearance.data.backdrop_image_url = URLReducer.ReduceAppearanceURL(appearance.data.backdrop_image_url);
+		appearance.data.image_urls.nameplate = URLReducer.ReduceAppearanceURL(appearance.data.image_urls.nameplate);
+		appearance.data.image_urls.emblem = URLReducer.ReduceAppearanceURL(appearance.data.image_urls.emblem);
+		appearance.data.image_urls.backdrop = URLReducer.ReduceAppearanceURL(appearance.data.image_urls.backdrop);
+		appearance.data.image_urls.action_pose = URLReducer.ReduceAppearanceURL(appearance.data.image_urls.action_pose);
 
 		return appearance;
-	}
-
-	/**
-	 * Converts an Autocode player match to a Firebase recent match
-	 * @param match the Autocode player match
-	 * @returns a Firebase recent match
-	 */
-	public static PlayerMatchToRecentMatch(match: AutocodePlayerMatch): FirebaseRecentMatch
-	{
-		return {
-			id: match.id,
-			details: match.details,
-			experience: match.experience,
-			type: match.type,
-			played_at: match.played_at,
-			player: {
-				stats: {
-					core: {
-						summary: {
-							kills: match.player.stats.core.summary.kills,
-							deaths: match.player.stats.core.summary.deaths,
-							assists: match.player.stats.core.summary.assists,
-						},
-						damage: {
-							taken: match.player.stats.core.damage.taken,
-							dealt: match.player.stats.core.damage.dealt,
-						},
-						shots: {
-							accuracy: match.player.stats.core.shots.accuracy,
-						},
-						kda: match.player.stats.core.kda,
-						kdr: match.player.stats.core.kdr,
-					},
-				},
-				rank: match.player.rank,
-				outcome: match.player.outcome,
-				progression: match.player.progression,
-			}
-		}
 	}
 
 	/**

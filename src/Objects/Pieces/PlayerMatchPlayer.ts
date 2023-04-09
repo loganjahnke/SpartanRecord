@@ -1,7 +1,8 @@
 import { HaloOutcome } from "../../Database/ArrowheadFirebase";
-import { AutocodePlayerMatchPlayer } from "../../Database/Schemas/AutocodePlayerMatch";
+import { PlayerMatchPlayerSchema } from "../../Database/Schemas/PlayerMatchSchema";
 import { MatchCSRSummary } from "../Model/MatchCSRSummary";
 import { Damage } from "./Damage";
+import { Expectation } from "./Expectation";
 import { Shots } from "./Shots";
 import { Summary } from "./Summary";
 import { TeamDetails } from "./TeamDetails";
@@ -31,6 +32,10 @@ export class PlayerMatchPlayer
     public kdr: number;
     /** The CSR for the player */
     public csr: MatchCSRSummary;
+    /** Expected kill performance */
+    public killExpectations: Expectation;
+    /** Expected death performance */
+    public deathExpectations: Expectation;
 
     /** The damage efficiency per kill */
     public get damageEfficiency(): number
@@ -60,9 +65,9 @@ export class PlayerMatchPlayer
         return this.rank + "th";
     }
 
-    constructor(data?: AutocodePlayerMatchPlayer)
+    constructor(data?: PlayerMatchPlayerSchema)
     {
-        this.team = new TeamDetails(data?.team);
+        this.team = new TeamDetails(data?.properties?.team);
         this.summary = 
         {
             kills: data?.stats?.core?.summary?.kills ?? 0,
@@ -75,7 +80,7 @@ export class PlayerMatchPlayer
                 destroys: data?.stats?.core?.summary?.vehicles?.destroys ?? 0,
                 hijacks: data?.stats?.core?.summary?.vehicles?.hijacks ?? 0
             },
-            medals: data?.stats?.core?.summary?.medals ?? 0
+            medals: data?.stats?.core?.summary?.medals.total ?? 0
         };
 
         this.damage =
@@ -88,11 +93,13 @@ export class PlayerMatchPlayer
         this.shots = 
         {
             fired: data?.stats?.core?.shots?.fired ?? 0,
-            landed: data?.stats?.core?.shots?.landed ?? 0,
+            landed: data?.stats?.core?.shots?.hit ?? 0,
             missed: data?.stats?.core?.shots?.missed ?? 0,
             accuracy: data?.stats?.core?.shots?.accuracy ?? 0
         };
 
+        this.killExpectations = new Expectation(data?.performances?.kills);
+        this.deathExpectations = new Expectation(data?.performances?.deaths);
         this.csr = new MatchCSRSummary(data?.progression);
         this.kda = data?.stats?.core?.kda ?? 0;
         this.kdr = data?.stats?.core?.kdr ?? 0;

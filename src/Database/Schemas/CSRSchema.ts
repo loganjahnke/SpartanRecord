@@ -1,19 +1,18 @@
-export type AutocodeCSRS = {
-	data: Array<AutocodeCSRSData>;
+import { PlaylistProperties } from "./PlayerMatchSchema";
+
+export type CSRSchema = {
+	data: Array<CSRDataSchema>;
 	additional: {
-		parameters: {
-			gamertag: string;
-			season: number;
-			version: number;
-		};
+		query: {
+			season_csr: string;
+		}
 	};
 };
 
-export type AutocodeCSRSData = {
+export type CSRDataSchema = {
 	id: string;
 	name: string;
-	queue: "open" | "solo-duo" | null;
-	input: "controller" | "mnk" | "crossplay" | null;
+	properties: PlaylistProperties;
 	response: {
 		current: Partial<AutocodeRank>;
 		season: Partial<AutocodeRank>;

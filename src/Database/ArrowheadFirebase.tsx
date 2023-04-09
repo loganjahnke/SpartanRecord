@@ -48,7 +48,9 @@ export enum ServiceRecordFilter
 	Playlist = "playlist",
 	Maps = "maps",
 	Modes = "modes",
-	Outcomes = "outcomes"
+	Outcomes = "outcomes",
+	Local = "LAN",
+	Customs = "customs"
 }
 
 export enum Leaderboard

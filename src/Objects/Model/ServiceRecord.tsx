@@ -1,5 +1,7 @@
 import { HaloOutcome } from "../../Database/ArrowheadFirebase";
-import { AutocodeMultiplayerServiceRecord, AutocodeServiceRecordData } from "../../Database/Schemas/AutocodeMultiplayerServiceRecord";
+import { TeamStatsSchema } from "../../Database/Schemas/MatchSchema";
+import { DurationSchema, PlayerStatsSchema } from "../../Database/Schemas/PlayerMatchSchema";
+import { ServiceRecordSchema, ServiceRecordDataSchema, isServiceRecordSchema, ServiceRecordStatsSchema, ServiceRecordMatchesSchema } from "../../Database/Schemas/ServiceRecordSchema";
 import { AllMedals } from "../Helpers/AllMedals";
 import { Breakdowns } from "../Pieces/Breakdowns";
 import { CaptureTheFlag } from "../Pieces/CaptureTheFlag";
@@ -19,6 +21,8 @@ export class ServiceRecord
     /** The damage needed for a perfect kill */
     private readonly PERFECT_KILL_DAMAGE = 225;
 
+    /** The season identifier (empty string if all stats) */
+    public season: string;
     /** Contains summary information */
     public summary: Summary;
     /** Contains information about the damage taken and dealt */
@@ -42,7 +46,7 @@ export class ServiceRecord
     /** Sotkcpile statistics */
     public stockpile: Stockpile;
     /** Raw autocode and firebase JSON */
-    public data?: AutocodeServiceRecordData;
+    public data?: ServiceRecordDataSchema;
     /** If there is an error in the response, store it here */
     public error?: string;
 
@@ -124,34 +128,51 @@ export class ServiceRecord
     public matchesPlayed: number = 0;
     /** Win rate */
     public winRate: number = 0;
-    /** The gamertag */
-    public gamertag: string = "";
 
     /**
      * Creates a Service Record object from the JSON response
      * @param result the JSON response from cryptum
      */
-    constructor(result?: AutocodeMultiplayerServiceRecord)
+    constructor(result?: ServiceRecordSchema | TeamStatsSchema | PlayerStatsSchema, season?: string)
     {
         // Add error
         if (result && (result as any).error)
         {
             this.error = (result as any).error?.message;
         }
-        else if (result && result.additional?.privacy?.public === false)
+
+        // Set the season
+        this.season = season ?? "";
+
+        let timePlayed: DurationSchema | undefined;
+        let matches: ServiceRecordMatchesSchema | undefined;
+        let stats: PlayerStatsSchema | ServiceRecordStatsSchema | TeamStatsSchema | undefined;
+        if (isServiceRecordSchema(result))
         {
-            this.error = `${result.additional?.parameters?.gamertag} is set to private`;
+            this.data = result.data;
+            stats = result.data.stats;
+            timePlayed = result.data.time_played;
+            matches = result.data.matches;
+
+            this.ctf = new CaptureTheFlag(stats?.modes?.capture_the_flag);
+            this.zone = new Zone(stats?.modes?.zones);
+            this.oddball = new Oddball(stats?.modes?.oddball);
+            this.elimination = new Elimination(stats?.modes?.elimination);
+            this.stockpile = new Stockpile(stats?.modes?.stockpile);
+        }
+        else
+        {
+            stats = result;
+
+            this.ctf = new CaptureTheFlag(stats?.mode as any);
+            this.zone = new Zone(stats?.mode as any);
+            this.oddball = new Oddball(stats?.mode as any);
+            this.elimination = new Elimination(stats?.mode as any);
+            this.stockpile = new Stockpile(stats?.mode as any);
         }
 
-        // Set raw result for future use
-        this.data = result?.data;
-
         // Get stubs for easy access
-        this.gamertag = result?.additional?.parameters?.gamertag ?? "";
-        const record = result?.data;
-        const core = record?.core;
-        const matches = record?.matches;
-        const timePlayed = record?.time_played;
+        const core = stats?.core;
 
         this.summary = 
         {
@@ -166,20 +187,20 @@ export class ServiceRecord
                 destroys: core?.summary?.vehicles?.destroys ?? 0,
                 hijacks: core?.summary?.vehicles?.hijacks ?? 0
             },
-            medals: core?.summary?.medals ?? 0
+            medals: core?.summary?.medals?.total ?? 0
         };
 
         this.damage =
         {
             taken: core?.damage?.taken ?? 0,
             dealt: core?.damage?.dealt ?? 0,
-            average: core?.damage?.average ?? 0,
+            average: 0
         };
 
         this.shots = 
         {
             fired: core?.shots?.fired ?? 0,
-            landed: core?.shots?.landed ?? 0,
+            landed: core?.shots?.hit ?? 0,
             missed: core?.shots?.missed ?? 0,
             accuracy: core?.shots?.accuracy ?? 0,
         };
@@ -188,27 +209,28 @@ export class ServiceRecord
         {
             kills: 
             {
-                melee: core?.breakdowns?.kills?.melee ?? 0,
-                grenades: core?.breakdowns?.kills?.grenades ?? 0,
-                headshots: core?.breakdowns?.kills?.headshots ?? 0,
-                powerWeapons: core?.breakdowns?.kills?.power_weapons ?? 0,
-                assassinations: core?.breakdowns?.kills?.assassinations ?? 0,
-                splatters: core?.breakdowns?.kills?.vehicles?.splatters ?? 0,
-                repulsor: core?.breakdowns?.kills?.miscellaneous?.repulsor ?? 0,
-                fusionCoil: core?.breakdowns?.kills?.miscellaneous?.fusion_coils ?? 0
+                melee: core?.breakdown?.kills?.melee ?? 0,
+                grenades: core?.breakdown?.kills?.grenades ?? 0,
+                headshots: core?.breakdown?.kills?.headshots ?? 0,
+                powerWeapons: core?.breakdown?.kills?.power_weapons ?? 0,
+                assassinations: core?.breakdown?.kills?.assassinations ?? 0,
+                splatters: core?.breakdown?.kills?.vehicles?.splatters ?? 0,
+                repulsor: core?.breakdown?.kills?.miscellaneous?.repulsor ?? 0,
+                fusionCoil: core?.breakdown?.kills?.miscellaneous?.fusion_coils ?? 0,
+                sticks: core?.breakdown?.kills?.sticks ?? 0
             },
             assists:
             {
-                emp: core?.breakdowns?.assists?.emp ?? 0,
-                driver: core?.breakdowns?.assists?.driver ?? 0,
-                callouts: core?.breakdowns?.assists?.callouts ?? 0
+                emp: core?.breakdown?.assists?.emp ?? 0,
+                driver: core?.breakdown?.assists?.driver ?? 0,
+                callouts: core?.breakdown?.assists?.callouts ?? 0
             },
             matches:
             {
-                wins: matches?.outcomes?.wins ?? 0,
-                losses: matches?.outcomes?.losses ?? 0,
-                left: matches?.outcomes?.left ?? 0,
-                draws: matches?.outcomes?.draws ?? 0
+                wins: matches?.wins ?? 0,
+                losses: matches?.losses ?? 0,
+                draws: matches?.ties ?? 0,
+                left: 0
             }
         };
 
@@ -219,9 +241,9 @@ export class ServiceRecord
         };
 
         this.medals = [];
-        if (core?.breakdowns?.medals && core.breakdowns?.medals.length > 0)
+        if (core?.breakdown?.medals && core.breakdown?.medals.length > 0)
         {
-            this.medals = core.breakdowns.medals.map((data: any) => 
+            this.medals = core.breakdown.medals.map((data: any) => 
             {
                 const medal = new Medal(data);
                 const parent = (AllMedals as any)[(medal.id)];
@@ -243,13 +265,14 @@ export class ServiceRecord
         this.kdr = core?.kdr ?? 0;
         this.totalScore = core?.scores?.personal ?? 0;
         this.totalPoints = core?.scores?.points ?? 0;
-        this.matchesPlayed = matches?.total ?? 0;
-        this.winRate = matches?.win_rate ?? 0;
-        this.ctf = new CaptureTheFlag(record?.modes?.capture_the_flag);
-        this.zone = new Zone(record?.modes?.zones);
-        this.oddball = new Oddball(record?.modes?.oddball);
-        this.elimination = new Elimination(record?.modes?.elimination);
-        this.stockpile = new Stockpile(record?.modes?.stockpile);
+        this.matchesPlayed = matches?.completed ?? 0;
+
+        if (this.matchesPlayed !== 0)
+        {
+            this.winRate = (this.breakdowns.matches.wins / this.matchesPlayed) * 100;
+            this.kda = (this.summary.kills + (this.summary.assists / 3) - this.summary.deaths) / this.matchesPlayed;
+            this.damage.average = (this.damage.dealt / this.matchesPlayed) * 100;
+        }
     }
 
     /**
@@ -329,7 +352,8 @@ export class ServiceRecord
                 assassinations: sr.breakdowns.kills.assassinations + this.breakdowns.kills.assassinations,
                 splatters: sr.breakdowns.kills.splatters + this.breakdowns.kills.splatters,
                 repulsor: sr.breakdowns.kills.repulsor + this.breakdowns.kills.repulsor,
-                fusionCoil: sr.breakdowns.kills.fusionCoil + this.breakdowns.kills.fusionCoil
+                fusionCoil: sr.breakdowns.kills.fusionCoil + this.breakdowns.kills.fusionCoil,
+                sticks: sr.breakdowns.kills.sticks + this.breakdowns.kills.sticks
             },
             assists:
             {
@@ -432,7 +456,8 @@ export class ServiceRecord
                 assassinations: this.breakdowns.kills.assassinations,
                 splatters: this.breakdowns.kills.splatters,
                 repulsor: this.breakdowns.kills.repulsor,
-                fusionCoil: this.breakdowns.kills.fusionCoil
+                fusionCoil: this.breakdowns.kills.fusionCoil,
+                sticks: this.breakdowns.kills.sticks
             },
             assists:
             {

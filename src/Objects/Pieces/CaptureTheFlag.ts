@@ -1,4 +1,4 @@
-import { AutocodeCTFMode } from "../../Database/Schemas/AutocodeMultiplayerServiceRecord";
+import { CTFSchema } from "../../Database/Schemas/ServiceRecordSchema";
 
 export class CaptureTheFlag
 {
@@ -14,7 +14,7 @@ export class CaptureTheFlag
 	public killsAsFlagReturner: number = 0;
 	public timeAsCarrier: string = "";
 
-	constructor(data?: AutocodeCTFMode)
+	constructor(data?: CTFSchema)
 	{
 		if (!data) { return; }
 		this.flagCaptureAssists = data.flag_capture_assists;

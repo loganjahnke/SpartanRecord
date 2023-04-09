@@ -1,4 +1,4 @@
-import { AutocodePlayerMatch } from "../../Database/Schemas/AutocodePlayerMatch";
+import { PlayerMatchSchema, PlayerMatchWithOddsSchema } from "../../Database/Schemas/PlayerMatchSchema";
 import { GameVariant } from "../Pieces/GameVariant";
 import { Map } from "../Pieces/Map";
 import { MatchPlayer } from "../Pieces/MatchPlayer";
@@ -16,8 +16,6 @@ export class PlayerMatch
     public map: Map;
     /** The playlist */
     public playlist: Playlist;
-    /** Was this a teams game? */
-    public teamGame: boolean;
     /** Player statistics and results */
     public player: PlayerMatchPlayer;
     /** Arena or BTB */
@@ -28,18 +26,20 @@ export class PlayerMatch
     public duration: TimePlayed;
     /** Expanded player details */
     public expandedPlayer: MatchPlayer;
+    /** The odds of playing this experience again */
+    public odds: number;
 
-    constructor(match?: AutocodePlayerMatch)
+    constructor(match?: PlayerMatchWithOddsSchema)
     {
         this.id = match?.id ?? "";
-        this.variant = new GameVariant(match?.details?.gamevariant);
+        this.variant = new GameVariant(match?.details?.ugcgamevariant);
         this.map = new Map(match?.details?.map);
         this.playlist = new Playlist(match?.details?.playlist);
-        this.teamGame = !!match?.teams?.enabled;
         this.player = new PlayerMatchPlayer(match?.player);
-        this.experience = match?.experience ?? "";
-        this.date = match?.played_at ? new Date(match.played_at) : new Date();
-        this.duration = new TimePlayed(match?.duration);
+        this.experience = match?.properties?.experience ?? "";
+        this.date = match?.started_at ? new Date(match.started_at) : new Date();
+        this.duration = new TimePlayed(match?.playable_duration);
         this.expandedPlayer = new MatchPlayer();
+        this.odds = match?.odds ?? 0;
     }
 }

@@ -15,7 +15,7 @@ export function KillBreakdownCard(props: BreakdownProps)
 			</Box>
 			<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", flexWrap: "wrap", justifyContent: "space-evenly", width: "100%" }}>
 				<BreakdownRowTile title="Melee" 
-					tooltip="Melee kills, swords, hammers, assassinations" 
+					tooltip="You can call me Joe Louis" 
 					icon={<img src="https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/boxer.png" alt="Medal" height="48px" width="48px" />} 
 					value={showPerMatch ? serviceRecord.breakdowns.kills.melee / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.melee} 
 					isMainStat />
@@ -30,7 +30,7 @@ export function KillBreakdownCard(props: BreakdownProps)
 					value={showPerMatch ? serviceRecord.breakdowns.kills.powerWeapons / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.powerWeapons} 
 					isMainStat />
 				<BreakdownRowTile title="Grenades" 
-					tooltip="Sticks and bounces, all thrown explosives" 
+					tooltip="Let's throw some pineapples" 
 					icon={<img src="https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/grenadier.png" alt="Medal" height="48px" width="48px" />} 
 					value={showPerMatch ? serviceRecord.breakdowns.kills.grenades / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.grenades} 
 					isMainStat />
@@ -48,6 +48,11 @@ export function KillBreakdownCard(props: BreakdownProps)
 					tooltip="Vroom!" 
 					icon={<img src="https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/driver.png" alt="Medal" height="48px" width="48px" />} 
 					value={showPerMatch ? serviceRecord.breakdowns.kills.splatters / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.splatters} 
+					isMainStat />
+				<BreakdownRowTile title="Sticks" 
+					tooltip="I bet ya can't stick it" 
+					icon={<img src="https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/medals/3655682764.png" alt="Medal" height="48px" width="48px" />} 
+					value={showPerMatch ? serviceRecord.breakdowns.kills.sticks / serviceRecord.matchesPlayed : serviceRecord.breakdowns.kills.sticks} 
 					isMainStat />
 				<BreakdownRowTile title="Repulsor" 
 					tooltip="Mind the Gap and Pancake" 

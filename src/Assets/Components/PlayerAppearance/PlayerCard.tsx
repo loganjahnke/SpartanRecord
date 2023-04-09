@@ -45,7 +45,7 @@ export function PlayerCard(props: PlayerCardProps)
 
     if (!player) { return <></>; }
 	return showNameplate ? (
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
             {onFavorite && player && player.gamertag && <Rating sx={{ mr: 2 }} value={isFavorite ? 1 : 0} max={1} onChange={() => onFavorite(player.gamertag)} />}
             <Box className="playerCard" sx={{ backgroundColor: "transparent", display: "flex", alignItems: "center", justifyContent: rightAlign ? "flex-end" : "flex-start", textAlign: "left", height: "100%", mr: noMargin ? 0 : -1 }}>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -60,7 +60,7 @@ export function PlayerCard(props: PlayerCardProps)
         </Box>
     )
     : !topDown ? (
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
             {onFavorite && player && player.gamertag && <Rating sx={{ mr: 2 }} value={isFavorite ? 1 : 0} max={1} onChange={() => onFavorite(player.gamertag)} />}
             <Box className="playerCard" sx={{ backgroundColor: "transparent", display: "flex", flexDirection: "row", alignItems: "center", textAlign: rightAlign ? "right" : noImages ? "center" : "left" }}>
                 {!rightAlign && !noImages && player.appearance?.emblemURL && <img src={player.appearance.emblemURL} alt="emblem" height="48px" crossOrigin="anonymous" />}

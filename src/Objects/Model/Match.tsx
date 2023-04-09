@@ -1,5 +1,5 @@
 import { HaloOutcome } from "../../Database/ArrowheadFirebase";
-import { AutocodeMatch } from "../../Database/Schemas/AutocodeMatch";
+import { MatchSchema } from "../../Database/Schemas/MatchSchema";
 import { GameVariant } from "../Pieces/GameVariant";
 import { Map } from "../Pieces/Map";
 import { MatchPlayer } from "../Pieces/MatchPlayer";
@@ -75,30 +75,30 @@ export class Match
         return this.players.some(player => player.stats.summary.kills !== player.stats.totalPoints);
     }
 
-    constructor(match?: AutocodeMatch)
+    constructor(match?: MatchSchema)
     {
-        this.id = match?.id ?? "";
-        this.mode = new GameVariant(match?.match?.details?.gamevariant);
-        this.map = new Map(match?.match?.details?.map);
-        this.playlist = new Playlist(match?.match?.details?.playlist);
-        this.teamGame = !!match?.match?.teams?.enabled;
-        this.experience = match?.match?.experience ?? "";
-        this.type = match?.match?.type === "custom" 
+        this.id = match?.data?.id ?? "";
+        this.mode = new GameVariant(match?.data?.details?.ugcgamevariant);
+        this.map = new Map(match?.data?.details?.map);
+        this.playlist = new Playlist(match?.data?.details?.playlist);
+        this.teamGame = (!!match?.data?.teams && match.data.teams.length > 0);
+        this.experience = match?.data?.properties?.experience ?? "";
+        this.type = match?.data?.properties?.type === "custom" 
             ? "Custom"
-            : match?.match?.type === "local" 
+            : match?.data?.properties?.type === "local" 
             ? "Local"
             : "Matchmaking";
-        this.date = match?.match?.played_at ? new Date(match.match?.played_at) : new Date();
-        this.duration = new TimePlayed(match?.match?.duration);
+        this.date = match?.data?.started_at ? new Date(match.data?.started_at) : new Date();
+        this.duration = new TimePlayed(match?.data?.playable_duration);
         this.teams = [];
         this.players = [];
         this.best = { score: 0, points: 0, kills: 0, deaths: Number.MAX_VALUE, assists: 0 };
 
-        if (match?.match?.teams?.details)
+        if (match?.data?.teams)
         {
-            for (const team of match.match.teams.details)
+            for (const team of match.data.teams)
             {
-                const t = new Team(team, match.match.players);
+                const t = new Team(team, match.data.players);
                 this.teams.push(t);
                 for (const player of t.players)
                 {
@@ -112,9 +112,9 @@ export class Match
             }
         }
         
-        if (match?.match?.players)
+        if (match?.data?.players)
         {
-            for (const player of match.match.players)
+            for (const player of match.data.players)
             {
                 const mp = new MatchPlayer(player);
                 if (!mp) { continue; }

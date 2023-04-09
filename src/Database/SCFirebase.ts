@@ -12,12 +12,12 @@ import { PlayerMatch } from "../Objects/Model/PlayerMatch";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { SRFilter } from "../Objects/Pieces/SRFilter";
 import { Leaderboard, ServiceRecordFilter } from "./ArrowheadFirebase";
-import { AutocodeAppearance } from "./Schemas/AutocodeAppearance";
-import { AutocodeCSRSData } from "./Schemas/AutocodeCSRS";
-import { AutocodeMatch } from "./Schemas/AutocodeMatch";
-import { AutocodeMultiplayerServiceRecord } from "./Schemas/AutocodeMultiplayerServiceRecord";
-import { AutocodePlayerMatch } from "./Schemas/AutocodePlayerMatch";
+import { AppearanceSchema } from "./Schemas/AppearanceSchema";
+import { CSRDataSchema } from "./Schemas/CSRSchema";
+import { ServiceRecordSchema } from "./Schemas/ServiceRecordSchema";
 import { FirebaseBest } from "./Schemas/FirebaseBest";
+import { MatchSchema } from "./Schemas/MatchSchema";
+import { HaloDotAPISeason } from "./Schemas/AutocodeMetadata";
 
 export class SCFirebase
 {
@@ -34,11 +34,11 @@ export class SCFirebase
 	/**
      * Gets a player from firebase
      * @param player the player object (needs gamertag populated)
-     * @param season the season
+     * @param season the season identifier
      * @param historic the historic SRs
      * @returns player object
      */
-	public async GetPlayer(player: Player, season?: number, historic?: boolean): Promise<void>
+	public async GetPlayer(player: Player, season?: string, historic?: boolean): Promise<void>
 	{
 		if (!player.gamertag) { return; }
 		
@@ -99,15 +99,15 @@ export class SCFirebase
 	/**
 	 * Gets the service record for the gamertag from Firebase
 	 * @param gamertag the gamertag to get the service record of
-	 * @param season the season
+	 * @param season the season identifier
 	 * @returns the service record for the gamertag
 	 */
-	public async GetServiceRecord(gamertag: string, season?: number): Promise<ServiceRecord>
+	public async GetServiceRecord(gamertag: string, season?: string): Promise<ServiceRecord>
 	{
 		Debugger.Print("SCFirebase", "GetServiceRecord()", gamertag);
 
 		let snapshot: DataSnapshot | undefined;
-		if (!season || season === -1)
+		if (!season)
 		{
 			snapshot = await this.__get(`service_record/multiplayer/${gamertag}`);
 		}
@@ -192,12 +192,15 @@ export class SCFirebase
 	/**
 	 * Determines if the previous season's are cached for a given gamertag
 	 * @param gamertag the gamertag to evaluate
+	 * @param seasons the available seasons
 	 * @returns true if we have these seasons saved in Firebase
 	 */
-	public async HasHistoricSeasonsCached(gamertag: string): Promise<boolean>
+	public async HasHistoricSeasonsCached(gamertag: string, seasons: HaloDotAPISeason[]): Promise<boolean>
 	{
 		Debugger.Print("SCFirebase", "HasHistoricSeasonsCached()", gamertag);
 		
+		if (!seasons || seasons.length === 0) { return false; }
+
 		const snapshot = await this.__get(`service_record/historic/cached/${gamertag}`);
 		if (!snapshot) { return false; }
 
@@ -206,10 +209,12 @@ export class SCFirebase
 
 		this.__setReadSize("HasHistoricSeasonsCached", result);
 
-		for (let i = 1; i < SR.Season; i++)
+		const currSeason = seasons[seasons.length - 1];
+		for (const season of seasons)
 		{
-			Debugger.Continue("Season " + i + ": " + result[i]);
-			if (!result[i]) { return false; }
+			if (season.properties.identifier === currSeason.properties.identifier) { continue; }
+			Debugger.Continue(season.properties.identifier + ": " + result[season.properties.identifier]);
+			if (!result[season.properties.identifier]) { return false; }
 		}
 
 		return true;
@@ -235,7 +240,8 @@ export class SCFirebase
 		for (const key in result)
 		{
 			const autocodeSR: any = { data: result[key] };
-			historicSRs.push(new ServiceRecord(autocodeSR));
+			autocodeSR.data.time_played = "";
+			historicSRs.push(new ServiceRecord(autocodeSR, key));
 		}
 
 		return historicSRs;
@@ -280,7 +286,7 @@ export class SCFirebase
 	 * @param gamertag the gamertag
 	 * @param date the date string
 	 */
-	public async GetServiceRecordForDate(gamertag: string, date?: string): Promise<AutocodeMultiplayerServiceRecord | undefined>
+	public async GetServiceRecordForDate(gamertag: string, date?: string): Promise<ServiceRecordSchema | undefined>
 	{
 		if (!date) { return; }
 		Debugger.Print("SCFirebase", "GetServiceRecordForDate()", gamertag);
@@ -471,16 +477,16 @@ export class SCFirebase
 	/**
 	 * Gets the MMR of the gamertag
 	 * @param gamertag the gamertag to get the MMR of
-	 * @param season the season
+	 * @param season the season identifier
 	 * @returns the CSRS
 	 */
-	public async GetCSRS(gamertag: string, season?: number): Promise<CSRS[]>
+	public async GetCSRS(gamertag: string, season?: string): Promise<CSRS[]>
 	{
 		Debugger.Print("SCFirebase", "GetCSRS()", gamertag);
 
 		let snapshot: DataSnapshot | undefined;
 
-		if (!season || season === -1) { snapshot = await this.__get(`csrs/${gamertag}/current`); }
+		if (!season) { snapshot = await this.__get(`csrs/${gamertag}/current`); }
 		else { snapshot = await this.__get(`csrs/${gamertag}/season/${season}`); }
 
 		const data = snapshot?.val();
@@ -627,7 +633,7 @@ export class SCFirebase
 	 * @param gamertag the gamertag
 	 * @param data the appearance JSON
 	 */
-	public async SetAppearance(gamertag: string, data?: AutocodeAppearance): Promise<void>
+	public async SetAppearance(gamertag: string, data?: AppearanceSchema): Promise<void>
 	{
 		if (!data) { return; }
 		Debugger.Print("SCFirebase", "SetAppearance()", gamertag);
@@ -640,20 +646,21 @@ export class SCFirebase
 	 * Sets the service record for the gamertag into Firebase
 	 * @param gamertag the gamertag
 	 * @param data the service record JSON
-	 * @param season the season
+	 * @param season the season identifier
+	 * @param currSeason the current season identifier
 	 */
-	public async SetServiceRecord(gamertag: string, data?: AutocodeMultiplayerServiceRecord, season?: number): Promise<void>
+	public async SetServiceRecord(gamertag: string, data?: ServiceRecordSchema, season?: string, currSeason?: string): Promise<void>
 	{
 		if (!data) { return; }
 		Debugger.Print("SCFirebase", "SetServiceRecord()", gamertag);
 
-		if (!season || season === -1)
+		if (!season)
 		{
 			await this.__set(`service_record/multiplayer/${gamertag}`, data);
 		}
-		else
+		else if (currSeason)
 		{
-			await this.SetPreviousSeasonStats(gamertag, season, data);
+			await this.SetPreviousSeasonStats(gamertag, season, currSeason, data);
 		}		
 	}
 
@@ -662,7 +669,7 @@ export class SCFirebase
 	 * @param gamertag the gamertag to get stats from
 	 * @returns A service record that represents the filter
 	 */
-	public async SetFilteredServiceRecord(gamertag: string, tree: ServiceRecordFilter, data?: Map<string, AutocodeMultiplayerServiceRecord>): Promise<void>
+	public async SetFilteredServiceRecord(gamertag: string, tree: ServiceRecordFilter, data?: Map<string, ServiceRecordSchema>): Promise<void>
 	{
 		if (!data) { return; }
 		Debugger.Print("SCFirebase", "SetFilteredServiceRecord()", `${gamertag} - ${tree}`);
@@ -672,17 +679,18 @@ export class SCFirebase
 	/**
 	 * Sets a previous season's statistics
 	 * @param gamertag the gamertag to set the historic statistics for
-	 * @param season the season we are saving
+	 * @param season the season identifier we are saving
+	 * @param currSeason the current season identifier
 	 * @param sr the service record
 	 */
-	public async SetPreviousSeasonStats(gamertag: string, season: number, sr: AutocodeMultiplayerServiceRecord): Promise<void>
+	public async SetPreviousSeasonStats(gamertag: string, season: string, currSeason: string, sr: ServiceRecordSchema): Promise<void>
 	{
 		Debugger.Print("SCFirebase", "SetPreviousSeasonStats()", gamertag);
 
 		await Promise.all([
 			this.__set(`service_record/season/${season}/${gamertag}`, sr), 										  // set full SR into season node
 			this.__set(`service_record/historic/season/${gamertag}/${season}`, Converter.AutocodeToSeasons(sr)),  // set abridged SR into historic season node
-			this.__set(`service_record/historic/cached/${gamertag}/${season}`, season !== SR.Season),			  // set flag stating we have the historic season cached
+			this.__set(`service_record/historic/cached/${gamertag}/${season}`, season !== currSeason),            // set flag stating we have the historic season cached
 		]);
 	}
 
@@ -692,7 +700,7 @@ export class SCFirebase
 	 * @param data the service record JSON
 	 * @param date the date string
 	 */
-	public async SetServiceRecordForDate(gamertag: string, data?: AutocodeMultiplayerServiceRecord, date?: string): Promise<void>
+	public async SetServiceRecordForDate(gamertag: string, data?: ServiceRecordSchema, date?: string): Promise<void>
 	{
 		if (!data || !date) { return; }
 		Debugger.Print("SCFirebase", "SetServiceRecordForDate()", gamertag);
@@ -707,22 +715,10 @@ export class SCFirebase
 	 * @param matchID the match ID
 	 * @returns the match
 	 */
-	public async SetMatch(matchID: string, match: AutocodeMatch): Promise<void>
+	public async SetMatch(matchID: string, match: MatchSchema): Promise<void>
 	{
 		Debugger.Print("SCFirebase", "SetMatch()", matchID);
 		await this.__update(`match/${matchID}`, match);
-	}
-
-	/**
-	 * Sets an array of recent matches for the given gamertag
-	 * @param gamertag the gamertag to set the recent matches for
-	 * @param matches the array of Autocode player matches
-	 */
-	public async SetRecentMatches(gamertag: string, matches: AutocodePlayerMatch[]): Promise<void>
-	{
-		Debugger.Print("SCFirebase", "SetRecentMatches()", gamertag);
-		const abridged = matches.map(match => Converter.PlayerMatchToRecentMatch(match));
-		await this.__set(`recent/${gamertag}`, abridged);
 	}
 	//#endregion
 
@@ -745,15 +741,15 @@ export class SCFirebase
 	/**
 	 * Sets the MMR for the gamertag into Firebase
 	 * @param gamertag the gamertag
-	 * @param season the season
+	 * @param season the CSR season identifier
 	 * @param data the data to save
 	 */
-	public async SetCSRS(gamertag: string, season?: number, data?: Partial<AutocodeCSRSData>[]): Promise<void>
+	public async SetCSRS(gamertag: string, season?: string, data?: Partial<CSRDataSchema>[]): Promise<void>
 	{
 		if (!data) { return; }
 		Debugger.Print("SCFirebase", "SetCSRS()", gamertag);
 		
-		if (!season || season === -1) { await this.__set(`csrs/${gamertag}/current`, data); }
+		if (!season) { await this.__set(`csrs/${gamertag}/current`, data); }
 		else { await this.__set(`csrs/${gamertag}/season/${season}`, data); }
 	}
 	//#endregion

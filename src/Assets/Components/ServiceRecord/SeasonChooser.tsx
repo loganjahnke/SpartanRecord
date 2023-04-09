@@ -1,15 +1,17 @@
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
-import { useState } from "react";
+import { HaloDotAPISeason } from "../../../Database/Schemas/AutocodeMetadata";
 
 interface ServiceRecordFiltersProps
 {
-	setSeason: (season: number) => void;
+	season: string;
+	setSeason: (season: string) => void;
+	seasons: HaloDotAPISeason[];
+	hideAll?: boolean;
 }
 
 export function SeasonChooser(props: ServiceRecordFiltersProps)
 {
-	const { setSeason } = props;
-	const [season, chooseSeason] = useState<HTMLElement>((-1 as unknown as HTMLElement));
+	const { setSeason, seasons, hideAll, season } = props;
 
 	/**
 	 * When the select is changed
@@ -17,22 +19,17 @@ export function SeasonChooser(props: ServiceRecordFiltersProps)
 	 */
 	function handleSeasonChange(event: SelectChangeEvent<HTMLElement>)
 	{
-		const element = event.target.value as HTMLElement;
-		if (element)
-		{
-			chooseSeason(element);
-			setSeason(+element);
-		}
+		let element = event.target.value as string;
+		if (element === "All") { element = ""; }
+		setSeason(element as any as string);
 	}
 
 	return (
 		<FormControl size="small">
 			<InputLabel>Season</InputLabel>
-			<Select value={season} label="Season" onChange={handleSeasonChange}>
-				<MenuItem value={-1}>All</MenuItem>
-				<MenuItem value={1}>Season 1: Heroes of Reach</MenuItem>
-				<MenuItem value={2}>Season 2: Lone Wolves</MenuItem>
-				<MenuItem value={3}>Season 3: Echoes Within</MenuItem>
+			<Select value={(season as any === "" ? "All" : season as any) as HTMLElement} label="Season" onChange={handleSeasonChange}>
+				{!hideAll && <MenuItem value={"All"}>All</MenuItem>}
+				{seasons.map(season => <MenuItem value={season.properties.identifier}>Season {season.id}: {season.name}</MenuItem>)}
 			</Select>
 		</FormControl>
 	);

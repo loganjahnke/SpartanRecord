@@ -1,5 +1,5 @@
-import { AutocodeAppearance } from "../../Database/Schemas/AutocodeAppearance";
-import { AutocodeMultiplayerServiceRecord } from "../../Database/Schemas/AutocodeMultiplayerServiceRecord";
+import { AppearanceSchema } from "../../Database/Schemas/AppearanceSchema";
+import { ServiceRecordSchema } from "../../Database/Schemas/ServiceRecordSchema";
 import { MMR } from "../Pieces/MMR";
 import { Appearance } from "./Appearance";
 import { CampaignRecord } from "./CampaignRecord";
@@ -25,16 +25,15 @@ export class Player
     /** Last match ID */
     public lastMatchID: string;
     /** The raw appearance data */
-    public appearanceData?: AutocodeAppearance;
+    public appearanceData?: AppearanceSchema;
     /** A hashset with the seasons that a player has statistics for in Firebase */
     public hasStatsForSeason: Set<number>;
     /** The raw service record data */
-    private _serviceRecordData?: AutocodeMultiplayerServiceRecord;
+    private _serviceRecordData?: ServiceRecordSchema;
     public get serviceRecordData() { return this._serviceRecordData; }
-    public set serviceRecordData(value: AutocodeMultiplayerServiceRecord | undefined) 
+    public set serviceRecordData(value: ServiceRecordSchema | undefined) 
     { 
         this._serviceRecordData = value;
-        this.isPrivate = !(value?.additional?.privacy?.public ?? true);
     }
     /** Is this player private? */
     public isPrivate: boolean = false;

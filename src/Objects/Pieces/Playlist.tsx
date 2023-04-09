@@ -1,4 +1,4 @@
-import { AutocodePlaylist } from "../../Database/Schemas/AutocodePlayerMatch";
+import { PlaylistSchema } from "../../Database/Schemas/PlayerMatchSchema";
 import { Asset } from "./Asset";
 
 export class Playlist
@@ -22,12 +22,12 @@ export class Playlist
         return this.name.substring(colon + 2);
     }
 
-    constructor(data?: AutocodePlaylist)
+    constructor(data?: PlaylistSchema)
     {
         this.name = data?.name ?? "";
-        this.asset = new Asset(data?.asset);
+        this.asset = new Asset(data?.image_urls);
         this.queue = data?.properties?.queue ?? "";
         this.input = data?.properties?.input ?? "";
-        this.ranked = (data?.properties?.ranked ?? false) || this.name === "Ranked FFA";
+        this.ranked = (data?.attributes?.ranked ?? false) || this.name === "Ranked FFA";
     }
 }

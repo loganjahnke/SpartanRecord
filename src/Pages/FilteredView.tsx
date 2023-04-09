@@ -17,7 +17,7 @@ import { ViewProps } from "./Props/ViewProps";
 import { ChipFilters } from "../Assets/Components/ServiceRecord/ChipFilters";
 import { KillBreakdownCard } from "../Assets/Components/Breakdowns/KillBreakdownCard";
 import { TopMedals } from "../Assets/Components/Medals/TopMedals";
-import { AutocodePlaylist, AutocodeVariant } from "../Database/Schemas/AutocodeMetadata";
+import { HaloDotAPIPlaylist, HaloDotAPICategory, HaloDotAPISeason } from "../Database/Schemas/AutocodeMetadata";
 import { TitleCard } from "../Assets/Components/Cards/TitleCard";
 import { SeasonChooser } from "../Assets/Components/ServiceRecord/SeasonChooser";
 import { SRFilter } from "../Objects/Pieces/SRFilter";
@@ -39,24 +39,33 @@ export function FilteredView(props: ViewProps)
 	const [showPerMatch, setShowPerMatch] = useState(false);
     const [sr, setSR] = useState<ServiceRecord | undefined>();
 
-    const [selectedPlaylist, setSelectedPlaylist] = useState<AutocodePlaylist | undefined>();
-	const [playlists, setPlaylists] = useState<AutocodePlaylist[] | undefined>([]);
+    const [selectedPlaylist, setSelectedPlaylist] = useState<HaloDotAPIPlaylist | undefined>();
+	const [playlists, setPlaylists] = useState<HaloDotAPIPlaylist[] | undefined>([]);
 	
-	const [selectedVariant, setSelectedVariant] = useState<AutocodeVariant | undefined>();
-	const [variants, setVariants] = useState<AutocodeVariant[] | undefined>([]);
+	const [selectedVariant, setSelectedVariant] = useState<HaloDotAPICategory | undefined>();
+	const [variants, setVariants] = useState<HaloDotAPICategory[] | undefined>([]);
 
 	const [ranks, setRanks] = useState<string[] | undefined>([]);
 
 	const [selectedFBFilter, setSelectedFBFilter] = useState<SRFilter | undefined>();
 	const [fbFilters, setFBFilters] = useState<SRFilter[] | undefined>([]);
 	
-	const [season, setSeason] = useState(-1);
+	const [season, setSeason] = useState("");
+	const [seasons, setSeasons] = useState<HaloDotAPISeason[]>([]);
 	//#endregion
 
 	const loadData = useCallback(async () => 
 	{		
 		// Check if we need to check Firebase or HaloDotAPI
 		setLoadingMessage("Loading Filters");
+
+		// Get seasons
+		if (!seasons || seasons.length === 0)
+		{
+			setSeasons(await app.GetSeasons());
+			const curr = await app.GetCurrentSeason();
+			if (curr) { setSeason(curr.properties.identifier); }
+		}
 		
 		// Get player's service record
 		if (gamertag && node)
@@ -81,7 +90,7 @@ export function FilteredView(props: ViewProps)
 			}
 			else if (node === ServiceRecordFilter.Ranked)
 			{
-				setSR(await app.GetServiceRecordFromAutocode(gamertag, season, undefined, undefined, ServiceRecordType.ranked));
+				setSR(await app.GetServiceRecordFromAutocode(gamertag, "", undefined, undefined, ServiceRecordType.ranked));
 				//setRanks(["Solo-Duo MnK", "Solo-Duo Controller", "Open Crossplay"]);
 				setRanks(undefined);
 				setVariants(undefined);
@@ -94,7 +103,7 @@ export function FilteredView(props: ViewProps)
 			}
 			else if (node === ServiceRecordFilter.Social)
 			{
-				setSR(await app.GetServiceRecordFromAutocode(gamertag, season, undefined, undefined, ServiceRecordType.social));
+				setSR(await app.GetServiceRecordFromAutocode(gamertag, "", undefined, undefined, ServiceRecordType.social));
 				setRanks(undefined);
 				setVariants(undefined);
 				setPlaylists(undefined);
@@ -103,6 +112,30 @@ export function FilteredView(props: ViewProps)
 				setSelectedFBFilter(undefined);
 				setFBFilters(undefined);
 				switchTab(undefined, SRTabs.Social);
+			}
+			else if (node === ServiceRecordFilter.Customs)
+			{
+				setSR(await app.GetServiceRecordFromAutocode(gamertag, "", undefined, undefined, ServiceRecordType.custom));
+				setRanks(undefined);
+				setVariants(undefined);
+				setPlaylists(undefined);
+				setSelectedVariant(undefined);
+				setSelectedPlaylist(undefined);
+				setSelectedFBFilter(undefined);
+				setFBFilters(undefined);
+				switchTab(undefined, SRTabs.SRCustoms);
+			}
+			else if (node === ServiceRecordFilter.Local)
+			{
+				setSR(await app.GetServiceRecordFromAutocode(gamertag, "", undefined, undefined, ServiceRecordType.local));
+				setRanks(undefined);
+				setVariants(undefined);
+				setPlaylists(undefined);
+				setSelectedVariant(undefined);
+				setSelectedPlaylist(undefined);
+				setSelectedFBFilter(undefined);
+				setFBFilters(undefined);
+				switchTab(undefined, SRTabs.SRLocal);
 			}
 			else if (node === ServiceRecordFilter.Maps || node === ServiceRecordFilter.Outcomes)
 			{
@@ -122,7 +155,7 @@ export function FilteredView(props: ViewProps)
 		}
 
 		setLoadingMessage("");
-	}, [app, gamertag, node, season, switchTab, setLoadingMessage, updatePlayer]);
+	}, [app, gamertag, node, seasons, season, setSeasons, setSeason, switchTab, setLoadingMessage, updatePlayer]);
 
 	const loadFilteredSR = useCallback(async () => 
 	{		
@@ -134,14 +167,14 @@ export function FilteredView(props: ViewProps)
 			if (node === ServiceRecordFilter.Playlist)
 			{
 				setSR(await app.GetServiceRecordFromAutocode(gamertag, season, filter));
-				setSelectedPlaylist(playlists?.filter(playlist => playlist.asset.id === filter)[0]);
+				setSelectedPlaylist(playlists?.filter(playlist => playlist.id === filter)[0]);
 				setSelectedVariant(undefined);
 				setSelectedFBFilter(undefined);
 			}
 			else if (node === ServiceRecordFilter.Variant)
 			{
 				setSR(await app.GetServiceRecordFromAutocode(gamertag, season, undefined, filter));
-				setSelectedVariant(variants?.filter(variant => variant.category_id === +filter)[0]);
+				setSelectedVariant(variants?.filter(variant => variant.id === +filter)[0]);
 				setSelectedPlaylist(undefined);
 				setSelectedFBFilter(undefined);
 			}
@@ -210,7 +243,7 @@ export function FilteredView(props: ViewProps)
 					{/* Top */}
 					<Grid item xs={12}>
 						<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
-							{node !== ServiceRecordFilter.Maps && node !== ServiceRecordFilter.Outcomes && <SeasonChooser setSeason={setSeason} />}
+							{(node === ServiceRecordFilter.Playlist || node === ServiceRecordFilter.Variant) && <SeasonChooser season={season} seasons={seasons} setSeason={setSeason} hideAll={node === ServiceRecordFilter.Playlist} />}
 							<Box sx={{ flexGrow: 1 }}></Box>
 							<ServiceRecordFilters setPerMatch={setShowPerMatch} />
 						</Box>
@@ -226,7 +259,7 @@ export function FilteredView(props: ViewProps)
 						{/* Far left */}
 						<Grid container item spacing={2} md={12} lg={6} xl={4} sx={{ alignContent: "flex-start" }}>
 							{node !== ServiceRecordFilter.Social && node !== ServiceRecordFilter.Ranked && node !== ServiceRecordFilter.Outcomes && <Grid item xs={12}>
-								<ImageCard image={selectedPlaylist?.asset?.thumbnail_url ?? selectedVariant?.thumbnail_url ?? (node === ServiceRecordFilter.Maps && selectedFBFilter ? (AllMaps as any)[selectedFBFilter.name]?.thumbnail_url : "")} title={selectedPlaylist?.name ?? selectedVariant?.name ?? selectedFBFilter?.name} />
+								<ImageCard image={selectedPlaylist?.image_urls?.hero ?? selectedVariant?.image_urls?.thumbnail ?? (node === ServiceRecordFilter.Maps && selectedFBFilter ? (AllMaps as any)[selectedFBFilter.name]?.thumbnail_url : "")} title={selectedPlaylist?.name ?? selectedVariant?.name ?? selectedFBFilter?.name} />
 							</Grid>}
 							{node === ServiceRecordFilter.Ranked && <Grid item xs={12}><TitleCard title="Ranked"></TitleCard></Grid>}
 							{node === ServiceRecordFilter.Social && <Grid item xs={12}><TitleCard title="Social"></TitleCard></Grid>}

@@ -11,6 +11,7 @@ import { ServiceRecordGrid } from "../Assets/Components/ServiceRecord/ServiceRec
 import { SR } from "../Objects/Helpers/Statics/SR";
 import { Player } from "../Objects/Model/Player";
 import { Debugger } from "../Objects/Helpers/Debugger";
+import { HaloDotAPISeason } from "../Database/Schemas/AutocodeMetadata";
 
 export function PlayerView(props: ViewProps)
 {
@@ -22,7 +23,8 @@ export function PlayerView(props: ViewProps)
 	//#region State
 	const [historicStats, setHistoricStats] = useState<ServiceRecord[]>([]);
 	const [showPerMatch, setShowPerMatch] = useState(false);
-	const [season, setSeason] = useState(-1);
+	const [season, setSeason] = useState("");
+	const [seasons, setSeasons] = useState<HaloDotAPISeason[]>([]);
 	//#endregion
 
 	/**
@@ -69,8 +71,11 @@ export function PlayerView(props: ViewProps)
 			return; 
 		}
 
+		// Get the current season
+		const currSeason = await app.GetCurrentSeason();
+
 		// If we already have this data, don't bother reloading from HaloDotAPI
-		if (season !== undefined && season !== -1 && season < SR.Season && await app.DoesPlayerHavePrevSeasons(gamertag))
+		if (season && season !== currSeason?.properties.identifier && await app.DoesPlayerHavePrevSeasons(gamertag))
 		{ 
 			clearLoadingMessages();
 			return; 
@@ -121,7 +126,7 @@ export function PlayerView(props: ViewProps)
 	const loadHistoricStatistics = useCallback(async (currHistoricStats?: ServiceRecord[]) =>
 	{
 		// If we are already syncing this gamertag, quit early
-		if (!gamertag || (season !== undefined && season !== -1)) 
+		if (!gamertag || season)
 		{ 
 			clearLoadingMessages();
 			return; 
@@ -129,6 +134,11 @@ export function PlayerView(props: ViewProps)
 
 		// Update loading message
 		setBackgroundLoadingProgress("Loading historic statistics");
+
+		// Get the seasons
+		const allSeasons = await app.GetSeasons();
+		const currentSeason = await app.GetCurrentSeason();
+		if (!currentSeason) { return; }
 
 		// Only update current season since we have the previous ones
 		if (currHistoricStats && currHistoricStats.length > 0 && await app.DoesPlayerHavePrevSeasons(gamertag))
@@ -140,11 +150,11 @@ export function PlayerView(props: ViewProps)
 			prevSRs.pop();
 
 			// Get data from HaloDotAPI, update Firebase
-			const sr = await app.GetServiceRecordData(gamertag, SR.Season);
-			await app.SetPreviousSeasonStats(gamertag, SR.Season, sr);
+			const sr = await app.GetServiceRecordData(gamertag, currentSeason.properties.identifier);
+			await app.SetPreviousSeasonStats(gamertag, currentSeason.properties.identifier, sr);
 
 			// Add to prevSRs
-			prevSRs.push(new ServiceRecord(sr));
+			prevSRs.push(new ServiceRecord(sr, currentSeason.properties.identifier));
 
 			// Update state
 			setHistoricStats(prevSRs);
@@ -154,13 +164,13 @@ export function PlayerView(props: ViewProps)
 
 		// Loop through all old seasons if we don't have this cached in Firebase
 		const prevSRs = [];
-		for (let i = 1; i <= SR.Season; i++)
+		for (const s of allSeasons)
 		{
-			Debugger.Simple("PlayerView", "loadHistoricStatistics()", "Getting season " + i + " from HaloDotAPI");
+			Debugger.Simple("PlayerView", "loadHistoricStatistics()", "Getting season " + s.properties.identifier + " from HaloDotAPI");
 
-			const sr = await app.GetServiceRecordData(gamertag, i);
-			await app.SetPreviousSeasonStats(gamertag, i, sr);
-			prevSRs.push(new ServiceRecord(sr));
+			const sr = await app.GetServiceRecordData(gamertag, s.properties.identifier);
+			await app.SetPreviousSeasonStats(gamertag, s.properties.identifier, sr);
+			prevSRs.push(new ServiceRecord(sr, s.properties.identifier));
 		}
 		
 		// Show background loading message
@@ -179,6 +189,13 @@ export function PlayerView(props: ViewProps)
 
 		// Update tab
 		switchTab(undefined, SRTabs.ServiceRecord);
+
+		// Load available seasons
+		if (!seasons || seasons.length === 0) 
+		{ 
+			const allSeasons = await app.GetSeasons();
+			setSeasons(allSeasons);
+		}
 
 		// Get from firebase
 		const firebasePlayer = await loadFromFirebase();
@@ -226,12 +243,13 @@ export function PlayerView(props: ViewProps)
 				{player && <ServiceRecordGrid 
 					serviceRecord={player.serviceRecord} 
 					isAllowed={isAllowed}
+					season={season}
+					seasons={seasons}
+					setSeason={setSeason}
 					csrs={player.csrs}
 					historicStats={historicStats}
 					showPerMatch={showPerMatch}
-					setSeason={setSeason}
 					setShowPerMatch={setShowPerMatch}
-					season={season}
 					onMetricChanged={() => app.logger.LogChangeSeasonMetric()} 
 				/>}
 			</Box>

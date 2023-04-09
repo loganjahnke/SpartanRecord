@@ -1,4 +1,4 @@
-import { AutocodeOddballMode } from "../../Database/Schemas/AutocodeMultiplayerServiceRecord";
+import { OddballSchema } from "../../Database/Schemas/ServiceRecordSchema";
 
 export class Oddball
 {
@@ -9,7 +9,7 @@ export class Oddball
 	public skullScoringTicks: number = 0;
 	public timeAsSkullCarrier: string = "";
 
-	constructor(data?: AutocodeOddballMode)
+	constructor(data?: OddballSchema)
 	{
 		if (!data) { return; }
 		this.killsAsSkullCarrier = data.kills_as_skull_carrier;
