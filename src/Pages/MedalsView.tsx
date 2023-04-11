@@ -90,24 +90,24 @@ export function MedalsView(props: ViewProps)
 					<Grid item xs={12} sx={{ mt: 4 }}>
 						<Typography variant="h2">Game Modes</Typography>
 					</Grid>
-					{/* <Grid item xs={12} md={6} xl={4}>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Assault} medals={serviceRecord.medals} showAll={showAll} />
-					</Grid> */}
+					</Grid>
 					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.CTF} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
-					{/* <Grid item xs={12} md={6} xl={4}>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Infection} medals={serviceRecord.medals} showAll={showAll} />
-					</Grid> */}
+					</Grid>
 					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Elimination} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
-					{/* <Grid item xs={12} md={6} xl={4}>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Extraction} medals={serviceRecord.medals} showAll={showAll} />
-					</Grid> */}
-					{/* <Grid item xs={12} md={6} xl={4}>
+					</Grid>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Juggernaut} medals={serviceRecord.medals} showAll={showAll} />
-					</Grid> */}
+					</Grid>
 					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.KingOfTheHill} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
@@ -120,9 +120,9 @@ export function MedalsView(props: ViewProps)
 					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.Zone} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
-					{/* <Grid item xs={12} md={6} xl={4}>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.VIP} medals={serviceRecord.medals} showAll={showAll} />
-					</Grid> */}
+					</Grid>
 					{/* Weapons and Equipment */}
 					<Grid item xs={12} sx={{ mt: 4 }}>
 						<Typography variant="h2">Weapons and Equipment</Typography>
