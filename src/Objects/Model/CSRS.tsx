@@ -22,8 +22,8 @@ export class CSRS
     constructor(data?: CSRDataSchema)
     {
         this.name = data?.name ?? "";
-        this.queue = data?.properties.queue ?? "Unknown";
-        this.input = data?.properties.input ?? "Unknown";
+        this.queue = data?.properties?.queue ?? (data as any)?.queue ?? "Unknown";
+        this.input = data?.properties?.input ?? (data as any)?.input ?? "Unknown";
         this.ranks = new Ranks(data?.response);
     }
 
