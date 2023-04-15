@@ -106,7 +106,7 @@ export class PlayerMatchPlayer
         this.rank = data?.rank ?? -1;
         this.won = data?.outcome === "win" || data?.outcome === "won";
         this.outcome = this.won ? HaloOutcome.Win
-			: data?.outcome === "left" ? HaloOutcome.Left
+			: data?.outcome === "dnf" ? HaloOutcome.Left
 			: data?.outcome === "loss" ? HaloOutcome.Loss
 			: HaloOutcome.Draw;
     }

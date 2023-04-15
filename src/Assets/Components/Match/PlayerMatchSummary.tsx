@@ -115,7 +115,7 @@ export function PlayerMatchSummary(props: MatchSummaryProps)
 						<Box sx={{ backgroundColor: ArrowheadTheme.box, width: "100%", ml: "-16px", padding: "8px 16px 4px 16px", mt: -2 }}>
 							<Typography variant="h5" component="div" sx={{ textAlign: "center" }}>{match.playlist.name}</Typography>
 							<Typography variant="h6" component="div" sx={{ textAlign: "center" }}>{match.variant.name.indexOf(":") !== -1 ? match.variant.name.substring(match.variant.name.indexOf(":") + 1) : match.variant.name}</Typography>
-							<Typography variant="caption" component="div" sx={{ textAlign: "center" }}>Game Mode Odds: <Typography variant="subtitle1" component="span">{match.odds}%</Typography></Typography>
+							{match.odds > 0 && <Typography variant="caption" component="div" sx={{ textAlign: "center" }}>Game Mode Odds: <Typography variant="subtitle1" component="span">{match.odds}%</Typography></Typography>}
 						</Box>
 						<Box sx={{
 							pt: 1,
