@@ -3,6 +3,7 @@ import { useState, useRef, useCallback } from "react";
 import { Converter } from "../../../Objects/Helpers/Statics/Converter";
 import { Player } from "../../../Objects/Model/Player";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
+import { Image } from "../Common/Image";
 
 interface PlayerChipProps
 {
@@ -25,7 +26,7 @@ export function PlayerChip(props: PlayerChipProps)
     }, [setTextColor]);
 
 	return (
-		<Chip sx={{ backgroundPosition: "center", backgroundImage: `url(${player.appearance.nameplateURL})`, margin: "4px 4px", p: 0.5, height: "36px" }} icon={<img  height="24px" src={player.appearance.emblemURL} alt="Emblem" crossOrigin="anonymous" />} onClick={onClick ? () => onClick(player.gamertag) : undefined} 
+		<Chip sx={{ backgroundPosition: "center", backgroundImage: `url(${player.appearance.nameplateURL})`, margin: "4px 4px", p: 0.5, height: "36px" }} icon={<Image height="24px" src={player.appearance.emblemURL} alt="Emblem" crossOrigin="anonymous" />} onClick={onClick ? () => onClick(player.gamertag) : undefined} 
 			label={
 				<>
 					<Box sx={{ display: "none" }}><img ref={nameplateRef} src={player.appearance.nameplateURL} alt="nameplate" width="256px" height="48px" onLoad={onImageLoad} crossOrigin="anonymous" /></Box>
