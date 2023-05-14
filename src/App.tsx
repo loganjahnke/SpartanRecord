@@ -30,6 +30,7 @@ import { Donate } from "./Pages/Donate";
 import { LeaderboardView } from "./Pages/LeaderboardView";
 import { CompareView } from "./Pages/Compare/CompareView";
 import { BetaSingleMatchView } from "./Pages/Matches/BetaSingleMatchView";
+import { PlaylistsView } from "./Pages/Playlists/PlaylistsView";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -125,6 +126,9 @@ const App = () =>
 				<Routes>
 					{/* Home Views */}
 					<Route path="/" element={<HomeView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
+
+					{/* Playlists Views */}
+					<Route path="/playlists" element={<PlaylistsView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
 					
 					{/* Compare Views */}
 					<Route path="/compare/:gamertag1" element={<CompareView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />

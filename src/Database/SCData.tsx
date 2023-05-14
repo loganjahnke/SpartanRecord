@@ -15,6 +15,7 @@ import { AutocodeMap, AutocodeMedal, HaloDotAPIPlaylist, AutocodeTeam, HaloDotAP
 import { ServiceRecordSchema } from "./Schemas/ServiceRecordSchema";
 import { FirebaseBest } from "./Schemas/FirebaseBest";
 import { SCPostman } from "./SCPostman";
+import { PlaylistWeights } from "../Objects/Pieces/PlaylistWeights";
 
 /** The types of service records */
 export enum ServiceRecordType
@@ -414,6 +415,8 @@ export class SCData
 	public GetMaps = async (): Promise<AutocodeMap[]> => this.halodapi.GetMaps();
 	/** Gets the playlists */
 	public GetPlaylists = async (): Promise<HaloDotAPIPlaylist[]> => this.halodapi.GetPlaylists();
+    /** Gets the playlist weights */
+	public GetPlaylistWeights = async (): Promise<Map<string, PlaylistWeights>> => this.halodapi.GetPlaylistWeights();
 	/** Gets the game variants */
 	public GetVariants = async (): Promise<HaloDotAPICategory[]> => this.halodapi.GetVariants();
 	/** Gets the medals */

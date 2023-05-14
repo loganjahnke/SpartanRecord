@@ -188,12 +188,12 @@ export function PlayerMatchSummary(props: MatchSummaryProps)
 									<Box sx={{ display: "flex", alignItems: "center" }}>
 										<Typography variant="h4" sx={{ ml: hideExpected ? 0 : 1 }}>{match.player.summary.deaths}</Typography>
 										{!hideExpected && <Box sx={{ ml: "2px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-											{match.player.summary.deaths >= match.player.deathExpectations.expected && <Typography sx={{ fontSize: "10px", mb: "-4px", mt: "4px" }}>-{Math.round(match.player.summary.deaths - match.player.deathExpectations.expected)}</Typography>}
+											{match.player.summary.deaths < match.player.deathExpectations.expected && <Typography sx={{ fontSize: "10px", mb: "-4px", mt: "4px" }}>+{Math.round(match.player.deathExpectations.expected - match.player.summary.deaths)}</Typography>}
 											{match.player.summary.deaths > match.player.deathExpectations.expected 
-												? <KeyboardArrowDownIcon fontSize="small" sx={{ color: ArrowheadTheme.good }} /> 
-												: <KeyboardArrowUpIcon fontSize="small" sx={{ color: ArrowheadTheme.bad }} />
+												? <KeyboardArrowUpIcon fontSize="small" sx={{ color: ArrowheadTheme.bad }} />
+												: <KeyboardArrowDownIcon fontSize="small" sx={{ color: ArrowheadTheme.good }} /> 
 											}
-											{match.player.summary.deaths < match.player.deathExpectations.expected && <Typography sx={{ fontSize: "10px", mt: "-4px", mb: "2px" }}>+{Math.round(match.player.deathExpectations.expected - match.player.summary.deaths)}</Typography>}
+											{match.player.summary.deaths >= match.player.deathExpectations.expected && <Typography sx={{ fontSize: "10px", mt: "-4px", mb: "2px" }}>{Math.round(match.player.deathExpectations.expected - match.player.summary.deaths)}</Typography>}
 										</Box>}
 									</Box>									
 								</Box>
