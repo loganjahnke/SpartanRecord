@@ -9,9 +9,10 @@ import { CSRSchema } from "./Schemas/CSRSchema";
 import { AutocodeMap, AutocodeMedal, HaloDotAPIPlaylist, HaloDotAPISeason, AutocodeTeam, HaloDotAPICategory, HaloDotAPIStoreOffering, HaloDotAPIStore } from "./Schemas/AutocodeMetadata";
 import { ServiceRecordSchema } from "./Schemas/ServiceRecordSchema";
 import axios from "axios";
-import { PlayerMatchSchema, PlayerMatchWithOddsSchema } from "./Schemas/PlayerMatchSchema";
+import { PlayerMatchWithOddsSchema } from "./Schemas/PlayerMatchSchema";
 import { MatchSchema } from "./Schemas/MatchSchema";
 import { PlaylistWeights } from "../Objects/Pieces/PlaylistWeights";
+import { HaloDotAPIClip, HaloDotAPIClips } from "./Schemas/HaloDotAPIClip";
 
 export class SCPostman
 {
@@ -280,6 +281,16 @@ export class SCPostman
 	{
 		const result = await this.__fetch("/games/halo-infinite/stores/main") as HaloDotAPIStore;
 		return result.data.offerings;
+	}
+
+	/**
+	 * Gets the clips for a gamertag
+	 * @returns the clips
+	 */
+	public async GetClips(gamertag: string): Promise<HaloDotAPIClip[]>
+	{
+		const result = await this.__fetch(`/games/halo-infinite/media/players/${gamertag}/clips`) as HaloDotAPIClips;
+		return result.data;
 	}
 
 	/**

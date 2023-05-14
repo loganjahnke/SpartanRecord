@@ -32,6 +32,7 @@ import { CompareView } from "./Pages/Compare/CompareView";
 import { BetaSingleMatchView } from "./Pages/Matches/BetaSingleMatchView";
 import { PlaylistsView } from "./Pages/Playlists/PlaylistsView";
 import { StoreView } from "./Pages/Store/StoreView";
+import { ClipsView } from "./Pages/Clips/ClipsView";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -131,6 +132,9 @@ const App = () =>
 					{/* Metadata Views */}
 					<Route path="/playlists" element={<PlaylistsView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
 					<Route path="/store" element={<StoreView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
+
+					{/* Halo Clips */}
+					<Route path="/clips/:gamertag" element={<ClipsView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />
 					
 					{/* Compare Views */}
 					<Route path="/compare/:gamertag1" element={<CompareView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />

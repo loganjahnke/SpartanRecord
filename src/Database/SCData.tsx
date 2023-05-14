@@ -16,6 +16,7 @@ import { ServiceRecordSchema } from "./Schemas/ServiceRecordSchema";
 import { FirebaseBest } from "./Schemas/FirebaseBest";
 import { SCPostman } from "./SCPostman";
 import { PlaylistWeights } from "../Objects/Pieces/PlaylistWeights";
+import { HaloDotAPIClip } from "./Schemas/HaloDotAPIClip";
 
 /** The types of service records */
 export enum ServiceRecordType
@@ -425,6 +426,8 @@ export class SCData
 	public GetTeams = async (): Promise<AutocodeTeam[]> => this.halodapi.GetTeams();
     /** Gets the store */
 	public GetStore = async (): Promise<HaloDotAPIStoreOffering[]> => this.halodapi.GetStore();
+    /** Gets the clips for a gamertag */
+	public GetClips = async (gamertag: string): Promise<HaloDotAPIClip[]> => this.halodapi.GetClips(gamertag);
     //#endregion
 
     //#region Leaderboards
