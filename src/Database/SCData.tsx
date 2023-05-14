@@ -11,7 +11,7 @@ import { SRFilter } from "../Objects/Pieces/SRFilter";
 import { Leaderboard, ServiceRecordFilter } from "./ArrowheadFirebase";
 import { Logger } from "./Logger";
 import { SCFirebase } from "./SCFirebase";
-import { AutocodeMap, AutocodeMedal, HaloDotAPIPlaylist, AutocodeTeam, HaloDotAPICategory, HaloDotAPISeason } from "./Schemas/AutocodeMetadata";
+import { AutocodeMap, AutocodeMedal, HaloDotAPIPlaylist, AutocodeTeam, HaloDotAPICategory, HaloDotAPISeason, HaloDotAPIStoreOffering } from "./Schemas/AutocodeMetadata";
 import { ServiceRecordSchema } from "./Schemas/ServiceRecordSchema";
 import { FirebaseBest } from "./Schemas/FirebaseBest";
 import { SCPostman } from "./SCPostman";
@@ -423,6 +423,8 @@ export class SCData
 	public GetMedals = async (): Promise<AutocodeMedal[]> => this.halodapi.GetMedals();
 	/** Gets the teams */
 	public GetTeams = async (): Promise<AutocodeTeam[]> => this.halodapi.GetTeams();
+    /** Gets the store */
+	public GetStore = async (): Promise<HaloDotAPIStoreOffering[]> => this.halodapi.GetStore();
     //#endregion
 
     //#region Leaderboards

@@ -5,7 +5,7 @@ import { Player } from "../../../Objects/Model/Player";
 
 import PrimaryLogo from "../../Images/Primary/Spartan-Record-Logo-Primary-White.png";
 
-import { BestMatchIcon, MapIcon, MatchesIcon, MatchOutcomeIcon, MedalsIcon, ModesIcon, PlaylistsIcon, RankedIcon, SearchIcon, ServiceRecordIcon, SocialIcon, VariantsIcon, SpartanCompanyIcon } from "../../Icons/CustomIcons";
+import { MatchesIcon, MedalsIcon, ModesIcon, PlaylistsIcon, RankedIcon, SearchIcon, ServiceRecordIcon, SocialIcon, VariantsIcon, CreditsIcon } from "../../Icons/CustomIcons";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { UsbRounded, GamepadRounded, LeaderboardRounded, LockOutlined, CompareArrows } from "@mui/icons-material";
 
@@ -35,6 +35,7 @@ export enum SRTabs
 	Yesterday = "Yesterday",
 	Compare = "Compare",
 	ActivePlaylists = "Active Playlists",
+	Store = "Store",
 
 	None = "",
 }
@@ -143,6 +144,9 @@ export function AHDrawer(props: AHDrawerProps)
 			case SRTabs.ActivePlaylists:
 				switchTab(`/playlists`, newTab);
 				break;
+			case SRTabs.Store:
+				switchTab(`/store`, newTab);
+				break;
 			case SRTabs.None:
 				break;
 			default: 
@@ -202,6 +206,7 @@ export function AHDrawer(props: AHDrawerProps)
 					{/* <Tab value={SRTabs.Patreon} label={SRTabs.Patreon} icon={<EmojiEmotionsIcon />} iconPosition="start" />*/}
 					<Tab value={SRTabs.Leaderboard} label={SRTabs.Leaderboard} icon={<LeaderboardRounded />} iconPosition="start" />
 					<Tab value={SRTabs.ActivePlaylists} label={SRTabs.ActivePlaylists} icon={<PlaylistsIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Store} label={SRTabs.Store} icon={<CreditsIcon />} iconPosition="start" />
 					{/* <Tab value={SRTabs.SpartanCompany} label={<div>{SRTabs.SpartanCompany}<br/><Box sx={{ fontSize: "0.6rem", textTransform: "uppercase" }}>Beta</Box></div>} icon={<SpartanCompanyIcon />} iconPosition="start" /> */}
 				</Tabs>
 				: player && player.isPrivate ?
@@ -209,6 +214,7 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab value={SRTabs.Search} label={SRTabs.Search} icon={<SearchIcon />} iconPosition="start" />
 					<Tab value={SRTabs.ServiceRecord} label={SRTabs.ServiceRecord} icon={<LockOutlined />} iconPosition="start" />
 					<Tab value={SRTabs.ActivePlaylists} label={SRTabs.ActivePlaylists} icon={<PlaylistsIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Store} label={SRTabs.Store} icon={<CreditsIcon />} iconPosition="start" />
 					{/* <Tab value={SRTabs.SpartanCompany} label={<div>{SRTabs.SpartanCompany}<br/><Box sx={{ fontSize: "0.6rem", textTransform: "uppercase" }}>Beta</Box></div>} icon={<SpartanCompanyIcon />} iconPosition="start" /> */}
 				</Tabs>
 				: player && player.gamertag ?
@@ -234,12 +240,14 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab value={SRTabs.BestMatches} label={SRTabs.BestMatches} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
 					<Tab value={SRTabs.Leaderboard} label={SRTabs.Leaderboard} icon={<LeaderboardRounded />} iconPosition="start" />
 					<Tab value={SRTabs.ActivePlaylists} label={SRTabs.ActivePlaylists} icon={<PlaylistsIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Store} label={SRTabs.Store} icon={<CreditsIcon />} iconPosition="start" />
 					{/* <Tab value={SRTabs.SpartanCompany} label={<div>{SRTabs.SpartanCompany}<br/><Box sx={{ fontSize: "0.6rem", textTransform: "uppercase" }}>Beta</Box></div>} icon={<SpartanCompanyIcon />} iconPosition="start" /> */}
 				</Tabs>
 				:
 				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
 					<Tab value={SRTabs.Search} label={SRTabs.Search} icon={<SearchIcon />} iconPosition="start" />
 					<Tab value={SRTabs.ActivePlaylists} label={SRTabs.ActivePlaylists} icon={<PlaylistsIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Store} label={SRTabs.Store} icon={<CreditsIcon />} iconPosition="start" />
 					{/* <Tab value={SRTabs.SpartanCompany} label={<div>{SRTabs.SpartanCompany}<br/><Box sx={{ fontSize: "0.6rem", textTransform: "uppercase" }}>Beta</Box></div>} icon={<SpartanCompanyIcon />} iconPosition="start" /> */}
 				</Tabs>
 				}

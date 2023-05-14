@@ -73,3 +73,91 @@ export type HaloDotAPIPlaylist = {
 	rotation: Array<{ name: string, weight: number; }>;
 	availability: Array<{ start_date: Date; end_date: Date; }>;
 }
+
+export type HaloDotAPIStore = {
+	data: HaloDotAPIStoreData;
+}
+
+export type HaloDotAPIStoreData = {
+	id: string;
+	offerings: HaloDotAPIStoreOffering[];
+	expires_at: Date;
+}
+
+export type HaloDotAPIStoreOffering = {
+	id: string;
+	name: string;
+	description: string;
+	image_urls: {
+		offering: string;
+	};
+	attributes: HaloDotAPIStoreAttributes;
+	properties: HaloDotAPIStoreProperties;
+	items: HaloDotAPIStoreItem[];
+	currencies: Currency[];
+	prices: Price[];
+	expires_at: any;
+}
+
+export type HaloDotAPIStoreAttributes = {
+	quality: string
+	returning: boolean
+	new: boolean
+}
+
+export type HaloDotAPIStoreProperties = {
+	flair: {
+		text: string;
+		image_urls: {
+			icon?: string;
+			background?: string;
+		};
+	};
+	offering_image_hint: {
+		width: number;
+		height: number;
+	}
+}
+
+export type HaloDotAPIStoreItem = {
+	id: string;
+	name: string;
+	description: string;
+	image_urls: {
+		item: string;
+	};
+	attributes: {
+		quality: string;
+	};
+	properties: HaloDotAPIStoreItemProperties;
+};
+
+export type HaloDotAPIStoreItemProperties = {
+	type: string
+	amount: number
+	item_image_size: {
+		width: number;
+		height: number;
+	}
+	manufacturer: {
+		id: number;
+	}
+	season: {
+		id: number;
+	}
+};
+
+export interface Currency {
+	id: string
+	properties: {
+		amount: number;
+	}
+}
+
+export interface Price {
+	id: string
+	properties: {
+		cost: number;
+	}
+}
+  

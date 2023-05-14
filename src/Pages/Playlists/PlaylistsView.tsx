@@ -1,22 +1,15 @@
-import { Box, Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, Divider, FormControl, Grid, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, Toolbar, Typography } from "@mui/material";
+import { Box, Divider, FormControl, Grid, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useParams } from "react-router-dom";
 
 import { ViewProps } from "../Props/ViewProps";
-import { ServiceRecord } from "../../Objects/Model/ServiceRecord";
-import { Cookie } from "../../Objects/Helpers/Cookie";
 import { SRTabs } from "../../Assets/Components/Layout/AHDrawer";
-import { ServiceRecordGrid } from "../../Assets/Components/ServiceRecord/ServiceRecordGrid";
-import { SR } from "../../Objects/Helpers/Statics/SR";
-import { Player } from "../../Objects/Model/Player";
-import { Debugger } from "../../Objects/Helpers/Debugger";
-import { HaloDotAPIPlaylist, HaloDotAPISeason } from "../../Database/Schemas/AutocodeMetadata";
+import { HaloDotAPIPlaylist } from "../../Database/Schemas/AutocodeMetadata";
 import { ArrowheadTheme } from "../../Assets/Theme/ArrowheadTheme";
 import { PlaylistWeights } from "../../Objects/Pieces/PlaylistWeights";
+import { PlaylistCard } from "./Components/PlaylistCard";
 
 import "../../Assets/Styles/Views/Playlist.css";
-import { PlaylistCard } from "./Components/PlaylistCard";
 
 export function PlaylistsView(props: ViewProps)
 {
@@ -40,8 +33,7 @@ export function PlaylistsView(props: ViewProps)
 	}, [setLoadingMessage, setBackgroundLoadingProgress]);
 
 	/**
-	 * Loads the player from HaloDotAPI
-	 * @param currSR the current service record from Firebase
+	 * Loads the playlists from HaloDotAPI
 	 */
 	const loadPlaylists = useCallback(async () =>
 	{
@@ -69,7 +61,7 @@ export function PlaylistsView(props: ViewProps)
 		
 		// Load and render playlists
 		setLoadingMessage("Loading playlists");
-		await loadPlaylists()
+		await loadPlaylists();
 
 		// Clear loading messages
 		clearLoadingMessages();

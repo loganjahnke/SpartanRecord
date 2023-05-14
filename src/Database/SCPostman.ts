@@ -6,7 +6,7 @@ import { Player } from "../Objects/Model/Player";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { ServiceRecordType } from "./SCData";
 import { CSRSchema } from "./Schemas/CSRSchema";
-import { AutocodeMap, AutocodeMedal, HaloDotAPIPlaylist, HaloDotAPISeason, AutocodeTeam, HaloDotAPICategory } from "./Schemas/AutocodeMetadata";
+import { AutocodeMap, AutocodeMedal, HaloDotAPIPlaylist, HaloDotAPISeason, AutocodeTeam, HaloDotAPICategory, HaloDotAPIStoreOffering, HaloDotAPIStore } from "./Schemas/AutocodeMetadata";
 import { ServiceRecordSchema } from "./Schemas/ServiceRecordSchema";
 import axios from "axios";
 import { PlayerMatchSchema, PlayerMatchWithOddsSchema } from "./Schemas/PlayerMatchSchema";
@@ -270,6 +270,16 @@ export class SCPostman
 	{
 		const result = await this.__fetch("/games/halo-infinite/metadata/multiplayer/seasons");
 		return result.data as HaloDotAPISeason[];
+	}
+
+	/**
+	 * Gets the store
+	 * @returns the store items
+	 */
+	public async GetStore(): Promise<HaloDotAPIStoreOffering[]>
+	{
+		const result = await this.__fetch("/games/halo-infinite/stores/main") as HaloDotAPIStore;
+		return result.data.offerings;
 	}
 
 	/**

@@ -1,0 +1,19 @@
+._storeCardContent {
+	display: flex;
+	align-items: flex-start;
+}
+
+._storeName {
+	flex-grow: 1;
+}
+
+._storeCost {
+	margin-top: 4px;
+	display: flex;
+	align-items: center;
+	text-align: right;
+}
+
+._storeCreditIcon {
+	margin-right: 4px;
+}
