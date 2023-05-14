@@ -65,7 +65,7 @@ export function PlaylistsView(props: ViewProps)
 	const loadData = useCallback(async () => 
 	{
 		// Update tab
-		switchTab(undefined, SRTabs.ServiceRecord);
+		switchTab(undefined, SRTabs.ActivePlaylists);
 		
 		// Load and render playlists
 		setLoadingMessage("Loading playlists");
