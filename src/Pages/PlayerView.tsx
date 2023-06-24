@@ -51,7 +51,7 @@ export function PlayerView(props: ViewProps)
 		const player = await app.GetPlayerFromFirebase(gamertag, season, true);
 
 		// Update state
-		updatePlayer(player.gamertag, player.appearance, player.serviceRecord, player.csrs);
+		updatePlayer(player.gamertag, player.appearance, player.serviceRecord, player.csrs, player.careerRank);
 		setHistoricStats(player.historicStats ?? [new ServiceRecord(), new ServiceRecord(), new ServiceRecord()]);
 
 		return player;
@@ -98,7 +98,7 @@ export function PlayerView(props: ViewProps)
 		}
 
 		// Update state
-		updatePlayer(haloDotAPIPlayer.gamertag, haloDotAPIPlayer.appearance, haloDotAPIPlayer.serviceRecord, haloDotAPIPlayer.csrs, haloDotAPIPlayer.isPrivate);
+		updatePlayer(haloDotAPIPlayer.gamertag, haloDotAPIPlayer.appearance, haloDotAPIPlayer.serviceRecord, haloDotAPIPlayer.csrs, haloDotAPIPlayer.careerRank, haloDotAPIPlayer.isPrivate);
 
 		// Store into Firebase
 		await app.SetPlayerIntoFirebase(haloDotAPIPlayer, season, currSR);
@@ -241,7 +241,8 @@ export function PlayerView(props: ViewProps)
 					</Box>
 				}
 				{player && <ServiceRecordGrid 
-					serviceRecord={player.serviceRecord} 
+					serviceRecord={player.serviceRecord}
+					careerRank={player.careerRank}
 					isAllowed={isAllowed}
 					season={season}
 					seasons={seasons}

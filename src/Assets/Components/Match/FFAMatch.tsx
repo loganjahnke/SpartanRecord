@@ -82,11 +82,15 @@ export function FFAMatch(props: TeamsMatch)
 							}
 							{match.showPoints && <Compare category="Points" value1={myMatchPlayer.stats.totalPoints} value2={compareMatchPlayer.stats.totalPoints} />}
 							<Compare category="Kills" value1={myMatchPlayer.stats.summary.kills} value2={compareMatchPlayer.stats.summary.kills} />
-							<Compare category="Expected Kills" value1={myMatchPlayer.killExpectations.expected} value2={compareMatchPlayer.killExpectations.expected} />
+							{ myMatchPlayer.killExpectations.expected !== -1 && compareMatchPlayer.killExpectations.expected !== -1 &&
+								<Compare category="Expected Kills" value1={myMatchPlayer.killExpectations.expected} value2={compareMatchPlayer.killExpectations.expected} />
+							}
 							<Compare category="Assists" value1={myMatchPlayer.stats.summary.assists} value2={compareMatchPlayer.stats.summary.assists} />
 							<Compare category="Deaths" value1={myMatchPlayer.stats.summary.deaths} value2={compareMatchPlayer.stats.summary.deaths} lessIsBetter />
 							<Compare category="Damage" value1={myMatchPlayer.stats.damage.dealt} value2={compareMatchPlayer.stats.damage.dealt} />
-							<Compare category="MMR" value1={myMatchPlayer.mmr} value2={compareMatchPlayer.mmr} />
+							{ myMatchPlayer.mmr !== 0 && compareMatchPlayer.mmr !== 0 &&
+								<Compare category="MMR" value1={myMatchPlayer.mmr} value2={compareMatchPlayer.mmr} />
+							}
 						</CardContent>
 					</Card>
 				</Grid>

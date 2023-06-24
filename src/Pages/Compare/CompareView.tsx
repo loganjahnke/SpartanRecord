@@ -254,7 +254,7 @@ export function CompareView(props: ViewProps)
 		]);
 
 		// Update Player #1
-		updatePlayer(firebase1.gamertag, firebase1.appearance, firebase1.serviceRecord, firebase1.csrs, firebase1.isPrivate);
+		updatePlayer(firebase1.gamertag, firebase1.appearance, firebase1.serviceRecord, firebase1.csrs, firebase1.careerRank, firebase1.isPrivate);
 
 		// Need gamertag #2 to continue
 		if (!gamertag2) { clearLoadingMessages(); return; }
@@ -269,7 +269,7 @@ export function CompareView(props: ViewProps)
 		]);
 
 		// Update state
-		if (api1) { updatePlayer(api1.gamertag, api1.appearance, api1.serviceRecord, api1.csrs, api1.isPrivate); }
+		if (api1) { updatePlayer(api1.gamertag, api1.appearance, api1.serviceRecord, api1.csrs, api1.careerRank, api1.isPrivate); }
 		if (api2) { setPlayer2(api2); }
 
 		// Clear loading messages

@@ -43,6 +43,14 @@ export function TeamTable(props: TeamTableProps)
 
 	const bestTextColor = Converter.GetBestTextColor(team.color);
 
+	const sortedPlayers = match?.showPoints
+		? team.players.sort((a, b) => 
+		{
+			if (b.stats.totalPoints - a.stats.totalPoints === 0) { return b.stats.totalScore - a.stats.totalScore; }
+			return b.stats.totalPoints - a.stats.totalPoints;
+		})
+		: team.players.sort((a, b) => b.stats.totalScore - a.stats.totalScore);
+
 	if (!match) { return <></>; }
 	return (
 		<TableContainer component={Box} sx={{ backgroundColor: ArrowheadTheme.box, borderRadius: 3 }}>
@@ -62,7 +70,7 @@ export function TeamTable(props: TeamTableProps)
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{team.players.sort((a, b) => b.stats.totalScore - a.stats.totalScore).map((player, index) => (
+					{sortedPlayers.map((player, index) => (
 						<Row key={index} player={player} topSR={match.best} showPoints={match.showPoints} showRank={match.playlist.ranked} onGamertagClick={onGamertagClick} selectedGamertag={selectedGamertag} ffa={ffa} />
 					))}
 				</TableBody>

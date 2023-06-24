@@ -1,4 +1,5 @@
 import { AppearanceSchema } from "../../Database/Schemas/AppearanceSchema";
+import { CareerRankSchema, EmptyCareerRank } from "../../Database/Schemas/CareerRankSchema";
 import { ServiceRecordSchema } from "../../Database/Schemas/ServiceRecordSchema";
 import { MMR } from "../Pieces/MMR";
 import { Appearance } from "./Appearance";
@@ -22,6 +23,8 @@ export class Player
     public mmr: MMR;
     /** The player's CSRS */
     public csrs: CSRS[];
+    /** The career rank for the player */
+    public careerRank: CareerRankSchema;
     /** Last match ID */
     public lastMatchID: string;
     /** The raw appearance data */
@@ -46,6 +49,7 @@ export class Player
         this.appearance = appearance ?? new Appearance();
         this.mmr = mmr ?? new MMR();
         this.csrs = csrs ?? [];
+        this.careerRank = EmptyCareerRank();
         this.campaignRecord = campaignRecord;
         this.lastMatchID = "";
         this.hasStatsForSeason = new Set<number>();

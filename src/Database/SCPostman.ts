@@ -13,6 +13,7 @@ import { PlayerMatchWithOddsSchema } from "./Schemas/PlayerMatchSchema";
 import { MatchSchema } from "./Schemas/MatchSchema";
 import { PlaylistWeights } from "../Objects/Pieces/PlaylistWeights";
 import { HaloDotAPIClip, HaloDotAPIClips } from "./Schemas/HaloDotAPIClip";
+import { CareerRankSchema } from "./Schemas/CareerRankSchema";
 
 export class SCPostman
 {
@@ -39,7 +40,8 @@ export class SCPostman
 		await Promise.all([
 			this.GetAppearance(player), 
 			this.GetServiceRecord(player, season),
-			this.GetCSRS(player, season)
+			this.GetCSRS(player, season),
+			this.GetCareerRank(player)
 		]).catch(error => {
 			player.serviceRecord.error = error?.message ?? "Could not load player";
 		});
@@ -90,6 +92,19 @@ export class SCPostman
 		
 		if (!csrsData || !csrsData.data) { return; }
 		player.csrs = csrsData.data.map(iter => new CSRS(iter));
+	}
+	//#endregion
+
+	//#region Career Rank
+	/**
+	 * Sets the career rank for the player object
+	 * @param player the player
+	 */
+	public async GetCareerRank(player: Player): Promise<void>
+	{
+		Debugger.Print("SCPostman", "GetCareerRank()", player.gamertag);
+		const careerRankData = await this.__fetch(`/games/halo-infinite/stats/multiplayer/players/${player.gamertag}/career-rank`) as CareerRankSchema;
+		player.careerRank = careerRankData;
 	}
 	//#endregion
 

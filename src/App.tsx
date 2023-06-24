@@ -33,6 +33,7 @@ import { BetaSingleMatchView } from "./Pages/Matches/BetaSingleMatchView";
 import { PlaylistsView } from "./Pages/Playlists/PlaylistsView";
 import { StoreView } from "./Pages/Store/StoreView";
 import { ClipsView } from "./Pages/Clips/ClipsView";
+import { CareerRankSchema, EmptyCareerRank } from "./Database/Schemas/CareerRankSchema";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -78,7 +79,7 @@ const App = () =>
 	 * @param csrs the ranked ranks
 	 * @param isPrivate is the gamertag private?
 	 */
-	const updatePlayer = useCallback(async (gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, csrs?: CSRS[], isPrivate?: boolean) =>
+	const updatePlayer = useCallback(async (gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, csrs?: CSRS[], careerRank?: CareerRankSchema, isPrivate?: boolean) =>
 	{
 		const newPlayer = Player.Copy(player);
 
@@ -88,6 +89,7 @@ const App = () =>
 			newPlayer.appearance = appearance ?? new Appearance();
 			newPlayer.serviceRecord = serviceRecord ?? new ServiceRecord();
 			newPlayer.csrs = csrs ?? [];
+			newPlayer.careerRank = careerRank ?? EmptyCareerRank();
 			newPlayer.isPrivate = isPrivate !== undefined ? isPrivate : false;
 		}
 		else
@@ -95,6 +97,7 @@ const App = () =>
 			if (appearance) { newPlayer.appearance = appearance; }
 			if (serviceRecord) { newPlayer.serviceRecord = serviceRecord; }
 			if (csrs) { newPlayer.csrs = csrs; }
+			if (careerRank) { newPlayer.careerRank = careerRank; }
 			if (isPrivate !== undefined) { newPlayer.isPrivate = isPrivate; }
 		}
 

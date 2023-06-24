@@ -160,4 +160,28 @@ export interface Price {
 		cost: number;
 	}
 }
-  
+
+export interface CareerRankMetadataArray
+{
+	data: CareerRankMetadata[];
+}
+
+export interface CareerRankMetadata 
+{
+	rank: number;
+	title: string;
+	subtitle: string;
+	image_urls: {
+		icon: string;
+		large_icon: string;
+		adornment_icon: string;
+	};
+	attributes: {
+		tier: number;
+		grade: number;
+	};
+	properties: {
+		type: string;
+		threshold: number;
+	}
+}

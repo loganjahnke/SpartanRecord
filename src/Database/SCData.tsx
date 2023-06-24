@@ -83,16 +83,19 @@ export class SCData
         const player = new Player(gamertag);
         
         // Try to get from firebase
-        const firebaseAppearance = await this.firebase.GetAppearance(gamertag);
-        if (firebaseAppearance) 
-        { 
-            player.appearance = firebaseAppearance; 
-            return player;
-        }
+        const [firebaseAppearance, firebaseCareerRank] = await Promise.all([
+            this.firebase.GetAppearance(gamertag),
+            this.firebase.GetCareerRank(gamertag)
+        ]);
+
+        if (firebaseAppearance) { player.appearance = firebaseAppearance; }
+        if (firebaseCareerRank) { player.careerRank = firebaseCareerRank; }
+        if (firebaseAppearance && firebaseCareerRank) { return player; }
 
         // Otherwise get from HaloDotAPI
-        await this.halodapi.GetAppearance(player);
+        await Promise.all([this.halodapi.GetAppearance(player), this.halodapi.GetCareerRank(player)])
         if (player.appearanceData) { this.firebase.SetAppearance(gamertag, player.appearanceData); }
+        if (player.careerRank) { this.firebase.SetCareerRank(gamertag, player.careerRank); }
 
         return player;
     }
@@ -147,6 +150,7 @@ export class SCData
                 this.firebase.SetAppearance(player.gamertag, player.appearanceData),
                 this.firebase.SetServiceRecord(player.gamertag, player.serviceRecordData, season),
                 this.firebase.SetCSRS(player.gamertag, season, player.csrs.map(iter => iter.GetJSON())),
+                this.firebase.SetCareerRank(player.gamertag, player.careerRank)
             ]);
         }
         else if (oldSR && player.serviceRecord.matchesPlayed !== oldSR.matchesPlayed)
@@ -155,6 +159,7 @@ export class SCData
                 this.firebase.SetAppearance(player.gamertag, player.appearanceData),
                 this.firebase.SetServiceRecord(player.gamertag, player.serviceRecordData, season),
                 this.firebase.SetCSRS(player.gamertag, season, player.csrs.map(iter => iter.GetJSON())),
+                this.firebase.SetCareerRank(player.gamertag, player.careerRank),
                 this.firebase.UpdateLeaderboard(player)
             ]);
         }
@@ -365,28 +370,8 @@ export class SCData
         if (this.__seasons && this.__seasons.length > 0) { return this.__seasons; }
         this.__seasons = await this.halodapi.GetSeasons();
 
-        // Add Season1-1 manually since 343i took it out
-        const season1dash1: HaloDotAPISeason = {
-            id: 1,
-            version: 1,
-            name: "Heroes of Reach Part I",
-            description: "",
-            narrative_blurb: "",
-            image_urls: this.__seasons[0].image_urls,
-            properties: {
-                identifier: "Season1",
-                csr: "CsrSeason1"
-            },
-            availability: [
-                {
-                    start_date: new Date(),
-                    end_date: new Date()
-                }
-            ]
-        }
-
-        // Insert and rename Season1-2
-        this.__seasons.splice(0, 0, season1dash1);
+        // Add parts to season 1 names
+        this.__seasons[0].name += " Part I";
         this.__seasons[1].name += " Part II";
 
         return this.__seasons;

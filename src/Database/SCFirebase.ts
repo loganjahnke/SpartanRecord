@@ -18,6 +18,7 @@ import { ServiceRecordSchema } from "./Schemas/ServiceRecordSchema";
 import { FirebaseBest } from "./Schemas/FirebaseBest";
 import { MatchSchema } from "./Schemas/MatchSchema";
 import { HaloDotAPISeason } from "./Schemas/AutocodeMetadata";
+import { CareerRankSchema, EmptyCareerRank } from "./Schemas/CareerRankSchema";
 
 export class SCFirebase
 {
@@ -42,26 +43,29 @@ export class SCFirebase
 	{
 		if (!player.gamertag) { return; }
 		
-		let appearance;
+		let appearance, careerRank;
 		if (historic)
 		{
-			[player.serviceRecord, appearance, player.historicStats, player.csrs] = await Promise.all([
+			[player.serviceRecord, appearance, player.historicStats, player.csrs, careerRank] = await Promise.all([
 				this.GetServiceRecord(player.gamertag, season),
 				this.GetAppearance(player.gamertag),
 				this.GetAllSeasonsStats(player.gamertag),
-				this.GetCSRS(player.gamertag, season)
+				this.GetCSRS(player.gamertag, season),
+				this.GetCareerRank(player.gamertag)
 			]);
 		}
 		else
 		{
-			[player.serviceRecord, appearance, player.csrs] = await Promise.all([
+			[player.serviceRecord, appearance, player.csrs, careerRank] = await Promise.all([
 				this.GetServiceRecord(player.gamertag, season),
 				this.GetAppearance(player.gamertag),
-				this.GetCSRS(player.gamertag, season)
+				this.GetCSRS(player.gamertag, season),
+				this.GetCareerRank(player.gamertag)
 			]);
 		}
 
 		player.appearance = appearance ?? new Appearance();
+		player.careerRank = careerRank ?? EmptyCareerRank();
 	}
 	//#endregion
 
@@ -92,6 +96,22 @@ export class SCFirebase
 		this.__setReadSize("GetAppearance", snapshot.val());
 
 		return new Appearance(snapshot.val());
+	}
+	//#endregion
+
+	//#region Career Rank
+	/**
+	 * Gets the career rank for the player object
+	 * @param gamertag the gamertag
+	 */
+	public async GetCareerRank(gamertag: string): Promise<CareerRankSchema | null>
+	{
+		Debugger.Print("SCFirebase", "GetCareerRank()", gamertag);
+
+		const snapshot = await this.__get(`career_rank/${gamertag}`);
+		if (!snapshot || !snapshot.val()) { return null; }
+
+		return snapshot.val() as CareerRankSchema;
 	}
 	//#endregion
 	
@@ -638,6 +658,19 @@ export class SCFirebase
 		if (!data) { return; }
 		Debugger.Print("SCFirebase", "SetAppearance()", gamertag);
 		await this.__set(`appearance/${gamertag}`, Converter.ReducedAutocodeAppearance(data));
+	}
+	//#endregion
+
+	//#region Career Rank
+	/**
+	 * Gets the career rank for the player object
+	 * @param gamertag the gamertag
+	 */
+	public async SetCareerRank(gamertag: string, data?: CareerRankSchema): Promise<void>
+	{
+		if (!data) { return; }
+		Debugger.Print("SCFirebase", "SetCareerRank()", gamertag);
+		await this.__set(`career_rank/${gamertag}`, data);
 	}
 	//#endregion
 

@@ -17,6 +17,8 @@ import { TopMedals } from "../Medals/TopMedals";
 import { SeasonChooser } from "./SeasonChooser";
 import { ServiceRecordFilters } from "./ServiceRecordFilters";
 import { HaloDotAPISeason } from "../../../Database/Schemas/AutocodeMetadata";
+import { CareerRankSchema } from "../../../Database/Schemas/CareerRankSchema";
+import { CareerRankBreakdown } from "../CareerRank/CareerRankBreakdown";
 
 interface ServiceRecordGridProps
 {
@@ -30,12 +32,13 @@ interface ServiceRecordGridProps
 	isAllowed?: boolean;
 	season?: string;
 	title?: string;
+	careerRank?: CareerRankSchema;
 	onMetricChanged: () => void;
 }
 
 export function ServiceRecordGrid(props: ServiceRecordGridProps)
 {
-	const { seasons, setSeason, setShowPerMatch, showPerMatch, serviceRecord, csrs, historicStats, season, title, onMetricChanged } = props;
+	const { seasons, setSeason, setShowPerMatch, showPerMatch, serviceRecord, csrs, historicStats, season, title, careerRank, onMetricChanged } = props;
 
 	if (!serviceRecord || serviceRecord.IsEmpty() || serviceRecord.error) { return <></>; }
 
@@ -67,6 +70,9 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 				<Grid item xs={12}>
 					<KDABreakdown serviceRecord={serviceRecord} />
 				</Grid>
+				<Grid item xs={12}>
+					<CareerRankBreakdown careerRank={careerRank} />
+				</Grid>
 				{csrs && csrs.length > 0 && <Grid item xs={12}>
 					<CSRSBreakdown csrs={csrs} />
 				</Grid>}
@@ -87,9 +93,6 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 			<Grid container item spacing={2} sm={12} md={6} lg={12} xl={5} sx={{ alignContent: "flex-start" }}>
 				<Grid item xs={12}>
 					<TopMedals medals={serviceRecord.medals} matchesPlayed={serviceRecord.matchesPlayed} showPerMatch={showPerMatch} />
-				</Grid>
-				<Grid item xs={12}>
-					<LevelBreakdown serviceRecord={serviceRecord} showPerMatch={showPerMatch} />
 				</Grid>
 				{historicStats && (!season) && <Grid item xs={12}>
 					<SeasonsChart seasons={seasons} historicServiceRecords={historicStats} onMetricChanged={onMetricChanged} />
