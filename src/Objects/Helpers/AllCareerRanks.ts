@@ -1,4 +1,5 @@
 import { CareerRankMetadata } from "../../Database/Schemas/AutocodeMetadata";
+import { CareerRankSchema } from "../../Database/Schemas/CareerRankSchema";
 
 /**
  * Get the career rank metadata for the rank number
@@ -10,24 +11,52 @@ export function GetCareerRankMetadata(rank: number): CareerRankMetadata
 	return cr;
 }
 
+/**
+ * Get the string version of the grade
+ * @param rank the career rank
+ */
+export function CurrentGrade(rank: CareerRankSchema): string
+{
+	if (rank.data.current.attributes.grade === 1) { return "I"; }
+	if (rank.data.current.attributes.grade === 2) { return "II"; }
+	if (rank.data.current.attributes.grade === 3) { return "III"; }
+	return "";
+}
+
+/**
+ * Get the string version of the grade
+ * @param rank the career rank
+ */
+export function NextGrade(rank: CareerRankSchema): string
+{
+	if (rank.data.next.attributes.grade === 1) { return "I"; }
+	if (rank.data.next.attributes.grade === 2) { return "II"; }
+	if (rank.data.next.attributes.grade === 3) { return "III"; }
+	return "";
+}
+
 export const AllCareerRanks = {
-		0: {
-			"title": "Recruit",
-			"subtitle": "",
-			"image_urls": {
-				"icon": "https://api.halodotapi.com/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoiY2FyZWVyX3JhbmsvUHJvZ3Jlc3NXaWRnZXQvMV9SZWNydWl0LnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D",
-				"large_icon": "https://api.halodotapi.com/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoiY2FyZWVyX3JhbmsvQ2VsZWJyYXRpb25Nb21lbnQvMV9SZWNydWl0LnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D",
-				"adornment_icon": null
-			},
-			"attributes": {
-				"tier": null,
-				"grade": 0
-			},
-			"properties": {
-				"type": "Bronze",
-				"threshold": 0
-			}
+	0: {
+		"title": "Recruit",
+		"subtitle": "",
+		"image_urls": {
+			"icon": "https://api.halodotapi.com/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoiY2FyZWVyX3JhbmsvUHJvZ3Jlc3NXaWRnZXQvMV9SZWNydWl0LnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D",
+			"large_icon": "https://api.halodotapi.com/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoiY2FyZWVyX3JhbmsvQ2VsZWJyYXRpb25Nb21lbnQvMV9SZWNydWl0LnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D",
+			"adornment_icon": null
 		},
+		"attributes": {
+			"tier": null,
+			"grade": 1,
+			"colors": [
+				"#76472A",
+				"#E89568"
+			]
+		},
+		"properties": {
+			"type": "Bronze",
+			"threshold": 0
+		}
+	},
         1: {
             "title": "Recruit",
             "subtitle": "",
@@ -38,11 +67,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": null,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 100
+                "threshold": 0
             }
         },
         2: {
@@ -55,11 +88,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 1100
+                "threshold": 100
             }
         },
         3: {
@@ -72,11 +109,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 2350
+                "threshold": 1100
             }
         },
         4: {
@@ -89,11 +130,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 3850
+                "threshold": 2350
             }
         },
         5: {
@@ -106,11 +151,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 4850
+                "threshold": 3850
             }
         },
         6: {
@@ -123,11 +172,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 6100
+                "threshold": 4850
             }
         },
         7: {
@@ -140,11 +193,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 7850
+                "threshold": 6100
             }
         },
         8: {
@@ -157,11 +214,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 9100
+                "threshold": 7850
             }
         },
         9: {
@@ -174,11 +235,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 10600
+                "threshold": 9100
             }
         },
         10: {
@@ -191,11 +256,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 12350
+                "threshold": 10600
             }
         },
         11: {
@@ -208,11 +277,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 13600
+                "threshold": 12350
             }
         },
         12: {
@@ -225,11 +298,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 15100
+                "threshold": 13600
             }
         },
         13: {
@@ -242,11 +319,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 17100
+                "threshold": 15100
             }
         },
         14: {
@@ -259,11 +340,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 18600
+                "threshold": 17100
             }
         },
         15: {
@@ -276,11 +361,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 20350
+                "threshold": 18600
             }
         },
         16: {
@@ -293,11 +382,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 22600
+                "threshold": 20350
             }
         },
         17: {
@@ -310,11 +403,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 24100
+                "threshold": 22600
             }
         },
         18: {
@@ -327,11 +424,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 25850
+                "threshold": 24100
             }
         },
         19: {
@@ -344,11 +445,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 28350
+                "threshold": 25850
             }
         },
         20: {
@@ -361,11 +466,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 30100
+                "threshold": 28350
             }
         },
         21: {
@@ -378,11 +487,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 32100
+                "threshold": 30100
             }
         },
         22: {
@@ -395,11 +508,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 34850
+                "threshold": 32100
             }
         },
         23: {
@@ -412,11 +529,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 36600
+                "threshold": 34850
             }
         },
         24: {
@@ -429,11 +550,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 38850
+                "threshold": 36600
             }
         },
         25: {
@@ -446,11 +571,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 41850
+                "threshold": 38850
             }
         },
         26: {
@@ -463,11 +592,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 43850
+                "threshold": 41850
             }
         },
         27: {
@@ -480,11 +613,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 46350
+                "threshold": 43850
             }
         },
         28: {
@@ -497,11 +634,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 49600
+                "threshold": 46350
             }
         },
         29: {
@@ -514,11 +655,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 51850
+                "threshold": 49600
             }
         },
         30: {
@@ -531,11 +676,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 54600
+                "threshold": 51850
             }
         },
         31: {
@@ -548,11 +697,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 58100
+                "threshold": 54600
             }
         },
         32: {
@@ -565,11 +718,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 60600
+                "threshold": 58100
             }
         },
         33: {
@@ -582,11 +739,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 63600
+                "threshold": 60600
             }
         },
         34: {
@@ -599,11 +760,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 67350
+                "threshold": 63600
             }
         },
         35: {
@@ -616,11 +781,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 70100
+                "threshold": 67350
             }
         },
         36: {
@@ -633,11 +802,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 73350
+                "threshold": 70100
             }
         },
         37: {
@@ -650,11 +823,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 77350
+                "threshold": 73350
             }
         },
         38: {
@@ -667,11 +844,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 80350
+                "threshold": 77350
             }
         },
         39: {
@@ -684,11 +865,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 83850
+                "threshold": 80350
             }
         },
         40: {
@@ -701,11 +886,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 88350
+                "threshold": 83850
             }
         },
         41: {
@@ -718,11 +907,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 91600
+                "threshold": 88350
             }
         },
         42: {
@@ -735,11 +928,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 95350
+                "threshold": 91600
             }
         },
         43: {
@@ -752,11 +949,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 100350
+                "threshold": 95350
             }
         },
         44: {
@@ -769,11 +970,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 103850
+                "threshold": 100350
             }
         },
         45: {
@@ -786,11 +991,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 107850
+                "threshold": 103850
             }
         },
         46: {
@@ -803,11 +1012,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#76472A",
+                    "#E89568"
+                ]
             },
             "properties": {
                 "type": "Bronze",
-                "threshold": 113100
+                "threshold": 107850
             }
         },
         47: {
@@ -820,11 +1033,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 115350
+                "threshold": 113100
             }
         },
         48: {
@@ -837,11 +1054,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 117850
+                "threshold": 115350
             }
         },
         49: {
@@ -854,11 +1075,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 121100
+                "threshold": 117850
             }
         },
         50: {
@@ -871,11 +1096,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 123350
+                "threshold": 121100
             }
         },
         51: {
@@ -888,11 +1117,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 126100
+                "threshold": 123350
             }
         },
         52: {
@@ -905,11 +1138,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 129850
+                "threshold": 126100
             }
         },
         53: {
@@ -922,11 +1159,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 132350
+                "threshold": 129850
             }
         },
         54: {
@@ -939,11 +1180,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 135350
+                "threshold": 132350
             }
         },
         55: {
@@ -956,11 +1201,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 139350
+                "threshold": 135350
             }
         },
         56: {
@@ -973,11 +1222,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 142100
+                "threshold": 139350
             }
         },
         57: {
@@ -990,11 +1243,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 145350
+                "threshold": 142100
             }
         },
         58: {
@@ -1007,11 +1264,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 149600
+                "threshold": 145350
             }
         },
         59: {
@@ -1024,11 +1285,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 152600
+                "threshold": 149600
             }
         },
         60: {
@@ -1041,11 +1306,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 156350
+                "threshold": 152600
             }
         },
         61: {
@@ -1058,11 +1327,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 161100
+                "threshold": 156350
             }
         },
         62: {
@@ -1075,11 +1348,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 164350
+                "threshold": 161100
             }
         },
         63: {
@@ -1092,11 +1369,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 168350
+                "threshold": 164350
             }
         },
         64: {
@@ -1109,11 +1390,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 173600
+                "threshold": 168350
             }
         },
         65: {
@@ -1126,11 +1411,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 177350
+                "threshold": 173600
             }
         },
         66: {
@@ -1143,11 +1432,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 181600
+                "threshold": 177350
             }
         },
         67: {
@@ -1160,11 +1453,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 187350
+                "threshold": 181600
             }
         },
         68: {
@@ -1177,11 +1474,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 191350
+                "threshold": 187350
             }
         },
         69: {
@@ -1194,11 +1495,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 196100
+                "threshold": 191350
             }
         },
         70: {
@@ -1211,11 +1516,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 202350
+                "threshold": 196100
             }
         },
         71: {
@@ -1228,11 +1537,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 206600
+                "threshold": 202350
             }
         },
         72: {
@@ -1245,11 +1558,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 211850
+                "threshold": 206600
             }
         },
         73: {
@@ -1262,11 +1579,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 218600
+                "threshold": 211850
             }
         },
         74: {
@@ -1279,11 +1600,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 223350
+                "threshold": 218600
             }
         },
         75: {
@@ -1296,11 +1621,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 229100
+                "threshold": 223350
             }
         },
         76: {
@@ -1313,11 +1642,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 236350
+                "threshold": 229100
             }
         },
         77: {
@@ -1330,11 +1663,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 241600
+                "threshold": 236350
             }
         },
         78: {
@@ -1347,11 +1684,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 247850
+                "threshold": 241600
             }
         },
         79: {
@@ -1364,11 +1705,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 255850
+                "threshold": 247850
             }
         },
         80: {
@@ -1381,11 +1726,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 261600
+                "threshold": 255850
             }
         },
         81: {
@@ -1398,11 +1747,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 268350
+                "threshold": 261600
             }
         },
         82: {
@@ -1415,11 +1768,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 277100
+                "threshold": 268350
             }
         },
         83: {
@@ -1432,11 +1789,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 283350
+                "threshold": 277100
             }
         },
         84: {
@@ -1449,11 +1810,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 290850
+                "threshold": 283350
             }
         },
         85: {
@@ -1466,11 +1831,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 300350
+                "threshold": 290850
             }
         },
         86: {
@@ -1483,11 +1852,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 307100
+                "threshold": 300350
             }
         },
         87: {
@@ -1500,11 +1873,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 315100
+                "threshold": 307100
             }
         },
         88: {
@@ -1517,11 +1894,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 325100
+                "threshold": 315100
             }
         },
         89: {
@@ -1534,11 +1915,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 332350
+                "threshold": 325100
             }
         },
         90: {
@@ -1551,11 +1936,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 341100
+                "threshold": 332350
             }
         },
         91: {
@@ -1568,11 +1957,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#616263",
+                    "#E6E6E6"
+                ]
             },
             "properties": {
                 "type": "Silver",
-                "threshold": 353600
+                "threshold": 341100
             }
         },
         92: {
@@ -1585,11 +1978,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 358100
+                "threshold": 353600
             }
         },
         93: {
@@ -1602,11 +1999,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 363600
+                "threshold": 358100
             }
         },
         94: {
@@ -1619,11 +2020,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 370850
+                "threshold": 363600
             }
         },
         95: {
@@ -1636,11 +2041,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 375850
+                "threshold": 370850
             }
         },
         96: {
@@ -1653,11 +2062,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 381850
+                "threshold": 375850
             }
         },
         97: {
@@ -1670,11 +2083,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 389600
+                "threshold": 381850
             }
         },
         98: {
@@ -1687,11 +2104,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 395100
+                "threshold": 389600
             }
         },
         99: {
@@ -1704,11 +2125,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 401600
+                "threshold": 395100
             }
         },
         100: {
@@ -1721,11 +2146,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 410100
+                "threshold": 401600
             }
         },
         101: {
@@ -1738,11 +2167,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 416100
+                "threshold": 410100
             }
         },
         102: {
@@ -1755,11 +2188,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 423350
+                "threshold": 416100
             }
         },
         103: {
@@ -1772,11 +2209,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 432600
+                "threshold": 423350
             }
         },
         104: {
@@ -1789,11 +2230,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 439100
+                "threshold": 432600
             }
         },
         105: {
@@ -1806,11 +2251,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 446850
+                "threshold": 439100
             }
         },
         106: {
@@ -1823,11 +2272,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 456850
+                "threshold": 446850
             }
         },
         107: {
@@ -1840,11 +2293,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 463850
+                "threshold": 456850
             }
         },
         108: {
@@ -1857,11 +2314,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 472350
+                "threshold": 463850
             }
         },
         109: {
@@ -1874,11 +2335,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 482350
+                "threshold": 472350
             }
         },
         110: {
@@ -1891,11 +2356,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 490100
+                "threshold": 482350
             }
         },
         111: {
@@ -1908,11 +2377,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 499350
+                "threshold": 490100
             }
         },
         112: {
@@ -1925,11 +2398,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 511850
+                "threshold": 499350
             }
         },
         113: {
@@ -1942,11 +2419,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 520350
+                "threshold": 511850
             }
         },
         114: {
@@ -1959,11 +2440,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 530350
+                "threshold": 520350
             }
         },
         115: {
@@ -1976,11 +2461,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 542850
+                "threshold": 530350
             }
         },
         116: {
@@ -1993,11 +2482,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 552100
+                "threshold": 542850
             }
         },
         117: {
@@ -2010,11 +2503,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 562100
+                "threshold": 552100
             }
         },
         118: {
@@ -2027,11 +2524,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 577100
+                "threshold": 562100
             }
         },
         119: {
@@ -2044,11 +2545,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 587100
+                "threshold": 577100
             }
         },
         120: {
@@ -2061,11 +2566,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 599600
+                "threshold": 587100
             }
         },
         121: {
@@ -2078,11 +2587,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 614600
+                "threshold": 599600
             }
         },
         122: {
@@ -2095,11 +2608,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 624600
+                "threshold": 614600
             }
         },
         123: {
@@ -2112,11 +2629,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 637100
+                "threshold": 624600
             }
         },
         124: {
@@ -2129,11 +2650,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 654600
+                "threshold": 637100
             }
         },
         125: {
@@ -2146,11 +2671,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 667100
+                "threshold": 654600
             }
         },
         126: {
@@ -2163,11 +2692,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 682100
+                "threshold": 667100
             }
         },
         127: {
@@ -2180,11 +2713,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 702100
+                "threshold": 682100
             }
         },
         128: {
@@ -2197,11 +2734,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 714600
+                "threshold": 702100
             }
         },
         129: {
@@ -2214,11 +2755,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 729600
+                "threshold": 714600
             }
         },
         130: {
@@ -2231,11 +2776,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 749600
+                "threshold": 729600
             }
         },
         131: {
@@ -2248,11 +2797,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 764600
+                "threshold": 749600
             }
         },
         132: {
@@ -2265,11 +2818,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 782100
+                "threshold": 764600
             }
         },
         133: {
@@ -2282,11 +2839,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 804600
+                "threshold": 782100
             }
         },
         134: {
@@ -2299,11 +2860,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 819600
+                "threshold": 804600
             }
         },
         135: {
@@ -2316,11 +2881,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 839600
+                "threshold": 819600
             }
         },
         136: {
@@ -2333,11 +2902,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 864600
+                "threshold": 839600
             }
         },
         137: {
@@ -2350,11 +2923,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 874350
+                "threshold": 864600
             }
         },
         138: {
@@ -2367,11 +2944,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 886850
+                "threshold": 874350
             }
         },
         139: {
@@ -2384,11 +2965,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 901850
+                "threshold": 886850
             }
         },
         140: {
@@ -2401,11 +2986,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 911850
+                "threshold": 901850
             }
         },
         141: {
@@ -2418,11 +3007,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 924350
+                "threshold": 911850
             }
         },
         142: {
@@ -2435,11 +3028,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 941850
+                "threshold": 924350
             }
         },
         143: {
@@ -2452,11 +3049,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 954350
+                "threshold": 941850
             }
         },
         144: {
@@ -2469,11 +3070,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 969350
+                "threshold": 954350
             }
         },
         145: {
@@ -2486,11 +3091,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 986850
+                "threshold": 969350
             }
         },
         146: {
@@ -2503,11 +3112,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 999350
+                "threshold": 986850
             }
         },
         147: {
@@ -2520,11 +3133,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1014350
+                "threshold": 999350
             }
         },
         148: {
@@ -2537,11 +3154,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1034350
+                "threshold": 1014350
             }
         },
         149: {
@@ -2554,11 +3175,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1049350
+                "threshold": 1034350
             }
         },
         150: {
@@ -2571,11 +3196,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1066850
+                "threshold": 1049350
             }
         },
         151: {
@@ -2588,11 +3217,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1089350
+                "threshold": 1066850
             }
         },
         152: {
@@ -2605,11 +3238,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1104350
+                "threshold": 1089350
             }
         },
         153: {
@@ -2622,11 +3259,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1121850
+                "threshold": 1104350
             }
         },
         154: {
@@ -2639,11 +3280,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1144350
+                "threshold": 1121850
             }
         },
         155: {
@@ -2656,11 +3301,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1161850
+                "threshold": 1144350
             }
         },
         156: {
@@ -2673,11 +3322,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1181850
+                "threshold": 1161850
             }
         },
         157: {
@@ -2690,11 +3343,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1206850
+                "threshold": 1181850
             }
         },
         158: {
@@ -2707,11 +3364,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1224350
+                "threshold": 1206850
             }
         },
         159: {
@@ -2724,11 +3385,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1246850
+                "threshold": 1224350
             }
         },
         160: {
@@ -2741,11 +3406,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1274350
+                "threshold": 1246850
             }
         },
         161: {
@@ -2758,11 +3427,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1294350
+                "threshold": 1274350
             }
         },
         162: {
@@ -2775,11 +3448,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1319350
+                "threshold": 1294350
             }
         },
         163: {
@@ -2792,11 +3469,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1349350
+                "threshold": 1319350
             }
         },
         164: {
@@ -2809,11 +3490,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1371850
+                "threshold": 1349350
             }
         },
         165: {
@@ -2826,11 +3511,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1396850
+                "threshold": 1371850
             }
         },
         166: {
@@ -2843,11 +3532,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1429350
+                "threshold": 1396850
             }
         },
         167: {
@@ -2860,11 +3553,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1451850
+                "threshold": 1429350
             }
         },
         168: {
@@ -2877,11 +3574,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1479350
+                "threshold": 1451850
             }
         },
         169: {
@@ -2894,11 +3595,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1516850
+                "threshold": 1479350
             }
         },
         170: {
@@ -2911,11 +3616,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1541850
+                "threshold": 1516850
             }
         },
         171: {
@@ -2928,11 +3637,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1571850
+                "threshold": 1541850
             }
         },
         172: {
@@ -2945,11 +3658,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1611850
+                "threshold": 1571850
             }
         },
         173: {
@@ -2962,11 +3679,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1639350
+                "threshold": 1611850
             }
         },
         174: {
@@ -2979,11 +3700,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1674350
+                "threshold": 1639350
             }
         },
         175: {
@@ -2996,11 +3721,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1719350
+                "threshold": 1674350
             }
         },
         176: {
@@ -3013,11 +3742,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1749350
+                "threshold": 1719350
             }
         },
         177: {
@@ -3030,11 +3763,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1786850
+                "threshold": 1749350
             }
         },
         178: {
@@ -3047,11 +3784,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1834350
+                "threshold": 1786850
             }
         },
         179: {
@@ -3064,11 +3805,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1866850
+                "threshold": 1834350
             }
         },
         180: {
@@ -3081,11 +3826,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1906850
+                "threshold": 1866850
             }
         },
         181: {
@@ -3098,11 +3847,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#3A2B3D",
+                    "#675A68"
+                ]
             },
             "properties": {
                 "type": "Platinum",
-                "threshold": 1959350
+                "threshold": 1906850
             }
         },
         182: {
@@ -3115,11 +3868,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 1979350
+                "threshold": 1959350
             }
         },
         183: {
@@ -3132,11 +3889,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2004350
+                "threshold": 1979350
             }
         },
         184: {
@@ -3149,11 +3910,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2036850
+                "threshold": 2004350
             }
         },
         185: {
@@ -3166,11 +3931,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2059350
+                "threshold": 2036850
             }
         },
         186: {
@@ -3183,11 +3952,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2086850
+                "threshold": 2059350
             }
         },
         187: {
@@ -3200,11 +3973,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2121850
+                "threshold": 2086850
             }
         },
         188: {
@@ -3217,11 +3994,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2146850
+                "threshold": 2121850
             }
         },
         189: {
@@ -3234,11 +4015,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2176850
+                "threshold": 2146850
             }
         },
         190: {
@@ -3251,11 +4036,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2216850
+                "threshold": 2176850
             }
         },
         191: {
@@ -3268,11 +4057,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2244350
+                "threshold": 2216850
             }
         },
         192: {
@@ -3285,11 +4078,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2276850
+                "threshold": 2244350
             }
         },
         193: {
@@ -3302,11 +4099,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2319350
+                "threshold": 2276850
             }
         },
         194: {
@@ -3319,11 +4120,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2349350
+                "threshold": 2319350
             }
         },
         195: {
@@ -3336,11 +4141,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2384350
+                "threshold": 2349350
             }
         },
         196: {
@@ -3353,11 +4162,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2431850
+                "threshold": 2384350
             }
         },
         197: {
@@ -3370,11 +4183,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2464350
+                "threshold": 2431850
             }
         },
         198: {
@@ -3387,11 +4204,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2504350
+                "threshold": 2464350
             }
         },
         199: {
@@ -3404,11 +4225,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2554350
+                "threshold": 2504350
             }
         },
         200: {
@@ -3421,11 +4246,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2589350
+                "threshold": 2554350
             }
         },
         201: {
@@ -3438,11 +4267,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2631850
+                "threshold": 2589350
             }
         },
         202: {
@@ -3455,11 +4288,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2686850
+                "threshold": 2631850
             }
         },
         203: {
@@ -3472,11 +4309,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2726850
+                "threshold": 2686850
             }
         },
         204: {
@@ -3489,11 +4330,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2774350
+                "threshold": 2726850
             }
         },
         205: {
@@ -3506,11 +4351,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2834350
+                "threshold": 2774350
             }
         },
         206: {
@@ -3523,11 +4372,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2876850
+                "threshold": 2834350
             }
         },
         207: {
@@ -3540,11 +4393,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2926850
+                "threshold": 2876850
             }
         },
         208: {
@@ -3557,11 +4414,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 2991850
+                "threshold": 2926850
             }
         },
         209: {
@@ -3574,11 +4435,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 3039350
+                "threshold": 2991850
             }
         },
         210: {
@@ -3591,11 +4456,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 3094350
+                "threshold": 3039350
             }
         },
         211: {
@@ -3608,11 +4477,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 3166850
+                "threshold": 3094350
             }
         },
         212: {
@@ -3625,11 +4498,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 3216850
+                "threshold": 3166850
             }
         },
         213: {
@@ -3642,11 +4519,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 3276850
+                "threshold": 3216850
             }
         },
         214: {
@@ -3659,11 +4540,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 3356850
+                "threshold": 3276850
             }
         },
         215: {
@@ -3676,11 +4561,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 3411850
+                "threshold": 3356850
             }
         },
         216: {
@@ -3693,11 +4582,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 3476850
+                "threshold": 3411850
             }
         },
         217: {
@@ -3710,11 +4603,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 3561850
+                "threshold": 3476850
             }
         },
         218: {
@@ -3727,11 +4624,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 3621850
+                "threshold": 3561850
             }
         },
         219: {
@@ -3744,11 +4645,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 3694350
+                "threshold": 3621850
             }
         },
         220: {
@@ -3761,11 +4666,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 3789350
+                "threshold": 3694350
             }
         },
         221: {
@@ -3778,11 +4687,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 3854350
+                "threshold": 3789350
             }
         },
         222: {
@@ -3795,11 +4708,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 3934350
+                "threshold": 3854350
             }
         },
         223: {
@@ -3812,11 +4729,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 4034350
+                "threshold": 3934350
             }
         },
         224: {
@@ -3829,11 +4750,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 4106850
+                "threshold": 4034350
             }
         },
         225: {
@@ -3846,11 +4771,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 4191850
+                "threshold": 4106850
             }
         },
         226: {
@@ -3863,11 +4792,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#5A73DF",
+                    "#89ABFF"
+                ]
             },
             "properties": {
                 "type": "Diamond",
-                "threshold": 4291850
+                "threshold": 4191850
             }
         },
         227: {
@@ -3880,11 +4813,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 4336850
+                "threshold": 4291850
             }
         },
         228: {
@@ -3897,11 +4834,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 4391850
+                "threshold": 4336850
             }
         },
         229: {
@@ -3914,11 +4855,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 4461850
+                "threshold": 4391850
             }
         },
         230: {
@@ -3931,11 +4876,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 4511850
+                "threshold": 4461850
             }
         },
         231: {
@@ -3948,11 +4897,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 4569350
+                "threshold": 4511850
             }
         },
         232: {
@@ -3965,11 +4918,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 4646850
+                "threshold": 4569350
             }
         },
         233: {
@@ -3982,11 +4939,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 4699350
+                "threshold": 4646850
             }
         },
         234: {
@@ -3999,11 +4960,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 4764350
+                "threshold": 4699350
             }
         },
         235: {
@@ -4016,11 +4981,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 4846850
+                "threshold": 4764350
             }
         },
         236: {
@@ -4033,11 +5002,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 4904350
+                "threshold": 4846850
             }
         },
         237: {
@@ -4050,11 +5023,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 4974350
+                "threshold": 4904350
             }
         },
         238: {
@@ -4067,11 +5044,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 5064350
+                "threshold": 4974350
             }
         },
         239: {
@@ -4084,11 +5065,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 5126850
+                "threshold": 5064350
             }
         },
         240: {
@@ -4101,11 +5086,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 5204350
+                "threshold": 5126850
             }
         },
         241: {
@@ -4118,11 +5107,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 5304350
+                "threshold": 5204350
             }
         },
         242: {
@@ -4135,11 +5128,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 5374350
+                "threshold": 5304350
             }
         },
         243: {
@@ -4152,11 +5149,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 5456850
+                "threshold": 5374350
             }
         },
         244: {
@@ -4169,11 +5170,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 5556850
+                "threshold": 5456850
             }
         },
         245: {
@@ -4186,11 +5191,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 5631850
+                "threshold": 5556850
             }
         },
         246: {
@@ -4203,11 +5212,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 5721850
+                "threshold": 5631850
             }
         },
         247: {
@@ -4220,11 +5233,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 5846850
+                "threshold": 5721850
             }
         },
         248: {
@@ -4237,11 +5254,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 5929350
+                "threshold": 5846850
             }
         },
         249: {
@@ -4254,11 +5275,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 6029350
+                "threshold": 5929350
             }
         },
         250: {
@@ -4271,11 +5296,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 6154350
+                "threshold": 6029350
             }
         },
         251: {
@@ -4288,11 +5317,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 6244350
+                "threshold": 6154350
             }
         },
         252: {
@@ -4305,11 +5338,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 6344350
+                "threshold": 6244350
             }
         },
         253: {
@@ -4322,11 +5359,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 6494350
+                "threshold": 6344350
             }
         },
         254: {
@@ -4339,11 +5380,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 6594350
+                "threshold": 6494350
             }
         },
         255: {
@@ -4356,11 +5401,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 6719350
+                "threshold": 6594350
             }
         },
         256: {
@@ -4373,11 +5422,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 6869350
+                "threshold": 6719350
             }
         },
         257: {
@@ -4390,11 +5443,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 6969350
+                "threshold": 6869350
             }
         },
         258: {
@@ -4407,11 +5464,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 7094350
+                "threshold": 6969350
             }
         },
         259: {
@@ -4424,11 +5485,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 7269350
+                "threshold": 7094350
             }
         },
         260: {
@@ -4441,11 +5506,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 7394350
+                "threshold": 7269350
             }
         },
         261: {
@@ -4458,11 +5527,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 7544350
+                "threshold": 7394350
             }
         },
         262: {
@@ -4475,11 +5548,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 7719350
+                "threshold": 7544350
             }
         },
         263: {
@@ -4492,11 +5569,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 7844350
+                "threshold": 7719350
             }
         },
         264: {
@@ -4509,11 +5590,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 7994350
+                "threshold": 7844350
             }
         },
         265: {
@@ -4526,11 +5611,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 8194350
+                "threshold": 7994350
             }
         },
         266: {
@@ -4543,11 +5632,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 8344350
+                "threshold": 8194350
             }
         },
         267: {
@@ -4560,11 +5653,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 8519350
+                "threshold": 8344350
             }
         },
         268: {
@@ -4577,11 +5674,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 8744350
+                "threshold": 8519350
             }
         },
         269: {
@@ -4594,11 +5695,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 1,
-                "grade": 1
+                "grade": 1,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 8894350
+                "threshold": 8744350
             }
         },
         270: {
@@ -4611,11 +5716,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 2,
-                "grade": 2
+                "grade": 2,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 9069350
+                "threshold": 8894350
             }
         },
         271: {
@@ -4628,11 +5737,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": 3,
-                "grade": 3
+                "grade": 3,
+                "colors": [
+                    "#1D102B",
+                    "#452165"
+                ]
             },
             "properties": {
                 "type": "Onyx",
-                "threshold": 9319350
+                "threshold": 9069350
             }
         },
         272: {
@@ -4645,11 +5758,15 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": null,
-                "grade": 0
+                "grade": 0,
+                "colors": [
+                    "#C0A46E",
+                    "#EFD588"
+                ]
             },
             "properties": {
                 "type": "Gold",
-                "threshold": 9319351
+                "threshold": 9319350
             }
-        },
-	}
+        }
+}

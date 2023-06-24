@@ -1,11 +1,15 @@
 export interface CareerRankSchema
 {
 	data: {
+		level: {
+			next_level_threshold: number;
+			remaining_xp_to_next_level: number;
+			total_xp: number;
+		};
 		current: {
 			rank: number;
 			title: string;
 			subtitle: string;
-			progression: number;
 			image_urls: {
 				icon: string;
 				large_icon: string;
@@ -24,7 +28,6 @@ export interface CareerRankSchema
 			rank: number;
 			title: string;
 			subtitle: string;
-			progression: number;
 			image_urls: {
 				icon: string;
 				large_icon: string;
@@ -46,11 +49,15 @@ export function EmptyCareerRank(): CareerRankSchema
 {
 	return {
 		data: {
+			level: {
+				next_level_threshold: 0,
+				remaining_xp_to_next_level: 0,
+				total_xp: 0,
+			},
 			current: {
 				rank: 0,
 				title: "",
 				subtitle: "",
-				progression: 0,
 				image_urls: {
 					icon: "",
 					large_icon: "",
@@ -69,7 +76,6 @@ export function EmptyCareerRank(): CareerRankSchema
 				rank: 0,
 				title: "",
 				subtitle: "",
-				progression: 0,
 				image_urls: {
 					icon: "",
 					large_icon: "",

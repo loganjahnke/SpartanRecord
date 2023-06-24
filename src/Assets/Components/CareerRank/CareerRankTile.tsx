@@ -2,7 +2,7 @@ import { Box, Tooltip, Typography } from "@mui/material";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { BorderLinearProgress } from "../Custom/BorderLinearProgress";
 import { CareerRankSchema } from "../../../Database/Schemas/CareerRankSchema";
-import { GetCareerRankMetadata } from "../../../Objects/Helpers/AllCareerRanks";
+import { CurrentGrade, GetCareerRankMetadata, NextGrade } from "../../../Objects/Helpers/AllCareerRanks";
 
 export function CareerRankTile(props: { rank: CareerRankSchema })
 {
@@ -12,8 +12,10 @@ export function CareerRankTile(props: { rank: CareerRankSchema })
 	const previous = GetCareerRankMetadata(rank.data.current.rank - 1);
 
 	if (!previous) { return <></>; }
+	if (!rank.data.level) { return <></>; }
 
-	const progress = (rank.data.current.progression - previous.properties.threshold) * 100 / (rank.data.current.properties.threshold - previous.properties.threshold);
+	const levelAmount = (rank.data.current.properties.threshold - previous.properties.threshold);
+	const progress = (levelAmount - rank.data.level.remaining_xp_to_next_level) * 100 / levelAmount;
 	const color = rank.data.current.properties.type;
 
 	return (
@@ -28,13 +30,13 @@ export function CareerRankTile(props: { rank: CareerRankSchema })
 			<img src={rank.data.current.image_urls.icon} alt="Rank" height="48px" width="48px" />
 			<Box sx={{ mb: 1 }}>
 				<Box sx={{ display: "flex", flexDirection: "row", mb: 0.5, alignItems: "center" }}>
-					<Typography variant="subtitle1" sx={{ fontSize: "0.8rem", ml: 1 }}>{rank.data.current.title} - <span style={{ fontWeight: 100 }}>Grade {rank.data.current.attributes.grade}</span></Typography>
+					<Typography variant="subtitle1" sx={{ fontSize: "0.8rem", ml: 1 }}>{rank.data.current.title} {CurrentGrade(rank)}</Typography>
 					<Box sx={{ ml: 1 }} />
 					<Box sx={{ flexGrow: 1 }} />
-					<Typography variant="caption" sx={{ display: "block", fontSize: "0.8rem", mr: 1 }}>{rank.data.next.title} - <span style={{ fontWeight: 100 }}>Grade {rank.data.next.attributes.grade}</span></Typography>
+					<Typography variant="caption" sx={{ display: "block", fontSize: "0.8rem", mr: 1 }}>{rank.data.next.title} {NextGrade(rank)}</Typography>
 				</Box>
 				<Box>
-					<Tooltip title={`${rank.data.current.properties.threshold - rank.data.current.progression} needed for next rank`}>
+					<Tooltip title={`${rank.data.level.remaining_xp_to_next_level} needed for next rank`}>
 						<BorderLinearProgress 
 							variant="determinate" 
 							value={progress} 
