@@ -56,8 +56,12 @@ export function PlayerCard(props: PlayerCardProps)
                         <Typography variant="body1" sx={{ color: textColor }}>{player.gamertag}</Typography>
                         <Typography variant="body2" sx={{ fontWeight: 100, color: textColor, fontStyle: "italic", letterSpacing: "1px" }}>{player.appearance?.serviceTag}</Typography>
                     </Box>
-                    <Box sx={{ ml: 27, display: "flex", alignItems: "center", position: "absolute" }}>{!noImages && player.appearance?.emblemURL && <Image src={player.careerRank.data.current.image_urls.icon} alt="rank" height="48px" crossOrigin="anonymous" />}</Box>
-                    <Box sx={{ ml: 27, display: "flex", alignItems: "center", position: "absolute" }}>{!noImages && player.appearance?.emblemURL && <Image src={player.careerRank.data.current.image_urls.adornment_icon} alt="banner" height="48px" crossOrigin="anonymous" />}</Box>
+                    {player.careerRank.data.current.image_urls.icon && 
+                        <>
+                            <Box sx={{ ml: 27, display: "flex", alignItems: "center", position: "absolute" }}>{!noImages && player.appearance?.emblemURL && <Image src={player.careerRank.data.current.image_urls.icon} alt="rank" height="48px" crossOrigin="anonymous" />}</Box>
+                            <Box sx={{ ml: 27, display: "flex", alignItems: "center", position: "absolute" }}>{!noImages && player.appearance?.emblemURL && <Image src={player.careerRank.data.current.image_urls.adornment_icon} alt="banner" height="48px" crossOrigin="anonymous" />}</Box>
+                        </>
+                    }
                 </Box>
             </Box>
         </Box>
