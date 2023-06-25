@@ -53,8 +53,8 @@ export const AllCareerRanks = {
 			]
 		},
 		"properties": {
-			"type": "Bronze",
-			"threshold": 0
+			"type": "",
+			"threshold": -100
 		}
 	},
         1: {
@@ -74,7 +74,7 @@ export const AllCareerRanks = {
                 ]
             },
             "properties": {
-                "type": "Bronze",
+                "type": "",
                 "threshold": 0
             }
         },
@@ -5765,7 +5765,7 @@ export const AllCareerRanks = {
                 ]
             },
             "properties": {
-                "type": "Gold",
+                "type": "",
                 "threshold": 9319350
             }
         }

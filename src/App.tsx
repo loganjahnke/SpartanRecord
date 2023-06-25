@@ -34,6 +34,7 @@ import { PlaylistsView } from "./Pages/Playlists/PlaylistsView";
 import { StoreView } from "./Pages/Store/StoreView";
 import { ClipsView } from "./Pages/Clips/ClipsView";
 import { CareerRankSchema, EmptyCareerRank } from "./Database/Schemas/CareerRankSchema";
+import { CareerRankView } from "./Pages/Career Rank/CareerRankView";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -146,6 +147,9 @@ const App = () =>
 					{/* Mode Views */}
 					<Route path="/modes/:gamertag" element={<ModesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
 					
+					{/* Career Rank Views */}
+					<Route path="/career_rank/:gamertag" element={<CareerRankView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
+
 					{/* Service Record Views */}
 					<Route path="/service_record/:gamertag" element={<PlayerView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} isAllowed={isAllowed} />} />
 					<Route path="/service_record/:node/:gamertag" element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} />} />

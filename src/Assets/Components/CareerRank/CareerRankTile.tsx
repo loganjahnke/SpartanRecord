@@ -27,7 +27,7 @@ export function CareerRankTile(props: { rank: CareerRankSchema })
 			alignItems: "center",
 			padding: 0.5,
 			width: "100%" }}>
-			<img src={rank.data.current.image_urls.icon} alt="Rank" height="48px" width="48px" />
+			<img src={rank.data.current.image_urls.icon} alt="Rank" height="48px" />
 			<Box sx={{ mb: 1 }}>
 				<Box sx={{ display: "flex", flexDirection: "row", mb: 0.5, alignItems: "center" }}>
 					<Typography variant="subtitle1" sx={{ fontSize: "0.8rem", ml: 1 }}>{rank.data.current.title} {CurrentGrade(rank)}</Typography>

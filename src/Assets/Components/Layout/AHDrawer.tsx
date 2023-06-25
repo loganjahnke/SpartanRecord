@@ -5,38 +5,44 @@ import { Player } from "../../../Objects/Model/Player";
 
 import PrimaryLogo from "../../Images/Primary/Spartan-Record-Logo-Primary-White.png";
 
-import { MatchesIcon, MedalsIcon, ModesIcon, PlaylistsIcon, RankedIcon, SearchIcon, ServiceRecordIcon, SocialIcon, VariantsIcon, CreditsIcon } from "../../Icons/CustomIcons";
+import { MatchesIcon, MedalsIcon, ModesIcon, PlaylistsIcon, RankedIcon, SearchIcon, ServiceRecordIcon, SocialIcon, VariantsIcon, CreditsIcon, SpartanCompanyIcon } from "../../Icons/CustomIcons";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { UsbRounded, GamepadRounded, LeaderboardRounded, LockOutlined, CompareArrows, PlayArrow } from "@mui/icons-material";
 
 export enum SRTabs
 {
 	Search = "Search",
+
 	ServiceRecord = "Service Record",
+	CareerRank = "Career Rank",
+	Compare = "Compare",
 	Playlists = "Playlists",
 	Variants = "Variants",
 	Social = "Social",
 	Ranked = "Ranked",
 	SRCustoms = "Customs Stats",
 	SRLocal = "LAN Stats",
+	
+	Medals = "Medals",
+	Modes = "Modes",
+
 	Matches = "Matches",
 	MatchesCustoms = "Customs",
 	MatchesLocal = "LAN",
 	MatchesBeta = "MatchesBeta",
-	Medals = "Medals",
 	BestMatches = "Best Matches",
 	SpartanCompany = "Spartan Company",
 	VariantsExtended = "Variants Extended",
-	Maps = "Maps",
-	MatchOutcome = "Match Outcome",
-	Modes = "Modes",
-	Patreon = "Patreon",
+	
 	Leaderboard = "Leaderboards",
-	Yesterday = "Yesterday",
-	Compare = "Compare",
+	Clips = "Clips",
 	ActivePlaylists = "Active Playlists",
 	Store = "Store",
-	Clips = "Clips",
+	
+	Maps = "Maps",
+	MatchOutcome = "Match Outcome",
+	Patreon = "Patreon",
+	Yesterday = "Yesterday",
 
 	None = "",
 }
@@ -77,6 +83,9 @@ export function AHDrawer(props: AHDrawerProps)
 				break;
 			case SRTabs.ServiceRecord:
 				switchTab(`/service_record/${player.gamertag}`, newTab);
+				break;
+			case SRTabs.CareerRank:
+				switchTab(`/career_rank/${player.gamertag}`, newTab);
 				break;
 			case SRTabs.Playlists:
 				switchTab(`/service_record/${ServiceRecordFilter.Playlist}/${player.gamertag}`, newTab);
@@ -191,6 +200,7 @@ export function AHDrawer(props: AHDrawerProps)
 				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
 					<Tab value={SRTabs.Search} label={SRTabs.Search} icon={<SearchIcon />} iconPosition="start" />
 					<Tab value={SRTabs.ServiceRecord} label={SRTabs.ServiceRecord} icon={<ServiceRecordIcon />} iconPosition="start" />
+					<Tab value={SRTabs.CareerRank} label={SRTabs.CareerRank} icon={<SpartanCompanyIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab value={SRTabs.Compare} label={SRTabs.Compare} icon={<CompareArrows fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					{/* <Tab value={SRTabs.Yesterday} label={SRTabs.Yesterday} icon={<EventRepeat fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
 					<Tab value={SRTabs.Playlists} label={SRTabs.Playlists} icon={<PlaylistsIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
@@ -226,6 +236,7 @@ export function AHDrawer(props: AHDrawerProps)
 				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
 					<Tab value="Search" label="Search" icon={<SearchIcon />} iconPosition="start" />
 					<Tab value={SRTabs.ServiceRecord} label={SRTabs.ServiceRecord} icon={<ServiceRecordIcon />} iconPosition="start" />
+					<Tab value={SRTabs.CareerRank} label={SRTabs.CareerRank} icon={<SpartanCompanyIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab value={SRTabs.Compare} label={SRTabs.Compare} icon={<CompareArrows fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					{/* <Tab value={SRTabs.Yesterday} label={SRTabs.Yesterday} icon={<EventRepeat fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
 					<Tab value={SRTabs.Playlists} label={SRTabs.Playlists} icon={<PlaylistsIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />

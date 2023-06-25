@@ -1,0 +1,53 @@
+.progressionRow {
+	margin-top: 28px;
+}
+
+.progressionRowTitleContainer {
+	width: 100%;
+}
+
+.progressionRowTitle {
+	text-align: center;
+	background-clip: text;
+	-webkit-background-clip: text;
+  	-webkit-text-fill-color: transparent;
+}
+
+.progressionRankGridItemImage {
+	display: flex;
+	align-items: center;
+	padding: 6px;
+}
+
+.progressionRankGridItemIcon {
+	display: flex;
+	align-items: center;
+}
+
+.progressionRank {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	text-align: center;
+}
+
+.progressionRankCurrent {
+	border-bottom: 6px solid;
+	border-radius: 3px;
+}
+
+.progressionImg {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.progressionArrowIcon {
+	opacity: 30%;
+}
+
+.rankTitle {
+	text-transform: uppercase;
+	font-size: 0.6rem !important;
+	color: #FFFFFFAA !important;
+	height: 28px;
+}

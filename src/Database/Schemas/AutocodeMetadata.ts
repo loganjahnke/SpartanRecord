@@ -179,6 +179,7 @@ export interface CareerRankMetadata
 	attributes: {
 		tier: number;
 		grade: number;
+		colors: string[];
 	};
 	properties: {
 		type: string;
