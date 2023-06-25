@@ -53,6 +53,11 @@
 	height: 28px;
 }
 
+.rankRowLabelValues {
+	display: flex;
+	flex-direction: column;
+}
+
 /*---Column---*/
 .progressionRankGridItemImageColumn {
 	display: flex;

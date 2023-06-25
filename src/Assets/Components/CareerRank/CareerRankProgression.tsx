@@ -35,8 +35,6 @@ export function CareerRankProgression(props: { current: CareerRankSchema, servic
 	// Get average score
 	const avgScore = serviceRecord.totalScore / serviceRecord.matchesPlayed;
 
-	const currentDesc = current.data.current.title + current.data.current.subtitle;
-
 	return (
 		<Box>
 			<Grid container className="currentProgressionGrid">
@@ -47,12 +45,12 @@ export function CareerRankProgression(props: { current: CareerRankSchema, servic
 				<Grid item xs={0} sm={1} md={2} lg={3} xl={4} />
 			</Grid>
 			<Box sx={{ display: { xs: "none", sm: "none", md: "none", lg: "block", xl: "block" }}}>
-				<CareerRankProgressionRow allRanks={allRanks} type="Bronze" currentDesc={currentDesc} />
-				<CareerRankProgressionRow allRanks={allRanks} type="Silver" currentDesc={currentDesc} />
-				<CareerRankProgressionRow allRanks={allRanks} type="Gold" currentDesc={currentDesc} />
-				<CareerRankProgressionRow allRanks={allRanks} type="Platinum" currentDesc={currentDesc} />
-				<CareerRankProgressionRow allRanks={allRanks} type="Diamond" currentDesc={currentDesc} />
-				<CareerRankProgressionRow allRanks={allRanks} type="Onyx" currentDesc={currentDesc} />
+				<CareerRankProgressionRow allRanks={allRanks} type="Bronze" current={current} avgScore={avgScore} />
+				<CareerRankProgressionRow allRanks={allRanks} type="Silver" current={current} avgScore={avgScore} />
+				<CareerRankProgressionRow allRanks={allRanks} type="Gold" current={current} avgScore={avgScore} />
+				<CareerRankProgressionRow allRanks={allRanks} type="Platinum" current={current} avgScore={avgScore} />
+				<CareerRankProgressionRow allRanks={allRanks} type="Diamond" current={current} avgScore={avgScore} />
+				<CareerRankProgressionRow allRanks={allRanks} type="Onyx" current={current} avgScore={avgScore} />
 				<Box sx={{ height: "20px" }} />
 			</Box>
 			<Box sx={{ display: { xs: "block", sm: "block", md: "block", lg: "none", xl: "none" }}}>
