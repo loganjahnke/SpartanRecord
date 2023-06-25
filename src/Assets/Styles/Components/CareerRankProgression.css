@@ -1,3 +1,4 @@
+/*---Row---*/
 .progressionRow {
 	margin-top: 28px;
 }
@@ -50,4 +51,34 @@
 	font-size: 0.6rem !important;
 	color: #FFFFFFAA !important;
 	height: 28px;
+}
+
+/*---Column---*/
+.progressionRankGridItemImageColumn {
+	display: flex;
+	align-items: center;
+	padding: 6px 6px 6px 12px;
+	border-radius: 3px;
+}
+
+.rankColLabelValues {
+	display: flex;
+	flex-direction: column;
+	margin-left: 16px;
+}
+
+.rankColTitle {
+	text-transform: uppercase;
+	font-size: 0.6rem !important;
+	color: #FFFFFFAA !important;
+}
+
+.rankColExpected {
+	text-transform: none;
+	font-size: 0.6rem !important;
+	color: #FFFFFF66 !important;
+}
+
+.rankNoUppercase {
+	text-transform: none;
 }

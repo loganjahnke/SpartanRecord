@@ -38,10 +38,20 @@ export function CareerRankView(props: ViewProps)
 		setLoadingMessage("Loading " + gamertag);
 				
 		// Get the player from firebase and show on screen
-		const player = await app.GetPlayerAppearanceOnly(gamertag);
+		const player = await app.GetPlayerFromFirebase(gamertag);
 
 		// Update state
-		updatePlayer(player.gamertag, player.appearance, undefined, undefined, player.careerRank);
+		updatePlayer(player.gamertag, player.appearance, player.serviceRecord, player.csrs, player.careerRank);
+
+		// Update loading message
+		clearLoadingMessages();
+		setBackgroundLoadingProgress("Loading career rank");
+
+		// Get the player from HaloDotAPI and show on screen
+		const haloapiPlayer = await app.GetPlayerFromHaloDotAPI(gamertag);
+
+		// Update state
+		updatePlayer(haloapiPlayer.gamertag, haloapiPlayer.appearance, haloapiPlayer.serviceRecord, haloapiPlayer.csrs, haloapiPlayer.careerRank);
 		
 	}, [gamertag, app, setLoadingMessage, updatePlayer]);
 
@@ -57,7 +67,7 @@ export function CareerRankView(props: ViewProps)
 		switchTab(undefined, SRTabs.CareerRank);
 
 		// Get player
-		const firebasePlayer = await loadPlayer();
+		await loadPlayer();
 
 		// Clear loading messages
 		clearLoadingMessages();
@@ -89,9 +99,7 @@ export function CareerRankView(props: ViewProps)
 						<Button sx={{ mt: 4 }} onClick={() => switchTab("/", SRTabs.Search)} variant="contained">Back to Search</Button>
 					</Box>
 				}
-				{player && <>
-					<CareerRankProgression current={player.careerRank} />
-				</>}
+				{player && <CareerRankProgression current={player.careerRank} serviceRecord={player.serviceRecord} />}
 			</Box>
 		</Box>
 	);

@@ -4,7 +4,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 import "../../Styles/Components/CareerRankProgression.css";
 
-export function CareerRankProgressionTile(props: { rank: CareerRankMetadata, isCurrent?: boolean })
+export function CareerRankProgressionRowTile(props: { rank: CareerRankMetadata, isCurrent?: boolean })
 {
 	const { rank, isCurrent } = props;
 

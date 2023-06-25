@@ -1,16 +1,20 @@
+import { useState } from "react";
 import { Box, Grid } from "@mui/material";
 import { CareerRankSchema } from "../../../Database/Schemas/CareerRankSchema";
 import { GetCareerRankMetadata } from "../../../Objects/Helpers/AllCareerRanks";
 import { CareerRankMetadata } from "../../../Database/Schemas/AutocodeMetadata";
 
 import "../../Styles/Components/CareerRankProgression.css";
-import { CareerRankProgressionTile } from "./CareerRankProgressionTile";
 import { CareerRankBreakdown } from "./CareerRankBreakdown";
 import { CareerRankProgressionRow } from "./CareerRankProgressionRow";
+import { CareerRankProgressionColumn } from "./CareerRankProgressionColumn";
+import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 
-export function CareerRankProgression(props: { current: CareerRankSchema })
+export function CareerRankProgression(props: { current: CareerRankSchema, serviceRecord: ServiceRecord })
 {
-	const { current } = props;
+	const { current, serviceRecord } = props;
+
+	const [expandedType, setExpandedType] = useState(current?.data?.current?.properties?.type ?? "");
 
 	const previous = GetCareerRankMetadata(current.data.current.rank - 1);
 
@@ -27,6 +31,9 @@ export function CareerRankProgression(props: { current: CareerRankSchema })
 	{
 		allRanks.push(GetCareerRankMetadata(i));
 	}
+
+	// Get average score
+	const avgScore = serviceRecord.totalScore / serviceRecord.matchesPlayed;
 
 	const currentDesc = current.data.current.title + current.data.current.subtitle;
 
@@ -47,6 +54,14 @@ export function CareerRankProgression(props: { current: CareerRankSchema })
 				<CareerRankProgressionRow allRanks={allRanks} type="Diamond" currentDesc={currentDesc} />
 				<CareerRankProgressionRow allRanks={allRanks} type="Onyx" currentDesc={currentDesc} />
 				<Box sx={{ height: "20px" }} />
+			</Box>
+			<Box sx={{ display: { xs: "block", sm: "block", md: "block", lg: "none", xl: "none" }}}>
+				<CareerRankProgressionColumn allRanks={allRanks} type="Bronze" expanded={expandedType === "Bronze"} current={current} avgScore={avgScore} setExpanded={setExpandedType} />
+				<CareerRankProgressionColumn allRanks={allRanks} type="Silver" expanded={expandedType === "Silver"} current={current} avgScore={avgScore} setExpanded={setExpandedType} />
+				<CareerRankProgressionColumn allRanks={allRanks} type="Gold" expanded={expandedType === "Gold"} current={current} avgScore={avgScore} setExpanded={setExpandedType} />
+				<CareerRankProgressionColumn allRanks={allRanks} type="Platinum" expanded={expandedType === "Platinum"} current={current} avgScore={avgScore} setExpanded={setExpandedType} />
+				<CareerRankProgressionColumn allRanks={allRanks} type="Diamond" expanded={expandedType === "Diamond"} current={current} avgScore={avgScore} setExpanded={setExpandedType} />
+				<CareerRankProgressionColumn allRanks={allRanks} type="Onyx" expanded={expandedType === "Onyx"} current={current} avgScore={avgScore} setExpanded={setExpandedType} />
 			</Box>
 		</Box>
 	);

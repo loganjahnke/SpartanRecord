@@ -1,5 +1,5 @@
 import { Box, Grid, Typography } from "@mui/material";
-import { CareerRankProgressionTile } from "./CareerRankProgressionTile";
+import { CareerRankProgressionRowTile } from "./CareerRankProgressionRowTile";
 import { CareerRankMetadata } from "../../../Database/Schemas/AutocodeMetadata";
 
 export function CareerRankProgressionRow(props: { allRanks: CareerRankMetadata[], type: string, currentDesc: string })
@@ -35,7 +35,7 @@ export function CareerRankProgressionRow(props: { allRanks: CareerRankMetadata[]
 				{allRanks
 					.filter(rank => rank.properties.type === type)
 					.filter(rank => rank.attributes.grade === 1)
-					.map(rank => <CareerRankProgressionTile rank={rank} isCurrent={currentDesc === rank.title + rank.subtitle} />)
+					.map(rank => <CareerRankProgressionRowTile rank={rank} isCurrent={currentDesc === rank.title + rank.subtitle} />)
 				}
 			</Grid>
 		</Box>
