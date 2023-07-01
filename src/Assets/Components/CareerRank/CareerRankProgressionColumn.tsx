@@ -1,11 +1,10 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Typography } from "@mui/material";
 import { CareerRankProgressionColumnTile } from "./CareerRankProgressionColumnTile";
-import { CareerRankMetadata } from "../../../Database/Schemas/AutocodeMetadata";
-import { CareerRankSchema } from "../../../Database/Schemas/CareerRankSchema";
+import { CareerRankProgressionExpansionProps } from "./CareerRankProps";
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-export function CareerRankProgressionColumn(props: { allRanks: CareerRankMetadata[], type: string, current: CareerRankSchema, avgScore: number, expanded?: boolean, setExpanded: (type: string) => void; })
+export function CareerRankProgressionColumn(props: CareerRankProgressionExpansionProps)
 {
 	const { allRanks, type, current, avgScore, expanded, setExpanded } = props;
 

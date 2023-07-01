@@ -1,11 +1,10 @@
 import { Box, Grid, Typography } from "@mui/material";
-import { CareerRankMetadata } from "../../../Database/Schemas/AutocodeMetadata";
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { CareerRankTileProps } from "./CareerRankProps";
 
 import "../../Styles/Components/CareerRankProgression.css";
-import { CareerRankSchema } from "../../../Database/Schemas/CareerRankSchema";
+import { GetCareerRankMetadata } from "../../../Objects/Helpers/AllCareerRanks";
 
-export function CareerRankProgressionColumnTile(props: { rank: CareerRankMetadata, current: CareerRankSchema, avgScore: number })
+export function CareerRankProgressionColumnTile(props: CareerRankTileProps)
 {
 	const { rank, current, avgScore } = props;
 

@@ -1,5 +1,6 @@
 import { CareerRankMetadata } from "../../Database/Schemas/AutocodeMetadata";
-import { CareerRankSchema } from "../../Database/Schemas/CareerRankSchema";
+import { CareerRankSchema, EmptyCareerRank } from "../../Database/Schemas/CareerRankSchema";
+import { ServiceRecord } from "../Model/ServiceRecord";
 
 /**
  * Get the career rank metadata for the rank number
@@ -17,6 +18,7 @@ export function GetCareerRankMetadata(rank: number): CareerRankMetadata
  */
 export function CurrentGrade(rank: CareerRankSchema): string
 {
+    if (rank.data.current.title === "Hero") { return ""; }
 	if (rank.data.current.attributes.grade === 1) { return "I"; }
 	if (rank.data.current.attributes.grade === 2) { return "II"; }
 	if (rank.data.current.attributes.grade === 3) { return "III"; }
@@ -29,10 +31,335 @@ export function CurrentGrade(rank: CareerRankSchema): string
  */
 export function NextGrade(rank: CareerRankSchema): string
 {
+    if (rank.data.current.title === "Hero") { return ""; }
+    if (rank.data.next.title === "Hero") { return ""; }
 	if (rank.data.next.attributes.grade === 1) { return "I"; }
 	if (rank.data.next.attributes.grade === 2) { return "II"; }
 	if (rank.data.next.attributes.grade === 3) { return "III"; }
 	return "";
+}
+
+/**
+ * Gets the lifetime rank of a service record
+ * @param serviceRecord the service record
+ */
+export function LifetimeRank(serviceRecord: ServiceRecord): CareerRankSchema
+{
+    const cr = EmptyCareerRank();
+    const rank = GetRankFromScore(serviceRecord.totalScore);
+    const currMetadata = GetCareerRankMetadata(rank);
+    const nextMetadata = GetCareerRankMetadata(rank + 1) ?? currMetadata;
+
+    const schema = {
+		data: {
+			level: {
+				next_level_threshold: nextMetadata.properties.threshold,
+				remaining_xp_to_next_level: nextMetadata.properties.threshold - serviceRecord.totalScore,
+				total_xp: serviceRecord.totalScore,
+			},
+			current: {
+				rank: rank,
+				title: currMetadata.title,
+				subtitle: currMetadata.subtitle,
+				image_urls: currMetadata.image_urls,
+				attributes: currMetadata.attributes,
+				properties: currMetadata.properties
+			},
+			next: {
+				rank: rank,
+				title: nextMetadata.title,
+				subtitle: nextMetadata.subtitle,
+				image_urls: nextMetadata.image_urls,
+				attributes: nextMetadata.attributes,
+				properties: nextMetadata.properties
+            }
+        }
+    };
+
+    return schema;
+}
+
+/**
+ * Get the rank number from the score number
+ * @param score the total score
+ * @returns the rank number
+ */
+function GetRankFromScore(score: number): number
+{
+    if (score >= 9319350) { return 272; }
+    if (score >= 9069350) { return 271; }
+    if (score >= 8894350) { return 270; }
+    if (score >= 8744350) { return 269; }
+    if (score >= 8519350) { return 268; }
+    if (score >= 8344350) { return 267; }
+    if (score >= 8194350) { return 266; }
+    if (score >= 7994350) { return 265; }
+    if (score >= 7844350) { return 264; }
+    if (score >= 7719350) { return 263; }
+    if (score >= 7544350) { return 262; }
+    if (score >= 7394350) { return 261; }
+    if (score >= 7269350) { return 260; }
+    if (score >= 7094350) { return 259; }
+    if (score >= 6969350) { return 258; }
+    if (score >= 6869350) { return 257; }
+    if (score >= 6719350) { return 256; }
+    if (score >= 6594350) { return 255; }
+    if (score >= 6494350) { return 254; }
+    if (score >= 6344350) { return 253; }
+    if (score >= 6244350) { return 252; }
+    if (score >= 6154350) { return 251; }
+    if (score >= 6029350) { return 250; }
+    if (score >= 5929350) { return 249; }
+    if (score >= 5846850) { return 248; }
+    if (score >= 5721850) { return 247; }
+    if (score >= 5631850) { return 246; }
+    if (score >= 5556850) { return 245; }
+    if (score >= 5456850) { return 244; }
+    if (score >= 5374350) { return 243; }
+    if (score >= 5304350) { return 242; }
+    if (score >= 5204350) { return 241; }
+    if (score >= 5126850) { return 240; }
+    if (score >= 5064350) { return 239; }
+    if (score >= 4974350) { return 238; }
+    if (score >= 4904350) { return 237; }
+    if (score >= 4846850) { return 236; }
+    if (score >= 4764350) { return 235; }
+    if (score >= 4699350) { return 234; }
+    if (score >= 4646850) { return 233; }
+    if (score >= 4569350) { return 232; }
+    if (score >= 4511850) { return 231; }
+    if (score >= 4461850) { return 230; }
+    if (score >= 4391850) { return 229; }
+    if (score >= 4336850) { return 228; }
+    if (score >= 4291850) { return 227; }
+    if (score >= 4191850) { return 226; }
+    if (score >= 4106850) { return 225; }
+    if (score >= 4034350) { return 224; }
+    if (score >= 3934350) { return 223; }
+    if (score >= 3854350) { return 222; }
+    if (score >= 3789350) { return 221; }
+    if (score >= 3694350) { return 220; }
+    if (score >= 3621850) { return 219; }
+    if (score >= 3561850) { return 218; }
+    if (score >= 3476850) { return 217; }
+    if (score >= 3411850) { return 216; }
+    if (score >= 3356850) { return 215; }
+    if (score >= 3276850) { return 214; }
+    if (score >= 3216850) { return 213; }
+    if (score >= 3166850) { return 212; }
+    if (score >= 3094350) { return 211; }
+    if (score >= 3039350) { return 210; }
+    if (score >= 2991850) { return 209; }
+    if (score >= 2926850) { return 208; }
+    if (score >= 2876850) { return 207; }
+    if (score >= 2834350) { return 206; }
+    if (score >= 2774350) { return 205; }
+    if (score >= 2726850) { return 204; }
+    if (score >= 2686850) { return 203; }
+    if (score >= 2631850) { return 202; }
+    if (score >= 2589350) { return 201; }
+    if (score >= 2554350) { return 200; }
+    if (score >= 2504350) { return 199; }
+    if (score >= 2464350) { return 198; }
+    if (score >= 2431850) { return 197; }
+    if (score >= 2384350) { return 196; }
+    if (score >= 2349350) { return 195; }
+    if (score >= 2319350) { return 194; }
+    if (score >= 2276850) { return 193; }
+    if (score >= 2244350) { return 192; }
+    if (score >= 2216850) { return 191; }
+    if (score >= 2176850) { return 190; }
+    if (score >= 2146850) { return 189; }
+    if (score >= 2121850) { return 188; }
+    if (score >= 2086850) { return 187; }
+    if (score >= 2059350) { return 186; }
+    if (score >= 2036850) { return 185; }
+    if (score >= 2004350) { return 184; }
+    if (score >= 1979350) { return 183; }
+    if (score >= 1959350) { return 182; }
+    if (score >= 1906850) { return 181; }
+    if (score >= 1866850) { return 180; }
+    if (score >= 1834350) { return 179; }
+    if (score >= 1786850) { return 178; }
+    if (score >= 1749350) { return 177; }
+    if (score >= 1719350) { return 176; }
+    if (score >= 1674350) { return 175; }
+    if (score >= 1639350) { return 174; }
+    if (score >= 1611850) { return 173; }
+    if (score >= 1571850) { return 172; }
+    if (score >= 1541850) { return 171; }
+    if (score >= 1516850) { return 170; }
+    if (score >= 1479350) { return 169; }
+    if (score >= 1451850) { return 168; }
+    if (score >= 1429350) { return 167; }
+    if (score >= 1396850) { return 166; }
+    if (score >= 1371850) { return 165; }
+    if (score >= 1349350) { return 164; }
+    if (score >= 1319350) { return 163; }
+    if (score >= 1294350) { return 162; }
+    if (score >= 1274350) { return 161; }
+    if (score >= 1246850) { return 160; }
+    if (score >= 1224350) { return 159; }
+    if (score >= 1206850) { return 158; }
+    if (score >= 1181850) { return 157; }
+    if (score >= 1161850) { return 156; }
+    if (score >= 1144350) { return 155; }
+    if (score >= 1121850) { return 154; }
+    if (score >= 1104350) { return 153; }
+    if (score >= 1089350) { return 152; }
+    if (score >= 1066850) { return 151; }
+    if (score >= 1049350) { return 150; }
+    if (score >= 1034350) { return 149; }
+    if (score >= 1014350) { return 148; }
+    if (score >= 999350) { return 147; }
+    if (score >= 986850) { return 146; }
+    if (score >= 969350) { return 145; }
+    if (score >= 954350) { return 144; }
+    if (score >= 941850) { return 143; }
+    if (score >= 924350) { return 142; }
+    if (score >= 911850) { return 141; }
+    if (score >= 901850) { return 140; }
+    if (score >= 886850) { return 139; }
+    if (score >= 874350) { return 138; }
+    if (score >= 864600) { return 137; }
+    if (score >= 839600) { return 136; }
+    if (score >= 819600) { return 135; }
+    if (score >= 804600) { return 134; }
+    if (score >= 782100) { return 133; }
+    if (score >= 764600) { return 132; }
+    if (score >= 749600) { return 131; }
+    if (score >= 729600) { return 130; }
+    if (score >= 714600) { return 129; }
+    if (score >= 702100) { return 128; }
+    if (score >= 682100) { return 127; }
+    if (score >= 667100) { return 126; }
+    if (score >= 654600) { return 125; }
+    if (score >= 637100) { return 124; }
+    if (score >= 624600) { return 123; }
+    if (score >= 614600) { return 122; }
+    if (score >= 599600) { return 121; }
+    if (score >= 587100) { return 120; }
+    if (score >= 577100) { return 119; }
+    if (score >= 562100) { return 118; }
+    if (score >= 552100) { return 117; }
+    if (score >= 542850) { return 116; }
+    if (score >= 530350) { return 115; }
+    if (score >= 520350) { return 114; }
+    if (score >= 511850) { return 113; }
+    if (score >= 499350) { return 112; }
+    if (score >= 490100) { return 111; }
+    if (score >= 482350) { return 110; }
+    if (score >= 472350) { return 109; }
+    if (score >= 463850) { return 108; }
+    if (score >= 456850) { return 107; }
+    if (score >= 446850) { return 106; }
+    if (score >= 439100) { return 105; }
+    if (score >= 432600) { return 104; }
+    if (score >= 423350) { return 103; }
+    if (score >= 416100) { return 102; }
+    if (score >= 410100) { return 101; }
+    if (score >= 401600) { return 100; }
+    if (score >= 395100) { return 99; }
+    if (score >= 389600) { return 98; }
+    if (score >= 381850) { return 97; }
+    if (score >= 375850) { return 96; }
+    if (score >= 370850) { return 95; }
+    if (score >= 363600) { return 94; }
+    if (score >= 358100) { return 93; }
+    if (score >= 353600) { return 92; }
+    if (score >= 341100) { return 91; }
+    if (score >= 332350) { return 90; }
+    if (score >= 325100) { return 89; }
+    if (score >= 315100) { return 88; }
+    if (score >= 307100) { return 87; }
+    if (score >= 300350) { return 86; }
+    if (score >= 290850) { return 85; }
+    if (score >= 283350) { return 84; }
+    if (score >= 277100) { return 83; }
+    if (score >= 268350) { return 82; }
+    if (score >= 261600) { return 81; }
+    if (score >= 255850) { return 80; }
+    if (score >= 247850) { return 79; }
+    if (score >= 241600) { return 78; }
+    if (score >= 236350) { return 77; }
+    if (score >= 229100) { return 76; }
+    if (score >= 223350) { return 75; }
+    if (score >= 218600) { return 74; }
+    if (score >= 211850) { return 73; }
+    if (score >= 206600) { return 72; }
+    if (score >= 202350) { return 71; }
+    if (score >= 196100) { return 70; }
+    if (score >= 191350) { return 69; }
+    if (score >= 187350) { return 68; }
+    if (score >= 181600) { return 67; }
+    if (score >= 177350) { return 66; }
+    if (score >= 173600) { return 65; }
+    if (score >= 168350) { return 64; }
+    if (score >= 164350) { return 63; }
+    if (score >= 161100) { return 62; }
+    if (score >= 156350) { return 61; }
+    if (score >= 152600) { return 60; }
+    if (score >= 149600) { return 59; }
+    if (score >= 145350) { return 58; }
+    if (score >= 142100) { return 57; }
+    if (score >= 139350) { return 56; }
+    if (score >= 135350) { return 55; }
+    if (score >= 132350) { return 54; }
+    if (score >= 129850) { return 53; }
+    if (score >= 126100) { return 52; }
+    if (score >= 123350) { return 51; }
+    if (score >= 121100) { return 50; }
+    if (score >= 117850) { return 49; }
+    if (score >= 115350) { return 48; }
+    if (score >= 113100) { return 47; }
+    if (score >= 107850) { return 46; }
+    if (score >= 103850) { return 45; }
+    if (score >= 100350) { return 44; }
+    if (score >= 95350) { return 43; }
+    if (score >= 91600) { return 42; }
+    if (score >= 88350) { return 41; }
+    if (score >= 83850) { return 40; }
+    if (score >= 80350) { return 39; }
+    if (score >= 77350) { return 38; }
+    if (score >= 73350) { return 37; }
+    if (score >= 70100) { return 36; }
+    if (score >= 67350) { return 35; }
+    if (score >= 63600) { return 34; }
+    if (score >= 60600) { return 33; }
+    if (score >= 58100) { return 32; }
+    if (score >= 54600) { return 31; }
+    if (score >= 51850) { return 30; }
+    if (score >= 49600) { return 29; }
+    if (score >= 46350) { return 28; }
+    if (score >= 43850) { return 27; }
+    if (score >= 41850) { return 26; }
+    if (score >= 38850) { return 25; }
+    if (score >= 36600) { return 24; }
+    if (score >= 34850) { return 23; }
+    if (score >= 32100) { return 22; }
+    if (score >= 30100) { return 21; }
+    if (score >= 28350) { return 20; }
+    if (score >= 25850) { return 19; }
+    if (score >= 24100) { return 18; }
+    if (score >= 22600) { return 17; }
+    if (score >= 20350) { return 16; }
+    if (score >= 18600) { return 15; }
+    if (score >= 17100) { return 14; }
+    if (score >= 15100) { return 13; }
+    if (score >= 13600) { return 12; }
+    if (score >= 12350) { return 11; }
+    if (score >= 10600) { return 10; }
+    if (score >= 9100) { return 9; }
+    if (score >= 7850) { return 8; }
+    if (score >= 6100) { return 7; }
+    if (score >= 4850) { return 6; }
+    if (score >= 3850) { return 5; }
+    if (score >= 2350) { return 4; }
+    if (score >= 1100) { return 3; }
+    if (score >= 100) { return 2; }
+    if (score >= 0) { return 1; }
+    if (score >= -100   ) { return 0; }
+    return 0;
 }
 
 export const AllCareerRanks = {
@@ -5758,14 +6085,14 @@ export const AllCareerRanks = {
             },
             "attributes": {
                 "tier": null,
-                "grade": 0,
+                "grade": 1,
                 "colors": [
                     "#C0A46E",
                     "#EFD588"
                 ]
             },
             "properties": {
-                "type": "",
+                "type": "Hero",
                 "threshold": 9319350
             }
         }

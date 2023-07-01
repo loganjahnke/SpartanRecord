@@ -1,11 +1,10 @@
 import { Box, Grid, Tooltip, Typography } from "@mui/material";
-import { CareerRankMetadata } from "../../../Database/Schemas/AutocodeMetadata";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { CareerRankTileProps } from "./CareerRankProps";
 
 import "../../Styles/Components/CareerRankProgression.css";
-import { CareerRankSchema } from "../../../Database/Schemas/CareerRankSchema";
 
-export function CareerRankProgressionRowTile(props: { rank: CareerRankMetadata, current: CareerRankSchema, avgScore: number })
+export function CareerRankProgressionRowTile(props: CareerRankTileProps)
 {
 	const { rank, current, avgScore } = props;
 
@@ -19,9 +18,10 @@ export function CareerRankProgressionRowTile(props: { rank: CareerRankMetadata, 
 		<>
 			<Grid 
 				item
-				xs={2}
+				xs={rank.title === "Hero" ? 1 : 2}
 				className={isCurrent ? "progressionRankGridItemImage progressionRankCurrent" : "progressionRankGridItemImage"} 
 				sx={{ 
+					justifyContent: rank.title === "Hero" ? "center" : "",
 					borderColor: rank.attributes.colors[1] + " !important",
 					background: `linear-gradient(to bottom, transparent 0%, ${colorA} 25%, ${colorB} 50%, ${colorA} 75%, transparent 100%)` 
 				}}
@@ -33,13 +33,22 @@ export function CareerRankProgressionRowTile(props: { rank: CareerRankMetadata, 
 						{xpToRank > 0 && <Typography className="rankColTitle rankNoUppercase"><span className="rankColExpected">Expected games to rank:</span> {Math.ceil(xpToRank / avgScore).toLocaleString()}</Typography>}
 					</Box>
 				}>
-					<Box className="progressionRank" sx={{ mt: { xs: "0", sm: "0", md: "0", lg: "0", xl: isCurrent ? "34px" : "28px" }}}>
-						<img className="progressionImg" src={rank.image_urls.icon} alt={rank.title + " " + rank.subtitle} />
+					<Box className="progressionRank" sx={{ 
+						mt: { 
+							xs: "0", 
+							sm: "0", 
+							md: "0", 
+							lg: "0", 
+							xl: isCurrent ? "34px" : "28px" 
+						},
+					}}>
+						{rank.title !== "Hero" && <img className="progressionImg" src={rank.image_urls.icon} alt={rank.title + " " + rank.subtitle} />}
+						{rank.title === "Hero" && <img className="progressionImg" src={rank.image_urls.icon} alt={rank.title + " " + rank.subtitle} height="108px" />}
 						<Typography className="rankTitle" sx={{ display: { xs: "none", sm: "none", md: "none", lg: "none", xl: "block" }}}>{rank.title}</Typography>
 					</Box>
 				</Tooltip>
 			</Grid>
-			{rank.title !== "General" && 
+			{rank.title !== "General" && rank.title !== "Hero" && 
 				<Grid className="progressionRankGridItemIcon" item xs={1} sx={{ background: `linear-gradient(to bottom, transparent 0%, ${colorA} 25%, ${colorB} 50%, ${colorA} 75%, transparent 100%)` }}>
 					<Box className="progressionRank">
 						<NavigateNextIcon className="progressionArrowIcon" htmlColor={rank.subtitle !== "Onyx" ? rank.attributes.colors[1] : "#C0A46E"} />

@@ -15,8 +15,8 @@ export function CareerRankTile(props: { rank: CareerRankSchema })
 	if (!rank.data.level) { return <></>; }
 
 	const levelAmount = (rank.data.current.properties.threshold - previous.properties.threshold);
-	const progress = (levelAmount - rank.data.level.remaining_xp_to_next_level) * 100 / levelAmount;
-	const color = rank.data.current.properties.type;
+	const progress = rank.data.current.title === "Hero" ? 100 : (levelAmount - rank.data.level.remaining_xp_to_next_level) * 100 / levelAmount;
+	const color = rank.data.current.properties.type || rank.data.current.title;
 
 	return (
 		<Box sx={{ 
@@ -33,10 +33,10 @@ export function CareerRankTile(props: { rank: CareerRankSchema })
 					<Typography variant="subtitle1" sx={{ fontSize: "0.8rem", ml: 1 }}>{rank.data.current.title} {CurrentGrade(rank)}</Typography>
 					<Box sx={{ ml: 1 }} />
 					<Box sx={{ flexGrow: 1 }} />
-					<Typography variant="caption" sx={{ display: "block", fontSize: "0.8rem", mr: 1 }}>{rank.data.next.title} {NextGrade(rank)}</Typography>
+					{color !== "Hero" && <Typography variant="caption" sx={{ display: "block", fontSize: "0.8rem", mr: 1 }}>{rank.data.next.title} {NextGrade(rank)}</Typography>}
 				</Box>
 				<Box>
-					<Tooltip title={`${rank.data.level.remaining_xp_to_next_level} needed for next rank`}>
+					<Tooltip title={color === "Hero" ? "Congratulations Hero!" : `${rank.data.level.remaining_xp_to_next_level} needed for next rank`}>
 						<BorderLinearProgress 
 							variant="determinate" 
 							value={progress} 
@@ -52,11 +52,11 @@ export function CareerRankTile(props: { rank: CareerRankSchema })
 										? { background: "linear-gradient(to right, #d3d3d3 0%, #d3d3d3 20%, #a6a6a6 50%, #b8b8b8 80%, #b8b8b8 100%)" } :
 									color === "Gold" 
 										? { background: "linear-gradient(to right, #b9aa57 0%, #b9aa57 20%, #583e1b 50%, #a2854e 80%, #a2854e 100%)" } :
-									color === "Platinum" 
+									color === "Platinum"
 										? { background: "linear-gradient(to right, #8e93cc 0%, #8e93cc 20%, #c1d0d0 50%, #5a6276 80%, #5a6276 100%)" } :
 									color === "Diamond" 
 										? { background: "linear-gradient(to right, #88c6f9 0%, #88c6f9 20%, #58beed 50%, #5078c0 80%, #5078c0 100%)" } :
-									color === "Onyx" 
+									color === "Onyx" || color === "Hero"
 										? { background: "linear-gradient(to left, #bb8c41 0%, #bb8c41 20%, #8c6e34 50%, #ffffba 80%, #ffffba 100%)" }
 									/* Unranked */ 
 										: { background: "linear-gradient(to left, #FFFFFF 0%, #ffffda 20%, #EFEFEF 50%, #ffffda 80%, #FCFCFC 100%)" } 

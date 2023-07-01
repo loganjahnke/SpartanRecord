@@ -2,9 +2,11 @@ import { Box, Grid, Typography } from "@mui/material";
 import { CareerRankProgressionRowTile } from "./CareerRankProgressionRowTile";
 import { CareerRankProgressionProps } from "./CareerRankProps";
 
-export function CareerRankProgressionRow(props: CareerRankProgressionProps)
+export function CareerRankHero(props: CareerRankProgressionProps)
 {
 	const { allRanks, type, current, avgScore } = props;
+
+	if (current.data.current.title !== "Hero") { return <></>; }
 
 	return (
 		<Box className="progressionRow">
@@ -31,7 +33,7 @@ export function CareerRankProgressionRow(props: CareerRankProgressionProps)
 					{type}
 				</Typography>
 			</Box>
-			<Grid container columns={type === "Hero" ? 1 : 44}>
+			<Grid container columns={44}>
 				{allRanks
 					.filter(rank => rank.properties.type === type)
 					.filter(rank => rank.attributes.grade === 1)
