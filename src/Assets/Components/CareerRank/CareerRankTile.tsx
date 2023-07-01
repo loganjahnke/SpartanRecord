@@ -4,15 +4,15 @@ import { BorderLinearProgress } from "../Custom/BorderLinearProgress";
 import { CareerRankSchema } from "../../../Database/Schemas/CareerRankSchema";
 import { CurrentGrade, GetCareerRankMetadata, NextGrade } from "../../../Objects/Helpers/AllCareerRanks";
 
-export function CareerRankTile(props: { rank: CareerRankSchema })
+export function CareerRankTile(props: { rank?: CareerRankSchema })
 {
 	const { rank } = props;
 
     const background = ArrowheadTheme.box;
-	const previous = GetCareerRankMetadata(rank.data.current.rank - 1);
+	const previous = GetCareerRankMetadata((rank?.data?.current?.rank ?? 1) - 1);
 
 	if (!previous) { return <></>; }
-	if (!rank.data.level) { return <></>; }
+	if (!rank?.data?.level) { return <></>; }
 
 	const levelAmount = (rank.data.current.properties.threshold - previous.properties.threshold);
 	const progress = rank.data.current.title === "Hero" ? 100 : (levelAmount - rank.data.level.remaining_xp_to_next_level) * 100 / levelAmount;

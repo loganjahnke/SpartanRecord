@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Box, Grid } from "@mui/material";
 import { CareerRankSchema } from "../../../Database/Schemas/CareerRankSchema";
 import { GetCareerRankMetadata, LifetimeRank } from "../../../Objects/Helpers/AllCareerRanks";
@@ -22,21 +22,32 @@ export function CareerRankProgression(props: { current: CareerRankSchema, servic
 	const [rank, setRank] = useState(current);
 	//#endregion
 
+	//#region Refs
+	const lifetimeShown = useRef(false);
+	//#endregion
+
 	//#region Callbacks
 	/** Sets the appropriate career rank */
 	const setShowLifetimeCallback = useCallback((show: boolean) =>
 	{
 		const rankToShow = show ? LifetimeRank(serviceRecord) : current;
 		setRank(rankToShow);
-		setExpandedType(rankToShow.data.current.properties.type ?? "");
+		setExpandedType(rankToShow?.data?.current?.properties?.type ?? "");
 	}, [current, serviceRecord, setRank, setExpandedType]);
 	//#endregion
 
+	//#region Effects
+	// useEffect(() =>
+	// {
+	// 	setShowLifetimeCallback(lifetimeShown.current);
+	// }, [current, serviceRecord]);
+	//#endregion
+
 	//#region Calculated Properties
-	const previous = GetCareerRankMetadata(current.data.current.rank - 1);
+	const previous = GetCareerRankMetadata((current?.data?.current?.rank ?? 1) - 1);
 
 	if (!previous) { return <></>; }
-	if (!current.data.level) { return <></>; }
+	if (!current?.data?.level) { return <></>; }
 
 	// Get all ranks into an array
 	const allRanks: CareerRankMetadata[] = [];
