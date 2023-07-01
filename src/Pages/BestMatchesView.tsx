@@ -42,7 +42,7 @@ export function BestMatchesView(props: ViewProps)
 		{
 			setLoadingMessage("Loading " + gamertag);
 
-			const myPlayer = await app.GetPlayerAppearanceOnly(gamertag);
+			const myPlayer = await app.GetPlayerAppearanceAndCROnly(gamertag);
 			const [filters, bests] = await Promise.all([
 				await app.GetAvailableFilters(gamertag, ServiceRecordFilter.Maps),
 				await app.GetBest(gamertag)

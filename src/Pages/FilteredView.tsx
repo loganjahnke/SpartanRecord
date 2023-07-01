@@ -27,6 +27,7 @@ import { VehicleBreakdown } from "../Assets/Components/Breakdowns/VehicleBreakdo
 import { TimePlayed } from "../Assets/Components/Breakdowns/TimePlayed";
 import { Helmet } from "react-helmet";
 import { ServiceRecordType } from "../Database/SCData";
+import { Debugger } from "../Objects/Helpers/Debugger";
 
 export function FilteredView(props: ViewProps)
 {
@@ -56,6 +57,8 @@ export function FilteredView(props: ViewProps)
 
 	const loadData = useCallback(async () => 
 	{		
+		Debugger.LoadView("FilteredView");
+		
 		// Check if we need to check Firebase or HaloDotAPI
 		setLoadingMessage("Loading Filters");
 
@@ -148,7 +151,7 @@ export function FilteredView(props: ViewProps)
 				switchTab(undefined, node === ServiceRecordFilter.Maps ? SRTabs.Maps : SRTabs.MatchOutcome);
 			}
 
-			const myPlayer = await app.GetPlayerAppearanceOnly(gamertag);
+			const myPlayer = await app.GetPlayerAppearanceAndCROnly(gamertag);
 			updatePlayer(gamertag, myPlayer.appearance);
             
 			app.logger.LogViewServiceRecord(true);

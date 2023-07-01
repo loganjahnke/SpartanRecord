@@ -9,6 +9,7 @@ import { Helmet } from "react-helmet";
 import { GamertagSearch } from "../Assets/Components/ServiceRecord/GamertagSearch";
 import { Grow } from "../Assets/Components/Common/Grow";
 import { HaloDotAPISeason } from "../Database/Schemas/AutocodeMetadata";
+import { Debugger } from "../Objects/Helpers/Debugger";
 
 export function HomeView(props: ViewProps)
 {
@@ -90,6 +91,8 @@ export function HomeView(props: ViewProps)
 
 	const loadData = useCallback(async () => 
 	{
+		Debugger.LoadView("HomeView");
+		
 		setVersion(await app.halodapi.GetVersion());
 		setCurrSeason(await app.GetCurrentSeason());
 

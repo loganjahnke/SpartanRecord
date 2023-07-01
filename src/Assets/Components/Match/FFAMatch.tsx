@@ -44,8 +44,8 @@ export function FFAMatch(props: TeamsMatch)
 		const right = me.gamertag === "" || me.gamertag === winner.gamertag ? second : winner;
 
 		const [player1, player2] = await Promise.all([
-			app.GetPlayerAppearanceOnly(left.gamertag),
-			app.GetPlayerAppearanceOnly(right.gamertag)
+			app.GetPlayerAppearanceAndCROnly(left.gamertag),
+			app.GetPlayerAppearanceAndCROnly(right.gamertag)
 		]);
 
 		setMyMatchPlayer(left);

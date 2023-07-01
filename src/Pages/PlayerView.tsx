@@ -62,7 +62,7 @@ export function PlayerView(props: ViewProps)
 	 * Loads the player from HaloDotAPI
 	 * @param currSR the current service record from Firebase
 	 */
-	const loadFromHaloDotAPI = useCallback(async (currSR: ServiceRecord) =>
+	const loadFromHaloDotAPI = useCallback(async (firebasePlayer: Player) =>
 	{
 		// If we are already syncing this gamertag, quit early
 		if (!gamertag || app.IsSyncing(gamertag)) 
@@ -89,7 +89,7 @@ export function PlayerView(props: ViewProps)
 		app.AddToSyncing(gamertag);
 
 		// Get updated player
-		const haloDotAPIPlayer = await app.GetPlayerFromHaloDotAPI(gamertag, season);
+		const haloDotAPIPlayer = await app.GetPlayerFromHaloDotAPI(gamertag, season, firebasePlayer.serviceRecord);
 		if (!haloDotAPIPlayer) 
 		{
 			clearLoadingMessages();
@@ -98,10 +98,10 @@ export function PlayerView(props: ViewProps)
 		}
 
 		// Update state
-		updatePlayer(haloDotAPIPlayer.gamertag, haloDotAPIPlayer.appearance, haloDotAPIPlayer.serviceRecord, haloDotAPIPlayer.csrs, haloDotAPIPlayer.careerRank, haloDotAPIPlayer.isPrivate);
+		updatePlayer(haloDotAPIPlayer.gamertag, haloDotAPIPlayer.appearance, haloDotAPIPlayer.serviceRecord, haloDotAPIPlayer.csrs, haloDotAPIPlayer.careerRank, haloDotAPIPlayer.isPrivate, firebasePlayer);
 
 		// Store into Firebase
-		await app.SetPlayerIntoFirebase(haloDotAPIPlayer, season, currSR);
+		await app.SetPlayerIntoFirebase(haloDotAPIPlayer, season, firebasePlayer.serviceRecord);
 
 		// Check if HaloDotAPI automatically corrected the gamertag
 		// Make sure we point Firebase to the right gamertag
@@ -116,7 +116,7 @@ export function PlayerView(props: ViewProps)
 		// Add to recent players cookie
 		if (haloDotAPIPlayer.serviceRecordData && !(haloDotAPIPlayer.serviceRecordData as any).error) { Cookie.addRecent(haloDotAPIPlayer.gamertag); }
 
-		return haloDotAPIPlayer.serviceRecordData && !(haloDotAPIPlayer.serviceRecordData as any).error;
+		return haloDotAPIPlayer.serviceRecordData && !(haloDotAPIPlayer.serviceRecordData as any).error && haloDotAPIPlayer.serviceRecord.matchesPlayed !== firebasePlayer?.serviceRecord?.matchesPlayed;
 
 	}, [gamertag, app, season, setLoadingMessage, updatePlayer, setBackgroundLoadingProgress, clearLoadingMessages]);
 
@@ -184,6 +184,8 @@ export function PlayerView(props: ViewProps)
 	 */
 	const loadData = useCallback(async () => 
 	{		
+		Debugger.LoadView("PlayerView");
+
 		// Gamertag is required
 		if (!gamertag) { switchTab("/", SRTabs.Search); return; }
 
@@ -201,7 +203,7 @@ export function PlayerView(props: ViewProps)
 		const firebasePlayer = await loadFromFirebase();
 
 		// Load from HaloDotAPI
-		if (await loadFromHaloDotAPI(firebasePlayer.serviceRecord))
+		if (await loadFromHaloDotAPI(firebasePlayer))
 		{
 			// Update historic statistics
 			await loadHistoricStatistics(firebasePlayer.historicStats);

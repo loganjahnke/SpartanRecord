@@ -10,6 +10,7 @@ import { PlaylistWeights } from "../../Objects/Pieces/PlaylistWeights";
 import { PlaylistCard } from "./Components/PlaylistCard";
 
 import "../../Assets/Styles/Views/Playlist.css";
+import { Debugger } from "../../Objects/Helpers/Debugger";
 
 export function PlaylistsView(props: ViewProps)
 {
@@ -56,6 +57,8 @@ export function PlaylistsView(props: ViewProps)
 	 */
 	const loadData = useCallback(async () => 
 	{
+		Debugger.LoadView("PlaylistsView");
+		
 		// Update tab
 		switchTab(undefined, SRTabs.ActivePlaylists);
 		

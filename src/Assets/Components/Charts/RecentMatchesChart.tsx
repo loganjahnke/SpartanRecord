@@ -17,7 +17,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { PlayerMatch } from "../../../Objects/Model/PlayerMatch";
 import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import useWindowDimensions from "../../../Objects/Helpers/Hooks/UseWindowDimensions";
-import { Debugger } from "../../../Objects/Helpers/Debugger";
 
 enum RecentMatchesDataSets
 {
@@ -99,7 +98,6 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 		dataSet.current = newDataSet;
 
 		const displayDataLabels = width > 500 && newDataSet !== RecentMatchesDataSets.WinLoss;
-		Debugger.Simple("RecentMatchesChart", "changeDataSet()", displayDataLabels ? "YES Display Labels" : "NO Display Labels");
 
 		setOptions({
 			responsive: true,

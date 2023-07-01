@@ -37,10 +37,10 @@ export function CareerRankProgression(props: { current: CareerRankSchema, servic
 	//#endregion
 
 	//#region Effects
-	// useEffect(() =>
-	// {
-	// 	setShowLifetimeCallback(lifetimeShown.current);
-	// }, [current, serviceRecord]);
+	useEffect(() =>
+	{
+		setShowLifetimeCallback(lifetimeShown.current);
+	}, [current, serviceRecord]);
 	//#endregion
 
 	//#region Calculated Properties

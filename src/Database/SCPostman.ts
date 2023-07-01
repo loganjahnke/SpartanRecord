@@ -14,6 +14,7 @@ import { MatchSchema } from "./Schemas/MatchSchema";
 import { PlaylistWeights } from "../Objects/Pieces/PlaylistWeights";
 import { HaloDotAPIClip, HaloDotAPIClips } from "./Schemas/HaloDotAPIClip";
 import { CareerRankSchema } from "./Schemas/CareerRankSchema";
+import { AllSeasons } from "../Objects/Helpers/AllSeasons";
 
 export class SCPostman
 {
@@ -32,16 +33,42 @@ export class SCPostman
 	 * Gets the player from HaloDotAPI
 	 * @param gamertag the gamertag
 	 * @param season the season identifier
+	 * @param oldSR the old service record
 	 * @returns the player
 	 */
-	public async GetPlayer(gamertag: string, season?: string): Promise<Player>
+	public async GetPlayer(gamertag: string, season?: string, oldSR?: ServiceRecord): Promise<Player>
 	{
 		const player = new Player(gamertag);
+
+		// See if anything has updated
+		if (!season)
+		{
+			const newSR = await this.GetServiceRecord(player);
+			if (!newSR) 
+			{ 
+				player.serviceRecord.error = "Could not load player";
+				return player; 
+			}
+
+			if (newSR.matchesPlayed === oldSR?.matchesPlayed)
+			{
+				return player;
+			}
+
+			await Promise.all([
+				this.GetAppearance(player), 
+				this.GetCSRS(player, season),
+				this.GetCareerRank(player)
+			]).catch(error => {
+				player.serviceRecord.error = error?.message ?? "Could not load player";
+			});
+
+			return player;
+		}
+
+		// Season specifics, service record only
 		await Promise.all([
-			this.GetAppearance(player), 
 			this.GetServiceRecord(player, season),
-			this.GetCSRS(player, season),
-			this.GetCareerRank(player)
 		]).catch(error => {
 			player.serviceRecord.error = error?.message ?? "Could not load player";
 		});
@@ -132,11 +159,11 @@ export class SCPostman
 	 * @param type the type of service record to get
 	 * @returns the service record for the gamertag
 	 */
-	public async GetServiceRecord(player: Player, season?: string, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<void>
+	public async GetServiceRecord(player: Player, season?: string, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<ServiceRecord>
 	{
-		Debugger.Print("SCPostman", "GetServiceRecord()", player.gamertag);
 		player.serviceRecordData = await this.GetServiceRecordData(player, season, playlistId, categoryId, type);
 		player.serviceRecord = new ServiceRecord(player.serviceRecordData);
+		return player.serviceRecord;
 	}
 
 	/**
@@ -194,6 +221,7 @@ export class SCPostman
 	 */
 	public async GetMaps(): Promise<AutocodeMap[]>
 	{
+		Debugger.Print("SCPostman", "GetMaps()");
 		const result = await this.__fetch("/games/halo-infinite/metadata/multiplayer/maps");
 		return result.data as AutocodeMap[];
 	}
@@ -203,7 +231,13 @@ export class SCPostman
 	 */
 	public async GetPlaylists(): Promise<HaloDotAPIPlaylist[]>
 	{
-		if (this.__playlists && this.__playlists.length > 0) { return this.__playlists; }
+		if (this.__playlists && this.__playlists.length > 0) 
+		{ 
+			Debugger.Print("SCPostman", "GetPlaylists()", "Cache");
+			return this.__playlists; 
+		}
+
+		Debugger.Print("SCPostman", "GetPlaylists()", "Hit");
 
 		const result = await this.__fetch("/games/halo-infinite/metadata/multiplayer/playlists");
 		const playlists = result.data as HaloDotAPIPlaylist[];
@@ -256,6 +290,7 @@ export class SCPostman
 	 */
 	public async GetVariants(): Promise<HaloDotAPICategory[]>
 	{
+		Debugger.Print("SCPostman", "GetVariants()", "Hit");
 		const result = await this.__fetch("/games/halo-infinite/metadata/multiplayer/modes/categories");
 		return result.data as HaloDotAPICategory[];
 	}
@@ -265,6 +300,7 @@ export class SCPostman
 	 */
 	public async GetMedals(): Promise<AutocodeMedal[]>
 	{
+		Debugger.Print("SCPostman", "GetMedals()", "Hit");
 		const result = await this.__fetch("/games/halo-infinite/metadata/multiplayer/medals");
 		return result.data as AutocodeMedal[];
 	}
@@ -274,6 +310,7 @@ export class SCPostman
 	 */
 	public async GetTeams(): Promise<AutocodeTeam[]>
 	{
+		Debugger.Print("SCPostman", "GetTeams()", "Hit");
 		const result = await this.__fetch("/games/halo-infinite/metadata/multiplayer/teams");
 		return result.data as AutocodeTeam[];
 	}
@@ -284,8 +321,9 @@ export class SCPostman
 	 */
 	public async GetSeasons(): Promise<HaloDotAPISeason[]>
 	{
-		const result = await this.__fetch("/games/halo-infinite/metadata/multiplayer/seasons");
-		return result.data as HaloDotAPISeason[];
+		Debugger.Print("SCPostman", "GetSeasons()", "Cache");
+		const result = AllSeasons; //await this.__fetch("/games/halo-infinite/metadata/multiplayer/seasons");
+		return result.data as any as HaloDotAPISeason[];
 	}
 
 	/**
@@ -294,6 +332,7 @@ export class SCPostman
 	 */
 	public async GetStore(): Promise<HaloDotAPIStoreOffering[]>
 	{
+		Debugger.Print("SCPostman", "GetStore()", "Hit");
 		const result = await this.__fetch("/games/halo-infinite/stores/main") as HaloDotAPIStore;
 		return result.data.offerings;
 	}
@@ -304,6 +343,7 @@ export class SCPostman
 	 */
 	public async GetClips(gamertag: string): Promise<HaloDotAPIClip[]>
 	{
+		Debugger.Print("SCPostman", "GetClips()", "Hit");
 		const result = await this.__fetch(`/games/halo-infinite/media/players/${gamertag}/clips`) as HaloDotAPIClips;
 		return result.data;
 	}
@@ -390,6 +430,8 @@ export class SCPostman
 	 */
 	public async GetPlayerMatches(gamertag: string, count: number, offset: number, customs?: boolean, local?: boolean): Promise<PlayerMatchWithOddsSchema[]>
 	{
+		Debugger.Print("SCPostman", "GetPlayerMatches()", "Hit");
+
 		// Prepare params
 		const typeParam = SCPostman.__param("type", customs ? "custom" : local ? "local" : "matchmaking");
 		const countParam = SCPostman.__param("count", count, true);
@@ -449,6 +491,7 @@ export class SCPostman
 	 */
 	public async GetMatches(ids: string[]): Promise<MatchSchema[]>
 	{
+		Debugger.Print("SCPostman", "GetMatches()", `Hit x${ids.length}`);
 		return await Promise.all(ids.map(id => this.__fetch(`/games/halo-infinite/stats/multiplayer/matches/${id}`)));
 	}
 	//#endregion
@@ -461,6 +504,7 @@ export class SCPostman
 	 */
 	public async IsValidGamertag(gamertag: string): Promise<string>
 	{
+		Debugger.Print("SCPostman", "IsValidGamertag()", `Hit`);
 		const details = await this.__fetch(`/tooling/xbox-network/players/${gamertag}/details`);
 		return details?.data?.gamertag ?? "";
 	}
@@ -470,7 +514,13 @@ export class SCPostman
 	 */
 	public async GetVersion(): Promise<string>
 	{
-		if (this.__version) { return this.__version; }
+		if (this.__version) 
+		{ 
+			Debugger.Print("SCPostman", "GetVersion()", `Cache`);
+			return this.__version; 
+		}
+		
+		Debugger.Print("SCPostman", "GetVersion()", `Hit`);
 		const details = await this.__fetch("/tooling/api/details");
 		this.__version = details?.data?.versions?.latest;
 		return this.__version;
@@ -528,8 +578,6 @@ export class SCPostman
 		const playlistParam = SCPostman.__param("playlist_id", playlistId, true);
 		const seasonParam = SCPostman.__param("season_id", season, true);
 		const categoryParam = SCPostman.__param("category_id", categoryId, true);
-		
-		Debugger.Simple("SCPostman", "__getServiceRecord...", `${node}${filterParam}${playlistParam}${categoryParam}${seasonParam}`);
 
 		return await this.__fetch(`/games/halo-infinite/stats/multiplayer/players/${gamertag}/service-record/${node}${filterParam}${playlistParam}${categoryParam}${seasonParam}`);
 	}

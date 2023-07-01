@@ -13,7 +13,7 @@ export interface ViewProps
     setLoadingMessage: (message: string) => void;
     setBackgroundLoadingProgress: (progress: string) => void;
     player?: Player;
-    updatePlayer: (gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, csrs?: CSRS[], careerRank?: CareerRankSchema, isPrivate?: boolean) => void;
+    updatePlayer: (gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, csrs?: CSRS[], careerRank?: CareerRankSchema, isPrivate?: boolean, oldPlayer?: Player) => void;
     switchTab: (url?: string, tab?: SRTabs) => void;
     isAllowed?: boolean;
 }

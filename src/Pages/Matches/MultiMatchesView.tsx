@@ -14,6 +14,7 @@ import { SRTabs } from "../../Assets/Components/Layout/AHDrawer";
 import { RecentMatchesChart } from "../../Assets/Components/Charts/RecentMatchesChart";
 import { Helmet } from "react-helmet";
 import { Cookie } from "../../Objects/Helpers/Cookie";
+import { Debugger } from "../../Objects/Helpers/Debugger";
 
 interface MultiMatchesViewProps extends ViewProps
 {
@@ -91,6 +92,8 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 	 */
 	const loadData = useCallback(async (append?: boolean) => 
 	{
+		Debugger.LoadView("MultiMatchesView");
+
 		if (!gamertag) { return; }
 
 		// Clear messages from other views

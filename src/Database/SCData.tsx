@@ -83,6 +83,30 @@ export class SCData
         const player = new Player(gamertag);
         
         // Try to get from firebase
+        const [firebaseAppearance] = await Promise.all([
+            this.firebase.GetAppearance(gamertag)
+        ]);
+
+        if (firebaseAppearance) { player.appearance = firebaseAppearance; }
+        if (firebaseAppearance) { return player; }
+
+        // Otherwise get from HaloDotAPI
+        await Promise.all([this.halodapi.GetAppearance(player)]);
+        if (player.appearanceData) { this.firebase.SetAppearance(gamertag, player.appearanceData); }
+
+        return player;
+    }
+
+    /**
+     * Gets the player's appearance from firebase
+     * @param gamertag the gamertag
+     * @returns the player
+     */
+    public async GetPlayerAppearanceAndCROnly(gamertag: string): Promise<Player>
+    {
+        const player = new Player(gamertag);
+        
+        // Try to get from firebase
         const [firebaseAppearance, firebaseCareerRank] = await Promise.all([
             this.firebase.GetAppearance(gamertag),
             this.firebase.GetCareerRank(gamertag)
@@ -192,10 +216,11 @@ export class SCData
      * Gets the player from HaloDotAPI
      * @param gamertag the gamertag
      * @param season the season identifier
+     * @param oldSR the current service record
      */
-	public async GetPlayerFromHaloDotAPI(gamertag: string, season?: string): Promise<Player> 
+	public async GetPlayerFromHaloDotAPI(gamertag: string, season?: string, oldSR?: ServiceRecord): Promise<Player> 
     {
-        const player = await this.halodapi.GetPlayer(gamertag, season);
+        const player = await this.halodapi.GetPlayer(gamertag, season, oldSR);
         if ((player.serviceRecordData as any)?.error) { this.logger.LogError(); }
         return player;
     }

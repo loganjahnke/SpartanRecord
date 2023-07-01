@@ -78,11 +78,13 @@ const App = () =>
 	 * @param appearance the new appearance of the player
 	 * @param serviceRecord the new service record for the player
 	 * @param csrs the ranked ranks
+	 * @param careerRank the career rank for the player
 	 * @param isPrivate is the gamertag private?
+	 * @param oldPlayer the current (old) player
 	 */
-	const updatePlayer = useCallback(async (gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, csrs?: CSRS[], careerRank?: CareerRankSchema, isPrivate?: boolean) =>
+	const updatePlayer = useCallback(async (gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, csrs?: CSRS[], careerRank?: CareerRankSchema, isPrivate?: boolean, oldPlayer?: Player) =>
 	{
-		const newPlayer = Player.Copy(player);
+		const newPlayer = Player.Copy(oldPlayer ?? player);
 
 		if (gamertag && gamertag !== player.gamertag)
 		{
@@ -95,10 +97,10 @@ const App = () =>
 		}
 		else
 		{
-			if (appearance) { newPlayer.appearance = appearance; }
-			if (serviceRecord) { newPlayer.serviceRecord = serviceRecord; }
-			if (csrs) { newPlayer.csrs = csrs; }
-			if (careerRank) { newPlayer.careerRank = careerRank; }
+			if (appearance && appearance.emblemURL) { newPlayer.appearance = appearance; }
+			if (serviceRecord && !serviceRecord.IsEmpty()) { newPlayer.serviceRecord = serviceRecord; }
+			if (csrs && csrs.length > 0) { newPlayer.csrs = csrs; }
+			if (careerRank?.data?.current?.title) { newPlayer.careerRank = careerRank; }
 			if (isPrivate !== undefined) { newPlayer.isPrivate = isPrivate; }
 		}
 

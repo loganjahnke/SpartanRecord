@@ -67,6 +67,7 @@ export class Player
         newPlayer.appearanceData = player.appearanceData;
         newPlayer.serviceRecordData = player.serviceRecordData;
         newPlayer.isPrivate = player.isPrivate;
+        newPlayer.careerRank = player.careerRank;
         return newPlayer;
     }
 

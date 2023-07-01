@@ -111,6 +111,16 @@ export class Debugger
 
     /**
      * Prints a debug message to the console
+     * @param view the name of the view
+     */
+    public static LoadView(view: string)
+    {
+        if (!Debugger.IS_DEBUGGING) { return; }
+        console.log("--------------------" + view + "--------------------");
+    }
+
+    /**
+     * Prints a debug message to the console
      * @param tsClass the class
      * @param tsMethod the method
      * @param message the message details (optional)

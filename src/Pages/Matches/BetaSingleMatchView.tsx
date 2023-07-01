@@ -16,6 +16,7 @@ import { MultiTeamsMatch } from "../../Assets/Components/Match/MultiTeamMatch";
 import { FFAMatch } from "../../Assets/Components/Match/FFAMatch";
 
 import "../../Assets/Styles/Views/SingleMatch.css";
+import { Debugger } from "../../Objects/Helpers/Debugger";
 
 export function BetaSingleMatchView(props: ViewProps)
 {
@@ -35,6 +36,8 @@ export function BetaSingleMatchView(props: ViewProps)
 	{
 		if (!id) { return; }
 		
+		Debugger.LoadView("BetaSingleMatchView");
+
 		// Set loading message
 		setLoadingMessage("Loading match");
 		if (gamertag) { setGamertag(gamertag); }

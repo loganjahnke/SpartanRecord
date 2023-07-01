@@ -11,6 +11,7 @@ import { LeaderRanks } from "../Assets/Components/Ranks/LeaderRanks";
 import { Timeline } from "@mui/lab";
 import { TimelineEvent } from "../Assets/Components/Leaderboard/TimelineEvent";
 import { LeaderboardChooser } from "../Assets/Components/Leaderboard/LeaderboardChooser";
+import { Debugger } from "../Objects/Helpers/Debugger";
 
 export function LeaderboardView(props: ViewProps)
 {
@@ -101,6 +102,8 @@ export function LeaderboardView(props: ViewProps)
 
 	const loadData = useCallback(async () => 
 	{
+		Debugger.LoadView("LeaderboardView");
+
 		if (!category || !isLeaderboard(category)) 
 		{ 
 			switchTab(`/leaderboard/${gamertag ?? "ItzEmoneyyy"}/${Leaderboard.Accuracy}`, SRTabs.Leaderboard); 

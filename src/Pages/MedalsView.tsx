@@ -9,6 +9,7 @@ import { ViewProps } from "./Props/ViewProps";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { Helmet } from "react-helmet";
 import { Cookie } from "../Objects/Helpers/Cookie";
+import { Debugger } from "../Objects/Helpers/Debugger";
 
 export function MedalsView(props: ViewProps)
 {
@@ -24,6 +25,8 @@ export function MedalsView(props: ViewProps)
 
 	const loadData = useCallback(async () => 
 	{		
+		Debugger.LoadView("MedalsView");
+		
 		// Check if we need to check Firebase or HaloDotAPI
 		setLoadingMessage("Loading Medals");
 		

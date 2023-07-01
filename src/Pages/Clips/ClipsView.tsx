@@ -62,7 +62,7 @@ export function ClipsView(props: ViewProps)
 		// Ensure player is set
 		if (gamertag)
 		{
-			const player = await app.GetPlayerAppearanceOnly(gamertag);
+			const player = await app.GetPlayerAppearanceAndCROnly(gamertag);
 			updatePlayer(gamertag, player?.appearance);
 		}
 

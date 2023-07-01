@@ -6,6 +6,11 @@ import { useParams } from "react-router-dom";
 import { ViewProps } from "../Props/ViewProps";
 import { SRTabs } from "../../Assets/Components/Layout/AHDrawer";
 import { CareerRankProgression } from "../../Assets/Components/CareerRank/CareerRankProgression";
+import { Player } from "../../Objects/Model/Player";
+import { ServiceRecord } from "../../Objects/Model/ServiceRecord";
+import { SR } from "../../Objects/Helpers/Statics/SR";
+import { Cookie } from "../../Objects/Helpers/Cookie";
+import { Debugger } from "../../Objects/Helpers/Debugger";
 
 export function CareerRankView(props: ViewProps)
 {
@@ -30,9 +35,9 @@ export function CareerRankView(props: ViewProps)
 	 * Loads the player from firebase
 	 * @returns the player object
 	 */
-	const loadPlayer = useCallback(async () =>
+	const loadFromFirebase = useCallback(async () =>
 	{
-		if (!gamertag) { return; }
+		if (!gamertag) { return new Player(); }
 
 		// Set page gamertag and show loading message
 		setLoadingMessage("Loading " + gamertag);
@@ -43,36 +48,85 @@ export function CareerRankView(props: ViewProps)
 		// Update state
 		updatePlayer(player.gamertag, player.appearance, player.serviceRecord, player.csrs, player.careerRank);
 
-		// Update loading message
-		clearLoadingMessages();
-		setBackgroundLoadingProgress("Loading career rank");
+		return player;
 
-		// Get the player from HaloDotAPI and show on screen
-		const haloapiPlayer = await app.GetPlayerFromHaloDotAPI(gamertag);
+	}, [gamertag, app, setLoadingMessage, updatePlayer]);
+
+	/**
+	 * Loads the player from HaloDotAPI
+	 * @param currSR the current service record from Firebase
+	 */
+	const loadFromHaloDotAPI = useCallback(async (firebasePlayer: Player) =>
+	{
+		// If we are already syncing this gamertag, quit early
+		if (!gamertag || app.IsSyncing(gamertag)) 
+		{ 
+			clearLoadingMessages(); 
+			return; 
+		}
+
+		// Show background loading message
+		setLoadingMessage("");
+		setBackgroundLoadingProgress(SR.DefaultLoading);
+
+		// Otherwise get latest data from HaloDotAPI
+		app.AddToSyncing(gamertag);
+
+		// Get updated player
+		const haloDotAPIPlayer = await app.GetPlayerFromHaloDotAPI(gamertag, undefined, firebasePlayer.serviceRecord);
+		if (!haloDotAPIPlayer) 
+		{
+			clearLoadingMessages();
+			app.RemoveFromSyncing(gamertag);
+			return;
+		}
 
 		// Update state
-		updatePlayer(haloapiPlayer.gamertag, haloapiPlayer.appearance, haloapiPlayer.serviceRecord, haloapiPlayer.csrs, haloapiPlayer.careerRank);
-		
-	}, [gamertag, app, setLoadingMessage, updatePlayer]);
+		updatePlayer(haloDotAPIPlayer.gamertag, haloDotAPIPlayer.appearance, haloDotAPIPlayer.serviceRecord, haloDotAPIPlayer.csrs, haloDotAPIPlayer.careerRank, haloDotAPIPlayer.isPrivate, firebasePlayer);
+
+		// Store into Firebase
+		await app.SetPlayerIntoFirebase(haloDotAPIPlayer, undefined, firebasePlayer.serviceRecord);
+
+		// Check if HaloDotAPI automatically corrected the gamertag
+		// Make sure we point Firebase to the right gamertag
+		if (haloDotAPIPlayer.gamertag !== gamertag)
+		{
+			await app.UpdateGamertagReference(haloDotAPIPlayer.gamertag, gamertag);
+		}
+
+		// Remove from syncing tracker
+		app.RemoveFromSyncing(gamertag);
+
+		// Add to recent players cookie
+		if (haloDotAPIPlayer.serviceRecordData && !(haloDotAPIPlayer.serviceRecordData as any).error) { Cookie.addRecent(haloDotAPIPlayer.gamertag); }
+
+		return haloDotAPIPlayer.serviceRecordData && !(haloDotAPIPlayer.serviceRecordData as any).error;
+
+	}, [gamertag, app, setLoadingMessage, updatePlayer, setBackgroundLoadingProgress, clearLoadingMessages]);
 
 	/**
 	 * Loads the data for the view
 	 */
 	const loadData = useCallback(async () => 
 	{		
+		Debugger.LoadView("CareerRankView");
+
 		// Gamertag is required
 		if (!gamertag) { switchTab("/", SRTabs.Search); return; }
 
 		// Update tab
 		switchTab(undefined, SRTabs.CareerRank);
 
-		// Get player
-		await loadPlayer();
+		// Get from firebase
+		const firebasePlayer = await loadFromFirebase();
+
+		// Load from HaloDotAPI
+		await loadFromHaloDotAPI(firebasePlayer);
 
 		// Clear loading messages
 		clearLoadingMessages();
 
-	}, [app, gamertag, switchTab, loadPlayer, clearLoadingMessages]);
+	}, [app, gamertag, switchTab, loadFromFirebase, loadFromHaloDotAPI, clearLoadingMessages]);
 	
 	useEffect(() =>
 	{

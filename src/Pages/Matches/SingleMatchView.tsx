@@ -15,6 +15,7 @@ import { MatchPlayer } from "../../Objects/Pieces/MatchPlayer";
 import { Team } from "../../Objects/Pieces/Team";
 import { ViewProps } from "../Props/ViewProps";
 import { TeamTable } from "../Subpage/TeamTable";
+import { Debugger } from "../../Objects/Helpers/Debugger";
 
 export function SingleMatchView(props: ViewProps)
 {
@@ -32,6 +33,8 @@ export function SingleMatchView(props: ViewProps)
 
 	const loadData = useCallback(async () => 
 	{
+		Debugger.LoadView("SingleMatchView");
+		
 		// Get player's service record
 		if (id)
 		{

@@ -14,6 +14,7 @@ import { EliminationBreakdown } from "../Assets/Components/Breakdowns/Eliminatio
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { Helmet } from "react-helmet";
 import { HaloDotAPISeason } from "../Database/Schemas/AutocodeMetadata";
+import { Debugger } from "../Objects/Helpers/Debugger";
 
 export function ModesView(props: ViewProps)
 {
@@ -32,6 +33,8 @@ export function ModesView(props: ViewProps)
 
 	const loadData = useCallback(async () => 
 	{		
+		Debugger.LoadView("ModesView");
+
 		if (!gamertag) { switchTab("/", SRTabs.Search); return; }
 
 		// Set page gamertag and show loading message

@@ -9,6 +9,7 @@ import { Masonry } from "@mui/lab";
 import { StoreOffer } from "./Components/StoreOffer";
 
 import "../../Assets/Styles/Views/Store.css";
+import { Debugger } from "../../Objects/Helpers/Debugger";
 
 export function StoreView(props: ViewProps)
 {
@@ -48,6 +49,8 @@ export function StoreView(props: ViewProps)
 	 */
 	const loadData = useCallback(async () => 
 	{
+		Debugger.LoadView("StoreView");
+		
 		// Update tab
 		switchTab(undefined, SRTabs.Store);
 		
