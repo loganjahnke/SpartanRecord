@@ -1799,15 +1799,48 @@ export const AllMedals = {
 		  large: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/medals/580478179.png"
 		}
 	  },
-	  1090931685: {
+	1090931685: {
 		name: "Monopoly",
 		description: "Capture all zones in a set of 3+ without dying in Land Grab",
 		type: MedalRarity.Heoric,
 		category: MedalType.Zone,
 		image_urls: {
-		  small: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/1090931685.png?width=72&height=72",
-		  medium: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/1090931685.png?width=128&height=128",
-		  large: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/medals/1090931685.png"
+			small: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/1090931685.png?width=72&height=72",
+			medium: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/1090931685.png?width=128&height=128",
+			large: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/medals/1090931685.png"
 		}
+	},
+	3169118333: {
+		name: "Driving Spree",
+		description: "Earn 5 Driver Assists without dying",
+		type: MedalRarity.Normal,
+		category: MedalType.Vehicles,
+		image_urls: {
+			small: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/3169118333.png?width=72&height=72",
+			medium: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/3169118333.png?width=128&height=128",
+			large: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/medals/3169118333.png"
+		},
+	},
+	2848470465: {
+		name: "Death Cabbie",
+		description: "Earn 10 Driver Assists without dying",
+		type: MedalRarity.Legendary,
+		category: MedalType.Vehicles,
+		image_urls: {
+			small: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/2848470465.png?width=72&height=72",
+			medium: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/2848470465.png?width=128&height=128",
+			large: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/medals/2848470465.png"
+		},
+	},
+	1739996188: {
+		name: "Immortal Chauffeur",
+		description: "Earn 15 Driver Assists without dying",
+		type: MedalRarity.Mythic,
+		category: MedalType.Vehicles,
+		image_urls: {
+			small: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/1739996188.png?width=72&height=72",
+			medium: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/1739996188.png?width=128&height=128",
+			large: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/medals/1739996188.png"
+		},
 	}
-  };
+};
