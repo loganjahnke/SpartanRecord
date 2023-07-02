@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Box, Grid } from "@mui/material";
-import { CareerRankSchema } from "../../../Database/Schemas/CareerRankSchema";
+import { CareerRankSchema, EmptyCareerRank } from "../../../Database/Schemas/CareerRankSchema";
 import { GetCareerRankMetadata, LifetimeRank } from "../../../Objects/Helpers/AllCareerRanks";
 import { CareerRankMetadata } from "../../../Database/Schemas/AutocodeMetadata";
 import { CareerRankBreakdown } from "./CareerRankBreakdown";
@@ -30,7 +30,7 @@ export function CareerRankProgression(props: { current: CareerRankSchema, servic
 	/** Sets the appropriate career rank */
 	const setShowLifetimeCallback = useCallback((show: boolean) =>
 	{
-		const rankToShow = show ? LifetimeRank(serviceRecord) : current;
+		const rankToShow = (show ? LifetimeRank(serviceRecord) : current) ?? EmptyCareerRank();
 		setRank(rankToShow);
 		setExpandedType(rankToShow?.data?.current?.properties?.type ?? "");
 	}, [current, serviceRecord, setRank, setExpandedType]);

@@ -329,7 +329,7 @@ export class SCFirebase
 	{
 		if (!gamertag) { return 0; }
 
-		const snapshot = await this.__get(`service_record/multiplayer/${gamertag}/data/matches/total`);
+		const snapshot = await this.__get(`service_record/multiplayer/${gamertag}/data/matches/completed`);
 		if (!snapshot || !snapshot.exists()) { return 0; }
 
 		return snapshot.val() as number;
