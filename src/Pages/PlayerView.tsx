@@ -16,7 +16,7 @@ import { HaloDotAPISeason } from "../Database/Schemas/AutocodeMetadata";
 export function PlayerView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setBackgroundLoadingProgress, player, updatePlayer, switchTab, isAllowed } = props;
+	const { app, setLoadingMessage, setBackgroundLoadingProgress, player, updatePlayer, switchTab, setApiError, isAllowed } = props;
 	const { gamertag } = useParams();
 	//#endregion
 	
@@ -71,6 +71,20 @@ export function PlayerView(props: ViewProps)
 			return; 
 		}
 
+		// Ensure we can update from HaloDotAPI
+		if (!await app.CanUpdate())
+		{
+			setApiError(true);
+
+			if (firebasePlayer.serviceRecord.IsEmpty())
+			{
+				firebasePlayer.serviceRecord.error = "Cannot load data, try again later.";
+				updatePlayer(gamertag, undefined, firebasePlayer.serviceRecord);
+			}
+
+			return false;
+		}
+
 		// Get the current season
 		const currSeason = await app.GetCurrentSeason();
 
@@ -94,7 +108,22 @@ export function PlayerView(props: ViewProps)
 		{
 			clearLoadingMessages();
 			app.RemoveFromSyncing(gamertag);
-			return;
+
+			if (firebasePlayer.serviceRecord.IsEmpty())
+			{
+				firebasePlayer.serviceRecord.error = "Cannot load data, try again later.";
+				updatePlayer(gamertag, undefined, firebasePlayer.serviceRecord);
+			}
+
+			return false;
+		}
+
+		// Error checking
+		if (firebasePlayer.serviceRecord.IsEmpty() && haloDotAPIPlayer.serviceRecord.IsEmpty())
+		{
+			firebasePlayer.serviceRecord.error = "Cannot load data, try again later.";
+			updatePlayer(gamertag, undefined, firebasePlayer.serviceRecord);
+			return false;
 		}
 
 		// Update state

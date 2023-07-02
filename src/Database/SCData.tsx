@@ -71,7 +71,12 @@ export class SCData
 	 * @param gamertag the gamertag
 	 * @returns the gamertag in its official form if valid, empty string otherwise
 	 */
-    public IsValidGamertag = async (gamertag: string): Promise<string> => this.halodapi.IsValidGamertag(gamertag);
+    public async IsValidGamertag(gamertag: string): Promise<string>
+    {
+        const valid = await this.halodapi.IsValidGamertag(gamertag);
+        this.firebase.CountAPIUsage(1);
+        return valid;
+    }
 
     /**
      * Gets the player's appearance from firebase
@@ -90,9 +95,14 @@ export class SCData
         if (firebaseAppearance) { player.appearance = firebaseAppearance; }
         if (firebaseAppearance) { return player; }
 
+        if (!await this.CanUpdate()) { return player; }
+
         // Otherwise get from HaloDotAPI
         await Promise.all([this.halodapi.GetAppearance(player)]);
         if (player.appearanceData) { this.firebase.SetAppearance(gamertag, player.appearanceData); }
+
+        // Update counter
+        this.firebase.CountAPIUsage(1);
 
         return player;
     }
@@ -120,6 +130,9 @@ export class SCData
         await Promise.all([this.halodapi.GetAppearance(player), this.halodapi.GetCareerRank(player)])
         if (player.appearanceData) { this.firebase.SetAppearance(gamertag, player.appearanceData); }
         if (player.careerRank) { this.firebase.SetCareerRank(gamertag, player.careerRank); }
+
+        // Update counter
+        this.firebase.CountAPIUsage(2);
 
         return player;
     }
@@ -222,6 +235,10 @@ export class SCData
     {
         const player = await this.halodapi.GetPlayer(gamertag, season, oldSR);
         if ((player.serviceRecordData as any)?.error) { this.logger.LogError(); }
+
+        // Update counter
+        this.firebase.CountAPIUsage(player?.serviceRecord?.matchesPlayed === oldSR?.matchesPlayed ? 1 : 4);
+
         return player;
     }
 
@@ -238,6 +255,7 @@ export class SCData
     {
         const player = new Player(gamertag);
         await this.halodapi.GetServiceRecord(player, season, playlistId, categoryId, type);
+        this.firebase.CountAPIUsage(1);
         return player.serviceRecord;
     }
 
@@ -253,6 +271,7 @@ export class SCData
 	public async GetServiceRecordData(gamertag: string, season?: string, playlistId?: string, categoryId?: string, type?: ServiceRecordType): Promise<ServiceRecordSchema> 
     {
         const player = new Player(gamertag);
+        this.firebase.CountAPIUsage(1);
         return await this.halodapi.GetServiceRecordData(player, season, playlistId, categoryId, type);
     }
 
@@ -286,6 +305,7 @@ export class SCData
     public async GetLast25PlayerMatches(gamertag: string): Promise<PlayerMatch[]>
     {
         const result = await this.halodapi.GetPlayerMatches(gamertag, 25, 0);
+        this.firebase.CountAPIUsage(1);
         
         let playerMatches: PlayerMatch[] = [];
         for (const match of result) { playerMatches.push(new PlayerMatch(match)); }
@@ -296,12 +316,16 @@ export class SCData
     /**
      * Gets the last 25 player matches for a gamertag
      * @param gamertag the gamertag
+     * @param count the count
      * @param offset the number of matches to get
+     * @param customs custom game?
+     * @param local LAN game?
      * @returns the array of player matches
      */
-    public async GetPlayerMatches(gamertag: string, offset: number): Promise<PlayerMatch[]>
+    public async GetPlayerMatches(gamertag: string, count: number, offset: number, customs?: boolean, local?: boolean): Promise<PlayerMatch[]>
     {
-        const result = await this.halodapi.GetPlayerMatches(gamertag, 25, offset);
+        const result = await this.halodapi.GetPlayerMatches(gamertag, count, offset, customs, local);
+        this.firebase.CountAPIUsage(1);
         
         let playerMatches: PlayerMatch[] = [];
         for (const match of result) { playerMatches.push(new PlayerMatch(match)); }
@@ -324,6 +348,7 @@ export class SCData
 
         // Now check HaloDotAPI
         const result = await this.halodapi.GetMatch(matchID);
+        this.firebase.CountAPIUsage(1);
         if (!result) { return new Match(); }
 
         // Set match into firebase for faster lookup next time
@@ -343,6 +368,7 @@ export class SCData
 
         // Check with HaloDotAPI
         const matches = await this.halodapi.GetMatches(ids);
+        this.firebase.CountAPIUsage(ids.length);
         if (!matches) { return []; }
 
         // Store into Firebase if appropriate
@@ -414,6 +440,17 @@ export class SCData
     }
     //#endregion
 
+    //#region Version
+    /**
+     * Gets the HaloDotAPI version
+     */
+    public async GetVersion(): Promise<string>
+    {
+        this.firebase.CountAPIUsage(1);
+        return await this.halodapi.GetVersion();
+    }
+    //#endregion
+
     //#region Filters
     /**
      * Gets the available filters for a node
@@ -422,22 +459,62 @@ export class SCData
      * @returns the available filters
      */
     public GetAvailableFilters = async (gamertag: string, node: ServiceRecordFilter): Promise<SRFilter[]> => this.firebase.GetAvailableFilters(gamertag, node);
+    
     /** Gets the maps */
-	public GetMaps = async (): Promise<AutocodeMap[]> => this.halodapi.GetMaps();
+	public async GetMaps(): Promise<AutocodeMap[]>
+    {
+        this.firebase.CountAPIUsage(1);
+        return await this.halodapi.GetMaps();
+    }
+
 	/** Gets the playlists */
-	public GetPlaylists = async (): Promise<HaloDotAPIPlaylist[]> => this.halodapi.GetPlaylists();
+	public async GetPlaylists(): Promise<HaloDotAPIPlaylist[]>
+    {
+        this.firebase.CountAPIUsage(1);
+        return await this.halodapi.GetPlaylists();
+    } 
+
     /** Gets the playlist weights */
-	public GetPlaylistWeights = async (): Promise<Map<string, PlaylistWeights>> => this.halodapi.GetPlaylistWeights();
+	public async GetPlaylistWeights(): Promise<Map<string, PlaylistWeights>>
+    {
+        this.firebase.CountAPIUsage(1);
+        return await this.halodapi.GetPlaylistWeights();
+    } 
+
 	/** Gets the game variants */
-	public GetVariants = async (): Promise<HaloDotAPICategory[]> => this.halodapi.GetVariants();
+	public async GetVariants(): Promise<HaloDotAPICategory[]>
+    {
+        this.firebase.CountAPIUsage(1);
+        return await this.halodapi.GetVariants();
+    } 
+
 	/** Gets the medals */
-	public GetMedals = async (): Promise<AutocodeMedal[]> => this.halodapi.GetMedals();
+	public async GetMedals(): Promise<AutocodeMedal[]>
+    {
+        this.firebase.CountAPIUsage(1);
+        return await this.halodapi.GetMedals();
+    } 
+
 	/** Gets the teams */
-	public GetTeams = async (): Promise<AutocodeTeam[]> => this.halodapi.GetTeams();
+	public async GetTeams(): Promise<AutocodeTeam[]>
+    {
+        this.firebase.CountAPIUsage(1);
+        return await this.halodapi.GetTeams();
+    } 
+
     /** Gets the store */
-	public GetStore = async (): Promise<HaloDotAPIStoreOffering[]> => this.halodapi.GetStore();
+	public async GetStore(): Promise<HaloDotAPIStoreOffering[]>
+    {
+        this.firebase.CountAPIUsage(1);
+        return await this.halodapi.GetStore();
+    } 
+
     /** Gets the clips for a gamertag */
-	public GetClips = async (gamertag: string): Promise<HaloDotAPIClip[]> => this.halodapi.GetClips(gamertag);
+	public async GetClips(gamertag: string): Promise<HaloDotAPIClip[]>
+    {
+        this.firebase.CountAPIUsage(1);
+        return await this.halodapi.GetClips(gamertag);
+    }
     //#endregion
 
     //#region Leaderboards
@@ -462,5 +539,23 @@ export class SCData
 	 * @returns the averages for a leaderboard
 	 */
 	public GetLeaderboardAverages = async (leaderboard: Leaderboard): Promise<LeaderboardAverages> => this.firebase.GetLeaderboardAverages(leaderboard);
+    //#endregion
+
+    //#region API Usage
+    /**
+     * Returns an error message if we cannot update from the API
+     */
+    public async CanUpdate(): Promise<boolean>
+    {
+        return await this.CurrentAPIUsage() < 5000;
+    }
+
+    /**
+	 * Gets the current API usage
+	 */
+	public async CurrentAPIUsage(): Promise<number>
+	{
+		return await this.firebase.CurrentAPIUsage();
+	}
     //#endregion
 }

@@ -20,7 +20,7 @@ import { CompareHeader } from "../../Assets/Components/Compare/CompareHeader";
 export function CompareView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setBackgroundLoadingProgress, player, updatePlayer, switchTab } = props;
+	const { app, setLoadingMessage, setBackgroundLoadingProgress, player, updatePlayer, switchTab, setApiError } = props;
 	const { gamertag1, gamertag2 } = useParams();
 	//#endregion
 	
@@ -198,6 +198,13 @@ export function CompareView(props: ViewProps)
 		{ 
 			clearLoadingMessages(); 
 			return; 
+		}
+
+		// Ensure we can update from HaloDotAPI
+		if (!await app.CanUpdate())
+		{
+			setApiError(true);
+			return;
 		}
 
 		// Show background loading message

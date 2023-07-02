@@ -32,7 +32,7 @@ import { Debugger } from "../Objects/Helpers/Debugger";
 export function FilteredView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, updatePlayer, switchTab } = props;
+	const { app, setLoadingMessage, updatePlayer, switchTab, setApiError } = props;
 	const { node, filter, gamertag } = useParams();
 	//#endregion
 	
@@ -162,6 +162,13 @@ export function FilteredView(props: ViewProps)
 
 	const loadFilteredSR = useCallback(async () => 
 	{		
+		// Ensure we can update from HaloDotAPI
+		if (!await app.CanUpdate()) 
+		{ 
+			setApiError(true); 
+			return;
+		}
+
 		// Get player's service record
 		if (gamertag && node && filter)
 		{

@@ -21,7 +21,7 @@ import { Debugger } from "../../Objects/Helpers/Debugger";
 export function BetaSingleMatchView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, updatePlayer: setGamertag, switchTab } = props;
+	const { app, setLoadingMessage, updatePlayer: setGamertag, switchTab, setApiError } = props;
 	const { id, gamertag } = useParams();
 	//#endregion
 	
@@ -46,7 +46,12 @@ export function BetaSingleMatchView(props: ViewProps)
 		const match = await app.GetMatch(id);
 		setMatch(match);
 
-		if (!match) { return; }
+		if (!match) 
+		{ 
+			// Ensure we can update from HaloDotAPI
+			if (!await app.CanUpdate()) { setApiError(true); }
+			return; 
+		}
 		setPlayers(match.players && match.players.length > 0 ? match.players : match.teams.reduce((prev, curr) => 
 		{
 			if (prev)

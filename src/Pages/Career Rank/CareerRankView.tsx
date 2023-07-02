@@ -15,7 +15,7 @@ import { Debugger } from "../../Objects/Helpers/Debugger";
 export function CareerRankView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setBackgroundLoadingProgress, player, updatePlayer, switchTab, isAllowed } = props;
+	const { app, setLoadingMessage, setBackgroundLoadingProgress, player, updatePlayer, switchTab, setApiError } = props;
 	const { gamertag } = useParams();
 	//#endregion
 	
@@ -65,6 +65,18 @@ export function CareerRankView(props: ViewProps)
 			return; 
 		}
 
+		// Ensure we can update from HaloDotAPI
+		if (!await app.CanUpdate())
+		{
+			setApiError(true);
+			if (firebasePlayer.serviceRecord.IsEmpty())
+			{
+				firebasePlayer.serviceRecord.error = "Cannot load data, try again later.";
+				updatePlayer(gamertag, undefined, firebasePlayer.serviceRecord);
+			}
+			return false;
+		}
+
 		// Show background loading message
 		setLoadingMessage("");
 		setBackgroundLoadingProgress(SR.DefaultLoading);
@@ -78,7 +90,22 @@ export function CareerRankView(props: ViewProps)
 		{
 			clearLoadingMessages();
 			app.RemoveFromSyncing(gamertag);
+
+			if (firebasePlayer.serviceRecord.IsEmpty())
+			{
+				firebasePlayer.serviceRecord.error = "Cannot load data, try again later.";
+				updatePlayer(gamertag, undefined, firebasePlayer.serviceRecord);
+			}
+
 			return;
+		}
+
+		// Error checking
+		if (firebasePlayer.serviceRecord.IsEmpty() && haloDotAPIPlayer.serviceRecord.IsEmpty())
+		{
+			firebasePlayer.serviceRecord.error = "Cannot load data, try again later.";
+			updatePlayer(gamertag, undefined, firebasePlayer.serviceRecord);
+			return false;
 		}
 
 		// Update state

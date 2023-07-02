@@ -25,7 +25,7 @@ interface MultiMatchesViewProps extends ViewProps
 export function MultiMatchesView(props: MultiMatchesViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setBackgroundLoadingProgress, switchTab, player, updatePlayer, isAllowed, customs, local } = props;
+	const { app, setLoadingMessage, setBackgroundLoadingProgress, switchTab, player, updatePlayer, isAllowed, customs, local, setApiError } = props;
 	const { gamertag } = useParams();
 	//#endregion
 	
@@ -53,10 +53,16 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 	const loadFromHaloDotAPI = useCallback(async (append: boolean) =>
 	{
 		if (!gamertag) { return; }
+
+		// Ensure we can update from HaloDotAPI
+		if (!await app.CanUpdate()) 
+		{ 
+			setApiError(true); 
+			return;
+		}
 		
 		// Get from HaloDotAPI
-		const recentJSON = await app.halodapi.GetPlayerMatches(gamertag, 25, offset.current, customs, local);
-		const recent = recentJSON.map(m => new PlayerMatch(m));
+		const recent = await app.GetPlayerMatches(gamertag, 25, offset.current, customs, local);
 
 		// Set state
 		if (append) 

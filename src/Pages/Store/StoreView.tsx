@@ -14,7 +14,7 @@ import { Debugger } from "../../Objects/Helpers/Debugger";
 export function StoreView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setBackgroundLoadingProgress, switchTab } = props;
+	const { app, setLoadingMessage, setBackgroundLoadingProgress, switchTab, setApiError } = props;
 	//#endregion
 	
 	//#region State
@@ -36,6 +36,13 @@ export function StoreView(props: ViewProps)
 	const loadStore = useCallback(async () =>
 	{
 		if (offerings.length > 0) { return; }
+
+		// Ensure we can update from HaloDotAPI
+		if (!await app.CanUpdate()) 
+		{ 
+			setApiError(true); 
+			return;
+		}
 
 		// Get the store
 		const storeOfferings = await app.GetStore();

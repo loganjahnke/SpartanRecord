@@ -1,4 +1,4 @@
-import { child, Database, DatabaseReference, DataSnapshot, get, limitToLast, orderByValue, Query, query, ref, set, update } from "firebase/database";
+import { child, Database, DatabaseReference, DataSnapshot, get, increment, limitToLast, orderByValue, Query, query, ref, serverTimestamp, set, update } from "firebase/database";
 import { Debugger } from "../Objects/Helpers/Debugger";
 import { Halo5Converter } from "../Objects/Helpers/Halo5Converter";
 import { Converter } from "../Objects/Helpers/Statics/Converter";
@@ -855,6 +855,37 @@ export class SCFirebase
 		await this.__set(`debug/${method}/0`, num);
 	} 
 	//#endregion
+	//#endregion
+
+	//#region API Usage
+	/**
+	 * Gets the current API usage
+	 */
+	public async CurrentAPIUsage(): Promise<number>
+	{
+		const timestamp = serverTimestamp() as any;
+		const date = timestamp && timestamp.seconds ? new Date(timestamp.seconds * 1000) : new Date();
+
+		const snapshot = await this.__get(`api/${date.getUTCFullYear()}/${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCHours()}`);
+		return snapshot?.val() ?? -1;
+	}
+
+	/**
+	 * Increments the API usage counter by the count
+	 * @param count the count to increment
+	 */
+	public async CountAPIUsage(count: number): Promise<void>
+	{		
+		if (count === 0) { return; }
+
+		const timestamp = serverTimestamp() as any;
+		const date = timestamp && timestamp.seconds ? new Date(timestamp.seconds * 1000) : new Date();
+
+		const updates: any = {};
+		updates[`api/${date.getUTCFullYear()}/${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCHours()}`] = increment(count);
+
+		update(ref(this.__database), updates);
+	}
 	//#endregion
 
 	//#region Helpers

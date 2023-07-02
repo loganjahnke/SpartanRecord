@@ -92,8 +92,8 @@ export function HomeView(props: ViewProps)
 	const loadData = useCallback(async () => 
 	{
 		Debugger.LoadView("HomeView");
-		
-		setVersion(await app.halodapi.GetVersion());
+
+		setVersion(await app.GetVersion());
 		setCurrSeason(await app.GetCurrentSeason());
 
 		if (!loadFavoritePlayers())
