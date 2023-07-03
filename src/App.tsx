@@ -87,7 +87,7 @@ const App = () =>
 	{
 		const newPlayer = Player.Copy(oldPlayer ?? player);
 
-		if (gamertag && gamertag !== newPlayer.gamertag)
+		if (gamertag && gamertag.toUpperCase() !== newPlayer.gamertag.toUpperCase())
 		{
 			newPlayer.gamertag = gamertag;
 			newPlayer.appearance = appearance ?? new Appearance();
