@@ -52,6 +52,8 @@ export class SCData
         this.halodapi = new SCPostman();
         this.__seasons = [];
         this.__currentlySyncing = new Set<string>();
+
+        this.SetVersion();
     }
 
     //#region Sync Check
@@ -542,6 +544,14 @@ export class SCData
     //#endregion
 
     //#region API Usage
+    /**
+     * Sets the version counter
+     */
+    public async SetVersion(): Promise<void>
+    {
+        await this.firebase.SetVersion();
+    }
+
     /**
      * Returns an error message if we cannot update from the API
      */

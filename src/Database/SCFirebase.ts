@@ -861,6 +861,26 @@ export class SCFirebase
 	/**
 	 * Gets the current API usage
 	 */
+	public async SetVersion(): Promise<void>
+	{		
+		let version = process.env.REACT_APP_VERSION;
+		if (!version) { return; }
+
+		version = version.replaceAll(".", "-");
+		if (!version) { return; }
+
+		const timestamp = serverTimestamp() as any;
+		const date = timestamp && timestamp.seconds ? new Date(timestamp.seconds * 1000) : new Date();
+
+		const updates: any = {};
+		updates[`version/${date.getUTCFullYear()}/${date.getUTCMonth() + 1}/${date.getUTCDate()}/${version}`] = increment(1);
+
+		update(ref(this.__database), updates);
+	}
+
+	/**
+	 * Gets the current API usage
+	 */
 	public async CurrentAPIUsage(): Promise<number>
 	{
 		const timestamp = serverTimestamp() as any;
