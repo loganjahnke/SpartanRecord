@@ -32,7 +32,8 @@ export function CareerRankProgression(props: { current: CareerRankSchema, servic
 	{
 		const rankToShow = (show ? LifetimeRank(serviceRecord) : current) ?? EmptyCareerRank();
 		setRank(rankToShow);
-		setExpandedType(rankToShow?.data?.current?.properties?.type ?? "");
+		const type = rankToShow?.data?.current?.title === "Hero" ? "Hero" : rankToShow?.data?.current?.properties?.type;
+		setExpandedType(type ?? "");
 	}, [current, serviceRecord, setRank, setExpandedType]);
 	//#endregion
 

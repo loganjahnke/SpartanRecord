@@ -16,7 +16,7 @@ export function CareerRankTile(props: { rank?: CareerRankSchema })
 
 	const levelAmount = (rank.data.current.properties.threshold - previous.properties.threshold);
 	const progress = rank.data.current.title === "Hero" ? 100 : (levelAmount - rank.data.level.remaining_xp_to_next_level) * 100 / levelAmount;
-	const color = rank.data.current.properties.type || rank.data.current.title;
+	const color = rank.data.current.title === "Hero" ? "Hero" : (rank.data.current.properties.type || rank.data.current.title);
 
 	return (
 		<Box sx={{ 
@@ -33,7 +33,7 @@ export function CareerRankTile(props: { rank?: CareerRankSchema })
 					<Typography variant="subtitle1" sx={{ fontSize: "0.8rem", ml: 1 }}>{rank.data.current.title} {CurrentGrade(rank)}</Typography>
 					<Box sx={{ ml: 1 }} />
 					<Box sx={{ flexGrow: 1 }} />
-					{color !== "Hero" && <Typography variant="caption" sx={{ display: "block", fontSize: "0.8rem", mr: 1 }}>{rank.data.next.title} {NextGrade(rank)}</Typography>}
+					{color !== "Hero" && rank.data.next && <Typography variant="caption" sx={{ display: "block", fontSize: "0.8rem", mr: 1 }}>{rank.data.next.title} {NextGrade(rank)}</Typography>}
 				</Box>
 				<Box>
 					<Tooltip title={color === "Hero" ? "Congratulations Hero!" : `${rank.data.level.remaining_xp_to_next_level} needed for next rank`}>
