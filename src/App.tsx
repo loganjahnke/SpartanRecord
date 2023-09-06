@@ -125,6 +125,8 @@ const App = () =>
 	/** Navigates to a new URL */
 	const switchTab = (url?: string, tab?: SRTabs) => 
 	{
+		setLoadingMessage("");
+		setBackgroundLoadingProgress("");
 		setMobileOpen(false);
 		setTab(tab ?? "");
 		if (url) { navigate(url); }

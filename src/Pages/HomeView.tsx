@@ -127,7 +127,7 @@ export function HomeView(props: ViewProps)
 				backgroundSize: "cover", 
 				backgroundImage: currSeason 
 					? `url(${currSeason.image_urls.battlepass_background})`
-					: "url(https://api.halodotapi.com/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU2NyZWVuQmFja2dyb3VuZHMvc2Vhc29uX3Vwc2VsbF9iYWNrZ3JvdW5kX1MzLnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D)" 
+					: "url(https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU2NyZWVuQmFja2dyb3VuZHMvc2Vhc29uX3Vwc2VsbF9iYWNrZ3JvdW5kX1MzLnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D)" 
 			}}>
 				<Box sx={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", backgroundColor: "rgba(1,64,82, 0.9)", textAlign: "center" }}>
 					<Grow />
@@ -135,7 +135,7 @@ export function HomeView(props: ViewProps)
 					<Grow />
 					<Box sx={{ textAlign: "center", mt: 18 }}>
 						<Typography variant="subtitle1" sx={{ textAlign: "center" }}>
-							Powered by <Link sx={{ cursor: "pointer" }} onClick={() => switchTab("/powered_by_halodotapi")}>HaloDotAPI</Link>{halodotapiVersion ? ` v${halodotapiVersion} ` : " "}| Spartan Record v{process.env.REACT_APP_VERSION}
+							Powered by <Link sx={{ cursor: "pointer" }} href={process.env.REACT_APP_API_MARKETING_URL}>{process.env.REACT_APP_API_NAME}</Link>{halodotapiVersion ? ` v${halodotapiVersion} ` : " "}| Spartan Record v{process.env.REACT_APP_VERSION}
 						</Typography>
 					</Box>
 				</Box>

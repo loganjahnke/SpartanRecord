@@ -272,9 +272,8 @@ export function AHDrawer(props: AHDrawerProps)
 			<Divider flexItem sx={{ flexGrow: 1 }} />
 			<Box sx={{ display: "flex", flexDirection: "column", p: 1, textAlign: "center" }}>
 				<Typography sx={{ m: 0.5 }} variant="body2"><Link sx={{ cursor: "pointer" }} onClick={() => switchTab("/donate")}>Donate</Link></Typography>
-				<Typography sx={{ m: 0.5 }} variant="body2">Powered by <Link href="https://twitter.com/halodotapi">HaloDotAPI</Link></Typography>
+				<Typography sx={{ m: 0.5 }} variant="body2">Powered by <Link href="https://twitter.com/halodotip">{process.env.REACT_APP_API_NAME}</Link></Typography>
 				<Typography sx={{ m: 0.5 }} variant="body2">Made by <Link href="https://twitter.com/Logan_Jahnke">Logan Jahnke</Link></Typography>
-				<Typography sx={{ m: 0.5 }} variant="body2"><Link sx={{ cursor: "pointer" }} onClick={() => switchTab("/powered_by_halodotapi")}>Other Creators</Link></Typography>
 			</Box>
 		</Box>
 	);
