@@ -43,12 +43,12 @@ export function CareerRankView(props: ViewProps)
 		setLoadingMessage("Loading " + gamertag);
 				
 		// Get the player from firebase and show on screen
-		const player = await app.GetPlayerFromFirebase(gamertag);
+		const firebasePlayer = await app.GetPlayerFromFirebase(gamertag);
 
 		// Update state
-		updatePlayer(player.gamertag, player.appearance, player.serviceRecord, player.csrs, player.careerRank);
+		updatePlayer(firebasePlayer.gamertag, firebasePlayer.appearance, firebasePlayer.serviceRecord, firebasePlayer.csrs, firebasePlayer.careerRank);
 
-		return player;
+		return firebasePlayer;
 
 	}, [gamertag, app, setLoadingMessage, updatePlayer]);
 
@@ -86,7 +86,7 @@ export function CareerRankView(props: ViewProps)
 
 		// Get updated player
 		const haloDotAPIPlayer = await app.GetPlayerFromHaloDotAPI(gamertag, undefined, firebasePlayer.serviceRecord);
-		if (!haloDotAPIPlayer) 
+		if (!haloDotAPIPlayer || !haloDotAPIPlayer.serviceRecord || haloDotAPIPlayer.serviceRecord.IsEmpty()) 
 		{
 			clearLoadingMessages();
 			app.RemoveFromSyncing(gamertag);

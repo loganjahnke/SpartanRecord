@@ -149,4 +149,15 @@ export class Debugger
         if (!Debugger.IS_DEBUGGING) { return; }
         console.log("".padStart(50, " ") + message);
     }
+
+    /**
+     * Prints a debug message to the console
+     * @param message the message details
+     */
+    public static AxiosError(node: string, error: any)
+    {
+        if (!Debugger.IS_DEBUGGING) { return; }
+        console.log("".padStart(20, ".") + node)
+        console.log(error);
+    }
 }

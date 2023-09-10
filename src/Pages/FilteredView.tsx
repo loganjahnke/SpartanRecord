@@ -28,6 +28,7 @@ import { TimePlayed } from "../Assets/Components/Breakdowns/TimePlayed";
 import { Helmet } from "react-helmet";
 import { ServiceRecordType } from "../Database/SCData";
 import { Debugger } from "../Objects/Helpers/Debugger";
+import { PlaylistChooser } from "../Assets/Components/Playlists/PlaylistChooser";
 
 export function FilteredView(props: ViewProps)
 {
@@ -254,17 +255,20 @@ export function FilteredView(props: ViewProps)
 					<Grid item xs={12}>
 						<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
 							{(node === ServiceRecordFilter.Playlist || node === ServiceRecordFilter.Variant) && <SeasonChooser season={season} seasons={seasons} setSeason={setSeason} hideAll={node === ServiceRecordFilter.Playlist} />}
+							{node === ServiceRecordFilter.Playlist && <Box sx={{ ml: 2 }}><PlaylistChooser playlist={filter ?? ""} playlists={playlists ?? []} setPlaylist={onFilterSelected} hideAll useId /></Box>}
 							<Box sx={{ flexGrow: 1 }}></Box>
 							<ServiceRecordFilters setPerMatch={setShowPerMatch} />
 						</Box>
 					</Grid>
 					{/* Still top but less so*/}
-					<Grid item xs={12}>
-						<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
-							<ChipFilters activeFilter={filter ?? ""} filters={playlists ?? variants ?? ranks ?? fbFilters ?? []} onFilterClick={onFilterSelected} />
-						</Box>
-					</Grid>
-					{!sr ? undefined :
+					{node !== ServiceRecordFilter.Playlist && 
+						<Grid item xs={12}>
+							<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
+								<ChipFilters activeFilter={filter ?? ""} filters={playlists ?? variants ?? ranks ?? fbFilters ?? []} onFilterClick={onFilterSelected} />
+							</Box>
+						</Grid>
+					}
+					{sr &&
 					<>
 						{/* Far left */}
 						<Grid container item spacing={2} md={12} lg={6} xl={4} sx={{ alignContent: "flex-start" }}>

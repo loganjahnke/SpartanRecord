@@ -1,10 +1,7 @@
-import { HaloDotAPIStoreItem, HaloDotAPIStoreOffering } from "../../../Database/Schemas/AutocodeMetadata";
+import { HaloDotAPIStoreItem } from "../../../Database/Schemas/AutocodeMetadata";
 
 import "../../../Assets/Styles/Views/Store.css";
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Collapse, ImageList, ImageListItem, Typography } from "@mui/material";
-import { CreditsIcon } from "../../../Assets/Icons/CustomIcons";
-import { ArrowheadTheme } from "../../../Assets/Theme/ArrowheadTheme";
-import { Search } from "@mui/icons-material";
+import { ImageListItem } from "@mui/material";
 
 interface StoreOfferProps
 {

@@ -9,6 +9,7 @@ import { ClipCard } from "./Components/ClipCard";
 import { useParams } from "react-router";
 
 import "../../Assets/Styles/Views/Clips.css";
+import { Debugger } from "../../Objects/Helpers/Debugger";
 
 export function ClipsView(props: ViewProps)
 {
@@ -49,6 +50,8 @@ export function ClipsView(props: ViewProps)
 	 */
 	const loadData = useCallback(async () => 
 	{
+		Debugger.LoadView("ClipsView");
+
 		// Update tab
 		switchTab(undefined, SRTabs.Clips);
 		

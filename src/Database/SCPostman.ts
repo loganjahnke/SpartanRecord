@@ -616,7 +616,7 @@ export class SCPostman
 		}
 		catch (error: any)
 		{
-			console.log(error);
+			Debugger.AxiosError(node, error);
 		}
 
 		return result?.data;

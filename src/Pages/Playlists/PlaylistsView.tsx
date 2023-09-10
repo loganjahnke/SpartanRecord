@@ -50,7 +50,7 @@ export function PlaylistsView(props: ViewProps)
 		// Set the chosen playlist to the first in the list
 		if (playlists.length > 0) { setChosenPlaylist(playlists[0].id); }
 
-	}, [app, allPlaylists, setAllPlaylists, setWeights, setChosenPlaylist, setLoadingMessage, setBackgroundLoadingProgress, clearLoadingMessages]);
+	}, [app, allPlaylists, setAllPlaylists, setWeights, setChosenPlaylist]);
 
 	/**
 	 * Loads the data for the view
@@ -69,7 +69,7 @@ export function PlaylistsView(props: ViewProps)
 		// Clear loading messages
 		clearLoadingMessages();
 
-	}, [app, switchTab, loadPlaylists, setLoadingMessage, clearLoadingMessages]);
+	}, [switchTab, loadPlaylists, setLoadingMessage, clearLoadingMessages]);
 	
 	useEffect(() =>
 	{

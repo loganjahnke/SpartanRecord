@@ -1,4 +1,4 @@
-import { Box, Checkbox, Divider, FormControlLabel, FormGroup, Grid, Toolbar, Typography } from "@mui/material";
+import { Box, Divider, Grid, Toolbar, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -13,8 +13,10 @@ import { PlayerMatch } from "../../Objects/Model/PlayerMatch";
 import { SRTabs } from "../../Assets/Components/Layout/AHDrawer";
 import { RecentMatchesChart } from "../../Assets/Components/Charts/RecentMatchesChart";
 import { Helmet } from "react-helmet";
-import { Cookie } from "../../Objects/Helpers/Cookie";
 import { Debugger } from "../../Objects/Helpers/Debugger";
+import { HaloDotAPIPlaylist } from "../../Database/Schemas/AutocodeMetadata";
+import { PlaylistChooser } from "../../Assets/Components/Playlists/PlaylistChooser";
+import { Grow } from "../../Assets/Components/Common/Grow";
 
 interface MultiMatchesViewProps extends ViewProps
 {
@@ -31,8 +33,11 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 	
 	//#region State
 	const [matches, setMatches] = useState<PlayerMatch[]>([]);
+	const [matchesToShow, setMatchesToShow] = useState<PlayerMatch[]>([]);
 	const [combinedSR, setCombinedSR] = useState(new ServiceRecord());
 	const [loadingMore, setLoadingMore] = useState(false);
+	const [playlists, setPlaylists] = useState<HaloDotAPIPlaylist[]>([]);
+	const [selectedPlaylist, setSelectedPlaylist] = useState("");
 	const offset = useRef<number>(0);
 	//#endregion
 
@@ -68,16 +73,12 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 		if (append) 
 		{ 
 			const newMatches = matches.concat(recent);
-			setMatches(newMatches); 
-			createServiceRecord(newMatches);
+			return newMatches; 
 		}
-		else 
-		{ 
-			setMatches(recent); 
-			createServiceRecord(recent);
-		}
+		
+		return recent;
 
-	}, [app, gamertag, matches, isAllowed, customs, local, setMatches, createServiceRecord, setLoadingMessage, setBackgroundLoadingProgress]);
+	}, [app, gamertag, matches, isAllowed, customs, local, setLoadingMessage, setBackgroundLoadingProgress]);
 
 	/**
 	 * Sets the appearance for the gamertag, if needed
@@ -91,6 +92,49 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 			updatePlayer(p.gamertag, p.appearance, p.serviceRecord, p.csrs);
 		}
 	}, [app, gamertag, player, updatePlayer]);
+
+	/**
+	 * Loads the playlists and filters them to just the active ones
+	 */
+	const loadActivePlaylists = useCallback(async () =>
+	{
+		const allPlaylists = await app.GetPlaylists();
+		const filtered = allPlaylists.filter(playlist => playlist.attributes.active);
+		setPlaylists(filtered);
+	}, [app, setPlaylists]);
+
+	/**
+	 * Calculate the matches and service record to show to the user
+	 * @param playlist the name of the playlist to filter to
+	 */
+	const calculateMatchesToShow = useCallback((allMatches: PlayerMatch[], playlist: string) =>
+	{
+		setMatches(allMatches);
+
+		if (playlist === "" || playlist === "All")
+		{
+			setMatchesToShow(allMatches);
+			createServiceRecord(allMatches);
+			return;
+		}
+
+		if (playlist.includes("Ranked Arena")) { playlist = "Ranked Arena"; }
+
+		const filtered = allMatches.filter(match => playlist === match.playlist.name);
+		setMatchesToShow(filtered);
+		createServiceRecord(filtered);
+
+	}, [matches, createServiceRecord, setMatchesToShow]);
+
+	/**
+	 * Handler for when the playlist changes
+	 * @param newPlaylist the new playlist name
+	 */
+	const onPlaylistChanged = useCallback(async (newPlaylist: string) =>
+	{
+		setSelectedPlaylist(newPlaylist);
+		calculateMatchesToShow(matches, newPlaylist);
+	}, [matches, setSelectedPlaylist, calculateMatchesToShow]);	
 
 	/**
 	 * Loads the data for the view
@@ -108,12 +152,16 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 
 		// Load from HaloDotAPI
 		setLoadingMessage("Loading matches for " + gamertag);
-		
-		// Set appearance
-		await setAppearance();
-		
-		// Get matches
-		await loadFromHaloDotAPI(!!append);		
+
+		// Load playlists
+		const [allMatches] = await Promise.all([
+			loadFromHaloDotAPI(!!append),
+			loadActivePlaylists(),
+			setAppearance(),
+		]);
+
+		// Filter down, if appropriate
+		calculateMatchesToShow(allMatches ?? [], selectedPlaylist);
 		
 		// Log
 		app.logger.LogViewMatches();
@@ -125,8 +173,11 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 		setLoadingMessage("");
 		setBackgroundLoadingProgress("");
 
-	}, [app, gamertag, customs, switchTab, setLoadingMessage, setBackgroundLoadingProgress, loadFromHaloDotAPI, setAppearance]);
+	}, [app, gamertag, customs, selectedPlaylist, switchTab, setLoadingMessage, setBackgroundLoadingProgress, loadFromHaloDotAPI, setAppearance, calculateMatchesToShow]);
 
+	/**
+	 * Tell the API to load more matches
+	 */
 	const loadMore = useCallback(async () =>
 	{
 		offset.current += 25;
@@ -141,10 +192,15 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 	{
 		offset.current = 0;
 		setMatches([]);
+		setMatchesToShow([]);
 		loadData();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [gamertag, customs, local]);
 
+	/**
+	 * Navigate to the match
+	 * @param id the match ID
+	 */
     function goToMatch(id: string): void
     {
 		if (gamertag)
@@ -171,6 +227,13 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 			<Box sx={{ p: 2 }}>
 				<Grid container spacing={2}>
 					{/* Top */}
+					<Grid item xs={12}>
+						<Box sx={{ display: "flex", alignItems: "baseline" }}>
+							<PlaylistChooser playlists={playlists} playlist={selectedPlaylist} setPlaylist={onPlaylistChanged} />
+							<Grow />
+							{selectedPlaylist !== "" && <Typography variant="subtitle1">{`Showing ${matchesToShow.length} of ${matches.length} loaded matches`}</Typography>}
+						</Box>
+					</Grid>
 					<Grid item xs={12} lg={4}>
 						<KDABreakdown serviceRecord={combinedSR} />
 					</Grid>
@@ -181,15 +244,15 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 						<KillDeathCard serviceRecord={combinedSR} />
 					</Grid>
 					<Grid item xs={12}>
-						<RecentMatchesChart matches={matches} sr={player?.serviceRecord ?? new ServiceRecord()} openMatch={goToMatch} onMetricChanged={() => app.logger.LogChangeSeasonMetric()} />
+						<RecentMatchesChart matches={matchesToShow} sr={player?.serviceRecord ?? new ServiceRecord()} openMatch={goToMatch} onMetricChanged={() => app.logger.LogChangeSeasonMetric()} />
 					</Grid>
 				</Grid>
 				<Grid container spacing={2} sx={{ mt: 1 }}>
-					{matches?.length > 0 ? matches.map(match => <PlayerMatchSummary match={match} player={match.expandedPlayer} goToMatch={goToMatch} gamertag={gamertag ?? ""} showExpanded hideExpected={customs || local || match.variant.name.includes("Infection")} />) : undefined}
+					{matchesToShow?.length > 0 ? matchesToShow.map(match => <PlayerMatchSummary match={match} player={match.expandedPlayer} goToMatch={goToMatch} gamertag={gamertag ?? ""} showExpanded hideExpected={customs || local || match.variant.name.includes("Infection")} />) : undefined}
 				</Grid>
 				{matches.length > 0 && <Grid item xs={12}>
 					<Box sx={{ display: "flex", justifyContent: "center", width: "100%", mt: 2 }}>
-						<LoadingButton loading={loadingMore} variant="outlined" onClick={loadMore}>Load 25 More</LoadingButton>
+						<LoadingButton loading={loadingMore} variant="outlined" onClick={loadMore}>Load More</LoadingButton>
 					</Box>
 				</Grid>}
 			</Box>

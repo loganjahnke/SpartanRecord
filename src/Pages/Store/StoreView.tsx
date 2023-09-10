@@ -49,7 +49,7 @@ export function StoreView(props: ViewProps)
 		
 		setOfferings(storeOfferings);
 
-	}, [app, offerings, setOfferings, setLoadingMessage, setBackgroundLoadingProgress, clearLoadingMessages]);
+	}, [app, offerings, setOfferings, setApiError, setLoadingMessage, setBackgroundLoadingProgress, clearLoadingMessages]);
 
 	/**
 	 * Loads the data for the view
@@ -68,7 +68,7 @@ export function StoreView(props: ViewProps)
 		// Clear loading messages
 		clearLoadingMessages();
 
-	}, [app, switchTab, loadStore, setLoadingMessage, clearLoadingMessages]);
+	}, [switchTab, loadStore, setLoadingMessage, clearLoadingMessages]);
 	
 	useEffect(() =>
 	{

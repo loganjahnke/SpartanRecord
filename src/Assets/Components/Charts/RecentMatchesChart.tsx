@@ -17,15 +17,16 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { PlayerMatch } from "../../../Objects/Model/PlayerMatch";
 import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import useWindowDimensions from "../../../Objects/Helpers/Hooks/UseWindowDimensions";
+import { HaloOutcome } from "../../../Database/ArrowheadFirebase";
 
 enum RecentMatchesDataSets
 {
 	WinLoss = "Win / Loss",
-	CSRRankedArenaController = "CSR Arena Controller",
-	CSRRankedArenaMnK = "CSR Arena MnK",
-	CSRRankedArenaOpen = "CSR Arena Open",
+	CSRRankedArena = "CSR Arena",
 	CSRDoubles = "CSR Doubles",
 	CSRFFA = "CSR FFA",
+	CSRTactical = "CSR Tactical Slayer",
+	CSRSlayer = "CSR Slayer",
 	KDA = "KDA",
 	KDR = "KDR",
 	Kills = "Kills",
@@ -201,6 +202,7 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 							if (dataSet.current === RecentMatchesDataSets.WinLoss)
 							{
 								if (value === 0.6) { return "Win"; }
+								if (value === 0) { return "Tie"; }
 								if (value === -0.6) { return "Loss"; }
 								return "";
 							}
@@ -219,11 +221,11 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 		switch (dataSet.current)
 		{
 			case RecentMatchesDataSets.WinLoss: label = "Win"; break;
-			case RecentMatchesDataSets.CSRRankedArenaController: label = RecentMatchesDataSets.CSRRankedArenaController; break;
-			case RecentMatchesDataSets.CSRRankedArenaMnK: label = RecentMatchesDataSets.CSRRankedArenaMnK; break;
-			case RecentMatchesDataSets.CSRRankedArenaOpen: label = RecentMatchesDataSets.CSRRankedArenaOpen; break;
+			case RecentMatchesDataSets.CSRRankedArena: label = RecentMatchesDataSets.CSRRankedArena; break;
 			case RecentMatchesDataSets.CSRDoubles: label = RecentMatchesDataSets.CSRDoubles; break;
 			case RecentMatchesDataSets.CSRFFA: label = RecentMatchesDataSets.CSRFFA; break;
+			case RecentMatchesDataSets.CSRTactical: label = RecentMatchesDataSets.CSRTactical; break;
+			case RecentMatchesDataSets.CSRSlayer: label = RecentMatchesDataSets.CSRSlayer; break;
 			case RecentMatchesDataSets.KDA: label = "KDA"; break;
 			case RecentMatchesDataSets.KDR: label = "KDR"; break;
 			case RecentMatchesDataSets.Kills: label = "Kills"; break;
@@ -269,14 +271,14 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 					{
 						switch (dataSet.current)
 						{
-							case RecentMatchesDataSets.WinLoss: return match.player.won ? 1 : -1;
+							case RecentMatchesDataSets.WinLoss: return match.player.outcome === HaloOutcome.Win ? 1 : match.player.outcome === HaloOutcome.Draw ? 0 : -1;
 							//queue: "open" | "solo-duo" | null;
 						    //input: "controller" | "mnk" | "crossplay" | null;
-							case RecentMatchesDataSets.CSRRankedArenaController: return match.playlist.queue === "solo-duo" && match.playlist.input === "controller" && match.playlist.name.includes("Arena") ? match.player.csr.post.value : undefined;
-							case RecentMatchesDataSets.CSRRankedArenaMnK: return match.playlist.queue === "solo-duo" && match.playlist.input === "mnk" && match.playlist.name.includes("Arena") ? match.player.csr.post.value : undefined;
-							case RecentMatchesDataSets.CSRRankedArenaOpen: return match.playlist.queue === "open" && match.playlist.input === "crossplay" && match.playlist.name.includes("Arena") ? match.player.csr.post.value : undefined;
-							case RecentMatchesDataSets.CSRDoubles: return match.playlist.queue === "open" && match.playlist.input === "crossplay" && match.playlist.name.includes("Doubles") ? match.player.csr.post.value : undefined;
-							case RecentMatchesDataSets.CSRFFA: return match.playlist.queue === "open" && match.playlist.input === "crossplay" && match.playlist.name.includes("FFA") ? match.player.csr.post.value : undefined;
+							case RecentMatchesDataSets.CSRRankedArena: return match.playlist.name.includes("Ranked Arena") ? match.player.csr.post.value : undefined;
+							case RecentMatchesDataSets.CSRDoubles: return match.playlist.name.includes("Ranked Doubles") ? match.player.csr.post.value : undefined;
+							case RecentMatchesDataSets.CSRFFA: return match.playlist.name.includes("Ranked FFA") ? match.player.csr.post.value : undefined;
+							case RecentMatchesDataSets.CSRTactical: return match.playlist.name.includes("Ranked Tactical") ? match.player.csr.post.value : undefined;
+							case RecentMatchesDataSets.CSRSlayer: return match.playlist.name.includes("Ranked Slayer") ? match.player.csr.post.value : undefined;
 							case RecentMatchesDataSets.KDA: return match.player.kda;
 							case RecentMatchesDataSets.KDR: return match.player.kdr;
 							case RecentMatchesDataSets.Kills: return match.player.summary.kills;
@@ -312,11 +314,11 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 	}, [matches]);
 
 	/** Is a CSR category? */
-	const isCSR = () => dataSet.current === RecentMatchesDataSets.CSRRankedArenaOpen || 
-		dataSet.current === RecentMatchesDataSets.CSRRankedArenaController || 
-		dataSet.current === RecentMatchesDataSets.CSRRankedArenaMnK || 
+	const isCSR = () => dataSet.current === RecentMatchesDataSets.CSRRankedArena || 
 		dataSet.current === RecentMatchesDataSets.CSRDoubles || 
-		dataSet.current === RecentMatchesDataSets.CSRFFA;
+		dataSet.current === RecentMatchesDataSets.CSRFFA ||
+		dataSet.current === RecentMatchesDataSets.CSRTactical ||
+		dataSet.current === RecentMatchesDataSets.CSRSlayer;
 	
 	return (
 		matches.length > 2 
@@ -328,11 +330,11 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 						<InputLabel id="data-set-label">Data Set</InputLabel>
 						<Select labelId="data-set-label" id="data-set" value={dataSet.current} label="Data Set" onChange={changeDataSet}>
 							<MenuItem value={RecentMatchesDataSets.WinLoss}>{RecentMatchesDataSets.WinLoss}</MenuItem>
-							<MenuItem value={RecentMatchesDataSets.CSRRankedArenaOpen}>{RecentMatchesDataSets.CSRRankedArenaOpen}</MenuItem>
-							<MenuItem value={RecentMatchesDataSets.CSRRankedArenaController}>{RecentMatchesDataSets.CSRRankedArenaController}</MenuItem>
-							<MenuItem value={RecentMatchesDataSets.CSRRankedArenaMnK}>{RecentMatchesDataSets.CSRRankedArenaMnK}</MenuItem>
+							<MenuItem value={RecentMatchesDataSets.CSRRankedArena}>{RecentMatchesDataSets.CSRRankedArena}</MenuItem>
 							<MenuItem value={RecentMatchesDataSets.CSRDoubles}>{RecentMatchesDataSets.CSRDoubles}</MenuItem>
 							<MenuItem value={RecentMatchesDataSets.CSRFFA}>{RecentMatchesDataSets.CSRFFA}</MenuItem>
+							<MenuItem value={RecentMatchesDataSets.CSRTactical}>{RecentMatchesDataSets.CSRTactical}</MenuItem>
+							<MenuItem value={RecentMatchesDataSets.CSRSlayer}>{RecentMatchesDataSets.CSRSlayer}</MenuItem>
 							<MenuItem value={RecentMatchesDataSets.KDA}>{RecentMatchesDataSets.KDA}</MenuItem>
 							<MenuItem value={RecentMatchesDataSets.KDR}>{RecentMatchesDataSets.KDR}</MenuItem>
 							<MenuItem value={RecentMatchesDataSets.Kills}>{RecentMatchesDataSets.Kills}</MenuItem>

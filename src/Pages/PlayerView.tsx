@@ -147,7 +147,7 @@ export function PlayerView(props: ViewProps)
 
 		return haloDotAPIPlayer.serviceRecordData && !(haloDotAPIPlayer.serviceRecordData as any).error && haloDotAPIPlayer.serviceRecord.matchesPlayed !== firebasePlayer?.serviceRecord?.matchesPlayed;
 
-	}, [gamertag, app, season, setLoadingMessage, updatePlayer, setBackgroundLoadingProgress, clearLoadingMessages]);
+	}, [gamertag, app, season, setLoadingMessage, setApiError, updatePlayer, setBackgroundLoadingProgress, clearLoadingMessages]);
 
 	/**
 	 * Loads historic season statistics
@@ -244,7 +244,7 @@ export function PlayerView(props: ViewProps)
 		// Log event
 		app.logger.LogViewServiceRecord();
 
-	}, [app, gamertag, switchTab, loadFromFirebase, loadFromHaloDotAPI, loadHistoricStatistics, clearLoadingMessages]);
+	}, [app, gamertag, seasons, switchTab, loadFromFirebase, loadFromHaloDotAPI, loadHistoricStatistics, clearLoadingMessages]);
 	
 	useEffect(() =>
 	{
