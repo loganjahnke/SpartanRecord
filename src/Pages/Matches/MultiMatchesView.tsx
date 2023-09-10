@@ -228,7 +228,7 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 				<Grid container spacing={2}>
 					{/* Top */}
 					<Grid item xs={12}>
-						<Box sx={{ display: "flex", alignItems: "baseline" }}>
+						<Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "baseline" }}>
 							<PlaylistChooser playlists={playlists} playlist={selectedPlaylist} setPlaylist={onPlaylistChanged} />
 							<Grow />
 							{selectedPlaylist !== "" && <Typography variant="subtitle1">{`Showing ${matchesToShow.length} of ${matches.length} loaded matches`}</Typography>}

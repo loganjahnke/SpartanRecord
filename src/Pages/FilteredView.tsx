@@ -253,7 +253,7 @@ export function FilteredView(props: ViewProps)
 				<Grid container spacing={2}>
 					{/* Top */}
 					<Grid item xs={12}>
-						<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
+						<Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "center", ml: 1 }}>
 							{(node === ServiceRecordFilter.Playlist || node === ServiceRecordFilter.Variant) && <SeasonChooser season={season} seasons={seasons} setSeason={setSeason} hideAll={node === ServiceRecordFilter.Playlist} />}
 							{node === ServiceRecordFilter.Playlist && <Box sx={{ ml: 2 }}><PlaylistChooser playlist={filter ?? ""} playlists={playlists ?? []} setPlaylist={onFilterSelected} hideAll useId /></Box>}
 							<Box sx={{ flexGrow: 1 }}></Box>
