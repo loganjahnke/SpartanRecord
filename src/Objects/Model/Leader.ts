@@ -45,8 +45,8 @@ export class LeaderboardAverages
 		this.median = json?.median ?? 0;
 		this.q25 = json?.q25 ?? 0;
 		this.q75 = json?.q75 ?? 0;
-		this.min = json?.min ?? 0;
-		this.max = json?.max ?? 0;
+		this.min = json?.max ?? 0; // I got this backwards in the database calculations, whoops
+		this.max = json?.min ?? 0;
 		this.standardDeviation = json?.sd ?? 0;
     }
 }
