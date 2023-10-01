@@ -21,7 +21,7 @@ export function TimePlayed(props: BreakdownProps)
 		if (numminutes < 10) { numminutes = "0" + numminutes; }
 
         let daysStr = "";
-        const timeStr = numhours > 0 
+        const timeStr = +numhours > 0 
             ? numhours + ":" + numminutes
             : "00:" + numminutes;
 

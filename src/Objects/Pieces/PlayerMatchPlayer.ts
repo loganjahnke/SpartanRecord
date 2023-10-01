@@ -1,5 +1,6 @@
 import { HaloOutcome } from "../../Database/ArrowheadFirebase";
-import { PlayerMatchPlayerSchema } from "../../Database/Schemas/PlayerMatchSchema";
+import { PlayerMatchPlayerSchema, Scores } from "../../Database/Schemas/PlayerMatchSchema";
+import { CTFSchema, OddballSchema, ZoneSchema, EliminationSchema, StockpileSchema } from "../../Database/Schemas/ServiceRecordSchema";
 import { MatchCSRSummary } from "../Model/MatchCSRSummary";
 import { Damage } from "./Damage";
 import { Expectation } from "./Expectation";
@@ -32,10 +33,14 @@ export class PlayerMatchPlayer
     public kdr: number;
     /** The CSR for the player */
     public csr: MatchCSRSummary;
+    /** The scores for the player */
+    public scores: Scores;
     /** Expected kill performance */
     public killExpectations: Expectation;
     /** Expected death performance */
     public deathExpectations: Expectation;
+    /** Mode statistics */
+    public mode?: CTFSchema | OddballSchema | ZoneSchema | EliminationSchema | StockpileSchema;
 
     /** The damage efficiency per kill */
     public get damageEfficiency(): number
@@ -44,11 +49,25 @@ export class PlayerMatchPlayer
         return this.PERFECT_KILL_DAMAGE / (this.damage.dealt / this.summary.kills);
     }
 
+    /** The total number of kills you could've gotten if your damage was 100% effective */
+    public get maximumKillsFromDamage(): number
+    {
+        if (this.damage.dealt === 0) { return 0; }
+        return Math.round((this.damage.dealt / this.PERFECT_KILL_DAMAGE) * 10) / 10;
+    }
+
     /** The enemy damage efficiency per death */
     public get enemyDamageEfficiency(): number
     {
         if (this.damage.taken === 0 || this.summary.deaths === 0) { return 0; }
         return this.PERFECT_KILL_DAMAGE / (this.damage.taken / this.summary.deaths);
+    }
+
+    /** The total number of deaths you could've gotten if the enemy's damage was 100% effective */
+    public get maximumDeathsFromDamage(): number
+    {
+        if (this.damage.taken === 0) { return 0; }
+        return Math.round((this.damage.taken / this.PERFECT_KILL_DAMAGE) * 10) / 10;
     }
 
     /** The rank of the player in a string format */
@@ -80,7 +99,8 @@ export class PlayerMatchPlayer
                 destroys: data?.stats?.core?.summary?.vehicles?.destroys ?? 0,
                 hijacks: data?.stats?.core?.summary?.vehicles?.hijacks ?? 0
             },
-            medals: data?.stats?.core?.summary?.medals.total ?? 0
+            medals: data?.stats?.core?.summary?.medals.total ?? 0,
+            maxKillingSpree: data?.stats?.core?.summary?.max_killing_spree ?? 0
         };
 
         this.damage =
@@ -98,6 +118,7 @@ export class PlayerMatchPlayer
             accuracy: data?.stats?.core?.shots?.accuracy ?? 0
         };
 
+        this.mode = data?.stats?.mode;
         this.killExpectations = new Expectation(data?.performances?.kills);
         this.deathExpectations = new Expectation(data?.performances?.deaths);
         this.csr = new MatchCSRSummary(data?.progression);
@@ -105,6 +126,7 @@ export class PlayerMatchPlayer
         this.kdr = data?.stats?.core?.kdr ?? 0;
         this.rank = data?.rank ?? -1;
         this.won = data?.outcome === "win" || data?.outcome === "won";
+        this.scores = data?.stats?.core?.scores ?? { personal: 0, points: 0 };
         this.outcome = this.won ? HaloOutcome.Win
 			: data?.outcome === "dnf" ? HaloOutcome.Left
 			: data?.outcome === "loss" ? HaloOutcome.Loss

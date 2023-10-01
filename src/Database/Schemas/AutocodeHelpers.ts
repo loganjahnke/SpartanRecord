@@ -121,15 +121,15 @@ export class AutocodeHelpers
 							}
 						},
 						zones: {
-							total_zone_occupation_time: {
+							stronghold_occupation_time: {
 								seconds: 0,
 								human: "",
 							},
-							zone_captures: 0,
-							zone_defensive_kills: 0,
-							zone_offensive_kills: 0,
-							zone_scoring_ticks: 0,
-							zone_secures: 0,
+							stronghold_captures: 0,
+							stronghold_defensive_kills: 0,
+							stronghold_offensive_kills: 0,
+							stronghold_scoring_ticks: 0,
+							stronghold_secures: 0,
 						},
 						stockpile: {
 							kills_as_power_seed_carrier: 0,

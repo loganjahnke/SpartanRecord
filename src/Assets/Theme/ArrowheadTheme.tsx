@@ -13,7 +13,7 @@ export class ArrowheadTheme
 	/** #004052 */
 	public static secondary = `#014052`;
 	/** #70A288 */
-	public static text_secondary = `#${this.__coolors[3]}`;
+	public static text_secondary = `#${this.__coolors[3]}`; //2BC3EB selection blue
 	/** #F9F0FA */
 	public static text_primary = `#${this.__coolors[4]}`;
 	/** #70A288 */

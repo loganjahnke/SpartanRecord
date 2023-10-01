@@ -19,7 +19,7 @@ export function BeforeAfterProgress(props: LinearProgressProps)
 	return (
 		<>
 			<BorderLinearProgress {...props} />
-			{props.valueBuffer !== undefined && <Box sx={{ height: "24px", mb: "-24px", backgroundColor: "white", width: "2px", position: "relative", top: "-18px", left: `calc(${props.valueBuffer}%)` }} />}
+			{props.valueBuffer !== undefined && <Box sx={{ height: "10px", mb: "-10px", backgroundColor: "#DFDFDF", width: "2px", position: "relative", top: "-10px", left: `calc(${props.valueBuffer}%)` }} />}
 		</>
 	);
 };

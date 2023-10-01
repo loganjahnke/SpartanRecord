@@ -12,11 +12,11 @@ export class Zone
 	constructor(data?: ZoneSchema)
 	{
 		if (!data) { return; }
-		this.zoneOccupationTime = data.total_zone_occupation_time?.human ?? "";
-		this.zoneCaptures = data.zone_captures;
-		this.zoneDefensiveKills = data.zone_defensive_kills;
-		this.zoneOffensiveKills = data.zone_offensive_kills;
-		this.zoneScoringTicks = data.zone_scoring_ticks;
-		this.zoneSecures = data.zone_secures;
+		this.zoneOccupationTime = data.stronghold_occupation_time?.human ?? "";
+		this.zoneCaptures = data.stronghold_captures;
+		this.zoneDefensiveKills = data.stronghold_defensive_kills;
+		this.zoneOffensiveKills = data.stronghold_offensive_kills;
+		this.zoneScoringTicks = data.stronghold_scoring_ticks;
+		this.zoneSecures = data.stronghold_secures;
 	}
 }

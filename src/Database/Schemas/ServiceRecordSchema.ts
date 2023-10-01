@@ -123,7 +123,8 @@ export type ServiceRecordCoreSchema = {
 	};
 }
 
-export type CTFSchema = {
+export interface CTFSchema 
+{
 	flag_capture_assists: number;
 	flag_captures: number;
 	flag_carriers_killed: number;
@@ -137,7 +138,8 @@ export type CTFSchema = {
 	time_as_flag_carrier: DurationSchema;
 };
 
-export type EliminationSchema = {
+export interface EliminationSchema 
+{
 	allies_revived: number;
 	elimination_assists: number;
 	eliminations: number;
@@ -149,7 +151,8 @@ export type EliminationSchema = {
 	times_revived_by_ally: number;
 };
 
-export type OddballSchema = {
+export interface OddballSchema 
+{
 	kills_as_skull_carrier: number;
 	longest_time_as_skull_carrier: DurationSchema;
 	skull_carriers_killed: number;
@@ -158,16 +161,18 @@ export type OddballSchema = {
 	time_as_skull_carrier: DurationSchema;
 };
 
-export type ZoneSchema = {
-	total_zone_occupation_time: DurationSchema;
-	zone_captures: number;
-	zone_defensive_kills: number;
-	zone_offensive_kills: number;
-	zone_scoring_ticks: number;
-	zone_secures: number;
+export interface ZoneSchema 
+{
+	stronghold_occupation_time: DurationSchema;
+	stronghold_captures: number;
+	stronghold_defensive_kills: number;
+	stronghold_offensive_kills: number;
+	stronghold_scoring_ticks: number;
+	stronghold_secures: number;
 };
 
-export type StockpileSchema = {
+export interface StockpileSchema 
+{
 	kills_as_power_seed_carrier: number;
 	power_seed_carriers_killed: number;
 	power_seeds_deposited: number;

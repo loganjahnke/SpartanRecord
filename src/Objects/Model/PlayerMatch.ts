@@ -1,4 +1,4 @@
-import { PlayerMatchSchema, PlayerMatchWithOddsSchema } from "../../Database/Schemas/PlayerMatchSchema";
+import { PlayerMatchWithOddsSchema } from "../../Database/Schemas/PlayerMatchSchema";
 import { GameVariant } from "../Pieces/GameVariant";
 import { Map } from "../Pieces/Map";
 import { MatchPlayer } from "../Pieces/MatchPlayer";
