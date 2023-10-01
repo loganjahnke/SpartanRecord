@@ -15,6 +15,7 @@ import { ExpectationBreakdown } from "../../Assets/Components/Breakdowns/Expecta
 import { CSRSProgression, CSRSTooltip } from "../../Assets/Components/Custom/CSRSTooltip";
 import { Match } from "../../Objects/Model/Match";
 import { Converter } from "../../Objects/Helpers/Statics/Converter";
+import { MedalsMode, PlayerMatchSummaryDetails } from "../../Assets/Components/Match/PlayerMatchSummaryDetails";
 
 interface TeamTableProps
 {
@@ -157,33 +158,11 @@ function Row(props: TeamTableRowProps)
 					</TableCell> 
 				}
 			</TableRow>
-			<TableRow sx={{ width: "calc(100%-128px)"}}>
+			<TableRow>
 				<TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8 + +(showPoints ?? 0) + +(showRank ?? 0) + +(ffa ?? 0)}>
 					<Collapse in={expanded} timeout="auto" unmountOnExit sx={{ width: "auto" }}>
-						<Box sx={{ p: 1 }}>
-							<Grid container spacing={1}>
-								<Grid item xs={6}>
-									<ShotsBreakdown serviceRecord={player.stats} small />
-									<Box sx={{ m: 1 }}></Box>
-									<DamageBreakdown serviceRecord={player.stats} small />
-									<Box sx={{ m: 1 }}></Box>
-									<ExpectationBreakdown kills={player.killExpectations} deaths={player.deathExpectations} small />						
-								</Grid>
-								<Grid item xs={6}>
-									<Box sx={{ display: "flex", 
-										flexDirection: "column", 
-										justifyContent: "center", 
-										clear: "both", 
-										borderRadius: 3,
-										backgroundColor: ArrowheadTheme.secondary }}>
-										<Box sx={{ margin: 1 }}>
-											{player.stats.medals.length > 0 
-												? player.stats.medals.sort((a, b) => b.RarityValue() - a.RarityValue()).map(medal => <MedalTile medal={medal} />) 
-												: <Typography variant="body1" sx={{ m: 4 }}>No medals earned.</Typography>}
-										</Box>
-									</Box>
-								</Grid>
-							</Grid>
+						<Box sx={{ p: 1, width: { sm: "calc(100vw - 76px)", md: "auto" }}}>
+							<PlayerMatchSummaryDetails player={player} isRanked={showRank} medalsMode={MedalsMode.all} />
 						</Box>
 					</Collapse>
 				</TableCell>

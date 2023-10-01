@@ -1,7 +1,7 @@
 import { HaloOutcome } from "../../Database/ArrowheadFirebase";
 import { TeamStatsSchema } from "../../Database/Schemas/MatchSchema";
 import { DurationSchema, PlayerStatsSchema } from "../../Database/Schemas/PlayerMatchSchema";
-import { ServiceRecordSchema, ServiceRecordDataSchema, isServiceRecordSchema, ServiceRecordStatsSchema, ServiceRecordMatchesSchema } from "../../Database/Schemas/ServiceRecordSchema";
+import { ServiceRecordSchema, ServiceRecordDataSchema, isServiceRecordSchema, ServiceRecordStatsSchema, ServiceRecordMatchesSchema, CTFSchema, EliminationSchema, OddballSchema, StockpileSchema, ZoneSchema } from "../../Database/Schemas/ServiceRecordSchema";
 import { AllMedals } from "../Helpers/AllMedals";
 import { Breakdowns } from "../Pieces/Breakdowns";
 import { CaptureTheFlag } from "../Pieces/CaptureTheFlag";
@@ -45,6 +45,8 @@ export class ServiceRecord
     public elimination: Elimination;
     /** Sotkcpile statistics */
     public stockpile: Stockpile;
+    /** Mode statistics */
+    public mode?: CTFSchema | OddballSchema | ZoneSchema | EliminationSchema | StockpileSchema;
     /** Raw autocode and firebase JSON */
     public data?: ServiceRecordDataSchema;
     /** If there is an error in the response, store it here */
@@ -164,6 +166,7 @@ export class ServiceRecord
         {
             stats = result;
 
+            this.mode = stats?.mode;
             this.ctf = new CaptureTheFlag(stats?.mode as any);
             this.zone = new Zone(stats?.mode as any);
             this.oddball = new Oddball(stats?.mode as any);

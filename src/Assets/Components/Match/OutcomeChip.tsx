@@ -1,10 +1,11 @@
 import { Box, Chip, Typography } from "@mui/material";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { PlayerMatchPlayer } from "../../../Objects/Pieces/PlayerMatchPlayer";
+import { MatchPlayer } from "../../../Objects/Pieces/MatchPlayer";
 
 interface OutcomeChipProps
 {
-	player?: PlayerMatchPlayer;
+	player?: PlayerMatchPlayer | MatchPlayer;
 }
 
 export function OutcomeChip(props: OutcomeChipProps)
@@ -44,7 +45,7 @@ export function OutcomeChip(props: OutcomeChipProps)
 						<Typography fontSize="small" component="div">{player.placement}</Typography>
 					</Box>
 					<Box sx={{ textAlign: "center" }}>
-						<Typography variant="caption" component="div" sx={{ color: "#BBBBBB", textTransform: "uppercase", fontSize: "0.6rem", mb: "-3px" }}>Score</Typography>
+						<Typography variant="caption" component="div" sx={{ color: "#BBBBBB", textTransform: "uppercase", fontSize: "0.6rem", mb: "-3px" }}>XP</Typography>
 						<Typography fontSize="small" component="div">{player.scores.personal.toLocaleString()}</Typography>
 					</Box>
 				</Typography>

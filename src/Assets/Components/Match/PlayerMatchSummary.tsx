@@ -14,6 +14,7 @@ import { LeftvsRight } from "../Breakdowns/Templates/LeftvsRight";
 import { MatchMode } from "./Mode/MatchMode";
 import { GenericMode } from "./Mode/GenericMode";
 import { OutcomeChip } from "./OutcomeChip";
+import { MedalsMode, PlayerMatchSummaryDetails } from "./PlayerMatchSummaryDetails";
 
 interface MatchSummaryProps
 {
@@ -110,80 +111,24 @@ export function PlayerMatchSummary(props: MatchSummaryProps)
 		window.open(shareURL, "_blank", "left=0,top=0,width=550,height=450,personalbar=0,toolbar=0,scrollbars=0,resizable=0");
 	};
 
-	//#region Label Value Components
-	const LabelValueFC = (props: { label: string, value: number | string }) =>
-	{
-		return <Box sx={{ display: "flex", width: "112px", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-			<Typography variant="caption">{props.label}</Typography>
-			<Typography variant="body1">{props.value}</Typography>
-		</Box>
-	}
-	//#endregion
-
-	//#region Kills / Deaths Component
-	const KillsComponent = <Box sx={{ mt: 2, display: "flex", justifyContent: "center", width: "100%" }}>
-		<MatchBreakdown emphasize
-				main={new LeftvsRight(match.player.summary.kills, match.player.summary.deaths, "Kills", "Deaths", match.player.killExpectations.expected, match.player.deathExpectations.expected, match.player.summary.assists, "Assists")}
-				additional={[
-					new LeftvsRight(Math.round(match.player.killExpectations.expected * 10) / 10, Math.round(match.player.deathExpectations.expected * 10) / 10, "", "", undefined, undefined, undefined, "expected"),
-				]}
-			/>
-	</Box>;
-	//#endregion
-
-	//#region Damage Component
-	const DamageComponent = <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
-		<MatchBreakdown 
-			main={new LeftvsRight(match.player.damage.dealt, match.player.damage.taken, "Damage Dealt", "Damage Taken")}
-			additional={[
-				new LeftvsRight(Math.round(match.player.damageEfficiency * 100).toLocaleString() + "%", Math.round(match.player.enemyDamageEfficiency * 100).toLocaleString() + "%", "", "", undefined, undefined, undefined, "efficiency"),
-				new LeftvsRight(match.player.maximumKillsFromDamage.toLocaleString(), match.player.maximumDeathsFromDamage.toLocaleString(), "", "", undefined, undefined, undefined, "EQKD"),
-			]}
-		/>
-	</Box>;
-	//#endregion
-
-	//#region Accuracy Component
-	const AccuracyComponent = <Box sx={{ mt: 2, display: "flex", justifyContent: "center", width: "100%" }}>
-		<MatchBreakdown main={new LeftvsRight(match.player.shots.landed, match.player.shots.missed, "Shots Landed", "Shots Missed")} />
-	</Box>;
-	//#endregion
-
-	//#region CSR Component
-	const CSRComponent = <Box sx={{ backgroundColor: ArrowheadTheme.card, width: "100%", marginLeft: "-16px", padding: "8px 16px" }}>
-		<Box sx={{ display: "flex", justifyContent: "center", width: "100%", mt: 2, mb: 2 }}>
-			<CSRSProgression pre={match.player.csr.pre} post={match.player.csr.post} noBackground />
-		</Box>
-	</Box>;
-	//#endregion
-
 	return (
 		<Grid item xs={12} md={6} lg={4} xl={3}>
 			<Card>
 				<CardActionArea onClick={onCardAreaClick} onContextMenu={handleContextMenu}>
 					<CardMedia component="img" height="200" image={match.map.asset.thumbnail} alt={match.map.name} title={match.map.name} />
 					<CardContent>
-						<Box sx={{ backgroundColor: ArrowheadTheme.card, width: "100%", ml: "-16px", padding: "8px 16px 4px 16px", mt: -2 }}>
+						<Box sx={{ backgroundColor: ArrowheadTheme.card, width: "100%", ml: "-16px", padding: "8px 16px 0px 16px", mt: -2, mb: -1 }}>
 							<Typography variant="h5" component="div" sx={{ textAlign: "center", fontWeight: 700 }}>{match.playlist.name}</Typography>
 							<Typography variant="h6" component="div" sx={{ textAlign: "center" }}>{match.variant.name.indexOf(":") !== -1 ? match.variant.name.substring(match.variant.name.indexOf(":") + 1) : match.variant.name}</Typography>
 							<Typography variant="h6" component="div" sx={{ textAlign: "center", fontSize: "0.8rem !important" }}>{match.map.name}</Typography>
 						</Box>
-						<Box sx={{ backgroundColor: ArrowheadTheme.box, width: "100%", marginLeft: "-16px", padding: "8px 16px" }}>
-							<OutcomeChip player={match?.player} />
-							{KillsComponent}
-							<GenericMode player={match?.player} />
-							{DamageComponent}
-							{AccuracyComponent}
-							<Box sx={{ mt: 2 }} />
-							<MatchMode mode={match?.player?.mode} />
-						</Box>
-						{match.playlist.ranked && CSRComponent}
-						<Box sx={{ backgroundColor: ArrowheadTheme.card, width: "100%", marginLeft: "-16px", padding: "8px 16px", marginBottom: -2 }}>
-							{match.odds > 0 && <Typography variant="caption" component="div" sx={{ textAlign: "center", color: "#AAAAAA", fontSize: "0.6rem", textTransform: "uppercase" }}>Experience Odds: <Typography variant="subtitle1" component="span" sx={{ fontSize: "0.6rem" }}>{match.odds}%</Typography></Typography>}
-							<Typography variant="body1" component="div" sx={{ textAlign: "center", color: "#AAAAAA", fontSize: "0.6rem" }}>{match.date.toLocaleString()}</Typography>
-						</Box>
 					</CardContent>
 				</CardActionArea>
+				<PlayerMatchSummaryDetails player={match?.player} isRanked={match?.playlist?.ranked} medalsMode={MedalsMode.top3} />
+				<Box sx={{ backgroundColor: ArrowheadTheme.card, width: "100%", padding: "8px" }}>
+					{match.odds > 0 && <Typography variant="caption" component="div" sx={{ textAlign: "center", color: "#AAAAAA", fontSize: "0.6rem", textTransform: "uppercase" }}>Experience Odds: <Typography variant="subtitle1" component="span" sx={{ fontSize: "0.6rem" }}>{match.odds}%</Typography></Typography>}
+					<Typography variant="body1" component="div" sx={{ textAlign: "center", color: "#AAAAAA", fontSize: "0.6rem" }}>{match.date.toLocaleString()}</Typography>
+				</Box>
 			</Card>
 			<Menu
 				open={contextMenu !== null}

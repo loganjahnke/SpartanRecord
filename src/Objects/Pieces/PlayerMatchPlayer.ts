@@ -1,9 +1,11 @@
 import { HaloOutcome } from "../../Database/ArrowheadFirebase";
 import { PlayerMatchPlayerSchema, Scores } from "../../Database/Schemas/PlayerMatchSchema";
 import { CTFSchema, OddballSchema, ZoneSchema, EliminationSchema, StockpileSchema } from "../../Database/Schemas/ServiceRecordSchema";
+import { AllMedals } from "../Helpers/AllMedals";
 import { MatchCSRSummary } from "../Model/MatchCSRSummary";
 import { Damage } from "./Damage";
 import { Expectation } from "./Expectation";
+import { Medal, MedalRarity, MedalType } from "./Medal";
 import { Shots } from "./Shots";
 import { Summary } from "./Summary";
 import { TeamDetails } from "./TeamDetails";
@@ -21,6 +23,8 @@ export class PlayerMatchPlayer
     public damage: Damage;
     /** Accuracy statistics */
     public shots: Shots;
+    /** Contains all medals */
+    public medals: Medal[];
     /** Ranking in the match */
     public rank: number;
     /** Outcome */
@@ -117,6 +121,27 @@ export class PlayerMatchPlayer
             missed: data?.stats?.core?.shots?.missed ?? 0,
             accuracy: data?.stats?.core?.shots?.accuracy ?? 0
         };
+
+        this.medals = [];
+        if (data?.stats?.core?.breakdown?.medals && data?.stats?.core?.breakdown?.medals.length > 0)
+        {
+            this.medals = data?.stats?.core?.breakdown.medals.map((data: any) => 
+            {
+                const medal = new Medal(data);
+                const parent = (AllMedals as any)[(medal.id)];
+                medal.name = parent?.name ?? data?.name ?? data?.id ?? "";
+                medal.rarity = parent?.type ?? MedalRarity.Normal;
+                medal.type = parent?.category ?? MedalType.Unknown;
+                medal.sort = parent?.sort ?? -1;
+                medal.description = parent?.description ?? data?.description ?? "N/A";
+                medal.images = {
+                    small: parent?.image_urls?.small ?? "",
+                    medium: parent?.image_urls?.medium ?? "",
+                    large: parent?.image_urls?.large ?? ""
+                };
+                return medal;
+            });
+        }
 
         this.mode = data?.stats?.mode;
         this.killExpectations = new Expectation(data?.performances?.kills);
