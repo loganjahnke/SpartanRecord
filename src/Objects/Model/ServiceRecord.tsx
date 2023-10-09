@@ -372,11 +372,10 @@ export class ServiceRecord
             }
         };
 
-        this.timePlayed =
-        {
+        this.timePlayed = new TimePlayed({
             seconds: sr.timePlayed.seconds + this.timePlayed.seconds,
             human: ""
-        };
+        });
 
         const medals1 = new Map<number, Medal>();
         sr.medals.forEach(m => medals1.set(m.id, m));
@@ -476,11 +475,10 @@ export class ServiceRecord
             }
         };
 
-        this.timePlayed =
-        {
+        this.timePlayed = new TimePlayed({
             seconds: this.timePlayed.seconds,
             human: ""
-        };
+        });
 
         this.matchesPlayed = 1 + this.matchesPlayed;
         
