@@ -237,11 +237,10 @@ export class ServiceRecord
             }
         };
 
-        this.timePlayed =
-        {
+        this.timePlayed = new TimePlayed({
             seconds: timePlayed?.seconds ?? 0,
             human: timePlayed?.human ?? ""
-        };
+        });
 
         this.medals = [];
         if (core?.breakdown?.medals && core.breakdown?.medals.length > 0)
