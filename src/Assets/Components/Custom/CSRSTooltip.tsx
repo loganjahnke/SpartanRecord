@@ -5,7 +5,7 @@ import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { BeforeAfterProgress } from "../Custom/BorderLinearProgress";
 
 export const CSRSTooltip = styled(({ className, ...props }: TooltipProps) => (
-	<Tooltip {...props} classes={{ popper: className }} />
+	<Tooltip disableFocusListener arrow {...props} classes={{ popper: className }} />
   ))(({ theme }) => ({
 	[`& .${tooltipClasses.tooltip}`]: {
 	  maxWidth: 350,

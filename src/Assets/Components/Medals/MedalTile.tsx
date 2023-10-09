@@ -25,7 +25,7 @@ export function MedalTile(props: { medal: Medal, small?: boolean, matchesPlayed?
 			justifyContent: "center", 
 			margin: 0, 
 			padding: 0.5 }}>
-			<Tooltip title={IS_DEBUGGING ? medal.id : medal.description}>
+			<Tooltip disableFocusListener arrow title={IS_DEBUGGING ? medal.id : medal.description}>
 				<Box sx={{ textAlign: "right" }}>
 					<img src={medal.images.medium} alt={medal.name} height={small ? "48px" : "64px"} />
 				</Box>
@@ -44,7 +44,7 @@ export function MedalTile(props: { medal: Medal, small?: boolean, matchesPlayed?
 			margin: 0, 
 			alignItems: "center",
 			padding: 0.5 }}>
-			<Tooltip title={IS_DEBUGGING ? medal.id : medal.description}>
+			<Tooltip disableFocusListener arrow title={IS_DEBUGGING ? medal.id : medal.description}>
 				<Box sx={{ textAlign: "left", ml: 2 }}>
 					<img src={medal.images.medium} alt={medal.name} height={small ? "48px" : "64px"} />
 				</Box>

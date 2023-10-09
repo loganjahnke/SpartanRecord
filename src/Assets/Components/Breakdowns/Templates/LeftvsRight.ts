@@ -8,8 +8,9 @@ export class LeftvsRight
 	public expectedRight?: number;
 	public middleValue?: number;
 	public middleDesc?: string;
+	public middleTooltip?: string;
 
-	constructor(leftValue: string | number, rightValue: string | number, leftDesc: string, rightDesc: string, expectedLeft?: number, expectedRight?: number, middleValue?: number, middleDesc?: string)
+	constructor(leftValue: string | number, rightValue: string | number, leftDesc: string, rightDesc: string, expectedLeft?: number, expectedRight?: number, middleValue?: number, middleDesc?: string, middleTooltip?: string)
 	{
 		this.leftValue = leftValue;
 		this.rightValue = rightValue;
@@ -19,5 +20,6 @@ export class LeftvsRight
 		this.expectedRight = expectedRight;
 		this.middleValue = middleValue;
 		this.middleDesc = middleDesc;
+		this.middleTooltip = middleTooltip;
 	}
 }

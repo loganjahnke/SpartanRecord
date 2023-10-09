@@ -4,9 +4,9 @@ import { BorderLinearProgress } from "../Custom/BorderLinearProgress";
 import { CareerRankSchema } from "../../../Database/Schemas/CareerRankSchema";
 import { CurrentGrade, GetCareerRankMetadata, NextGrade } from "../../../Objects/Helpers/AllCareerRanks";
 
-export function CareerRankTile(props: { rank?: CareerRankSchema })
+export function CareerRankTile(props: { rank?: CareerRankSchema, rightAlign?: boolean })
 {
-	const { rank } = props;
+	const { rank, rightAlign } = props;
 
     const background = ArrowheadTheme.box;
 	const previous = GetCareerRankMetadata((rank?.data?.current?.rank ?? 1) - 1);
@@ -22,12 +22,12 @@ export function CareerRankTile(props: { rank?: CareerRankSchema })
 		<Box sx={{ 
 			background: background, 
 			display: "grid",
-			gridTemplateColumns: "48px auto",
+			gridTemplateColumns: rightAlign ? "auto 48px" : "48px auto",
 			margin: 0.5, 
 			alignItems: "center",
 			padding: 0.5,
 			width: "100%" }}>
-			<img src={rank.data.current.image_urls.icon} alt="Rank" height="48px" />
+			{!rightAlign && <Box sx={{ display: "flex", alignItems: "center" }}><img src={rank.data.current.image_urls.icon} alt="Rank" height="48px" /></Box>}
 			<Box sx={{ mb: 1 }}>
 				<Box sx={{ display: "flex", flexDirection: "row", mb: 0.5, alignItems: "center" }}>
 					<Typography variant="subtitle1" sx={{ fontSize: "0.8rem", ml: 1 }}>{rank.data.current.title} {CurrentGrade(rank)}</Typography>
@@ -36,7 +36,7 @@ export function CareerRankTile(props: { rank?: CareerRankSchema })
 					{color !== "Hero" && rank.data.next && <Typography variant="caption" sx={{ display: "block", fontSize: "0.8rem", mr: 1 }}>{rank.data.next.title} {NextGrade(rank)}</Typography>}
 				</Box>
 				<Box>
-					<Tooltip title={color === "Hero" ? "Congratulations Hero!" : `${rank.data.level.remaining_xp_to_next_level} needed for next rank`}>
+					<Tooltip disableFocusListener arrow title={color === "Hero" ? "Congratulations Hero!" : `${rank.data.level.remaining_xp_to_next_level} needed for next rank`}>
 						<BorderLinearProgress 
 							variant="determinate" 
 							value={progress} 
@@ -64,6 +64,7 @@ export function CareerRankTile(props: { rank?: CareerRankSchema })
 					</Tooltip>
 				</Box>
 			</Box>
+			{rightAlign && <Box sx={{ display: "flex", alignItems: "center", justifySelf: "right" }}><img src={rank.data.current.image_urls.icon} alt="Rank" height="48px" /></Box>}
 		</Box>
 	);
 }

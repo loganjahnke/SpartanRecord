@@ -37,7 +37,7 @@ export class CSRS
     /** Gets the header icon */
     public GetHeaderIcon(): ReactElement
     {
-        return <Tooltip title={this.__getIconTooltip()}>
+        return <Tooltip disableFocusListener arrow title={this.__getIconTooltip()}>
             {this.queue === "open-queue" ? <ShuffleRoundedIcon fontSize="small" color="primary" /> :
             this.input === "mnk" ? <MouseRoundedIcon fontSize="small" color="primary" /> :
             this.input === "controller" ? <SportsEsportsRoundedIcon fontSize="small" color="primary" /> : 

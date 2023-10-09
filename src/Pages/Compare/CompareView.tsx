@@ -16,6 +16,7 @@ import { ChangeCircle, CompareArrows } from "@mui/icons-material";
 import { AddGamertagDialog, AddGamertagInline } from "../Spartan Company/AddGamertagDialog";
 import { ArrowheadTheme } from "../../Assets/Theme/ArrowheadTheme";
 import { CompareHeader } from "../../Assets/Components/Compare/CompareHeader";
+import { CompareCareerRank } from "../../Assets/Components/Compare/CompareCareerRank";
 
 export function CompareView(props: ViewProps)
 {
@@ -337,6 +338,7 @@ export function CompareView(props: ViewProps)
 										backgroundURL="url(https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/playlists/ffa-slayer.jpg)"
 									/>
 									<Box sx={{ maxWidth: "800px", width: "100%", backgroundColor: ArrowheadTheme.box, borderRadius: "0 0 12px 12px" }}>
+										<CompareCareerRank category="Rank" value1={player?.careerRank} value2={player2.careerRank} />
 										<Compare category="Matches" value1={player?.serviceRecord.matchesPlayed} value2={player2.serviceRecord.matchesPlayed} />
 										<Compare category="Win Percentage" value1={player?.serviceRecord.winRate} value2={player2.serviceRecord.winRate} isPercent />
 										<Compare category="KDA" value1={player?.serviceRecord.kda} value2={player2.serviceRecord.kda} />

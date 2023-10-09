@@ -19,7 +19,7 @@ export function BeforeAfterProgress(props: LinearProgressProps)
 	return (
 		<>
 			<BorderLinearProgress {...props} />
-			{props.valueBuffer !== undefined && <Box sx={{ height: "10px", mb: "-10px", backgroundColor: "#DFDFDF", width: "2px", position: "relative", top: "-10px", left: `calc(${props.valueBuffer}%)` }} />}
+			{props.valueBuffer !== undefined && <Box sx={{ height: "10px", mb: "-10px", backgroundColor: "#DFDFDF", width: "2px", position: "relative", top: "-10px", left: `calc(${props.valueBuffer}% - 1px)` }} />}
 		</>
 	);
 };
@@ -37,11 +37,20 @@ export const BorderLinearProgressMatches = styled(LinearProgress)(({ theme }) =>
 	},
 }));
 
-export const CompareBarLeft = styled(LinearProgress)(({ theme }) => ({
+export function CompareBarLeft(props: LinearProgressProps)
+{
+	return <>
+		<CompareBarLeftProgress {...props} />
+		{props.valueBuffer !== undefined && <Box sx={{ height: "15px", mb: "-15px", backgroundColor: "#DFDFDF", width: "2px", position: "relative", top: "-15px", left: `calc(${props.valueBuffer}% - 1px)` }} />}
+	</>;
+}
+
+const CompareBarLeftProgress = styled(LinearProgress)(({ theme }) => ({
 	height: 15,
 	borderRadius: 5,
 	[`&.${linearProgressClasses.colorPrimary}`]: {
 		backgroundColor: ArrowheadTheme.background,
+		boxShadow: "0 0 15px " + ArrowheadTheme.thin_border
 	},
 	[`& .${linearProgressClasses.bar}`]: {
 		borderRadius: 0,
@@ -49,7 +58,15 @@ export const CompareBarLeft = styled(LinearProgress)(({ theme }) => ({
 	},
 }));
 
-export const CompareBarRight = styled(LinearProgress)(({ theme }) => ({
+export function CompareBarRight(props: LinearProgressProps)
+{
+	return <>
+		<CompareBarRightProgress {...props} />
+		{props.valueBuffer !== undefined && <Box sx={{ height: "15px", mb: "-15px", backgroundColor: "#DFDFDF", width: "2px", position: "relative", top: "-15px", left: `calc(${props.valueBuffer}% - 1px)` }} />}
+	</>;
+}
+
+const CompareBarRightProgress = styled(LinearProgress)(({ theme }) => ({
 	height: 15,
 	borderRadius: 5,
 	[`&.${linearProgressClasses.colorPrimary}`]: {

@@ -30,7 +30,7 @@ export function CSRSBreakdownTile(props: { csrs: CSRS })
 					<Typography variant="caption" sx={{ display: "block", fontSize: "0.8rem", mr: 1 }}>{csrs.GetSubtitle()}</Typography>
 				</Box>
 				<Box>
-					<Tooltip title={
+					<Tooltip disableFocusListener arrow title={
 						csrs.ranks.current.tier === "Unranked" 
 							? `${csrs.ranks.current.measurementMatchesRemaining} placement matches remaining` :
 						csrs.ranks.current.tier === "Onyx"

@@ -13,6 +13,16 @@ export function GetCareerRankMetadata(rank: number): CareerRankMetadata
 }
 
 /**
+ * Get the string version of the career rank title
+ * @param rank the career rank
+ */
+export function CareerRankTitle(rank: CareerRankSchema): string
+{
+    if (rank.data.current.title === "Hero") { return "Hero"; }
+    return `${rank.data.current.properties.type} ${rank.data.current.title} ${CurrentGrade(rank)}`
+}
+
+/**
  * Get the string version of the grade
  * @param rank the career rank
  */
@@ -37,6 +47,25 @@ export function NextGrade(rank: CareerRankSchema): string
 	if (rank.data.next.attributes.grade === 2) { return "II"; }
 	if (rank.data.next.attributes.grade === 3) { return "III"; }
 	return "";
+}
+
+/** Gets the background gradient for a career rank */
+export function CareerRankBackground(rank: CareerRankSchema): string
+{
+    return rank.data.current.properties.type === "Bronze" 
+            ? "-webkit-linear-gradient(0deg, #a16447 0%, #a16447 40%, #633522 100%)" :
+        rank.data.current.properties.type === "Silver" 
+            ? "-webkit-linear-gradient(0deg, #d3d3d3 0%, #d3d3d3 40%, #a6a6a6 100%)" :
+        rank.data.current.properties.type === "Gold" 
+            ? "-webkit-linear-gradient(0deg, #b9aa57 0%, #b9aa57 40%, #583e1b 100%)" :
+        rank.data.current.properties.type === "Platinum" 
+            ? "-webkit-linear-gradient(0deg, #8e93cc 0%, #8e93cc 40%, #c1d0d0 100%)" :
+        rank.data.current.properties.type === "Diamond" 
+            ? "-webkit-linear-gradient(0deg, #88c6f9 0%, #88c6f9 40%, #58beed 100%)" :
+        rank.data.current.properties.type === "Onyx" 
+            ? "-webkit-linear-gradient(0deg, #bb8c41 0%, #bb8c41 40%, #8c6e34 100%)"
+        /* Unranked */ 
+            : "-webkit-linear-gradient(0deg, #FFFFFF 0%, #ffffda 40%, #EFEFEF 100%)" 
 }
 
 /**

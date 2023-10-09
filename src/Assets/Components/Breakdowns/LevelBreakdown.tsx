@@ -24,7 +24,7 @@ export function LevelBreakdown(props: BreakdownProps)
             </Box>
 			<Box sx={{ display: "flex", flexDirection: "row", width: "90%", alignItems: "center", m: 1, mt: 0 }}>
 				<Typography variant="caption" sx={{ flexBasis: "12.5%", textAlign: "center" }}>{`SR${currLvl}`}</Typography>
-				<Tooltip title={`${xpNeeded.toLocaleString()} XP needed for next level`}>
+				<Tooltip disableFocusListener arrow title={`${xpNeeded.toLocaleString()} XP needed for next level`}>
 					<BorderLinearProgress variant="determinate" value={progress} sx={{ flexBasis: "75%", m: 1, "> .MuiLinearProgress-bar": { backgroundColor: ArrowheadTheme.good } }} />
 				</Tooltip>
 				<Typography variant="caption" sx={{ flexBasis: "12.5%", textAlign: "center" }}>{`SR${nextLvl}`}</Typography>

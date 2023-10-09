@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Tooltip, Typography } from "@mui/material";
 import { ArrowheadTheme } from "../../../Theme/ArrowheadTheme";
 import { BeforeAfterProgress } from "../../Custom/BorderLinearProgress";
 import { LeftvsRight } from "./LeftvsRight";
@@ -82,7 +82,9 @@ export function MatchBreakdown(props: MatchBreakdownTemplateProps)
 							<Typography variant="subtitle1">{lvr.leftValue} <Typography component="span" variant="subtitle1" sx={{ color: "#AAAAAA" }}>{lvr.leftDesc}</Typography></Typography>
 						</Box>
 						<Box sx={{ width: "34%", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
-							<Typography variant="caption" sx={{ color: "#AAAAAA", textTransform: "uppercase", fontSize: "0.6rem" }}>{lvr.middleDesc}</Typography>
+							<Tooltip title={lvr.middleTooltip} disableFocusListener arrow>
+								<Typography variant="caption" sx={{ color: "#AAAAAA", textTransform: "uppercase", fontSize: "0.6rem" }}>{lvr.middleDesc}</Typography>
+							</Tooltip>
 							<Typography variant="body1">{lvr.middleValue?.toLocaleString()}</Typography>
 						</Box>
 						<Box sx={{ textAlign: "left", width: "33%", ml: 3 }}>

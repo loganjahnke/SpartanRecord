@@ -10,6 +10,6 @@ export function CompareBar(props: CompareProps)
 		: (value1back || background);
 
 	return (!lessIsBetter && value1 < value2) || (lessIsBetter && value1 > value2)
-		? <CompareBarRight value={50} variant="determinate" sx={{ "> .MuiLinearProgress-bar": { background: color + " !important", backgroundColor: color + " !important" } }} />
-		: <CompareBarLeft value={value1 === value2 ? 100 : 50} variant="determinate" sx={{ "> .MuiLinearProgress-bar": { background: color + " !important", backgroundColor: color + " !important" } }} />
+		? <CompareBarRight value={50} variant="determinate" valueBuffer={50} sx={{ "> .MuiLinearProgress-bar": { background: color + " !important", backgroundColor: color + " !important" } }} />
+		: <CompareBarLeft value={value1 === value2 ? 100 : 50} valueBuffer={50} variant="determinate" sx={{ "> .MuiLinearProgress-bar": { background: color + " !important", backgroundColor: color + " !important" } }} />
 }

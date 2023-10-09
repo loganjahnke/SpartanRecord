@@ -12,7 +12,7 @@ export function BreakdownRowTile(props: BreakdownTileProps)
     if (value === 0 && !isMainStat) { return <React.Fragment />; }
 
 	return (
-        <Tooltip title={tooltip ?? (title + ": " + (typeof value === "number" ? (Math.round(value * 100) / 100).toLocaleString() : value) + (isPercent ? "%" : ""))}>
+        <Tooltip disableFocusListener arrow title={tooltip ?? (title + ": " + (typeof value === "number" ? (Math.round(value * 100) / 100).toLocaleString() : value) + (isPercent ? "%" : ""))}>
             <Box sx={{ 
 				background: background, 
 				display: "grid",

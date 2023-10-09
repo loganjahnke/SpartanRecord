@@ -42,7 +42,7 @@ export function PlayerMatchSummaryDetails(props: PlayerMatchSummaryDetailsProps)
 		<MatchBreakdown emphasize
 				main={new LeftvsRight(stats.kills, stats.deaths, "Kills", "Deaths", player.killExpectations.expected, player.deathExpectations.expected, stats.assists, "Assists")}
 				additional={[
-					new LeftvsRight(Math.round(player.killExpectations.expected * 10) / 10, Math.round(player.deathExpectations.expected * 10) / 10, "", "", undefined, undefined, undefined, "expected"),
+					new LeftvsRight(Math.round(player.killExpectations.expected * 10) / 10, Math.round(player.deathExpectations.expected * 10) / 10, "", "", undefined, undefined, undefined, "expected", "Expectations: Halo Infinite's expected kills/deaths for the player."),
 				]}
 			/>
 	</Box>;
@@ -53,8 +53,8 @@ export function PlayerMatchSummaryDetails(props: PlayerMatchSummaryDetailsProps)
 		<MatchBreakdown 
 			main={new LeftvsRight(damage.dealt, damage.taken, "Damage Dealt", "Damage Taken")}
 			additional={[
-				new LeftvsRight(Math.round(player.damageEfficiency * 100).toLocaleString() + "%", Math.round(player.enemyDamageEfficiency * 100).toLocaleString() + "%", "", "", undefined, undefined, undefined, "efficiency"),
-				new LeftvsRight(player.maximumKillsFromDamage.toLocaleString(), player.maximumDeathsFromDamage.toLocaleString(), "", "", undefined, undefined, undefined, "EQKD"),
+				new LeftvsRight(Math.round(player.damageEfficiency * 100).toLocaleString() + "%", Math.round(player.enemyDamageEfficiency * 100).toLocaleString() + "%", "", "", undefined, undefined, undefined, "efficiency", "Damage Efficiency: the ratio of the exact amount of damage needed to kill a player over the damage dealt per kill/death."),
+				new LeftvsRight(player.maximumKillsFromDamage.toLocaleString(), player.maximumDeathsFromDamage.toLocaleString(), "", "", undefined, undefined, undefined, "EQKD", "Equivalent Kills/Deaths: the equivalent number of kills or deaths if all your damage resulted in a kill or death. 275 damage per kill."),
 			]}
 		/>
 	</Box>;
@@ -78,7 +78,6 @@ export function PlayerMatchSummaryDetails(props: PlayerMatchSummaryDetailsProps)
 	const MedalsComponent = <Box sx={{ mt: 2, display: "flex", flexWrap: "wrap", justifyContent: "center", width: "100%" }}>
 		{medals.sort((a, b) => b.RarityValue() - a.RarityValue()).map((medal, index) => (medalsMode === MedalsMode.all || index <= 2) && <>
 				<MedalTile medal={medal} small />
-				{/* <img src={medal.images?.large} alt={medal.name} width="64px" /> */}
 			</>
 		)}
 	</Box>;

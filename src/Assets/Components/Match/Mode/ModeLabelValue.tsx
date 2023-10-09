@@ -11,9 +11,9 @@ export function ModeLabelValue(props: ModeLabelValueProps)
 {
 	return <Box sx={{ display: "flex", justifyContent: "center" }}>
 		<Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
-			<Typography variant="caption" sx={{ color: "#AAAAAA", width: "50%", textAlign: "right", mr: 1.5, textTransform: "uppercase", fontSize: "0.6rem" }}>{props.label}:</Typography>
-			{props.value !== undefined && <Typography variant="body1">{props.value.toLocaleString()}</Typography>}
-			{props.time !== undefined && <Typography variant="body1">{props.time}</Typography>}
+			<Typography variant="caption" sx={{ color: "#AAAAAA", width: "65%", textAlign: "right", mr: 1.5, textTransform: "uppercase", fontSize: "0.6rem" }}>{props.label}:</Typography>
+			{props.value !== undefined && <Typography variant="body1" sx={{ fontSize: "0.8rem" }}>{props.value.toLocaleString()}</Typography>}
+			{props.time !== undefined && <Typography variant="body1" sx={{ fontSize: "0.8rem" }}>{props.time}</Typography>}
 		</Box>
 	</Box>;
 }

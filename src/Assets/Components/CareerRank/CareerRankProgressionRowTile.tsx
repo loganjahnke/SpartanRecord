@@ -26,7 +26,7 @@ export function CareerRankProgressionRowTile(props: CareerRankTileProps)
 					background: `linear-gradient(to bottom, transparent 0%, ${colorA} 25%, ${colorB} 50%, ${colorA} 75%, transparent 100%)` 
 				}}
 			>
-				<Tooltip title={
+				<Tooltip disableFocusListener arrow title={
 					<Box className="rankRowLabelValues">
 						<Typography className="rankColTitle">{rank.title}</Typography>
 						<Typography className="rankColTitle">{rank.properties.threshold.toLocaleString()} xp</Typography>
