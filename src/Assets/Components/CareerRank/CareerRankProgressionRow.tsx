@@ -13,7 +13,7 @@ export function CareerRankProgressionRow(props: CareerRankProgressionProps)
 				<Typography variant="h3" className="progressionRowTitle" sx={{
 					fontSize: { lg: "24px !important", xl: "32px !important" },
 					mb: { lg: "0px !important", xl: "-25px !important" },
-					backgroundImage: CareerRankBackground(current)
+					backgroundImage: CareerRankBackground({ data: { current: { properties: { type: type }}}} as any)
 				}}>
 					{type}
 				</Typography>

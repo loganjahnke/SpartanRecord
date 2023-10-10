@@ -76,7 +76,7 @@ export function PlayerMatchSummaryDetails(props: PlayerMatchSummaryDetailsProps)
 
 	//#region Medals Component
 	const MedalsComponent = <Box sx={{ mt: 2, display: "flex", flexWrap: "wrap", justifyContent: "center", width: "100%" }}>
-		{medals.sort((a, b) => b.RarityValue() - a.RarityValue()).map((medal, index) => (medalsMode === MedalsMode.all || index <= 2) && <>
+		{medals.sort((a, b) => b.CompareTo(a)).map((medal, index) => (medalsMode === MedalsMode.all || index <= 2) && <>
 				<MedalTile medal={medal} small />
 			</>
 		)}

@@ -117,17 +117,17 @@ export class Medal
      */
     public CompareTo(other: Medal): number
     {
-        if (this.type !== other.type)
+        if (this.RarityValue() !== other.RarityValue())
+        {
+            return this.RarityValue() > other.RarityValue() ? 1 : -1;
+        }
+        else if (this.type !== other.type)
         {
             return this.type > other.type ? 1 : -1;
         }
         else if (this.sort !== other.sort)
         {
             return this.sort > other.sort ? 1 : -1;
-        }
-        else if (this.RarityValue() !== other.RarityValue())
-        {
-            return this.RarityValue() > other.RarityValue() ? 1 : -1;
         }
         else
         {
