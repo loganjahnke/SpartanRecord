@@ -15,18 +15,21 @@ import { PlaylistWeights } from "../Objects/Pieces/PlaylistWeights";
 import { HaloDotAPIClip, HaloDotAPIClips } from "./Schemas/HaloDotAPIClip";
 import { CareerRankSchema } from "./Schemas/CareerRankSchema";
 import { AllSeasons } from "../Objects/Helpers/AllSeasons";
+import { SCFirebase } from "./SCFirebase";
 
 export class SCPostman
 {
 	private __playlists: HaloDotAPIPlaylist[];
 	private __playlistWeights: Map<string, PlaylistWeights>;
 	private __version: string;
+	private __firebase: SCFirebase;
 
-	constructor() 
+	constructor(firebase: SCFirebase) 
 	{
 		this.__playlists = [];
 		this.__playlistWeights = new Map<string, PlaylistWeights>();
-		this.__version = "";	
+		this.__version = "";
+		this.__firebase = firebase;
 	}
 
 	/**
@@ -617,6 +620,16 @@ export class SCPostman
 		catch (error: any)
 		{
 			Debugger.AxiosError(node, error);
+		}
+
+		if (result?.status === 200)
+		{
+			this.__firebase?.CountAPIUsage(1);
+			Debugger.Print("SCPostman", "__fetch()", "Miss");
+		}
+		else
+		{
+			Debugger.Print("SCPostman", "__fetch()", "Cache");
 		}
 
 		return result?.data;
