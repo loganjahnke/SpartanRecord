@@ -1,5 +1,5 @@
 import { MatchProperties, DurationSchema, PlayerMatchDetailsSchema, PlayerMatchPlayerSchema, SeasonSchema, StatsCoreSchema } from "./PlayerMatchSchema"
-import { CTFSchema, OddballSchema, ZoneSchema, EliminationSchema, StockpileSchema } from "./ServiceRecordSchema";
+import { CTFSchema, OddballSchema, ZoneSchema, EliminationSchema, StockpileSchema, ExtractionSchema } from "./ServiceRecordSchema";
 
 export interface MatchSchema {
 	data: MatchDataSchema
@@ -29,7 +29,7 @@ export interface MatchTeamSchema {
 
 export interface TeamStatsSchema {
 	core: StatsCoreSchema;
-	mode: CTFSchema | OddballSchema | ZoneSchema | EliminationSchema | StockpileSchema;
+	mode: CTFSchema | OddballSchema | ZoneSchema | EliminationSchema | StockpileSchema | ExtractionSchema;
 	mmr: number;
 }
 

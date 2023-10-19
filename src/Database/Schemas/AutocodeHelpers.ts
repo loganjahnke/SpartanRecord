@@ -144,6 +144,13 @@ export class AutocodeHelpers
 								seconds: 0,
 								human: "",
 							},
+						},
+						extraction: {
+							extraction_conversions_completed: 0,
+							extraction_conversions_denied: 0,
+							extraction_initiations_completed: 0,
+							extraction_initiations_denied: 0,
+							successful_extractions: 0
 						}
 					},
 				},

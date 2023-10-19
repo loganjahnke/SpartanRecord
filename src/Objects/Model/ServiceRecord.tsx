@@ -1,7 +1,7 @@
 import { HaloOutcome } from "../../Database/ArrowheadFirebase";
 import { TeamStatsSchema } from "../../Database/Schemas/MatchSchema";
 import { DurationSchema, PlayerStatsSchema } from "../../Database/Schemas/PlayerMatchSchema";
-import { ServiceRecordSchema, ServiceRecordDataSchema, isServiceRecordSchema, ServiceRecordStatsSchema, ServiceRecordMatchesSchema, CTFSchema, EliminationSchema, OddballSchema, StockpileSchema, ZoneSchema } from "../../Database/Schemas/ServiceRecordSchema";
+import { ServiceRecordSchema, ServiceRecordDataSchema, isServiceRecordSchema, ServiceRecordStatsSchema, ServiceRecordMatchesSchema, CTFSchema, EliminationSchema, OddballSchema, StockpileSchema, ZoneSchema, ExtractionSchema } from "../../Database/Schemas/ServiceRecordSchema";
 import { AllMedals } from "../Helpers/AllMedals";
 import { Breakdowns } from "../Pieces/Breakdowns";
 import { CaptureTheFlag } from "../Pieces/CaptureTheFlag";
@@ -46,7 +46,7 @@ export class ServiceRecord
     /** Sotkcpile statistics */
     public stockpile: Stockpile;
     /** Mode statistics */
-    public mode?: CTFSchema | OddballSchema | ZoneSchema | EliminationSchema | StockpileSchema;
+    public mode?: CTFSchema | OddballSchema | ZoneSchema | EliminationSchema | StockpileSchema | ExtractionSchema;
     /** Raw autocode and firebase JSON */
     public data?: ServiceRecordDataSchema;
     /** If there is an error in the response, store it here */

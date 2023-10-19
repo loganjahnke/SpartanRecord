@@ -1,6 +1,6 @@
 import { HaloOutcome } from "../../Database/ArrowheadFirebase";
 import { PlayerMatchPlayerSchema, Scores } from "../../Database/Schemas/PlayerMatchSchema";
-import { CTFSchema, OddballSchema, ZoneSchema, EliminationSchema, StockpileSchema } from "../../Database/Schemas/ServiceRecordSchema";
+import { CTFSchema, OddballSchema, ZoneSchema, EliminationSchema, StockpileSchema, ExtractionSchema } from "../../Database/Schemas/ServiceRecordSchema";
 import { AllMedals } from "../Helpers/AllMedals";
 import { MatchCSRSummary } from "../Model/MatchCSRSummary";
 import { Damage } from "./Damage";
@@ -44,7 +44,7 @@ export class PlayerMatchPlayer
     /** Expected death performance */
     public deathExpectations: Expectation;
     /** Mode statistics */
-    public mode?: CTFSchema | OddballSchema | ZoneSchema | EliminationSchema | StockpileSchema;
+    public mode?: CTFSchema | OddballSchema | ZoneSchema | EliminationSchema | StockpileSchema | ExtractionSchema;
 
     /** The damage efficiency per kill */
     public get damageEfficiency(): number

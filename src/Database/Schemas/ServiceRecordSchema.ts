@@ -46,6 +46,7 @@ export type ServiceRecordStatsSchema = {
 		oddball: OddballSchema;
 		zones: ZoneSchema;
 		stockpile: StockpileSchema;
+		extraction: ExtractionSchema;
 	};
 }
 
@@ -180,3 +181,12 @@ export interface StockpileSchema
 	time_as_power_seed_carrier: DurationSchema;
 	time_as_power_seed_driver: DurationSchema;
 };
+
+export interface ExtractionSchema
+{
+	extraction_conversions_completed: number;
+	extraction_conversions_denied: number;
+	extraction_initiations_completed: number;
+	extraction_initiations_denied: number;
+	successful_extractions: number;
+}

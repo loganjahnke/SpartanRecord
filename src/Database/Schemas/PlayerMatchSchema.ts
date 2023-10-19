@@ -1,4 +1,4 @@
-import { CTFSchema, EliminationSchema, OddballSchema, StockpileSchema, ZoneSchema } from "./ServiceRecordSchema";
+import { CTFSchema, EliminationSchema, OddballSchema, StockpileSchema, ZoneSchema, ExtractionSchema } from "./ServiceRecordSchema";
 
 export interface PlayerMatchWithOddsSchema extends PlayerMatchSchema 
 {	
@@ -102,7 +102,7 @@ export interface TeamSchema {
   
 export interface PlayerStatsSchema {
 	core: StatsCoreSchema;
-	mode: CTFSchema | OddballSchema | ZoneSchema | EliminationSchema | StockpileSchema;
+	mode: CTFSchema | OddballSchema | ZoneSchema | EliminationSchema | StockpileSchema | ExtractionSchema;
 	mmr: number;
 }
   
