@@ -106,6 +106,8 @@ export class SCFirebase
 	 */
 	public async GetCareerRank(gamertag: string): Promise<CareerRankSchema | null>
 	{
+		if (!gamertag) { return null; }
+
 		Debugger.Print("SCFirebase", "GetCareerRank()", gamertag);
 
 		const snapshot = await this.__get(`career_rank/${gamertag}`);
@@ -473,6 +475,8 @@ export class SCFirebase
 	 */
 	public async GetAvailableFilters(gamertag: string, node: ServiceRecordFilter): Promise<SRFilter[]>
 	{
+		if (!gamertag) { return []; }
+
 		Debugger.Print("SCFirebase", "GetAvailableFilters()", `${gamertag} - ${node}`);
 
 		const n = node === ServiceRecordFilter.Maps ? "map" : node === ServiceRecordFilter.Modes ? "mode" : "outcome";
@@ -502,6 +506,8 @@ export class SCFirebase
 	 */
 	public async GetCSRS(gamertag: string, season?: string): Promise<CSRS[]>
 	{
+		if (!gamertag) { return []; }
+
 		Debugger.Print("SCFirebase", "GetCSRS()", gamertag);
 
 		let snapshot: DataSnapshot | undefined;
@@ -566,6 +572,8 @@ export class SCFirebase
 	 */
 	public async GetLeader(leaderboard: Leaderboard, gamertag: string): Promise<Leader>
 	{
+		if (!gamertag) { return new Leader(); }
+
 		// Get leader
 		const [value, matchesPlayed] = await Promise.all([
 			this.__get(`leaderboard/${leaderboard}/${gamertag}`),
@@ -621,6 +629,8 @@ export class SCFirebase
 	 */
 	public async GetIsPremiumUser(gamertag: string): Promise<boolean>
 	{
+		if (!gamertag) { return false; }
+
 		Debugger.Print("SCFirebase", "GetIsPremiumUser()", gamertag);
 
 		const snapshot = await this.__get(`allowed/${gamertag}`);

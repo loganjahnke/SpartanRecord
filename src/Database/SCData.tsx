@@ -541,7 +541,7 @@ export class SCData
      */
     public async CanUpdate(): Promise<boolean>
     {
-        return await this.CurrentAPIUsage() < 7500;
+        return await this.CurrentAPIUsage() < 8000;
     }
 
     /**
