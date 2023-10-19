@@ -114,7 +114,6 @@ export const SeasonsChart = (props: { seasons: HaloDotAPISeason[], historicServi
 	 */
 	const changeDataSet = useCallback((event?: SelectChangeEvent): void =>
 	{
-		if (event) { onMetricChanged(); }
 		const newDataSet = event?.target.value as SeasonsDataSets ?? SeasonsDataSets.Matches;
 		if (event && dataSet.current === newDataSet) { return; }
 		dataSet.current = newDataSet;
@@ -193,7 +192,7 @@ export const SeasonsChart = (props: { seasons: HaloDotAPISeason[], historicServi
 		}
 
 		setChartData({
-			labels: seasons.map((season) => "Season " + (season.id) + "." + season.version),
+			labels: seasons.map((season) => season.id < 3 ? "Season " + (season.id) + "." + season.version : "Season " + season.id),
 			datasets: [
 				{
 					backgroundColor: ArrowheadTheme.good,
@@ -224,7 +223,7 @@ export const SeasonsChart = (props: { seasons: HaloDotAPISeason[], historicServi
 				}
 			]
 		});
-	}, [historicServiceRecords, onMetricChanged]);
+	}, [historicServiceRecords]);
 
 	const initialChartData = {
 		labels: historicServiceRecords.map((_sr, index) => "Season " + (index + 1)),
