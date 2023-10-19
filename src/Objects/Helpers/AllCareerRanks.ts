@@ -18,6 +18,7 @@ export function GetCareerRankMetadata(rank: number): CareerRankMetadata
  */
 export function CareerRankTitle(rank: CareerRankSchema): string
 {
+    if (!rank?.data?.current) { return ""; }
     if (rank.data.current.title === "Hero") { return "Hero"; }
     return `${rank.data.current.properties.type} ${rank.data.current.title} ${CurrentGrade(rank)}`
 }
@@ -28,6 +29,7 @@ export function CareerRankTitle(rank: CareerRankSchema): string
  */
 export function CurrentGrade(rank: CareerRankSchema): string
 {
+    if (!rank?.data?.current) { return ""; }
     if (rank.data.current.title === "Hero") { return ""; }
 	if (rank.data.current.attributes.grade === 1) { return "I"; }
 	if (rank.data.current.attributes.grade === 2) { return "II"; }
@@ -41,6 +43,7 @@ export function CurrentGrade(rank: CareerRankSchema): string
  */
 export function NextGrade(rank: CareerRankSchema): string
 {
+    if (!rank?.data?.current) { return ""; }
     if (rank.data.current.title === "Hero") { return ""; }
     if (rank.data.next.title === "Hero") { return ""; }
 	if (rank.data.next.attributes.grade === 1) { return "I"; }
@@ -52,6 +55,7 @@ export function NextGrade(rank: CareerRankSchema): string
 /** Gets the background gradient for a career rank */
 export function CareerRankBackground(rank: CareerRankSchema): string
 {
+    if (!rank?.data?.current) { return ""; }
     return rank.data.current.properties.type === "Bronze" 
             ? "-webkit-linear-gradient(0deg, #a16447 0%, #a16447 40%, #633522 100%)" :
         rank.data.current.properties.type === "Silver" 
