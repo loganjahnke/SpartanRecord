@@ -88,7 +88,7 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 		if (!gamertag) { return; }
 		if (!player || !player.appearance || !player.serviceRecord || !player.appearance.emblemURL)
 		{
-			const p = await app.GetPlayerFromFirebase(gamertag);
+			const p = await app.GetPlayerAppearanceOnly(gamertag);
 			updatePlayer(p.gamertag, p.appearance, p.serviceRecord, p.csrs);
 		}
 	}, [app, gamertag, player, updatePlayer]);

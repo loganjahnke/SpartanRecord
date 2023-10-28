@@ -1,14 +1,13 @@
 import { Box } from "@mui/material";
-import { TitleCard } from "../Cards/TitleCard";
-import { BreakdownRowTile } from "./BreakdownRowTile";
-import { BreakdownProps, BreakdownTile } from "./BreakdownTile";
+import { BreakdownRowTile } from "../BreakdownRowTile";
+import { BreakdownProps, BreakdownTile } from "../BreakdownTile";
 
 export function OddballBreakdown(props: BreakdownProps)
 {
 	const { serviceRecord, showPerMatch } = props;
 
 	return (
-		<TitleCard title="Oddball">
+		<>
 			<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", width: "100%" }}>
 				<BreakdownTile title="Time as Carrier" value={serviceRecord.oddball.timeAsSkullCarrier} isMainStat />
 			</Box>
@@ -19,6 +18,6 @@ export function OddballBreakdown(props: BreakdownProps)
 				<BreakdownRowTile title="Skull Carriers Killed" value={showPerMatch ? serviceRecord.oddball.skullCarriersKilled / serviceRecord.matchesPlayed : serviceRecord.oddball.skullCarriersKilled} isMainStat />
 				<BreakdownRowTile title="Longest Time as Carrier" value={serviceRecord.oddball.longestTimeAsSkullCarrier} isMainStat />
 			</Box>
-		</TitleCard>
+		</>
 	);
 }

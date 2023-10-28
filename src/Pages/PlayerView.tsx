@@ -59,10 +59,10 @@ export function PlayerView(props: ViewProps)
 	}, [gamertag, app, season, setLoadingMessage, updatePlayer, setHistoricStats]);
 
 	/**
-	 * Loads the player from HaloDotAPI
+	 * Loads the player from GruntAPI
 	 * @param currSR the current service record from Firebase
 	 */
-	const loadFromHaloDotAPI = useCallback(async (firebasePlayer: Player) =>
+	const loadFromGruntDotAPI = useCallback(async (firebasePlayer: Player) =>
 	{
 		// If we are already syncing this gamertag, quit early
 		if (!gamertag || app.IsSyncing(gamertag)) 
@@ -71,7 +71,7 @@ export function PlayerView(props: ViewProps)
 			return; 
 		}
 
-		// Ensure we can update from HaloDotAPI
+		// Ensure we can update from GruntAPI
 		if (!await app.CanUpdate())
 		{
 			setApiError(true);
@@ -88,7 +88,7 @@ export function PlayerView(props: ViewProps)
 		// Get the current season
 		const currSeason = await app.GetCurrentSeason();
 
-		// If we already have this data, don't bother reloading from HaloDotAPI
+		// If we already have this data, don't bother reloading from GruntAPI
 		if (season && season !== currSeason?.properties.identifier && await app.DoesPlayerHavePrevSeasons(gamertag))
 		{ 
 			clearLoadingMessages();
@@ -99,12 +99,12 @@ export function PlayerView(props: ViewProps)
 		setLoadingMessage("");
 		setBackgroundLoadingProgress(SR.DefaultLoading);
 
-		// Otherwise get latest data from HaloDotAPI
+		// Otherwise get latest data from GruntAPI
 		app.AddToSyncing(gamertag);
 
 		// Get updated player
-		const haloDotAPIPlayer = await app.GetPlayerFromHaloDotAPI(gamertag, season, firebasePlayer.serviceRecord);
-		if (!haloDotAPIPlayer) 
+		const gruntAPIPlayer = await app.GetPlayerFromHaloDotAPI(gamertag, season, firebasePlayer.serviceRecord);
+		if (!gruntAPIPlayer) 
 		{
 			clearLoadingMessages();
 			app.RemoveFromSyncing(gamertag);
@@ -119,7 +119,7 @@ export function PlayerView(props: ViewProps)
 		}
 
 		// Error checking
-		if (firebasePlayer.serviceRecord.IsEmpty() && haloDotAPIPlayer.serviceRecord.IsEmpty())
+		if (firebasePlayer.serviceRecord.IsEmpty() && gruntAPIPlayer.serviceRecord.IsEmpty())
 		{
 			firebasePlayer.serviceRecord.error = "Cannot load data, try again later.";
 			updatePlayer(gamertag, undefined, firebasePlayer.serviceRecord);
@@ -127,25 +127,25 @@ export function PlayerView(props: ViewProps)
 		}
 
 		// Update state
-		updatePlayer(haloDotAPIPlayer.gamertag, haloDotAPIPlayer.appearance, haloDotAPIPlayer.serviceRecord, haloDotAPIPlayer.csrs, haloDotAPIPlayer.careerRank, haloDotAPIPlayer.isPrivate, firebasePlayer);
+		updatePlayer(gruntAPIPlayer.gamertag, gruntAPIPlayer.appearance, gruntAPIPlayer.serviceRecord, gruntAPIPlayer.csrs, gruntAPIPlayer.careerRank, gruntAPIPlayer.isPrivate, firebasePlayer);
 
 		// Store into Firebase
-		await app.SetPlayerIntoFirebase(haloDotAPIPlayer, season, firebasePlayer.serviceRecord);
+		await app.SetPlayerIntoFirebase(gruntAPIPlayer, season, firebasePlayer.serviceRecord);
 
-		// Check if HaloDotAPI automatically corrected the gamertag
+		// Check if GruntAPI automatically corrected the gamertag
 		// Make sure we point Firebase to the right gamertag
-		if (haloDotAPIPlayer.gamertag !== gamertag)
+		if (gruntAPIPlayer.gamertag !== gamertag)
 		{
-			await app.UpdateGamertagReference(haloDotAPIPlayer.gamertag, gamertag);
+			await app.UpdateGamertagReference(gruntAPIPlayer.gamertag, gamertag);
 		}
 
 		// Remove from syncing tracker
 		app.RemoveFromSyncing(gamertag);
 
 		// Add to recent players cookie
-		if (haloDotAPIPlayer.serviceRecordData && !(haloDotAPIPlayer.serviceRecordData as any).error) { Cookie.addRecent(haloDotAPIPlayer.gamertag); }
+		if (gruntAPIPlayer.serviceRecordData && !(gruntAPIPlayer.serviceRecordData as any).error) { Cookie.addRecent(gruntAPIPlayer.gamertag); }
 
-		return haloDotAPIPlayer.serviceRecordData && !(haloDotAPIPlayer.serviceRecordData as any).error && haloDotAPIPlayer.serviceRecord.matchesPlayed !== firebasePlayer?.serviceRecord?.matchesPlayed;
+		return gruntAPIPlayer.serviceRecordData && !(gruntAPIPlayer.serviceRecordData as any).error && gruntAPIPlayer.serviceRecord.matchesPlayed !== firebasePlayer?.serviceRecord?.matchesPlayed;
 
 	}, [gamertag, app, season, setLoadingMessage, setApiError, updatePlayer, setBackgroundLoadingProgress, clearLoadingMessages]);
 
@@ -178,7 +178,7 @@ export function PlayerView(props: ViewProps)
 			const prevSRs = Array.from(currHistoricStats);
 			prevSRs.pop();
 
-			// Get data from HaloDotAPI, update Firebase
+			// Get data from GruntAPI, update Firebase
 			const sr = await app.GetServiceRecordData(gamertag, currentSeason.properties.identifier);
 			await app.SetPreviousSeasonStats(gamertag, currentSeason.properties.identifier, sr);
 
@@ -195,7 +195,7 @@ export function PlayerView(props: ViewProps)
 		const prevSRs = [];
 		for (const s of allSeasons)
 		{
-			Debugger.Simple("PlayerView", "loadHistoricStatistics()", "Getting season " + s.properties.identifier + " from HaloDotAPI");
+			Debugger.Simple("PlayerView", "loadHistoricStatistics()", "Getting season " + s.properties.identifier + " from GruntAPI");
 
 			const sr = await app.GetServiceRecordData(gamertag, s.properties.identifier);
 			await app.SetPreviousSeasonStats(gamertag, s.properties.identifier, sr);
@@ -231,8 +231,8 @@ export function PlayerView(props: ViewProps)
 		// Get from firebase
 		const firebasePlayer = await loadFromFirebase();
 
-		// Load from HaloDotAPI
-		if (await loadFromHaloDotAPI(firebasePlayer))
+		// Load from GruntAPI
+		if (await loadFromGruntDotAPI(firebasePlayer))
 		{
 			// Update historic statistics
 			await loadHistoricStatistics(firebasePlayer.historicStats);
@@ -244,7 +244,7 @@ export function PlayerView(props: ViewProps)
 		// Log event
 		app.logger.LogViewServiceRecord();
 
-	}, [app, gamertag, seasons, switchTab, loadFromFirebase, loadFromHaloDotAPI, loadHistoricStatistics, clearLoadingMessages]);
+	}, [app, gamertag, seasons, switchTab, loadFromFirebase, loadFromGruntDotAPI, loadHistoricStatistics, clearLoadingMessages]);
 	
 	useEffect(() =>
 	{

@@ -61,9 +61,13 @@ export class Debugger
      * Gets the size of an object
      * @param object the object to get the size of
      */
-    public static Size(object: any): string
+    public static Size(object: any): { formatted: string, bytes: number }
     {
-        return this.FormatByteSize(this.RoughSizeOfObject(object));
+        const bytes = this.RoughSizeOfObject(object);
+        return {
+            formatted: this.FormatByteSize(bytes),
+            bytes: bytes
+        };
     }
 
     /**
@@ -76,7 +80,7 @@ export class Debugger
     public static PrintSize(object: any, description?: string): void
     {
         if (!Debugger.IS_DEBUGGING) { return; }
-        console.log(`Size of ${description || "object"}: ${this.Size(object)}`);
+        console.log(`Size of ${description || "object"}: ${this.Size(object).formatted}`);
     }
 
     /**

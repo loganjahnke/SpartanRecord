@@ -35,7 +35,7 @@ export function MedalsView(props: ViewProps)
 		{
 			// Set page gamertag and show loading message
 			setGamertag(gamertag);
-			const player = await app.GetPlayerFromFirebase(gamertag);
+			const player = await app.GetMinimumPlayerDataFromFirebase(gamertag);
 			setServiceRecord(player.serviceRecord);
 		}
 

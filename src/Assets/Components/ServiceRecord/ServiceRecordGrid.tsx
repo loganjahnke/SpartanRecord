@@ -19,6 +19,7 @@ import { ServiceRecordFilters } from "./ServiceRecordFilters";
 import { HaloDotAPISeason } from "../../../Database/Schemas/AutocodeMetadata";
 import { CareerRankSchema } from "../../../Database/Schemas/CareerRankSchema";
 import { CareerRankBreakdown } from "../CareerRank/CareerRankBreakdown";
+import { ModeBreakdown } from "../Breakdowns/Modes/ModeBreakdown";
 
 interface ServiceRecordGridProps
 {
@@ -108,6 +109,9 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 				{historicStats && (!season) && <Grid item xs={12}>
 					<SeasonsChart seasons={seasons} historicServiceRecords={historicStats} onMetricChanged={onMetricChanged} />
 				</Grid>}
+				<Grid item xs={12}>
+					<ModeBreakdown serviceRecord={serviceRecord} showPerMatch={showPerMatch} />
+				</Grid>
 				<Grid container item spacing={2} xs={12}>
 					<Grid item xs={12} lg={6}>
 						<TimePlayed serviceRecord={serviceRecord} showPerMatch={showPerMatch} />

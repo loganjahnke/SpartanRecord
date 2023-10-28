@@ -1,4 +1,5 @@
 import { CTFSchema } from "../../Database/Schemas/ServiceRecordSchema";
+import { TimePlayed } from "./TimePlayed";
 
 export class CaptureTheFlag
 {
@@ -27,6 +28,6 @@ export class CaptureTheFlag
 		this.flagSteals = data.flag_steals;
 		this.killsAsFlagCarrier = data.kills_as_flag_carrier;
 		this.killsAsFlagReturner = data.kills_as_flag_returner;
-		this.timeAsCarrier = data.time_as_flag_carrier?.human ?? "";
+		this.timeAsCarrier = new TimePlayed(data.time_as_flag_carrier)?.readable() ?? "";
 	}
 }

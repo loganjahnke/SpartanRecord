@@ -1,14 +1,13 @@
 import { Box } from "@mui/material";
-import { TitleCard } from "../Cards/TitleCard";
-import { BreakdownRowTile } from "./BreakdownRowTile";
-import { BreakdownProps, BreakdownTile } from "./BreakdownTile";
+import { BreakdownRowTile } from "../BreakdownRowTile";
+import { BreakdownProps, BreakdownTile } from "../BreakdownTile";
 
 export function EliminationBreakdown(props: BreakdownProps)
 {
 	const { serviceRecord, showPerMatch } = props;
 
 	return (
-		<TitleCard title="Elimination">
+		<>
 			<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", width: "100%" }}>
 				<BreakdownTile title="Eliminations" value={showPerMatch ? serviceRecord.elimination.eliminations / serviceRecord.matchesPlayed : serviceRecord.elimination.eliminations} isMainStat />
 				<BreakdownTile title="Executions" value={showPerMatch ? serviceRecord.elimination.executions / serviceRecord.matchesPlayed : serviceRecord.elimination.executions} isMainStat />
@@ -22,6 +21,6 @@ export function EliminationBreakdown(props: BreakdownProps)
 				<BreakdownRowTile title="Times Revived by Ally" value={showPerMatch ? serviceRecord.elimination.timesRevivedByAlly / serviceRecord.matchesPlayed : serviceRecord.elimination.timesRevivedByAlly} isMainStat  />
 				<BreakdownRowTile title="Rounds Survived" value={showPerMatch ? serviceRecord.elimination.roundsSurvived / serviceRecord.matchesPlayed : serviceRecord.elimination.roundsSurvived} isMainStat  />
 			</Box>
-		</TitleCard>
+		</>
 	);
 }

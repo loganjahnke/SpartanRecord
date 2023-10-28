@@ -1,4 +1,5 @@
 import { StockpileSchema } from "../../Database/Schemas/ServiceRecordSchema";
+import { TimePlayed } from "./TimePlayed";
 
 export class Stockpile
 {
@@ -16,7 +17,7 @@ export class Stockpile
 		this.powerSeedCarriersKilled = data.power_seed_carriers_killed;
 		this.powerSeedsDeposited = data.power_seeds_deposited;
 		this.powerSeedsStolen = data.power_seeds_stolen;
-		this.timeAsPowerSeedCarrier = data.time_as_power_seed_carrier?.human ?? "";
-		this.timeAsPowerSeedDriver = data.time_as_power_seed_driver?.human ?? "";
+		this.timeAsPowerSeedCarrier = new TimePlayed(data.time_as_power_seed_carrier)?.readable() ?? "";
+		this.timeAsPowerSeedDriver = new TimePlayed(data.time_as_power_seed_driver)?.readable() ?? "";
 	}
 }

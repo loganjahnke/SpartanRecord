@@ -17,12 +17,10 @@ import { AHDrawer, SRTabs } from "./Assets/Components/Layout/AHDrawer";
 import { Alert, Box, Snackbar, Typography } from "@mui/material";
 import { AHLoading } from "./Assets/Components/Layout/AHLoading";
 import { UhOh } from "./Pages/UhOh";
-import { BestMatchesView } from "./Pages/BestMatchesView";
 import { Player } from "./Objects/Model/Player";
 import { Appearance } from "./Objects/Model/Appearance";
 import { ServiceRecord } from "./Objects/Model/ServiceRecord";
 import { PatreonView } from "./Pages/PatreonView";
-import { ModesView } from "./Pages/ModesView";
 import { CSRS } from "./Objects/Model/CSRS";
 import { OtherCreators } from "./Pages/OtherCreators";
 import { Admin } from "./Pages/Admin";
@@ -163,9 +161,6 @@ const App = () =>
 					<Route path="/compare/:gamertag1" element={<CompareView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} />} />
 					<Route path="/compare/:gamertag1/:gamertag2" element={<CompareView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} />} />
 					
-					{/* Mode Views */}
-					<Route path="/modes/:gamertag" element={<ModesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} />} />
-					
 					{/* Career Rank Views */}
 					<Route path="/career_rank/:gamertag" element={<CareerRankView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} />} />
 
@@ -173,9 +168,6 @@ const App = () =>
 					<Route path="/service_record/:gamertag" element={<PlayerView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} />} />
 					<Route path="/service_record/:node/:gamertag" element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} />} />
 					<Route path="/service_record/:node/:gamertag/:filter" element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} />} />
-					
-					{/* Best Matches Views */}
-					<Route path="/best/matches/:gamertag" element={<BestMatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} />} />
 					
 					{/* Spartan Company Views */}
 					<Route path="/spartan_company" element={<SpartanCompanyView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} />} />

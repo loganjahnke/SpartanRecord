@@ -1,14 +1,13 @@
 import { Box } from "@mui/material";
-import { TitleCard } from "../Cards/TitleCard";
-import { BreakdownRowTile } from "./BreakdownRowTile";
-import { BreakdownProps, BreakdownTile } from "./BreakdownTile";
+import { BreakdownRowTile } from "../BreakdownRowTile";
+import { BreakdownProps, BreakdownTile } from "../BreakdownTile";
 
 export function CaptureTheFlagBreakdown(props: BreakdownProps)
 {
 	const { serviceRecord, showPerMatch } = props;
 
 	return (
-		<TitleCard title="Capture the Flag">
+		<>
 			<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", width: "100%" }}>
 				<BreakdownTile title="Flag Captures" value={showPerMatch ? serviceRecord.ctf.flagCaptures / serviceRecord.matchesPlayed : serviceRecord.ctf.flagCaptures} isMainStat tooltip="Total captures" />
 				<BreakdownTile title="Flag Returns" value={showPerMatch ? serviceRecord.ctf.flagReturns / serviceRecord.matchesPlayed : serviceRecord.ctf.flagReturns} isMainStat tooltip="Total flag returns" />
@@ -21,6 +20,6 @@ export function CaptureTheFlagBreakdown(props: BreakdownProps)
 				<BreakdownRowTile title="Flag Returners Killed" value={showPerMatch ? serviceRecord.ctf.flagReturnersKilled / serviceRecord.matchesPlayed : serviceRecord.ctf.flagReturnersKilled} isMainStat  />
 				<BreakdownRowTile title="Time as Carrier" value={serviceRecord.ctf.timeAsCarrier} isMainStat  />
 			</Box>
-		</TitleCard>
+		</>
 	);
 }

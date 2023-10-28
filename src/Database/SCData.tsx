@@ -131,9 +131,6 @@ export class SCData
         if (player.appearanceData) { this.firebase.SetAppearance(gamertag, player.appearanceData); }
         if (player.careerRank) { this.firebase.SetCareerRank(gamertag, player.careerRank); }
 
-        // Update counter
-        this.firebase.CountAPIUsage(2);
-
         return player;
     }
 
@@ -149,6 +146,19 @@ export class SCData
         const correct = await this.firebase.GetGamertag(gamertag);
 		const player = new Player(correct);
 		await this.firebase.GetPlayer(player, season, historic);
+		return player;
+	}
+
+    /**
+     * Gets a player from firebase
+     * @param gamertag the gamertag
+     * @returns player object
+     */
+    public async GetMinimumPlayerDataFromFirebase(gamertag: string): Promise<Player>
+	{
+        const correct = await this.firebase.GetGamertag(gamertag);
+		const player = new Player(correct);
+		await this.firebase.GetMinimumPlayerData(player);
 		return player;
 	}
 
@@ -236,9 +246,6 @@ export class SCData
         const player = await this.halodapi.GetPlayer(gamertag, season, oldSR);
         if ((player.serviceRecordData as any)?.error) { this.logger.LogError(); }
 
-        // Update counter
-        this.firebase.CountAPIUsage(player?.serviceRecord?.matchesPlayed === oldSR?.matchesPlayed ? 1 : 4);
-
         return player;
     }
 
@@ -271,17 +278,6 @@ export class SCData
     {
         const player = new Player(gamertag);
         return await this.halodapi.GetServiceRecordData(player, season, playlistId, categoryId, type);
-    }
-
-    /**
-     * Gets a historic service record for a specific game number
-     * @param player the player
-     * @param game the game number
-     * @returns the service record
-     */
-    public async GetHistoricServiceRecord(player: Player, game: number): Promise<ServiceRecord>
-    {
-        return await this.firebase.GetHistoricStatisticsForGameNumber(player.gamertag, game);
     }
 
     /**
@@ -363,7 +359,6 @@ export class SCData
 
         // Check with HaloDotAPI
         const matches = await this.halodapi.GetMatches(ids);
-        this.firebase.CountAPIUsage(ids.length);
         if (!matches) { return []; }
 
         // Store into Firebase if appropriate
@@ -374,27 +369,6 @@ export class SCData
         }
 
         return matches.map(m => new Match(m));
-    }
-
-    /**
-	 * The current best (or worst) values for the gamer
-	 * @param gamertag the gamertag
-	 * @returns the best values object
-	 */
-	public async GetBest(gamertag: string): Promise<FirebaseBest>
-    {
-        return await this.firebase.GetBestMatches(gamertag);
-    }
-
-    /**
-	 * The current best (or worst) values for the gamer
-	 * @param gamertag the gamertag
-	 * @param map the map name
-	 * @returns the best values object
-	 */
-	public async GetBestForMap(gamertag: string, map: string): Promise<FirebaseBest>
-    {
-        return await this.firebase.GetBestMatchesForMap(gamertag, map);
     }
 
     /**

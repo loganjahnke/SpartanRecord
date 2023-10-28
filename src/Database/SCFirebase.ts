@@ -67,6 +67,26 @@ export class SCFirebase
 		player.appearance = appearance ?? new Appearance();
 		player.careerRank = careerRank ?? EmptyCareerRank();
 	}
+
+	/**
+     * Gets a player from firebase
+     * @param player the player object (needs gamertag populated)
+     * @returns player object
+     */
+	public async GetMinimumPlayerData(player: Player): Promise<void>
+	{
+		if (!player.gamertag) { return; }
+		
+		let appearance, careerRank;
+		
+		[player.serviceRecord, appearance] = await Promise.all([
+			this.GetServiceRecord(player.gamertag),
+			this.GetAppearance(player.gamertag)
+		]);
+
+		player.appearance = appearance ?? new Appearance();
+		player.careerRank = careerRank ?? EmptyCareerRank();
+	}
 	//#endregion
 
 	//#region Appearance
@@ -113,6 +133,8 @@ export class SCFirebase
 		const snapshot = await this.__get(`career_rank/${gamertag}`);
 		if (!snapshot || !snapshot.val()) { return null; }
 
+		this.__setReadSize("GetCareerRank", snapshot.val());
+
 		return snapshot.val() as CareerRankSchema;
 	}
 	//#endregion
@@ -132,13 +154,8 @@ export class SCFirebase
 		if (!season)
 		{
 			snapshot = await this.__get(`service_record/multiplayer/${gamertag}`);
+			if (snapshot) { this.__setReadSize("GetServiceRecord", snapshot.val()); }
 		}
-		else
-		{
-			snapshot = await this.__get(`service_record/season/${season}/${gamertag}`);
-		}
-
-		if (snapshot) { this.__setReadSize("GetServiceRecord", snapshot.val()); }
 
 		return new ServiceRecord(snapshot?.val());
 	}
@@ -159,56 +176,6 @@ export class SCFirebase
 			this.__setReadSize("GetFilteredServiceRecord", snapshot.val());
 			return new ServiceRecord(snapshot.val());
 		}
-	}
-
-	/**
-	 * Gets all filtered service records for a gamertag
-	 * @param gamertag the gamertag to get stats from
-	 * @returns A big ole JSON object
-	 */
-	public async GetAllFilteredServiceRecordsInRawJSON(gamertag: string): Promise<any>
-	{
-		Debugger.Print("SCFirebase", "GetAllFilteredServiceRecordsInRawJSON()", `${gamertag}`);
-
-		const snapshot = await this.__get(`service_record/filtered/${gamertag}`);
-		if (snapshot)
-		{
-			return snapshot.val();
-		}
-	}
-
-	/**
-	 * A specific historic service record for a gamertag
-	 * @param gamertag the gamertag to get the historic statistics of
-	 * @returns the service record for the game
-	 */
-	public async GetHistoricStatisticsForGameNumber(gamertag: string, game: number): Promise<ServiceRecord>
-	{
-		Debugger.Print("SCFirebase", "GetHistoricStatisticsForGameNumber()", gamertag);
-		const snapshot = await this.__get(`service_record/historic/${gamertag}/${game}`);
-		if (!snapshot) { return new ServiceRecord(); }
-
-		let autocodeSR: any = {
-			data: {
-				records: {
-					pvp: snapshot.val()
-				},
-				privacy: {
-					public: true
-				},
-			},
-			additional: {
-				polling: {
-					synced_at: "",
-				},
-				parameters: {
-					gamertag: "gamertag",
-					filter: "matchmade"
-				},
-			}
-		};
-
-		return new ServiceRecord(autocodeSR);
 	}
 
 	/**
@@ -268,58 +235,6 @@ export class SCFirebase
 
 		return historicSRs;
 	}
-
-	/**
-	 * Gets the historic statistics for a gamertag
-	 * @param gamertag the gamertag to get the historic statistics of
-	 * @returns an array of service records
-	 */
-	public async GetHistoricStatistics(gamertag: string): Promise<ServiceRecord[]>
-	{
-		Debugger.Print("SCFirebase", "GetHistoricStatistics()", gamertag);
-
-		let historicSRs: ServiceRecord[] = [];
-
-		const snapshot = await this.__get(`service_record/historic/${gamertag}`);
-		if (snapshot)
-		{
-			const result = snapshot.val();
-			const keys = Object.keys(result);
-			const numberOfMatches = +keys[keys.length - 1];
-			for (const key in result)
-			{
-				if (+key < 50) { continue; }
-				if (numberOfMatches > 3000 && +key % 150 !== 0) { continue; }
-				else if (numberOfMatches > 2000 && +key % 100 !== 0) { continue; }
-				else if (numberOfMatches > 1000 && +key % 50 !== 0) { continue; }
-				let autocodeSR: any = {
-					data: result[key]
-				};
-
-				historicSRs.push(new ServiceRecord(autocodeSR));
-			}
-		}
-
-		return historicSRs;
-	}
-
-	/**
-	 * Gets the service record for the gamertag for the date into Firebase
-	 * @param gamertag the gamertag
-	 * @param date the date string
-	 */
-	public async GetServiceRecordForDate(gamertag: string, date?: string): Promise<ServiceRecordSchema | undefined>
-	{
-		if (!date) { return; }
-		Debugger.Print("SCFirebase", "GetServiceRecordForDate()", gamertag);
-
-		const snapshot = await this.__get(`service_record/date/${date}/${gamertag}`);
-		if (snapshot && snapshot.exists()) 
-		{ 
-			this.__setReadSize("GetServiceRecordForDate", snapshot.val());
-			return snapshot.val(); 
-		}
-	}
 	//#endregion
 	
 	//#region Matches Played
@@ -367,103 +282,6 @@ export class SCFirebase
 		if (!snapshot) { return false; }
 		this.__setReadSize("GetMatchIsStored", snapshot.val());
 		return snapshot.val();
-	}
-
-	/**
-	 * Gets an array of recent matches for the given gamertag
-	 * @param gamertag the gamertag to set the recent matches for
-	 * @returns an array of recent matches
-	 */
-	public async GetRecentMatches(gamertag: string): Promise<PlayerMatch[]>
-	{
-		Debugger.Print("SCFirebase", "GetRecentMatches()", gamertag);
-		
-		const snapshot = await this.__get(`recent/${gamertag}`);
-		if (!snapshot) { return []; }
-
-		const data = snapshot.val();
-		if (!data) { return []; }
-
-		this.__setReadSize("GetRecentMatches", data);
-
-		return data.map((match: any) => new PlayerMatch(match));
-	}
-
-	/**
-	 * The current best (or worst) values for the gamer
-	 * @param gamertag the gamertag
-	 * @returns the best values object
-	 */
-	public async GetBestMatches(gamertag: string): Promise<FirebaseBest>
-	{
-		Debugger.Print("SCFirebase", "GetBestMatches()", gamertag);
-		const result = await this.__get(`best/${gamertag}/all`);
-		let best = result?.val();
-		this.__setReadSize("GetBestMatches", best);
-
-		if (!best)
-		{
-			best = {
-				match_ids: {
-					best_kda: "",
-					worst_kda: "",
-					most_kills: "",
-					most_deaths: "",
-					most_assists: "",
-					highest_kd_spread: "",
-					worst_kd_spread: ""
-				},
-				values: {
-					best_kda: undefined,
-					worst_kda: undefined,
-					most_kills: undefined,
-					most_deaths: undefined,
-					most_assists: undefined,
-					highest_kd_spread: undefined,
-					worst_kd_spread: undefined
-				}
-			}
-		}
-		return best;
-	}
-
-	/**
-	 * The current best (or worst) values for the gamer
-	 * @param gamertag the gamertag
-	 * @param map the map name
-	 * @returns the best values object
-	 */
-	public async GetBestMatchesForMap(gamertag: string, map: string): Promise<FirebaseBest>
-	{
-		Debugger.Print("SCFirebase", "GetBestMatchesForMap()", gamertag + " - " + map);
-		const result = await this.__get(`best/${gamertag}/maps/${map}`);
-		let best = result?.val();
-		this.__setReadSize("GetBestMatchesForMap", best);
-
-		if (!best)
-		{
-			best = {
-				match_ids: {
-					best_kda: "",
-					worst_kda: "",
-					most_kills: "",
-					most_deaths: "",
-					most_assists: "",
-					highest_kd_spread: "",
-					worst_kd_spread: ""
-				},
-				values: {
-					best_kda: undefined,
-					worst_kda: undefined,
-					most_kills: undefined,
-					most_deaths: undefined,
-					most_assists: undefined,
-					highest_kd_spread: undefined,
-					worst_kd_spread: undefined
-				}
-			}
-		}
-		return best;
 	}
 	//#endregion
 
@@ -731,7 +549,6 @@ export class SCFirebase
 		Debugger.Print("SCFirebase", "SetPreviousSeasonStats()", gamertag);
 
 		await Promise.all([
-			this.__set(`service_record/season/${season}/${gamertag}`, sr), 										  // set full SR into season node
 			this.__set(`service_record/historic/season/${gamertag}/${season}`, Converter.AutocodeToSeasons(sr)),  // set abridged SR into historic season node
 			this.__set(`service_record/historic/cached/${gamertag}/${season}`, season !== currSeason),            // set flag stating we have the historic season cached
 		]);
@@ -852,17 +669,36 @@ export class SCFirebase
 	{
 		const size = Debugger.Size(data);
 
+		let bucket = "";
+
+		if (size.bytes < 1024) { bucket = "Under 1KB"; }
+		else if (size.bytes < 5120) { bucket = "Under 5KB"; }
+		else if (size.bytes < 10240) { bucket = "Under 10KB"; }
+		else if (size.bytes < 51200) { bucket = "Under 50KB"; }
+        else if (size.bytes < 102400) {bucket = "Under 100KB"; }
+		else if (size.bytes < 1048576) { bucket = "Under 1MB"; }
+        else { bucket = "Bigger than 1MB" }
+
 		// Get line count
-		const snapshot = await this.__get(`debug/${method}/0`);
+		const lines = await this.__get(`debug/${method}/details/0`);
 		
-		let num = 0;
-		if (snapshot && snapshot.val()) { num = snapshot.val(); }
+		let totalLines = 0;
+		if (lines && lines.val()) { totalLines = lines.val(); }
 		
-		num += 1;
+		totalLines += 1;
+
+		// Get bucket count
+		const bucketCount = await this.__get(`debug/${method}/summary/${bucket}`);
+		
+		let totalBucketCount = 0;
+		if (bucketCount && bucketCount.val()) { totalBucketCount = bucketCount.val(); }
 
 		// Set size and update line count
-		await this.__set(`debug/${method}/${num}`, size);
-		await this.__set(`debug/${method}/0`, num);
+		await Promise.all([
+			this.__set(`debug/${method}/summary/${bucket}`, totalBucketCount + 1),
+			this.__set(`debug/${method}/details/${Math.max(totalLines % 100, 1)}`, size.formatted),
+			this.__set(`debug/${method}/details/0`, totalLines)
+		]);
 	} 
 	//#endregion
 	//#endregion

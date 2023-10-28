@@ -5,7 +5,7 @@ import { Player } from "../../../Objects/Model/Player";
 
 import PrimaryLogo from "../../Images/Primary/Spartan-Record-Logo-Primary-White.png";
 
-import { MatchesIcon, MedalsIcon, ModesIcon, PlaylistsIcon, RankedIcon, SearchIcon, ServiceRecordIcon, SocialIcon, VariantsIcon, CreditsIcon, SpartanCompanyIcon } from "../../Icons/CustomIcons";
+import { MatchesIcon, MedalsIcon, PlaylistsIcon, RankedIcon, SearchIcon, ServiceRecordIcon, SocialIcon, VariantsIcon, CreditsIcon, SpartanCompanyIcon } from "../../Icons/CustomIcons";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { UsbRounded, GamepadRounded, LeaderboardRounded, LockOutlined, CompareArrows, PlayArrow } from "@mui/icons-material";
 
@@ -24,7 +24,6 @@ export enum SRTabs
 	SRLocal = "LAN Stats",
 	
 	Medals = "Medals",
-	Modes = "Modes",
 
 	Matches = "Matches",
 	MatchesCustoms = "Customs",
@@ -103,9 +102,6 @@ export function AHDrawer(props: AHDrawerProps)
 				break;
 			case SRTabs.Medals:
 				switchTab(`/medals/${player.gamertag}`, newTab);
-				break;
-			case SRTabs.Modes:
-				switchTab(`/modes/${player.gamertag}`, newTab);
 				break;
 			case SRTabs.SRCustoms:
 				switchTab(`/service_record/${ServiceRecordFilter.Customs}/${player.gamertag}`, newTab);
@@ -217,7 +213,6 @@ export function AHDrawer(props: AHDrawerProps)
 					{/* <Tab value={SRTabs.Maps} label={SRTabs.Maps} icon={<MapIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
 					{/* <Tab value={SRTabs.MatchOutcome} label={SRTabs.MatchOutcome} icon={<MatchOutcomeIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
 					<Tab value={SRTabs.Medals} label={SRTabs.Medals} icon={<MedalsIcon />} iconPosition="start" />
-					<Tab value={SRTabs.Modes} label={SRTabs.Modes} icon={<ModesIcon />} iconPosition="start" />
 					<Tab value={SRTabs.Matches} label={SRTabs.Matches} icon={<MatchesIcon />} iconPosition="start" />
 					<Tab value={SRTabs.MatchesCustoms} label={SRTabs.MatchesCustoms} icon={<GamepadRounded fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab value={SRTabs.MatchesLocal} label={SRTabs.MatchesLocal} icon={<UsbRounded fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
@@ -253,7 +248,6 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab value={SRTabs.SRCustoms} label="Customs" icon={<GamepadRounded fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab value={SRTabs.SRLocal} label="LAN" icon={<UsbRounded fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab value={SRTabs.Medals} label={SRTabs.Medals} icon={<MedalsIcon />} iconPosition="start" />
-					<Tab value={SRTabs.Modes} label={SRTabs.Modes} icon={<ModesIcon />} iconPosition="start" />
 					<Tab value={SRTabs.Matches} label={SRTabs.Matches} icon={<MatchesIcon />} iconPosition="start" />
 					<Tab value={SRTabs.MatchesCustoms} label={SRTabs.MatchesCustoms} icon={<GamepadRounded fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab value={SRTabs.MatchesLocal} label={SRTabs.MatchesLocal} icon={<UsbRounded fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
