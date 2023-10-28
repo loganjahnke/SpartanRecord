@@ -38,7 +38,7 @@ interface ServiceRecordGridProps
 
 export function ServiceRecordGrid(props: ServiceRecordGridProps)
 {
-	const { seasons, setSeason, setShowPerMatch, showPerMatch, serviceRecord, csrs, historicStats, season, title, careerRank, onMetricChanged } = props;
+	const { seasons, setSeason, setShowPerMatch, showPerMatch, serviceRecord, csrs, historicStats, season, title, careerRank, onMetricChanged, isAllowed } = props;
 
 	if (!serviceRecord || serviceRecord.IsEmpty() || serviceRecord.error) { return <></>; }
 
@@ -63,13 +63,24 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 				</Grid>
 				<Grid item xs={12} lg={4}>
 					<ShotsBreakdown serviceRecord={serviceRecord} showPerMatch={showPerMatch} />
-				</Grid>
+				</Grid>			
 			</Grid>
 			{/* Far left */}
 			<Grid container item spacing={2} md={12} lg={6} xl={4} sx={{ alignContent: "flex-start" }}>
 				<Grid item xs={12}>
 					<KDABreakdown serviceRecord={serviceRecord} />
 				</Grid>
+				{isAllowed && <Grid item xs={12}>
+					<ins className="adsbygoogle"
+						style={{ display: "block" }}
+						data-ad-client="ca-pub-1147948296547143"
+						data-ad-slot="8625509215"
+						data-ad-format="auto"
+						data-full-width-responsive="true"></ins>
+					<script>
+						(adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
+				</Grid>}
 				<Grid item xs={12}>
 					<CareerRankBreakdown careerRank={careerRank} />
 				</Grid>

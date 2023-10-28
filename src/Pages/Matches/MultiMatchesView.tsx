@@ -248,6 +248,17 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 					</Grid>
 				</Grid>
 				<Grid container spacing={2} sx={{ mt: 1 }}>
+					{isAllowed && <Grid item xs={12} md={6} lg={4} xl={3}>
+							<ins className="adsbygoogle"
+								style={{ display: "block" }}
+								data-ad-format="fluid"
+								data-ad-layout-key="-6t+ed+2i-1n-4w"
+								data-ad-client="ca-pub-1147948296547143"
+								data-ad-slot="4720270834"></ins>
+							<script>
+								(adsbygoogle = window.adsbygoogle || []).push({});
+							</script>
+						</Grid>}
 					{matchesToShow?.length > 0 ? matchesToShow.map(match => <PlayerMatchSummary match={match} player={match.expandedPlayer} goToMatch={goToMatch} gamertag={gamertag ?? ""} showExpanded hideExpected={customs || local || match.variant.name.includes("Infection")} />) : undefined}
 				</Grid>
 				{matches.length > 0 && <Grid item xs={12}>
