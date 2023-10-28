@@ -88,13 +88,6 @@ export function PlayerView(props: ViewProps)
 		// Get the current season
 		const currSeason = await app.GetCurrentSeason();
 
-		// If we already have this data, don't bother reloading from GruntAPI
-		if (season && season !== currSeason?.properties.identifier && await app.DoesPlayerHavePrevSeasons(gamertag))
-		{ 
-			clearLoadingMessages();
-			return; 
-		}
-
 		// Show background loading message
 		setLoadingMessage("");
 		setBackgroundLoadingProgress(SR.DefaultLoading);
