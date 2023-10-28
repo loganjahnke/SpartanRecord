@@ -200,6 +200,7 @@ const App = () =>
 					<Route path="/admin" element={<Admin app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} />} />
 					<Route path="/powered_by_halodotapi" element={<OtherCreators />} />
 					<Route path="/donate" element={<Donate />} />
+					<Route path="/privacy" element={() => {window.location.href="/privacy.html"}} />
 					<Route path="*" element={<UhOh />} />
 				</Routes>
 			</Box>

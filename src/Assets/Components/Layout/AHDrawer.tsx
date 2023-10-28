@@ -44,6 +44,8 @@ export enum SRTabs
 	Patreon = "Patreon",
 	Yesterday = "Yesterday",
 
+	Donate = "Donate",
+
 	None = "",
 }
 
@@ -160,6 +162,9 @@ export function AHDrawer(props: AHDrawerProps)
 			case SRTabs.Clips:
 				switchTab(`/clips/${player.gamertag}`, newTab);
 				break;
+			case SRTabs.Donate:
+				switchTab(`/donate`, newTab);
+				break;
 			case SRTabs.None:
 				break;
 			default: 
@@ -222,6 +227,7 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab value={SRTabs.Clips} label={SRTabs.Clips} icon={<PlayArrow />} iconPosition="start" />
 					<Tab value={SRTabs.ActivePlaylists} label={SRTabs.ActivePlaylists} icon={<PlaylistsIcon />} iconPosition="start" />
 					<Tab value={SRTabs.Store} label={SRTabs.Store} icon={<CreditsIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Donate} label={SRTabs.Donate} icon={<SpartanCompanyIcon />} iconPosition="start" />
 					{/* <Tab value={SRTabs.SpartanCompany} label={<div>{SRTabs.SpartanCompany}<br/><Box sx={{ fontSize: "0.6rem", textTransform: "uppercase" }}>Beta</Box></div>} icon={<SpartanCompanyIcon />} iconPosition="start" /> */}
 				</Tabs>
 				: player && player.isPrivate ?
@@ -230,6 +236,7 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab value={SRTabs.ServiceRecord} label={SRTabs.ServiceRecord} icon={<LockOutlined />} iconPosition="start" />
 					<Tab value={SRTabs.ActivePlaylists} label={SRTabs.ActivePlaylists} icon={<PlaylistsIcon />} iconPosition="start" />
 					<Tab value={SRTabs.Store} label={SRTabs.Store} icon={<CreditsIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Donate} label={SRTabs.Donate} icon={<SpartanCompanyIcon />} iconPosition="start" />
 					{/* <Tab value={SRTabs.SpartanCompany} label={<div>{SRTabs.SpartanCompany}<br/><Box sx={{ fontSize: "0.6rem", textTransform: "uppercase" }}>Beta</Box></div>} icon={<SpartanCompanyIcon />} iconPosition="start" /> */}
 				</Tabs>
 				: player && player.gamertag ?
@@ -258,6 +265,7 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab value={SRTabs.Clips} label={SRTabs.Clips} icon={<PlayArrow />} iconPosition="start" />
 					<Tab value={SRTabs.ActivePlaylists} label={SRTabs.ActivePlaylists} icon={<PlaylistsIcon />} iconPosition="start" />
 					<Tab value={SRTabs.Store} label={SRTabs.Store} icon={<CreditsIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Donate} label={SRTabs.Donate} icon={<SpartanCompanyIcon />} iconPosition="start" />
 					{/* <Tab value={SRTabs.SpartanCompany} label={<div>{SRTabs.SpartanCompany}<br/><Box sx={{ fontSize: "0.6rem", textTransform: "uppercase" }}>Beta</Box></div>} icon={<SpartanCompanyIcon />} iconPosition="start" /> */}
 				</Tabs>
 				:
@@ -265,13 +273,13 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab value={SRTabs.Search} label={SRTabs.Search} icon={<SearchIcon />} iconPosition="start" />
 					<Tab value={SRTabs.ActivePlaylists} label={SRTabs.ActivePlaylists} icon={<PlaylistsIcon />} iconPosition="start" />
 					<Tab value={SRTabs.Store} label={SRTabs.Store} icon={<CreditsIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Donate} label={SRTabs.Donate} icon={<SpartanCompanyIcon />} iconPosition="start" />
 					{/* <Tab value={SRTabs.SpartanCompany} label={<div>{SRTabs.SpartanCompany}<br/><Box sx={{ fontSize: "0.6rem", textTransform: "uppercase" }}>Beta</Box></div>} icon={<SpartanCompanyIcon />} iconPosition="start" /> */}
 				</Tabs>
 				}
 			</Box>
 			<Divider flexItem sx={{ flexGrow: 1 }} />
 			<Box sx={{ display: "flex", flexDirection: "column", p: 1, textAlign: "center" }}>
-				<Typography sx={{ m: 0.5 }} variant="body2"><Link sx={{ cursor: "pointer" }} onClick={() => switchTab("/donate")}>Donate</Link></Typography>
 				<Typography sx={{ m: 0.5 }} variant="body2">Powered by <Link href={process.env.REACT_APP_API_MARKETING_URL}>{process.env.REACT_APP_API_NAME}</Link></Typography>
 				<Typography sx={{ m: 0.5 }} variant="body2">Made by <Link href="https://twitter.com/Logan_Jahnke">Logan Jahnke</Link></Typography>
 			</Box>

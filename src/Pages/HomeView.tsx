@@ -10,6 +10,7 @@ import { GamertagSearch } from "../Assets/Components/ServiceRecord/GamertagSearc
 import { Grow } from "../Assets/Components/Common/Grow";
 import { HaloDotAPISeason } from "../Database/Schemas/AutocodeMetadata";
 import { Debugger } from "../Objects/Helpers/Debugger";
+import { WhatsNew } from "../Assets/Components/WhatsNew/WhatsNew";
 
 export function HomeView(props: ViewProps)
 {
@@ -23,6 +24,7 @@ export function HomeView(props: ViewProps)
 	const [recentPlayers, setRecentPlayers] = useState<Player[]>(Cookie.getRecents().map(gamertag => new Player(gamertag)));
 	const [favoritePlayers, setFavoritePlayers] = useState<Player[]>([]);
 	const [currSeason, setCurrSeason] = useState<HaloDotAPISeason>();
+	const [showWhatsNew, setShowWhatsNew] = useState(true);
 	//#endregion
 
 	/** Controlled search component */
@@ -95,13 +97,20 @@ export function HomeView(props: ViewProps)
 
 		setVersion(await app.GetVersion());
 		setCurrSeason(await app.GetCurrentSeason());
+		setShowWhatsNew(!Cookie.getHideWhatsNew());
 
 		if (!loadFavoritePlayers())
 		{
 			loadRecentPlayers();
 		}
 
-	}, [app, setCurrSeason, setVersion, loadFavoritePlayers, loadRecentPlayers]);
+	}, [app, setCurrSeason, setVersion, loadFavoritePlayers, loadRecentPlayers, setShowWhatsNew]);
+
+	const onDismissWhatsNew = useCallback(() => 
+	{
+		Cookie.dismissWhatsNew();
+		setShowWhatsNew(false);
+	}, [app, setCurrSeason, setVersion, loadFavoritePlayers, loadRecentPlayers, setShowWhatsNew]);
 
 	useEffect(() =>
 	{
@@ -124,19 +133,30 @@ export function HomeView(props: ViewProps)
 			<Box sx={{ 
 				height: "100%", 
 				backgroundPosition: "center", 
+				overflow: "auto",
 				backgroundSize: "cover", 
 				backgroundImage: currSeason 
 					? `url(${currSeason.image_urls.battlepass_background})`
 					: "url(https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU2NyZWVuQmFja2dyb3VuZHMvc2Vhc29uX3Vwc2VsbF9iYWNrZ3JvdW5kX1MzLnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D)" 
 			}}>
-				<Box sx={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", backgroundColor: "rgba(1,64,82, 0.8)", textAlign: "center" }}>
+				<Box sx={{ minHeight: "100%", display: "flex", flexDirection: "column", backgroundColor: "rgba(1,64,82, 0.8)", textAlign: "center" }}>
 					<Grow />
-					<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} />
-					<Grow />
-					<Box sx={{ textAlign: "center", mt: 18 }}>
-						<Typography variant="subtitle1" sx={{ textAlign: "center" }}>
-							Powered by <Link sx={{ cursor: "pointer" }} href={process.env.REACT_APP_API_MARKETING_URL}>{process.env.REACT_APP_API_NAME}</Link>{halodotapiVersion ? ` v${halodotapiVersion} ` : " "}| Spartan Record v{process.env.REACT_APP_VERSION}
-						</Typography>
+					{!showWhatsNew && <>
+						<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} />
+						<Grow />
+					</>}
+					<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+						{showWhatsNew && <>
+							<Box sx={{ mt: { xs: 20 }}}></Box>
+							<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} />
+							<Box sx={{ textAlign: "center", mt: 6, alignSelf: "center", width: { xs: "90%", sm: "75%", md: "500px" }}}><WhatsNew onDismiss={onDismissWhatsNew} switchTab={switchTab} /></Box>
+						</>}
+						<Grow />
+						<Box sx={{ textAlign: "center", mt: 18 }}>
+							<Typography variant="subtitle1" sx={{ textAlign: "center" }}>
+								Powered by <Link sx={{ cursor: "pointer" }} href={process.env.REACT_APP_API_MARKETING_URL}>{process.env.REACT_APP_API_NAME}</Link>{halodotapiVersion ? ` v${halodotapiVersion} ` : " "}| Spartan Record v{process.env.REACT_APP_VERSION} | <Link href="/privacy.html">Privacy Policy</Link>
+							</Typography>
+						</Box>
 					</Box>
 				</Box>
 			</Box>

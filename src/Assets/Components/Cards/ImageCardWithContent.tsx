@@ -12,7 +12,7 @@ export function ImageCardWithContent(props: TitleCardProps)
 
 	return (
 		<Card sx={{ height: "100%", borderRadius: 3 }}>
-			{image && <CardMedia sx={{ backgroundPosition: "center" }} component="img" image={image} alt="card media" height="250px" />}
+			{image && <CardMedia sx={{ objectFit: "contain", mt: -5, mb: -4 }} component="img" image={image} alt="card media" height="250px" />}
 			<CardContent>
 				{children}
 			</CardContent>

@@ -291,4 +291,25 @@ export class Cookie
         return new Set<string>(allArray);
     }
     //#endregion
+
+    //#region What's New
+    /**
+     * Should we hide what's new for this major version?
+     */
+    public static getHideWhatsNew(): boolean
+    {
+        const version = process.env.REACT_APP_MAJOR_VERSION;
+        const hideWhatsNew = this.get(`sc-hide-whatsnew${version}`);
+        return !!hideWhatsNew;
+    }
+
+    /**
+     * Should we hide what's new for this major version?
+     */
+    public static dismissWhatsNew(): void
+    {
+        const version = process.env.REACT_APP_MAJOR_VERSION;
+        this.set(`sc-hide-whatsnew${version}`, "true");
+    }
+    //#endregion
 }
