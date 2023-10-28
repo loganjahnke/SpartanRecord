@@ -10,28 +10,20 @@ export function Donate()
 	document.title = "Spartan Record | Donate";
 	
 	return (
-		<Box component="main" sx={{ flexGrow: 1, height: "calc(100% - 32px)" }}>
+		<Box component="main" sx={{ flexGrow: 1, height: {xs: "calc(100% - 24px)", md: "calc(100% - 32px)"}}}>
 			<Toolbar />
 			<Divider />
 			<Box sx={{ 
+				height: "100%", 
 				backgroundPosition: "center", 
 				overflow: "auto",
 				backgroundSize: "cover", 
 				backgroundImage: "url(https://blobs-infiniteugc.svc.halowaypoint.com/ugcstorage/playlist/73b48e1e-05c4-4004-927d-965549b28396/17b616fb-f128-46c9-b966-7850b38445f9/images/hero.png)", 
-				height: "100%", 
-				width: "100%",
-				display: "flex", 
-				flexDirection: "column"
 			}}>
-				<Box sx={{ 
-					height: "100%", 
-					width: "100%",
-					display: "flex", 
-					flexDirection: "column",
-					backgroundColor: "rgba(1,64,82, 0.8)",
-				}}>
-				<Grow />
+				<Box sx={{ height: { xs: "auto", md: "100%" }, display: "flex", flexDirection: "column", backgroundColor: "rgba(1,64,82, 0.8)", textAlign: "center", overflow: "hidden" }}>
+					<Grow />
 					<Box sx={{ textAlign: "center" }}>
+						<Box sx={{ mt: { xs: 20 }}}></Box>
 						<Typography variant="h3" sx={{ textAlign: "center" }}>Donate</Typography>
 						<Typography variant="h6" sx={{ textAlign: "center" }}>Help keep Spartan Record running</Typography>
 						<Grid container sx={{ justifyContent: "center", alignItems: "center" }}>
@@ -48,6 +40,7 @@ export function Donate()
 								</ImageCardWithContent>
 							</Grid>
 						</Grid>
+						<Box sx={{ mt: { xs: 20 }}}></Box>
 					</Box>
 					<Grow />
 				</Box>
