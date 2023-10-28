@@ -1842,5 +1842,38 @@ export const AllMedals = {
 			medium: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/1739996188.png?width=128&height=128",
 			large: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/medals/1739996188.png"
 		},
+	},
+	394349536: {
+		"name": "Clear Reception",
+		"description": "Complete an Extraction from Deploy to Completion without the device being Converted",
+		type: MedalRarity.Heoric,
+		category: MedalType.Extraction,
+		"image_urls": {
+			"small": "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/394349536.png?width=72&height=72",
+			"medium": "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/394349536.png?width=128&height=128",
+			"large": "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/medals/394349536.png"
+		},
+	},
+	2964157454: {
+		"name": "Call Blocked",
+		"description": "Kill an enemy converting the device",
+		type: MedalRarity.Normal,
+		category: MedalType.Extraction,
+		"image_urls": {
+			"small": "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/2964157454.png?width=72&height=72",
+			"medium": "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/2964157454.png?width=128&height=128",
+			"large": "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/medals/2964157454.png"
+		}
+	},
+	4285712605: {
+		"name": "Hang Up",
+		"description": "Kill an enemy deploying the device",
+		type: MedalRarity.Normal,
+		category: MedalType.Extraction,
+		"image_urls": {
+			"small": "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/4285712605.png?width=72&height=72",
+			"medium": "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/4285712605.png?width=128&height=128",
+			"large": "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/medals/4285712605.png"
+		}
 	}
 };

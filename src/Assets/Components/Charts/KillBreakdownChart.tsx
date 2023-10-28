@@ -97,6 +97,7 @@ export const KillBreakdownChart = (props: { currentSR: ServiceRecord }) =>
 			"Headshots", //: " + currentSR.breakdowns.kills.headshots.toLocaleString(),
 			"Melee", //: " + currentSR.breakdowns.kills.melee.toLocaleString(),
 			"Power Weapons", //: " + currentSR.breakdowns.kills.powerWeapons.toLocaleString(),
+			"Other",
 			//"Repulsor", //: " + currentSR.breakdowns.kills.repulsor.toLocaleString(),
 			//"Splatters", //: " + currentSR.breakdowns.kills.splatters.toLocaleString(),
 		],
@@ -111,6 +112,7 @@ export const KillBreakdownChart = (props: { currentSR: ServiceRecord }) =>
 					currentSR.breakdowns.kills.headshots,
 					currentSR.breakdowns.kills.melee,
 					currentSR.breakdowns.kills.powerWeapons,
+					currentSR.summary.kills - currentSR.breakdowns.kills.grenades - currentSR.breakdowns.kills.headshots - currentSR.breakdowns.kills.melee - currentSR.breakdowns.kills.powerWeapons
 					//currentSR.breakdowns.kills.repulsor,
 					//currentSR.breakdowns.kills.splatters
 				]
