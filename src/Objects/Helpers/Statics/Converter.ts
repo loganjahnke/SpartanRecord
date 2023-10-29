@@ -54,10 +54,10 @@ export class Converter
 	{
 		if ((appearance as any).additional) { delete (appearance as any).additional; }
 
-		appearance.data.image_urls.nameplate = URLReducer.ReduceAppearanceURL(appearance.data.image_urls.nameplate);
-		appearance.data.image_urls.emblem = URLReducer.ReduceAppearanceURL(appearance.data.image_urls.emblem);
-		appearance.data.image_urls.backdrop = URLReducer.ReduceAppearanceURL(appearance.data.image_urls.backdrop);
-		appearance.data.image_urls.action_pose = URLReducer.ReduceAppearanceURL(appearance.data.image_urls.action_pose);
+		appearance.data.image_urls.nameplate = URLReducer.ReduceURLFromGruntAPI(appearance.data.image_urls.nameplate);
+		appearance.data.image_urls.emblem = URLReducer.ReduceURLFromGruntAPI(appearance.data.image_urls.emblem);
+		appearance.data.image_urls.backdrop = URLReducer.ReduceURLFromGruntAPI(appearance.data.image_urls.backdrop);
+		appearance.data.image_urls.action_pose = URLReducer.ReduceURLFromGruntAPI(appearance.data.image_urls.action_pose);
 
 		return appearance;
 	}

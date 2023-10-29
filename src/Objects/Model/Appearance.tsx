@@ -20,9 +20,9 @@ export class Appearance
     {
         this.raw = appearance;
         this.serviceTag = appearance?.data?.service_tag ?? "";
-        this.emblemURL = URLReducer.ConstructAppearanceURL(appearance?.data?.image_urls?.emblem ?? "");
-        this.backdropURL = URLReducer.ConstructAppearanceURL(appearance?.data?.image_urls?.backdrop ?? "");
-        this.nameplateURL = URLReducer.ConstructAppearanceURL(appearance?.data?.image_urls?.nameplate ?? "");
-        this.actionPoseURL = URLReducer.ConstructAppearanceURL(appearance?.data?.image_urls?.action_pose ?? "");
+        this.emblemURL = URLReducer.ConstructURLForGruntAPI(appearance?.data?.image_urls?.emblem ?? "");
+        this.backdropURL = URLReducer.ConstructURLForGruntAPI(appearance?.data?.image_urls?.backdrop ?? "");
+        this.nameplateURL = URLReducer.ConstructURLForGruntAPI(appearance?.data?.image_urls?.nameplate ?? "");
+        this.actionPoseURL = URLReducer.ConstructURLForGruntAPI(appearance?.data?.image_urls?.action_pose ?? "");
     }
 }

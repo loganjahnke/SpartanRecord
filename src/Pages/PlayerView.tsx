@@ -85,9 +85,6 @@ export function PlayerView(props: ViewProps)
 			return false;
 		}
 
-		// Get the current season
-		const currSeason = await app.GetCurrentSeason();
-
 		// Show background loading message
 		setLoadingMessage("");
 		setBackgroundLoadingProgress(SR.DefaultLoading);
@@ -96,7 +93,8 @@ export function PlayerView(props: ViewProps)
 		app.AddToSyncing(gamertag);
 
 		// Get updated player
-		const gruntAPIPlayer = await app.GetPlayerFromHaloDotAPI(gamertag, season, firebasePlayer.serviceRecord);
+		const gruntAPIPlayer = Player.Copy(firebasePlayer);
+		await app.UpdatePlayerFromGruntAPI(gruntAPIPlayer, season);
 		if (!gruntAPIPlayer) 
 		{
 			clearLoadingMessages();

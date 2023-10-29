@@ -3,6 +3,7 @@ import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { BorderLinearProgress } from "../Custom/BorderLinearProgress";
 import { CareerRankSchema } from "../../../Database/Schemas/CareerRankSchema";
 import { CurrentGrade, GetCareerRankMetadata, NextGrade } from "../../../Objects/Helpers/AllCareerRanks";
+import { URLReducer } from "../../../Objects/Helpers/Statics/URLReducer";
 
 export function CareerRankTile(props: { rank?: CareerRankSchema, rightAlign?: boolean })
 {
@@ -27,7 +28,7 @@ export function CareerRankTile(props: { rank?: CareerRankSchema, rightAlign?: bo
 			alignItems: "center",
 			padding: 0.5,
 			width: "100%" }}>
-			{!rightAlign && <Box sx={{ display: "flex", alignItems: "center" }}><img src={rank.data.current.image_urls.icon} alt="Rank" height="48px" /></Box>}
+			{!rightAlign && <Box sx={{ display: "flex", alignItems: "center" }}><img src={URLReducer.ConstructURLForGruntAPI(rank.data.current.image_urls.icon)} alt="Rank" height="48px" /></Box>}
 			<Box sx={{ mb: 1 }}>
 				<Box sx={{ display: "flex", flexDirection: "row", mb: 0.5, alignItems: "center" }}>
 					<Typography variant="subtitle1" sx={{ fontSize: "0.8rem", ml: 1 }}>{rank.data.current.title} {CurrentGrade(rank)}</Typography>
@@ -64,7 +65,7 @@ export function CareerRankTile(props: { rank?: CareerRankSchema, rightAlign?: bo
 					</Tooltip>
 				</Box>
 			</Box>
-			{rightAlign && <Box sx={{ display: "flex", alignItems: "center", justifySelf: "right" }}><img src={rank.data.current.image_urls.icon} alt="Rank" height="48px" /></Box>}
+			{rightAlign && <Box sx={{ display: "flex", alignItems: "center", justifySelf: "right" }}><img src={URLReducer.ConstructURLForGruntAPI(rank.data.current.image_urls.icon)} alt="Rank" height="48px" /></Box>}
 		</Box>
 	);
 }

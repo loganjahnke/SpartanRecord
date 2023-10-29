@@ -54,13 +54,13 @@ export class CSRS
     }
 
     /** Gets the JSON representation of the CSRS */
-    public GetJSON(): Partial<CSRDataSchema>
+    public GetJSON(): any
     {
         return {
+            name: this.name,
             properties: {
                 queue: (this.queue as any),
                 input: (this.input as any),
-                experience: "",
             },
             response: {
                 current: this.ranks.current.GetJSON(),

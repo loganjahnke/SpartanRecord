@@ -212,7 +212,10 @@ export class SCData
         }
         else
         {
-            await this.firebase.SetAppearance(player.gamertag, player.appearanceData);
+            await Promise.all([
+                this.firebase.SetAppearance(player.gamertag, player.appearanceData),
+                this.firebase.SetCareerRank(player.gamertag, player.careerRank),
+            ]);
         }
 	}
 
@@ -247,6 +250,17 @@ export class SCData
         if ((player.serviceRecordData as any)?.error) { this.logger.LogError(); }
 
         return player;
+    }
+
+    /**
+     * Gets the player from HaloDotAPI
+     * @param gamertag the gamertag
+     * @param season the season identifier
+     */
+	public async UpdatePlayerFromGruntAPI(player: Player, season?: string): Promise<void> 
+    {
+        await this.halodapi.UpdatePlayer(player, season);
+        if ((player.serviceRecordData as any)?.error) { this.logger.LogError(); }
     }
 
     /**

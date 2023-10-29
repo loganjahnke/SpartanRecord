@@ -79,6 +79,64 @@ export class SCPostman
 	}
 
 	/**
+	 * Gets the player from GruntDotAPI
+	 * @param player the player to update
+	 * @param season the season identifier
+	 * @returns the player
+	 */
+	public async UpdatePlayer(player: Player, season?: string): Promise<void>
+	{
+		if (!player.gamertag) { return; }
+
+		const currMatchesPlayed = player.serviceRecord?.matchesPlayed ?? 0;
+		const currRank = player.careerRank?.data?.current?.rank ?? 0;
+
+		// See if anything has updated
+		if (!season)
+		{
+			const newSR = await this.GetServiceRecord(player);
+			if (!newSR) 
+			{ 
+				player.serviceRecord.error = "Could not load player";
+				return; 
+			}
+
+			if (newSR.matchesPlayed === currMatchesPlayed)
+			{
+				if (currRank > 0) { return; }
+
+				// Get Career Rank if it's currently empty
+				await Promise.all([
+					this.GetCareerRank(player)
+				]).catch(error => {
+					player.serviceRecord.error = error?.message ?? "Could not load player";
+				});
+
+				return;
+			}
+
+			await Promise.all([
+				this.GetAppearance(player), 
+				this.GetCSRS(player, season),
+				this.GetCareerRank(player)
+			]).catch(error => {
+				player.serviceRecord.error = error?.message ?? "Could not load player";
+			});
+
+			return;
+		}
+
+		// Season specifics, service record only
+		await Promise.all([
+			this.GetServiceRecord(player, season),
+		]).catch(error => {
+			player.serviceRecord.error = error?.message ?? "Could not load player";
+		});
+
+		return;
+	}
+
+	/**
 	 * Gets the player from HaloDotAPI for leaderboard population
 	 * @param gamertag the gamertag
 	 * @returns the player

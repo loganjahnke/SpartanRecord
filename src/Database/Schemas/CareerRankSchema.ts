@@ -16,6 +16,7 @@ export interface CareerRankSchema
 				adornment_icon: string;
 			};
 			attributes: {
+				colors: string[];
 				tier: number;
 				grade: number;
 			};
@@ -34,6 +35,7 @@ export interface CareerRankSchema
 				adornment_icon: string;
 			};
 			attributes: {
+				colors: string[];
 				tier: number;
 				grade: number;
 			};
@@ -64,6 +66,7 @@ export function EmptyCareerRank(): CareerRankSchema
 					adornment_icon: "",
 				},
 				attributes: {
+					colors: [],
 					tier: 0,
 					grade: 0,
 				},
@@ -82,6 +85,7 @@ export function EmptyCareerRank(): CareerRankSchema
 					adornment_icon: "",
 				},
 				attributes: {
+					colors: [],
 					tier: 0,
 					grade: 0,
 				},

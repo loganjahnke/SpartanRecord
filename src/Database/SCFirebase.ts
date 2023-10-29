@@ -2,23 +2,21 @@ import { child, Database, DatabaseReference, DataSnapshot, get, increment, limit
 import { Debugger } from "../Objects/Helpers/Debugger";
 import { Halo5Converter } from "../Objects/Helpers/Halo5Converter";
 import { Converter } from "../Objects/Helpers/Statics/Converter";
-import { SR } from "../Objects/Helpers/Statics/SR";
 import { Appearance } from "../Objects/Model/Appearance";
 import { CSRS } from "../Objects/Model/CSRS";
 import { Leader, LeaderboardAverages } from "../Objects/Model/Leader";
 import { Match } from "../Objects/Model/Match";
 import { Player } from "../Objects/Model/Player";
-import { PlayerMatch } from "../Objects/Model/PlayerMatch";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { SRFilter } from "../Objects/Pieces/SRFilter";
 import { Leaderboard, ServiceRecordFilter } from "./ArrowheadFirebase";
 import { AppearanceSchema } from "./Schemas/AppearanceSchema";
 import { CSRDataSchema } from "./Schemas/CSRSchema";
 import { ServiceRecordSchema } from "./Schemas/ServiceRecordSchema";
-import { FirebaseBest } from "./Schemas/FirebaseBest";
 import { MatchSchema } from "./Schemas/MatchSchema";
 import { HaloDotAPISeason } from "./Schemas/AutocodeMetadata";
 import { CareerRankSchema, EmptyCareerRank } from "./Schemas/CareerRankSchema";
+import { URLReducer } from "../Objects/Helpers/Statics/URLReducer";
 
 export class SCFirebase
 {
@@ -135,7 +133,14 @@ export class SCFirebase
 
 		this.__setReadSize("GetCareerRank", snapshot.val());
 
-		return snapshot.val() as CareerRankSchema;
+		const result = snapshot.val() as CareerRankSchema;
+
+		// Expand URL size
+		if (result?.data?.current?.image_urls?.icon) { result.data.current.image_urls.icon = URLReducer.ConstructURLForGruntAPI(result.data.current.image_urls.icon); }
+		if (result?.data?.current?.image_urls?.adornment_icon) { result.data.current.image_urls.adornment_icon = URLReducer.ConstructURLForGruntAPI(result.data.current.image_urls.adornment_icon); }
+		if (result?.data?.current?.image_urls?.large_icon) { result.data.current.image_urls.large_icon = URLReducer.ConstructURLForGruntAPI(result.data.current.image_urls.large_icon); }
+
+		return result;
 	}
 	//#endregion
 	
@@ -496,9 +501,23 @@ export class SCFirebase
 	 */
 	public async SetCareerRank(gamertag: string, data?: CareerRankSchema): Promise<void>
 	{
-		if (!data) { return; }
+		if (!data || !data.data?.current || data.data.current.rank === 0) { return; }
 		Debugger.Print("SCFirebase", "SetCareerRank()", gamertag);
-		await this.__set(`career_rank/${gamertag}`, data);
+
+		// Delete some unused things to save on space
+		const dataToSet = data as any;
+
+		if (dataToSet?.additional) { delete dataToSet.additional; }
+		if (dataToSet?.data?.current?.attributes?.colors) { delete dataToSet.data.current.attributes.colors; }
+		if (dataToSet?.data?.next?.attributes?.colors) { delete dataToSet.data.next.attributes.colors; }
+		if (dataToSet?.data?.next?.image_urls) { delete dataToSet.data.next.image_urls; }
+
+		// Reduce URL size
+		if (dataToSet?.data?.current?.image_urls?.icon) { dataToSet.data.current.image_urls.icon = URLReducer.ReduceURLFromGruntAPI(dataToSet.data.current.image_urls.icon); }
+		if (dataToSet?.data?.current?.image_urls?.adornment_icon) { dataToSet.data.current.image_urls.adornment_icon = URLReducer.ReduceURLFromGruntAPI(dataToSet.data.current.image_urls.adornment_icon); }
+		if (dataToSet?.data?.current?.image_urls?.large_icon) { dataToSet.data.current.image_urls.large_icon = URLReducer.ReduceURLFromGruntAPI(dataToSet.data.current.image_urls.large_icon); }
+
+		await this.__set(`career_rank/${gamertag}`, dataToSet);
 	}
 	//#endregion
 

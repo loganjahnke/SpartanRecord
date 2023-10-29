@@ -6,6 +6,7 @@ import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 
 import '../../Styles/Components/PlayerCard.css';
 import { Image } from "../Common/Image";
+import { URLReducer } from "../../../Objects/Helpers/Statics/URLReducer";
 
 interface PlayerCardProps
 {
@@ -58,8 +59,7 @@ export function PlayerCard(props: PlayerCardProps)
                     </Box>
                     {player.careerRank?.data?.current?.image_urls?.icon && 
                         <>
-                            <Box sx={{ ml: 27, display: "flex", alignItems: "center", position: "absolute" }}>{!noImages && player.appearance?.emblemURL && <Image src={player.careerRank.data.current.image_urls.icon} alt="rank" height="48px" crossOrigin="anonymous" />}</Box>
-                            <Box sx={{ ml: 27, display: "flex", alignItems: "center", position: "absolute" }}>{!noImages && player.appearance?.emblemURL && <Image src={player.careerRank.data.current.image_urls.adornment_icon} alt="banner" height="48px" crossOrigin="anonymous" />}</Box>
+                            <Box sx={{ ml: 27, display: "flex", alignItems: "center", position: "absolute" }}>{!noImages && player.appearance?.emblemURL && <Image src={URLReducer.ConstructURLForGruntAPI(player.careerRank.data.current.image_urls.adornment_icon)} alt="banner" height="48px" crossOrigin="anonymous" />}</Box>
                         </>
                     }
                 </Box>
