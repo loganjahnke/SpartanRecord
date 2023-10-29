@@ -1,4 +1,4 @@
-import { EliminationSchema } from "../../Database/Schemas/ServiceRecordSchema";
+import { EliminationSchema } from "../../../Database/Schemas/ServiceRecordSchema";
 
 export class Elimination
 {

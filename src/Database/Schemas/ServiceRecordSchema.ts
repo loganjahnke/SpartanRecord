@@ -46,6 +46,7 @@ export type ServiceRecordStatsSchema = {
 		oddball: OddballSchema;
 		zones: ZoneSchema;
 		stockpile: StockpileSchema;
+		infection: InfectionSchema;
 		extraction: ExtractionSchema;
 	};
 }
@@ -172,6 +173,16 @@ export interface ZoneSchema
 	stronghold_secures: number;
 };
 
+export interface ZoneServiceRecordSchema 
+{
+	total_zone_occupation_time: DurationSchema;
+	zone_captures: number;
+	zone_defensive_kills: number;
+	zone_offensive_kills: number;
+	zone_scoring_ticks: number;
+	zone_secures: number;
+};
+
 export interface StockpileSchema 
 {
 	kills_as_power_seed_carrier: number;
@@ -189,4 +200,20 @@ export interface ExtractionSchema
 	extraction_initiations_completed: number;
 	extraction_initiations_denied: number;
 	successful_extractions: number;
-}
+};
+
+export interface InfectionSchema 
+{
+	alphas_killed: number;
+	infected_killed: number;
+	kills_as_last_spartan_standing: number;
+	last_spartans_standing_infected: number;
+	rounds_as_alpha: number;
+	rounds_as_last_spartan_standing: number;
+	rounds_finished_as_infected: number;
+	rounds_survived_as_last_spartan_standing: number;
+	rounds_survived_as_spartan: number;
+	spartans_infected: number;
+	spartans_infected_as_alpha: number;
+	time_as_last_spartan_standing: DurationSchema;
+};

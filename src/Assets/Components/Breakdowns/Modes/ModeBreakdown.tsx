@@ -7,11 +7,11 @@ import { StockpileBreakdown } from "./StockpileBreakdown";
 import { EliminationBreakdown } from "./EliminationBreakdown";
 import { ZoneBreakdown } from "./ZoneBreakdown";
 import { OddballBreakdown } from "./OddballBreakdown";
+import { ExtractionBreakdown } from "./ExtractionBreakdown";
+import { InfectionBreakdown } from "./InfectionBreakdown";
 
 export function ModeBreakdown(props: BreakdownProps)
 {
-	const { serviceRecord, showPerMatch } = props;
-
 	const [mode, setMode] = useState<string>("CTF");
 
 	/**
@@ -38,14 +38,17 @@ export function ModeBreakdown(props: BreakdownProps)
 		case "Zones": 
 			breakdown = <ZoneBreakdown {...props} />;
 			break;
-		case "Extraction": 
-			breakdown = <CaptureTheFlagBreakdown {...props} />;
-			break;
 		case "Elimination": 
 			breakdown = <EliminationBreakdown {...props} />;
 			break;
 		case "Stockpile": 
 			breakdown = <StockpileBreakdown {...props} />;
+			break;
+		case "Infection": 
+			breakdown = <InfectionBreakdown {...props} />;
+			break;
+		case "Extraction": 
+			breakdown = <ExtractionBreakdown {...props} />;
 			break;
 		default:
 			breakdown = <></>;
@@ -61,9 +64,10 @@ export function ModeBreakdown(props: BreakdownProps)
 						<MenuItem value={"CTF"}>Capture the Flag</MenuItem>
 						<MenuItem value={"Oddball"}>Oddball</MenuItem>
 						<MenuItem value={"Zones"}>Zones</MenuItem>
-						{/* <MenuItem value={"Extraction"}>Extraction</MenuItem> */}
 						<MenuItem value={"Elimination"}>Elimination</MenuItem>
 						<MenuItem value={"Stockpile"}>Stockpile</MenuItem>
+						<MenuItem value={"Infection"}>Infection</MenuItem>
+						<MenuItem value={"Extraction"}>Extraction</MenuItem>
 					</Select>
 				</FormControl>
 			</Box>

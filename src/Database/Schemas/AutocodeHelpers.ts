@@ -151,6 +151,23 @@ export class AutocodeHelpers
 							extraction_initiations_completed: 0,
 							extraction_initiations_denied: 0,
 							successful_extractions: 0
+						},
+						infection: {
+							alphas_killed: 0,
+							infected_killed: 0,
+							kills_as_last_spartan_standing: 0,
+							last_spartans_standing_infected: 0,
+							rounds_as_alpha: 0,
+							rounds_as_last_spartan_standing: 0,
+							rounds_finished_as_infected: 0,
+							rounds_survived_as_last_spartan_standing: 0,
+							rounds_survived_as_spartan: 0,
+							spartans_infected: 0,
+							spartans_infected_as_alpha: 0,
+							time_as_last_spartan_standing: {
+								seconds: 0,
+								human: "",
+							},
 						}
 					},
 				},

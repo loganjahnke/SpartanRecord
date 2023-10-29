@@ -1,20 +1,22 @@
 import { HaloOutcome } from "../../Database/ArrowheadFirebase";
 import { TeamStatsSchema } from "../../Database/Schemas/MatchSchema";
 import { DurationSchema, PlayerStatsSchema } from "../../Database/Schemas/PlayerMatchSchema";
-import { ServiceRecordSchema, ServiceRecordDataSchema, isServiceRecordSchema, ServiceRecordStatsSchema, ServiceRecordMatchesSchema, CTFSchema, EliminationSchema, OddballSchema, StockpileSchema, ZoneSchema, ExtractionSchema } from "../../Database/Schemas/ServiceRecordSchema";
+import { ServiceRecordSchema, ServiceRecordDataSchema, isServiceRecordSchema, ServiceRecordStatsSchema, ServiceRecordMatchesSchema, CTFSchema, EliminationSchema, OddballSchema, StockpileSchema, ZoneServiceRecordSchema, ExtractionSchema, InfectionSchema, ZoneSchema } from "../../Database/Schemas/ServiceRecordSchema";
 import { AllMedals } from "../Helpers/AllMedals";
 import { Breakdowns } from "../Pieces/Breakdowns";
-import { CaptureTheFlag } from "../Pieces/CaptureTheFlag";
+import { CaptureTheFlag } from "../Pieces/Mode/CaptureTheFlag";
 import { Damage } from "../Pieces/Damage";
-import { Elimination } from "../Pieces/Elimination";
+import { Elimination } from "../Pieces/Mode/Elimination";
 import { Medal, MedalRarity, MedalType } from "../Pieces/Medal";
-import { Oddball } from "../Pieces/Oddball";
+import { Oddball } from "../Pieces/Mode/Oddball";
 import { Shots } from "../Pieces/Shots";
-import { Stockpile } from "../Pieces/Stockpile";
+import { Stockpile } from "../Pieces/Mode/Stockpile";
 import { Summary } from "../Pieces/Summary";
 import { TimePlayed } from "../Pieces/TimePlayed";
-import { Zone } from "../Pieces/Zone";
+import { Zone } from "../Pieces/Mode/Zone";
 import { PlayerMatch } from "./PlayerMatch";
+import { Infection } from "../Pieces/Mode/Infection";
+import { Extraction } from "../Pieces/Mode/Extraction";
 
 export class ServiceRecord
 {
@@ -45,8 +47,12 @@ export class ServiceRecord
     public elimination: Elimination;
     /** Sotkcpile statistics */
     public stockpile: Stockpile;
+    /** Infection statistics */
+    public infection: Infection;
+    /** Extraction statistics */
+    public extraction: Extraction;
     /** Mode statistics */
-    public mode?: CTFSchema | OddballSchema | ZoneSchema | EliminationSchema | StockpileSchema | ExtractionSchema;
+    public mode?: CTFSchema | OddballSchema | ZoneServiceRecordSchema | EliminationSchema | StockpileSchema | ExtractionSchema | InfectionSchema | ZoneSchema;
     /** Raw autocode and firebase JSON */
     public data?: ServiceRecordDataSchema;
     /** If there is an error in the response, store it here */
@@ -161,6 +167,8 @@ export class ServiceRecord
             this.oddball = new Oddball(stats?.modes?.oddball);
             this.elimination = new Elimination(stats?.modes?.elimination);
             this.stockpile = new Stockpile(stats?.modes?.stockpile);
+            this.infection = new Infection(stats?.modes?.infection);
+            this.extraction = new Extraction(stats?.modes?.extraction);
         }
         else
         {
@@ -172,6 +180,8 @@ export class ServiceRecord
             this.oddball = new Oddball(stats?.mode as any);
             this.elimination = new Elimination(stats?.mode as any);
             this.stockpile = new Stockpile(stats?.mode as any);
+            this.infection = new Infection(stats?.mode as any);
+            this.extraction = new Extraction(stats?.mode as any);
         }
 
         // Get stubs for easy access

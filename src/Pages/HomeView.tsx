@@ -133,13 +133,13 @@ export function HomeView(props: ViewProps)
 			<Box sx={{ 
 				height: "100%", 
 				backgroundPosition: "center", 
-				overflow: "auto",
+				overflow: "hidden",
 				backgroundSize: "cover", 
 				backgroundImage: currSeason 
 					? `url(${currSeason.image_urls.battlepass_background})`
 					: "url(https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU2NyZWVuQmFja2dyb3VuZHMvc2Vhc29uX3Vwc2VsbF9iYWNrZ3JvdW5kX1MzLnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D)" 
 			}}>
-				<Box sx={{ height: { xs: "auto", md: "100%" }, display: "flex", flexDirection: "column", backgroundColor: "rgba(1,64,82, 0.8)", textAlign: "center", overflow: "hidden" }}>
+				<Box sx={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: "rgba(1,64,82, 0.8)", textAlign: "center", overflow: "auto" }}>
 					<Grow />
 					{!showWhatsNew && <>
 						<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} />

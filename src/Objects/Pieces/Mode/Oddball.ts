@@ -1,5 +1,5 @@
-import { OddballSchema } from "../../Database/Schemas/ServiceRecordSchema";
-import { TimePlayed } from "./TimePlayed";
+import { OddballSchema } from "../../../Database/Schemas/ServiceRecordSchema";
+import { TimePlayed } from "../TimePlayed";
 
 export class Oddball
 {

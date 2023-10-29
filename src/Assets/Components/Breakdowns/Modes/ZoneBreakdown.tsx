@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
-import { BreakdownRowTile } from "../BreakdownRowTile";
 import { BreakdownProps, BreakdownTile } from "../BreakdownTile";
+import { ArrowheadTheme } from "../../../Theme/ArrowheadTheme";
 
 export function ZoneBreakdown(props: BreakdownProps)
 {
@@ -13,10 +13,10 @@ export function ZoneBreakdown(props: BreakdownProps)
 				<BreakdownTile title="Zone Secures" value={showPerMatch ? serviceRecord.zone.zoneSecures / serviceRecord.matchesPlayed : serviceRecord.zone.zoneSecures} isMainStat />
 			</Box>
 			<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", flexWrap: "wrap", justifyContent: "space-evenly", width: "100%" }}>
-				<BreakdownRowTile title="Offensive Kills" value={showPerMatch ? serviceRecord.zone.zoneOffensiveKills / serviceRecord.matchesPlayed : serviceRecord.zone.zoneOffensiveKills} isMainStat  />
-				<BreakdownRowTile title="Defensive Kills" value={showPerMatch ? serviceRecord.zone.zoneDefensiveKills / serviceRecord.matchesPlayed : serviceRecord.zone.zoneDefensiveKills} isMainStat  />
-				<BreakdownRowTile title="Score Ticks" value={showPerMatch ? serviceRecord.zone.zoneScoringTicks / serviceRecord.matchesPlayed : serviceRecord.zone.zoneScoringTicks} isMainStat  />
-				<BreakdownRowTile title="Zone Occupation Time" value={serviceRecord.zone.zoneOccupationTime} isMainStat  />
+				<BreakdownTile title="Offensive Kills" value={showPerMatch ? serviceRecord.zone.zoneOffensiveKills / serviceRecord.matchesPlayed : serviceRecord.zone.zoneOffensiveKills} small isMainStat backgroundColor={ArrowheadTheme.box}  />
+				<BreakdownTile title="Defensive Kills" value={showPerMatch ? serviceRecord.zone.zoneDefensiveKills / serviceRecord.matchesPlayed : serviceRecord.zone.zoneDefensiveKills} small isMainStat backgroundColor={ArrowheadTheme.box}  />
+				<BreakdownTile title="Score Ticks" value={showPerMatch ? serviceRecord.zone.zoneScoringTicks / serviceRecord.matchesPlayed : serviceRecord.zone.zoneScoringTicks} small isMainStat backgroundColor={ArrowheadTheme.box}  />
+				<BreakdownTile title="Zone Occupation Time" value={serviceRecord.zone.zoneOccupationTime} small isMainStat backgroundColor={ArrowheadTheme.box}  />
 			</Box>
 		</>
 	);
