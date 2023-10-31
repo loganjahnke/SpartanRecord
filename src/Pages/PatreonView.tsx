@@ -39,6 +39,9 @@ export function PatreonView(props: ViewProps)
 	{		
 		Debugger.LoadView("PatreonView");
 
+		// Update tab
+		switchTab(undefined, SRTabs.Subscribe);
+
 		// If no gamertag, isAdFree is false
 		setIsAdFree(gamertag ? await app.GetIsSubscribedToPatreon(gamertag) : false);
 
@@ -48,7 +51,7 @@ export function PatreonView(props: ViewProps)
 		// Log event
 		app.logger.LogSubscribe();
 
-	}, [app, gamertag]);
+	}, [app, gamertag, switchTab]);
 	
 	useEffect(() =>
 	{

@@ -152,7 +152,10 @@ export function CareerRankView(props: ViewProps)
 		// Clear loading messages
 		clearLoadingMessages();
 
-	}, [gamertag, switchTab, loadFromFirebase, loadFromHaloDotAPI, clearLoadingMessages]);
+		// Log
+		app.logger.LogCareerRank();
+
+	}, [app, gamertag, switchTab, loadFromFirebase, loadFromHaloDotAPI, clearLoadingMessages]);
 	
 	useEffect(() =>
 	{
