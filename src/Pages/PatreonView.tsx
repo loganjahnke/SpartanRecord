@@ -93,12 +93,12 @@ export function PatreonView(props: ViewProps)
 			<Divider />
 			<Box sx={{ backgroundColor: "secondary.main", height: "100%", display: "flex", flexDirection: "column", textAlign: "left", alignItems: "flex-start", p: 4 }}>
 				<Box sx={{ textAlign: "center", width: "100%", mt: 6 }}>
-					{isSubscribedToPatreon && gamertag && 
+					{isAdFree && gamertag && 
 					<>
 						<Typography variant="h3">Thank you for supporting Spartan Record!</Typography>
 						<Typography variant="h6">{gamertag} has access to an ad-free experience.</Typography>
 					</>}
-					{!isSubscribedToPatreon && <>
+					{!isAdFree && <>
 						<Typography variant="h3">Support Spartan Record</Typography>
 						<Typography variant="h6">Subscribe to our Patreon to gain access to additional benefits!</Typography>
 						<Button sx={{ mt: 2 }} variant="outlined" startIcon={<RankedIcon />} href="https://patreon.com/spartanrecord?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=creatorshare_creator&utm_content=join_link">Subscribe</Button>

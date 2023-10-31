@@ -24,7 +24,6 @@ import { PatreonView } from "./Pages/PatreonView";
 import { CSRS } from "./Objects/Model/CSRS";
 import { OtherCreators } from "./Pages/OtherCreators";
 import { Admin } from "./Pages/Admin";
-import { Donate } from "./Pages/Donate";
 import { LeaderboardView } from "./Pages/LeaderboardView";
 import { CompareView } from "./Pages/Compare/CompareView";
 import { BetaSingleMatchView } from "./Pages/Matches/BetaSingleMatchView";
