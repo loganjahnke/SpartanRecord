@@ -72,8 +72,8 @@ export function CareerRankProgression(props: { current: CareerRankSchema, servic
 						<ShowLifetimeToggle setShowLifetime={setShowLifetimeCallback} />
 					</Box>
 				</Grid>
-				<Grid item xs={0} sm={1} md={2} lg={3} xl={4} />
 				<Grid item xs={12}><AutoAd adId="9800211278" /></Grid>
+				<Grid item xs={0} sm={1} md={2} lg={3} xl={4} />
 				<Grid item xs={12} sm={10} md={8} lg={6} xl={4}>
 					<CareerRankBreakdown careerRank={rank} />
 				</Grid>
