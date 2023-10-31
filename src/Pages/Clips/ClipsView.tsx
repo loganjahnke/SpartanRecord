@@ -43,7 +43,7 @@ export function ClipsView(props: ViewProps)
 		
 		setClips(videos);
 
-	}, [app, gamertag, clips, setClips, setLoadingMessage, setBackgroundLoadingProgress, clearLoadingMessages]);
+	}, [app, gamertag, clips, setClips]);
 
 	/**
 	 * Loads the data for the view
@@ -69,7 +69,7 @@ export function ClipsView(props: ViewProps)
 			updatePlayer(gamertag, player?.appearance);
 		}
 
-	}, [app, switchTab, loadClips, setLoadingMessage, clearLoadingMessages, updatePlayer]);
+	}, [app, gamertag, switchTab, loadClips, setLoadingMessage, clearLoadingMessages, updatePlayer]);
 	
 	useEffect(() =>
 	{

@@ -49,7 +49,7 @@ export function StoreView(props: ViewProps)
 		
 		setOfferings(storeOfferings);
 
-	}, [app, offerings, setOfferings, setApiError, setLoadingMessage, setBackgroundLoadingProgress, clearLoadingMessages]);
+	}, [app, offerings, setOfferings, setApiError]);
 
 	/**
 	 * Loads the data for the view

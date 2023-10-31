@@ -7,7 +7,6 @@ import { DamageBreakdown } from "../Breakdowns/DamageBreakdown";
 import { KDABreakdown } from "../Breakdowns/KDABreakdown";
 import { KillBreakdownCard } from "../Breakdowns/KillBreakdownCard";
 import { KillDeathCard } from "../Breakdowns/KillDeathCard";
-import { LevelBreakdown } from "../Breakdowns/LevelBreakdown";
 import { MatchesBreakdown } from "../Breakdowns/MatchesBreakdown";
 import { ShotsBreakdown } from "../Breakdowns/ShotsBreakdown";
 import { TimePlayed } from "../Breakdowns/TimePlayed";
@@ -20,6 +19,7 @@ import { HaloDotAPISeason } from "../../../Database/Schemas/AutocodeMetadata";
 import { CareerRankSchema } from "../../../Database/Schemas/CareerRankSchema";
 import { CareerRankBreakdown } from "../CareerRank/CareerRankBreakdown";
 import { ModeBreakdown } from "../Breakdowns/Modes/ModeBreakdown";
+import { AutoAd } from "../Ads/AutoAd";
 
 interface ServiceRecordGridProps
 {
@@ -72,15 +72,7 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 					<KDABreakdown serviceRecord={serviceRecord} />
 				</Grid>
 				{isAllowed && <Grid item xs={12}>
-					<ins className="adsbygoogle"
-						style={{ display: "block" }}
-						data-ad-client="ca-pub-1147948296547143"
-						data-ad-slot="8625509215"
-						data-ad-format="auto"
-						data-full-width-responsive="true"></ins>
-					<script>
-						(adsbygoogle = window.adsbygoogle || []).push({});
-					</script>
+					<AutoAd adId="8625509215" />
 				</Grid>}
 				<Grid item xs={12}>
 					<CareerRankBreakdown careerRank={careerRank} />

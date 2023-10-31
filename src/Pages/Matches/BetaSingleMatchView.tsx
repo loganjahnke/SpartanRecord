@@ -69,7 +69,7 @@ export function BetaSingleMatchView(props: ViewProps)
 		switchTab(undefined, SRTabs.None);
 		setLoadingMessage("");
 
-	}, [app, setMatch, setPlayers, setGamertag, gamertag, switchTab, id, setLoadingMessage]);
+	}, [app, gamertag, id, setMatch, setPlayers, setGamertag, switchTab, setLoadingMessage, setApiError]);
 	
 	useEffect(() =>
 	{

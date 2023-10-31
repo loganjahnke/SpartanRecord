@@ -159,7 +159,7 @@ export function FilteredView(props: ViewProps)
 		}
 
 		setLoadingMessage("");
-	}, [app, gamertag, node, seasons, season, setSeasons, setSeason, switchTab, setLoadingMessage, updatePlayer]);
+	}, [app, gamertag, node, seasons, setSeasons, setSeason, switchTab, setLoadingMessage, updatePlayer]);
 
 	const loadFilteredSR = useCallback(async () => 
 	{		
@@ -199,7 +199,7 @@ export function FilteredView(props: ViewProps)
 
 			setLoadingMessage("");
 		}
-	}, [app, gamertag, node, filter, setSR, setSelectedPlaylist, setSelectedVariant, setLoadingMessage, season, fbFilters, playlists, variants]);
+	}, [app, gamertag, node, filter, season, fbFilters, playlists, variants, setSR, setSelectedPlaylist, setSelectedVariant, setLoadingMessage, setApiError]);
 
 	const onFilterSelected = useCallback((filter: string) =>
 	{

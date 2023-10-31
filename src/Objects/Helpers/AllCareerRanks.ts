@@ -1,5 +1,5 @@
 import { CareerRankMetadata } from "../../Database/Schemas/AutocodeMetadata";
-import { CareerRankSchema, EmptyCareerRank } from "../../Database/Schemas/CareerRankSchema";
+import { CareerRankSchema } from "../../Database/Schemas/CareerRankSchema";
 import { ServiceRecord } from "../Model/ServiceRecord";
 
 /**
@@ -78,7 +78,6 @@ export function CareerRankBackground(rank: CareerRankSchema): string
  */
 export function LifetimeRank(serviceRecord: ServiceRecord): CareerRankSchema
 {
-    const cr = EmptyCareerRank();
     const rank = GetRankFromScore(serviceRecord.totalScore);
     const currMetadata = GetCareerRankMetadata(rank);
     const nextMetadata = GetCareerRankMetadata(rank + 1) ?? currMetadata;

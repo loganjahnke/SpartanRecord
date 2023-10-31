@@ -1,4 +1,4 @@
-import { TableContainer, Box, Table, TableHead, TableCell, TableRow, TableBody, IconButton, Collapse, Typography, Grid } from "@mui/material";
+import { TableContainer, Box, Table, TableHead, TableCell, TableRow, TableBody, IconButton, Collapse, Typography } from "@mui/material";
 import { ArrowheadTheme } from "../../Assets/Theme/ArrowheadTheme";
 import { MatchPlayer } from "../../Objects/Pieces/MatchPlayer";
 import { Team } from "../../Objects/Pieces/Team";
@@ -6,12 +6,8 @@ import { Team } from "../../Objects/Pieces/Team";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import React, { useState } from "react";
-import { MedalTile } from "../../Assets/Components/Medals/MedalTile";
-import { DamageBreakdown } from "../../Assets/Components/Breakdowns/DamageBreakdown";
-import { ShotsBreakdown } from "../../Assets/Components/Breakdowns/ShotsBreakdown";
 
 import StarIcon from '@mui/icons-material/Star';
-import { ExpectationBreakdown } from "../../Assets/Components/Breakdowns/ExpectationBreakdown";
 import { CSRSProgression, CSRSTooltip } from "../../Assets/Components/Custom/CSRSTooltip";
 import { Match } from "../../Objects/Model/Match";
 import { Converter } from "../../Objects/Helpers/Statics/Converter";

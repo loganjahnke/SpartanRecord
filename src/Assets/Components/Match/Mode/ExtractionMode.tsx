@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import { ExtractionSchema } from "../../../../Database/Schemas/ServiceRecordSchema";
 import { ModeLabelValue } from "./ModeLabelValue";
-import { TimePlayed } from "../../../../Objects/Pieces/TimePlayed";
 
 interface ExtractionModeProps
 {

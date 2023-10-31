@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { PlayerMatchPlayer } from "../../../Objects/Pieces/PlayerMatchPlayer";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { LeftvsRight } from "../Breakdowns/Templates/LeftvsRight";

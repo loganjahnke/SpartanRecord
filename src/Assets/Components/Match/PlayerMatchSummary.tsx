@@ -1,19 +1,11 @@
-import { Box, Card, CardActionArea, CardContent, CardMedia, Chip, Grid, Menu, MenuItem, Snackbar, Typography } from "@mui/material";
+import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, Menu, MenuItem, Snackbar, Typography } from "@mui/material";
 import { useState } from "react";
 import { PlayerMatch } from "../../../Objects/Model/PlayerMatch";
 import { MatchPlayer } from "../../../Objects/Pieces/MatchPlayer";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
-import { MatchBreakdown } from "../Breakdowns/Templates/MatchBreakdown";
-import { CSRSProgression } from "../Custom/CSRSTooltip";
 
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import "../../Styles/Components/PlayerMatchSummary.css";
-import { LeftvsRight } from "../Breakdowns/Templates/LeftvsRight";
-import { MatchMode } from "./Mode/MatchMode";
-import { GenericMode } from "./Mode/GenericMode";
-import { OutcomeChip } from "./OutcomeChip";
 import { MedalsMode, PlayerMatchSummaryDetails } from "./PlayerMatchSummaryDetails";
 
 interface MatchSummaryProps
@@ -28,7 +20,7 @@ interface MatchSummaryProps
 
 export function PlayerMatchSummary(props: MatchSummaryProps)
 {
-	const { match, player, goToMatch, gamertag, showExpanded, hideExpected } = props;
+	const { match, goToMatch, gamertag } = props;
 
 	const [contextMenu, setContextMenu] = useState<{mouseX: number; mouseY: number;} | null>(null);
 	const [snacking, setSnacking] = useState(false);

@@ -4,7 +4,7 @@ import { ArrowheadTheme } from "../../../Theme/ArrowheadTheme";
 
 export function InfectionBreakdown(props: BreakdownProps)
 {
-	const { serviceRecord, showPerMatch } = props;
+	const { serviceRecord } = props;
 
 	return (
 		<>

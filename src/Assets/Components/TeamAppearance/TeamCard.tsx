@@ -1,7 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { useCallback, useRef, useState } from "react";
 import { GetColorForTeam } from "../../../Objects/Helpers/AllTeams";
-import { Converter } from "../../../Objects/Helpers/Statics/Converter";
 import { Team } from "../../../Objects/Pieces/Team";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 
@@ -32,17 +30,7 @@ export function TeamCard(props: TeamCardProps)
 {
 	const { team, noImages, rightAlign, showNameplate, topDown, noMargin, winner } = props;
 
-    const [textColor, setTextColor] = useState(ArrowheadTheme.text_primary);
-    const nameplateRef = useRef<HTMLImageElement>(null);
-
 	const teamColor = GetColorForTeam(team?.details.name ?? "");
-
-    const onImageLoad = useCallback(() =>
-    {
-        if (!nameplateRef.current) { return; }
-        const background = Converter.ImageToAverageColor(nameplateRef.current);
-        setTextColor(Converter.GetBestTextColor(background));
-    }, [setTextColor]);
 
     if (!team) { return <></>; }
 	return showNameplate ? (
@@ -56,7 +44,7 @@ export function TeamCard(props: TeamCardProps)
 				}
                 <Box className="midflex teamEmblem" sx={{ ml: rightAlign ? "202px" : 1 }}>{!noImages && team.details.emblem && <img src={team.details.emblem} alt="emblem" height="44px" crossOrigin="anonymous" />}</Box>
                 <Box className="teamName" sx={{ ml: rightAlign ? "0px" : "72px" }}>
-                    <Typography variant="h6" sx={{ fontWeight: 500, fontSize: "1.32rem !important", color: textColor, textAlign: rightAlign ? "right" : "left" }}>{team.details.name}</Typography>
+                    <Typography variant="h6" sx={{ fontWeight: 500, fontSize: "1.32rem !important", color: ArrowheadTheme.text_primary, textAlign: rightAlign ? "right" : "left" }}>{team.details.name}</Typography>
                 </Box>
 				{winner && <Box className="winnerSVG" sx={{ ml: rightAlign ? 1 : "224px" }} />}
             </Box>

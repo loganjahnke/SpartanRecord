@@ -46,7 +46,7 @@ export const SeasonsChart = (props: { seasons: HaloDotAPISeason[], historicServi
 		ChartDataLabels
 	);
 
-	const { seasons, historicServiceRecords, onMetricChanged } = props;
+	const { seasons, historicServiceRecords } = props;
 	const dataSet = useRef<SeasonsDataSets>(SeasonsDataSets.Matches);
 	const [options, setOptions] = useState<any>({
 		responsive: true,
@@ -223,7 +223,7 @@ export const SeasonsChart = (props: { seasons: HaloDotAPISeason[], historicServi
 				}
 			]
 		});
-	}, [historicServiceRecords]);
+	}, [historicServiceRecords, seasons]);
 
 	const initialChartData = {
 		labels: historicServiceRecords.map((_sr, index) => "Season " + (index + 1)),

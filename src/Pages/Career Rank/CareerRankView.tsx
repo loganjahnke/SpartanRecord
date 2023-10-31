@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Toolbar, Typography } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 
@@ -7,7 +7,6 @@ import { ViewProps } from "../Props/ViewProps";
 import { SRTabs } from "../../Assets/Components/Layout/AHDrawer";
 import { CareerRankProgression } from "../../Assets/Components/CareerRank/CareerRankProgression";
 import { Player } from "../../Objects/Model/Player";
-import { ServiceRecord } from "../../Objects/Model/ServiceRecord";
 import { SR } from "../../Objects/Helpers/Statics/SR";
 import { Cookie } from "../../Objects/Helpers/Cookie";
 import { Debugger } from "../../Objects/Helpers/Debugger";
@@ -129,7 +128,7 @@ export function CareerRankView(props: ViewProps)
 
 		return haloDotAPIPlayer.serviceRecordData && !(haloDotAPIPlayer.serviceRecordData as any).error;
 
-	}, [gamertag, app, setLoadingMessage, updatePlayer, setBackgroundLoadingProgress, clearLoadingMessages]);
+	}, [gamertag, app, setLoadingMessage, updatePlayer, setBackgroundLoadingProgress, clearLoadingMessages, setApiError]);
 
 	/**
 	 * Loads the data for the view
@@ -153,7 +152,7 @@ export function CareerRankView(props: ViewProps)
 		// Clear loading messages
 		clearLoadingMessages();
 
-	}, [app, gamertag, switchTab, loadFromFirebase, loadFromHaloDotAPI, clearLoadingMessages]);
+	}, [gamertag, switchTab, loadFromFirebase, loadFromHaloDotAPI, clearLoadingMessages]);
 	
 	useEffect(() =>
 	{

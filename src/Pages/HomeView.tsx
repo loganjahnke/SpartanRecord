@@ -110,7 +110,7 @@ export function HomeView(props: ViewProps)
 	{
 		Cookie.dismissWhatsNew();
 		setShowWhatsNew(false);
-	}, [app, setCurrSeason, setVersion, loadFavoritePlayers, loadRecentPlayers, setShowWhatsNew]);
+	}, [setShowWhatsNew]);
 
 	useEffect(() =>
 	{

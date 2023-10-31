@@ -17,6 +17,7 @@ import { Debugger } from "../../Objects/Helpers/Debugger";
 import { HaloDotAPIPlaylist } from "../../Database/Schemas/AutocodeMetadata";
 import { PlaylistChooser } from "../../Assets/Components/Playlists/PlaylistChooser";
 import { Grow } from "../../Assets/Components/Common/Grow";
+import { FluidAd } from "../../Assets/Components/Ads/FluidAd";
 
 interface MultiMatchesViewProps extends ViewProps
 {
@@ -52,6 +53,16 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 	}, [setCombinedSR]);
 
 	/**
+	 * Loads the playlists and filters them to just the active ones
+	 */
+	const loadActivePlaylists = useCallback(async () =>
+	{
+		const allPlaylists = await app.GetPlaylists();
+		const filtered = allPlaylists.filter(playlist => playlist.attributes.active);
+		setPlaylists(filtered);
+	}, [app, setPlaylists]);
+
+	/**
 	 * Loads the recent matches from HaloDotAPI
 	 * @param append are we appending to existing data?
 	 */
@@ -78,7 +89,7 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 		
 		return recent;
 
-	}, [app, gamertag, matches, isAllowed, customs, local, setLoadingMessage, setBackgroundLoadingProgress]);
+	}, [app, matches, gamertag, customs, local, setApiError]);
 
 	/**
 	 * Sets the appearance for the gamertag, if needed
@@ -92,16 +103,6 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 			updatePlayer(p.gamertag, p.appearance, p.serviceRecord, p.csrs);
 		}
 	}, [app, gamertag, player, updatePlayer]);
-
-	/**
-	 * Loads the playlists and filters them to just the active ones
-	 */
-	const loadActivePlaylists = useCallback(async () =>
-	{
-		const allPlaylists = await app.GetPlaylists();
-		const filtered = allPlaylists.filter(playlist => playlist.attributes.active);
-		setPlaylists(filtered);
-	}, [app, setPlaylists]);
 
 	/**
 	 * Calculate the matches and service record to show to the user
@@ -124,7 +125,7 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 		setMatchesToShow(filtered);
 		createServiceRecord(filtered);
 
-	}, [matches, createServiceRecord, setMatchesToShow]);
+	}, [createServiceRecord, setMatchesToShow]);
 
 	/**
 	 * Handler for when the playlist changes
@@ -173,7 +174,7 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 		setLoadingMessage("");
 		setBackgroundLoadingProgress("");
 
-	}, [app, gamertag, customs, selectedPlaylist, switchTab, setLoadingMessage, setBackgroundLoadingProgress, loadFromHaloDotAPI, setAppearance, calculateMatchesToShow]);
+	}, [app, gamertag, customs, selectedPlaylist, local, switchTab, setLoadingMessage, setBackgroundLoadingProgress, loadFromHaloDotAPI, setAppearance, calculateMatchesToShow, loadActivePlaylists]);
 
 	/**
 	 * Tell the API to load more matches
@@ -248,18 +249,12 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 					</Grid>
 				</Grid>
 				<Grid container spacing={2} sx={{ mt: 1 }}>
-					{isAllowed && <Grid item xs={12} md={6} lg={4} xl={3}>
-							<ins className="adsbygoogle"
-								style={{ display: "block" }}
-								data-ad-format="fluid"
-								data-ad-layout-key="-6t+ed+2i-1n-4w"
-								data-ad-client="ca-pub-1147948296547143"
-								data-ad-slot="4720270834"></ins>
-							<script>
-								(adsbygoogle = window.adsbygoogle || []).push({});
-							</script>
-						</Grid>}
-					{matchesToShow?.length > 0 ? matchesToShow.map(match => <PlayerMatchSummary match={match} player={match.expandedPlayer} goToMatch={goToMatch} gamertag={gamertag ?? ""} showExpanded hideExpected={customs || local || match.variant.name.includes("Infection")} />) : undefined}
+					{matchesToShow && matchesToShow.length > 0 && matchesToShow.map((match, index) => (
+						<>
+							{isAllowed && index % 10 === 1 && <Grid item xs={12} md={6} lg={4} xl={3}><FluidAd adId="4720270834" /></Grid>}
+							<PlayerMatchSummary key={match.id} match={match} player={match.expandedPlayer} goToMatch={goToMatch} gamertag={gamertag ?? ""} showExpanded hideExpected={customs || local || match.variant.name.includes("Infection")} />
+						</>
+					))}
 				</Grid>
 				{matches.length > 0 && <Grid item xs={12}>
 					<Box sx={{ display: "flex", justifyContent: "center", width: "100%", mt: 2 }}>

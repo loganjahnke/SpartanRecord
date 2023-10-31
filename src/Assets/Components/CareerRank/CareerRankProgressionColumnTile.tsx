@@ -1,8 +1,7 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { CareerRankTileProps } from "./CareerRankProps";
 
 import "../../Styles/Components/CareerRankProgression.css";
-import { GetCareerRankMetadata } from "../../../Objects/Helpers/AllCareerRanks";
 
 export function CareerRankProgressionColumnTile(props: CareerRankTileProps)
 {
@@ -26,7 +25,7 @@ export function CareerRankProgressionColumnTile(props: CareerRankTileProps)
 					background: `linear-gradient(to left, transparent 0%, ${colorA} 25%, ${colorB} 50%, ${colorA} 75%, transparent 100%)` 
 				}}
 			>
-				<img className="progressionColImg" src={rank.image_urls.icon} height="72px" title={rank.title + " " + rank.subtitle} />
+				<img className="progressionColImg" alt={rank.title + " " + rank.subtitle} src={rank.image_urls.icon} height="72px" title={rank.title + " " + rank.subtitle} />
 				<Box className="rankColLabelValues">
 					<Typography className="rankColTitle">{rank.title}</Typography>
 					<Typography className="rankColTitle">{rank.properties.threshold.toLocaleString()} xp</Typography>

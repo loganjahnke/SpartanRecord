@@ -1,6 +1,6 @@
-import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid } from "@mui/material";
+import { Button, Card, CardActions, CardMedia, Grid } from "@mui/material";
 import { HaloDotAPIClip } from "../../../Database/Schemas/HaloDotAPIClip";
-import { PlayArrow, Share, Twitter } from "@mui/icons-material";
+import { PlayArrow, Twitter } from "@mui/icons-material";
 
 interface ClipCardProps
 {

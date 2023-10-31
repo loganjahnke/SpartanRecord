@@ -17,5 +17,5 @@ export function Image(props: ImageProps)
 		event.currentTarget.src = props.fallback || "https://spartanrecord.com/images/SwordsIco.png";
 	};
 
-	return <img {...imgProps} onError={onError} crossOrigin="anonymous" />
+	return <img alt="Spartan Record" {...imgProps} onError={onError} crossOrigin="anonymous" />
 }

@@ -1,4 +1,3 @@
-import { ZoneSchema } from "../../../Database/Schemas/ServiceRecordSchema";
 import { TimePlayed } from "../TimePlayed";
 
 export class Zone

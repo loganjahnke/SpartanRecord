@@ -21,7 +21,7 @@ interface CompareCareerRankProps
 
 export function CompareCareerRank(props: CompareCareerRankProps)
 {
-	const { category, value1 = EmptyCareerRank(), value2 = EmptyCareerRank(), display1, display2, isPercent } = props;
+	const { category, value1 = EmptyCareerRank(), value2 = EmptyCareerRank() } = props;
 
 	const regularCareerRankProps = {...props as CompareProps};
 	regularCareerRankProps.value1 = value1.data.level.total_xp;

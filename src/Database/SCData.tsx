@@ -1,7 +1,6 @@
 import { App } from "firebase-admin/app";
 import { Analytics } from "firebase/analytics";
 import { Database } from "firebase/database";
-import moment from "moment";
 import { Leader, LeaderboardAverages } from "../Objects/Model/Leader";
 import { Match } from "../Objects/Model/Match";
 import { Player } from "../Objects/Model/Player";
@@ -13,7 +12,6 @@ import { Logger } from "./Logger";
 import { SCFirebase } from "./SCFirebase";
 import { AutocodeMap, AutocodeMedal, HaloDotAPIPlaylist, AutocodeTeam, HaloDotAPICategory, HaloDotAPISeason, HaloDotAPIStoreOffering } from "./Schemas/AutocodeMetadata";
 import { ServiceRecordSchema } from "./Schemas/ServiceRecordSchema";
-import { FirebaseBest } from "./Schemas/FirebaseBest";
 import { SCPostman } from "./SCPostman";
 import { PlaylistWeights } from "../Objects/Pieces/PlaylistWeights";
 import { HaloDotAPIClip } from "./Schemas/HaloDotAPIClip";

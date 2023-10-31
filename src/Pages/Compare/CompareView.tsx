@@ -239,7 +239,7 @@ export function CompareView(props: ViewProps)
 
 		return haloDotAPIPlayer;
 
-	}, [app, setLoadingMessage, setBackgroundLoadingProgress, clearLoadingMessages]);
+	}, [app, setLoadingMessage, setBackgroundLoadingProgress, clearLoadingMessages, setApiError]);
 
 	/**
 	 * Loads the data for the view
