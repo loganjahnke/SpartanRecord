@@ -15,6 +15,7 @@ import { ServiceRecordSchema } from "./Schemas/ServiceRecordSchema";
 import { SCPostman } from "./SCPostman";
 import { PlaylistWeights } from "../Objects/Pieces/PlaylistWeights";
 import { HaloDotAPIClip } from "./Schemas/HaloDotAPIClip";
+import { VIP } from "../Objects/Model/VIP";
 
 /** The types of service records */
 export enum ServiceRecordType
@@ -384,13 +385,22 @@ export class SCData
     }
 
     /**
-	 * Sees if this gamertag is allowed to see filters
+	 * Sees if this gamertag is subscribed to the Patreon
 	 * @param gamertag the gamertag to check the permissions of
-	 * @returns true if allowed to see filters
+	 * @returns true if is subscribed to the Patreon
 	 */
-	public async GetIsAllowed(gamertag: string): Promise<boolean>
+	public async GetIsSubscribedToPatreon(gamertag: string): Promise<boolean>
     {
-        return await this.firebase.GetIsPremiumUser(gamertag);
+        return await this.firebase.GetIsAdFree(gamertag);
+    }
+
+    /**
+	 * Gets all VIPs (thanks kings)
+	 * @returns an array of VIPs
+	 */
+	public async GetAllVIPs(): Promise<VIP[]>
+    {
+        return await this.firebase.GetAllVIPs();
     }
 
     /**

@@ -8,15 +8,15 @@ import { CareerRankProgressionRow } from "./CareerRankProgressionRow";
 import { CareerRankProgressionColumn } from "./CareerRankProgressionColumn";
 import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import { ShowLifetimeToggle } from "./ShowLifetimeToggle";
-
-import "../../Styles/Components/CareerRankProgression.css";
 import { AutoAd } from "../Ads/AutoAd";
 import { FluidAd } from "../Ads/FluidAd";
 
-export function CareerRankProgression(props: { current: CareerRankSchema, serviceRecord: ServiceRecord })
+import "../../Styles/Components/CareerRankProgression.css";
+
+export function CareerRankProgression(props: { current: CareerRankSchema, serviceRecord: ServiceRecord, isSubscribedToPatreon?: boolean })
 {
 	//#region Props
-	const { current, serviceRecord } = props;
+	const { current, serviceRecord, isSubscribedToPatreon } = props;
 	//#endregion
 
 	//#region State
@@ -65,7 +65,7 @@ export function CareerRankProgression(props: { current: CareerRankSchema, servic
 
 	return (
 		<Box>
-			<Grid container className="currentProgressionGrid">
+			<Grid container spacing={2} className="currentProgressionGrid">
 				{/* Top */}
 				<Grid item xs={12}>
 					<Box sx={{ display: "flex", alignItems: "center", ml: 1, mb: 1 }}>
@@ -73,21 +73,14 @@ export function CareerRankProgression(props: { current: CareerRankSchema, servic
 						<ShowLifetimeToggle setShowLifetime={setShowLifetimeCallback} />
 					</Box>
 				</Grid>
-				<Grid item xs={0} md={2} lg={3} />
-				<Grid item xs={12} md={0}>
-					<FluidAd adId="4720270834" />
-					<Box sx={{ mb: 2 }} />
-				</Grid>
-				<Grid item xs={0} md={8} lg={6}>
-					<AutoAd adId="9800211278" />
-					<Box sx={{ mb: 2 }} />
-				</Grid>
-				<Grid item xs={0} md={2} lg={3} />
-				<Grid item xs={0} sm={1} md={2} lg={3} xl={4} />
-				<Grid item xs={12} sm={10} md={8} lg={6} xl={4}>
+				{!isSubscribedToPatreon && <Grid item xs={12} sm={12} md={0} sx={{ display: { md: "none" }}}>
+					<FluidAd adId="4720270834" isAdFree={isSubscribedToPatreon} />
+				</Grid>}
+				<Grid item xs={0} sm={0} md={2} lg={3} xl={4} sx={{ p: 1, maxHeight: "128px" }}><AutoAd adId="9800211278" isAdFree={isSubscribedToPatreon} /></Grid>
+				<Grid item xs={12} sm={12} md={8} lg={6} xl={4}>
 					<CareerRankBreakdown careerRank={rank} />
 				</Grid>
-				<Grid item xs={0} sm={1} md={2} lg={3} xl={4} />
+				<Grid item xs={0} sm={0} md={2} lg={3} xl={4} sx={{ p: 1, maxHeight: "128px" }}><AutoAd adId="9800211278" isAdFree={isSubscribedToPatreon} /></Grid>
 			</Grid>
 			<Box sx={{ display: { xs: "none", sm: "none", md: "none", lg: "block", xl: "block" }}}>
 				<CareerRankProgressionRow allRanks={allRanks} type="Bronze" current={rank} avgScore={avgScore} />

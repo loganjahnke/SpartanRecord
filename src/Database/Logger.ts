@@ -54,6 +54,21 @@ export class Logger
     }
 
     /**
+     * Logs an event in Firebase analytics for going to the subscribe page
+     */
+    public LogSubscribe = (): void => this.__logEvent("subscribe_page");
+
+    /**
+     * Logs an event in Firebase analytics for going to the subscribe button
+     */
+    public LogSubscribeButton = (): void => this.__logEvent("subscribe_button");
+
+    /**
+     * Logs an event in Firebase analytics for going to the Career Rank page
+     */
+    public LogCareerRank = (): void => this.__logEvent("career_rank");
+
+    /**
      * Logs an event in Firebase analytics for viewing the spartan company
      * @param company the spartan company
      */

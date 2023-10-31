@@ -15,6 +15,6 @@ export interface ViewProps
     player?: Player;
     updatePlayer: (gamertag?: string, appearance?: Appearance, serviceRecord?: ServiceRecord, csrs?: CSRS[], careerRank?: CareerRankSchema, isPrivate?: boolean, oldPlayer?: Player) => void;
     switchTab: (url?: string, tab?: SRTabs) => void;
-    isAllowed?: boolean;
+    isSubscribedToPatreon?: boolean;
     setApiError: (error: boolean) => void;
 }

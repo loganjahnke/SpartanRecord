@@ -5,7 +5,7 @@ import { Player } from "../../../Objects/Model/Player";
 
 import PrimaryLogo from "../../Images/Primary/Spartan-Record-Logo-Primary-White.png";
 
-import { MatchesIcon, MedalsIcon, PlaylistsIcon, RankedIcon, SearchIcon, ServiceRecordIcon, SocialIcon, VariantsIcon, CreditsIcon, SpartanCompanyIcon } from "../../Icons/CustomIcons";
+import { MatchesIcon, MedalsIcon, PlaylistsIcon, RankedIcon, SearchIcon, ServiceRecordIcon, SocialIcon, VariantsIcon, CreditsIcon, SpartanCompanyIcon, PatreonIcon } from "../../Icons/CustomIcons";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { UsbRounded, GamepadRounded, LeaderboardRounded, LockOutlined, CompareArrows, PlayArrow } from "@mui/icons-material";
 
@@ -40,7 +40,7 @@ export enum SRTabs
 	
 	Maps = "Maps",
 	MatchOutcome = "Match Outcome",
-	Patreon = "Patreon",
+	Subscribe = "Subscribe",
 	Yesterday = "Yesterday",
 
 	Donate = "Donate",
@@ -128,8 +128,8 @@ export function AHDrawer(props: AHDrawerProps)
 				switchTab(`/leaderboard/${player.gamertag}/${Leaderboard.Accuracy}`, newTab);
 				break;
 			// Patreon exclusives
-			case SRTabs.Patreon:
-				switchTab(`/patreon/${player.gamertag}`, newTab);
+			case SRTabs.Subscribe:
+				switchTab(`/subscribe/${player.gamertag}`, newTab);
 				break;
 			case SRTabs.Maps:
 				if (!isAllowed) { switchTab(`/patreon/${player.gamertag}`, newTab); break; }
@@ -159,7 +159,7 @@ export function AHDrawer(props: AHDrawerProps)
 				switchTab(`/clips/${player.gamertag}`, newTab);
 				break;
 			case SRTabs.Donate:
-				switchTab(`/donate`, newTab);
+				switchTab(`/subscribe`, newTab);
 				break;
 			case SRTabs.None:
 				break;
@@ -217,12 +217,11 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab value={SRTabs.MatchesCustoms} label={SRTabs.MatchesCustoms} icon={<GamepadRounded fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab value={SRTabs.MatchesLocal} label={SRTabs.MatchesLocal} icon={<UsbRounded fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					{/* <Tab value={SRTabs.BestMatches} label={SRTabs.BestMatches} icon={<BestMatchIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
-					{/* <Tab value={SRTabs.Patreon} label={SRTabs.Patreon} icon={<EmojiEmotionsIcon />} iconPosition="start" />*/}
 					<Tab value={SRTabs.Leaderboard} label={SRTabs.Leaderboard} icon={<LeaderboardRounded />} iconPosition="start" />
 					<Tab value={SRTabs.Clips} label={SRTabs.Clips} icon={<PlayArrow />} iconPosition="start" />
 					<Tab value={SRTabs.ActivePlaylists} label={SRTabs.ActivePlaylists} icon={<PlaylistsIcon />} iconPosition="start" />
 					<Tab value={SRTabs.Store} label={SRTabs.Store} icon={<CreditsIcon />} iconPosition="start" />
-					<Tab value={SRTabs.Donate} label={SRTabs.Donate} icon={<SpartanCompanyIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Subscribe} label={SRTabs.Subscribe} icon={<SpartanCompanyIcon />} iconPosition="start" />
 					{/* <Tab value={SRTabs.SpartanCompany} label={<div>{SRTabs.SpartanCompany}<br/><Box sx={{ fontSize: "0.6rem", textTransform: "uppercase" }}>Beta</Box></div>} icon={<SpartanCompanyIcon />} iconPosition="start" /> */}
 				</Tabs>
 				: player && player.isPrivate ?
@@ -231,7 +230,7 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab value={SRTabs.ServiceRecord} label={SRTabs.ServiceRecord} icon={<LockOutlined />} iconPosition="start" />
 					<Tab value={SRTabs.ActivePlaylists} label={SRTabs.ActivePlaylists} icon={<PlaylistsIcon />} iconPosition="start" />
 					<Tab value={SRTabs.Store} label={SRTabs.Store} icon={<CreditsIcon />} iconPosition="start" />
-					<Tab value={SRTabs.Donate} label={SRTabs.Donate} icon={<SpartanCompanyIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Subscribe} label={SRTabs.Subscribe} icon={<SpartanCompanyIcon />} iconPosition="start" />
 					{/* <Tab value={SRTabs.SpartanCompany} label={<div>{SRTabs.SpartanCompany}<br/><Box sx={{ fontSize: "0.6rem", textTransform: "uppercase" }}>Beta</Box></div>} icon={<SpartanCompanyIcon />} iconPosition="start" /> */}
 				</Tabs>
 				: player && player.gamertag ?
@@ -251,15 +250,14 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab value={SRTabs.Matches} label={SRTabs.Matches} icon={<MatchesIcon />} iconPosition="start" />
 					<Tab value={SRTabs.MatchesCustoms} label={SRTabs.MatchesCustoms} icon={<GamepadRounded fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab value={SRTabs.MatchesLocal} label={SRTabs.MatchesLocal} icon={<UsbRounded fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					{/* <Tab value={SRTabs.Patreon} label={SRTabs.Patreon} icon={<EmojiEmotionsIcon />} iconPosition="start" />
-					<Tab value={SRTabs.Maps} label={SRTabs.Maps} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					{/*<Tab value={SRTabs.Maps} label={SRTabs.Maps} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab value={SRTabs.MatchOutcome} label={SRTabs.MatchOutcome} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
 					<Tab value={SRTabs.BestMatches} label={SRTabs.BestMatches} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
 					<Tab value={SRTabs.Leaderboard} label={SRTabs.Leaderboard} icon={<LeaderboardRounded />} iconPosition="start" />
 					<Tab value={SRTabs.Clips} label={SRTabs.Clips} icon={<PlayArrow />} iconPosition="start" />
 					<Tab value={SRTabs.ActivePlaylists} label={SRTabs.ActivePlaylists} icon={<PlaylistsIcon />} iconPosition="start" />
 					<Tab value={SRTabs.Store} label={SRTabs.Store} icon={<CreditsIcon />} iconPosition="start" />
-					<Tab value={SRTabs.Donate} label={SRTabs.Donate} icon={<SpartanCompanyIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Subscribe} label={SRTabs.Subscribe} icon={<SpartanCompanyIcon />} iconPosition="start" />
 					{/* <Tab value={SRTabs.SpartanCompany} label={<div>{SRTabs.SpartanCompany}<br/><Box sx={{ fontSize: "0.6rem", textTransform: "uppercase" }}>Beta</Box></div>} icon={<SpartanCompanyIcon />} iconPosition="start" /> */}
 				</Tabs>
 				:
@@ -267,7 +265,7 @@ export function AHDrawer(props: AHDrawerProps)
 					<Tab value={SRTabs.Search} label={SRTabs.Search} icon={<SearchIcon />} iconPosition="start" />
 					<Tab value={SRTabs.ActivePlaylists} label={SRTabs.ActivePlaylists} icon={<PlaylistsIcon />} iconPosition="start" />
 					<Tab value={SRTabs.Store} label={SRTabs.Store} icon={<CreditsIcon />} iconPosition="start" />
-					<Tab value={SRTabs.Donate} label={SRTabs.Donate} icon={<SpartanCompanyIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Subscribe} label={SRTabs.Subscribe} icon={<SpartanCompanyIcon />} iconPosition="start" />
 					{/* <Tab value={SRTabs.SpartanCompany} label={<div>{SRTabs.SpartanCompany}<br/><Box sx={{ fontSize: "0.6rem", textTransform: "uppercase" }}>Beta</Box></div>} icon={<SpartanCompanyIcon />} iconPosition="start" /> */}
 				</Tabs>
 				}

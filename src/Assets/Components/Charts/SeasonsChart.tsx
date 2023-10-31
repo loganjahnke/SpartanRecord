@@ -30,7 +30,7 @@ enum SeasonsDataSets
 	AssistsPerGame = "Assists / Game",
 }
 
-export const SeasonsChart = (props: { seasons: HaloDotAPISeason[], historicServiceRecords: ServiceRecord[], onMetricChanged: () => void }) =>
+export const SeasonsChart = (props: { seasons: HaloDotAPISeason[], historicServiceRecords: ServiceRecord[] }) =>
 {
 	ChartJS.defaults.font.family = "Roboto";
 	ChartJS.defaults.font.weight = "100";

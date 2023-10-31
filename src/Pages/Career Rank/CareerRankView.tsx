@@ -14,7 +14,7 @@ import { Debugger } from "../../Objects/Helpers/Debugger";
 export function CareerRankView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setBackgroundLoadingProgress, player, updatePlayer, switchTab, setApiError } = props;
+	const { app, player, isSubscribedToPatreon, setLoadingMessage, setBackgroundLoadingProgress, updatePlayer, switchTab, setApiError } = props;
 	const { gamertag } = useParams();
 	//#endregion
 	
@@ -179,7 +179,7 @@ export function CareerRankView(props: ViewProps)
 						<Button sx={{ mt: 4 }} onClick={() => switchTab("/", SRTabs.Search)} variant="contained">Back to Search</Button>
 					</Box>
 				}
-				{player && <CareerRankProgression current={player.careerRank} serviceRecord={player.serviceRecord} />}
+				{player && <CareerRankProgression current={player.careerRank} serviceRecord={player.serviceRecord} isSubscribedToPatreon={isSubscribedToPatreon} />}
 			</Box>
 		</Box>
 	);

@@ -62,7 +62,7 @@ const App = () =>
 	const [tab, setTab] = useState("Search");
 	const [loadingMessage, setLoadingMessage] = useState("");
 	const [backgroundLoadingProgress, setBackgroundLoadingProgress] = useState<string>("");
-	const [isAllowed, setIsAllowed] = useState(true);
+	const [isSubscribedToPatreon, setIsSubscribedToPatreon] = useState(false);
 	const [apiError, setApiError] = useState(false);
 	//#endregion
 
@@ -104,8 +104,8 @@ const App = () =>
 		}
 
 		setPlayer(newPlayer);
-		setIsAllowed(await arrowhead.GetIsAllowed(newPlayer.gamertag));
-	}, [player, setPlayer, setIsAllowed, arrowhead]);
+		setIsSubscribedToPatreon(await arrowhead.GetIsSubscribedToPatreon(newPlayer.gamertag));
+	}, [player, arrowhead, setPlayer, setIsSubscribedToPatreon]);
 
 	/**
 	 * On the toast closing
@@ -138,7 +138,7 @@ const App = () =>
 		<ThemeProvider theme={ArrowheadTheme.theme}>
 			<Box sx={{ display: "flex", backgroundColor: "background.paper", height: "calc(100vh - 34px)" }}>
 				<AHAppBar player={player} handleDrawerToggle={handleDrawerToggle} backgroundLoadingMessage={backgroundLoadingProgress} />
-				<AHDrawer player={player} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={switchTab} handleDrawerToggle={handleDrawerToggle} isAllowed={isAllowed} />
+				<AHDrawer player={player} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={switchTab} handleDrawerToggle={handleDrawerToggle} isAllowed={isSubscribedToPatreon} />
 				<AHLoading loadingMessage={loadingMessage} />
 				<Snackbar open={apiError} autoHideDuration={6000} anchorOrigin={{ vertical: "bottom", horizontal: "right" }} onClose={onSnackbarClose}>
 					<Alert onClose={onSnackbarClose} severity="error" sx={{ width: '100%' }}>
@@ -148,50 +148,50 @@ const App = () =>
 				</Snackbar>
 				<Routes>
 					{/* Home Views */}
-					<Route path="/" element={<HomeView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} />} />
+					<Route path="/" element={<HomeView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 
 					{/* Metadata Views */}
-					<Route path="/playlists" element={<PlaylistsView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} />} />
-					<Route path="/store" element={<StoreView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} />} />
+					<Route path="/playlists" element={<PlaylistsView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
+					<Route path="/store" element={<StoreView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 
 					{/* Halo Clips */}
-					<Route path="/clips/:gamertag" element={<ClipsView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} />} />
+					<Route path="/clips/:gamertag" element={<ClipsView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 					
 					{/* Compare Views */}
-					<Route path="/compare/:gamertag1" element={<CompareView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} />} />
-					<Route path="/compare/:gamertag1/:gamertag2" element={<CompareView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} />} />
+					<Route path="/compare/:gamertag1" element={<CompareView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
+					<Route path="/compare/:gamertag1/:gamertag2" element={<CompareView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 					
 					{/* Career Rank Views */}
-					<Route path="/career_rank/:gamertag" element={<CareerRankView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} />} />
+					<Route path="/career_rank/:gamertag" element={<CareerRankView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 
 					{/* Service Record Views */}
-					<Route path="/service_record/:gamertag" element={<PlayerView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} />} />
-					<Route path="/service_record/:node/:gamertag" element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} />} />
-					<Route path="/service_record/:node/:gamertag/:filter" element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} />} />
+					<Route path="/service_record/:gamertag" element={<PlayerView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
+					<Route path="/service_record/:node/:gamertag" element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
+					<Route path="/service_record/:node/:gamertag/:filter" element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 					
 					{/* Spartan Company Views */}
-					<Route path="/spartan_company" element={<SpartanCompanyView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} />} />
+					<Route path="/spartan_company" element={<SpartanCompanyView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 					
 					{/* Medal Views */}
-					<Route path="/medals/:gamertag" element={<MedalsView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} />} />
+					<Route path="/medals/:gamertag" element={<MedalsView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 					
 					{/* Matches Views */}
-					<Route path="/matches/:gamertag" element={<MultiMatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} />} />
-					<Route path="/customs/:gamertag" element={<MultiMatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} customs />} />
-					<Route path="/LAN/:gamertag" element={<MultiMatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} local />} />
-					<Route path="/match/:id" element={<BetaSingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} />} />
-					<Route path="/match/:id/:gamertag" element={<BetaSingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} />} />
+					<Route path="/matches/:gamertag" element={<MultiMatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
+					<Route path="/customs/:gamertag" element={<MultiMatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} customs />} />
+					<Route path="/LAN/:gamertag" element={<MultiMatchesView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} local />} />
+					<Route path="/match/:id" element={<BetaSingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
+					<Route path="/match/:id/:gamertag" element={<BetaSingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 					
 					{/* Leaderboard Views */}
-					<Route path="/leaderboard" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} />} />
-					<Route path="/leaderboard/:gamertag" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} />} />
-					<Route path="/leaderboard/:gamertag/:category" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} />} />
+					<Route path="/leaderboard" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
+					<Route path="/leaderboard/:gamertag" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
+					<Route path="/leaderboard/:gamertag/:category" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 					
 					{/* Admin Views */}
-					<Route path="/patreon/:gamertag" element={<PatreonView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} />} />
-					<Route path="/admin" element={<Admin app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isAllowed={isAllowed} />} />
+					<Route path="/subscribe" element={<PatreonView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
+					<Route path="/subscribe/:gamertag" element={<PatreonView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
+					<Route path="/admin" element={<Admin app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 					<Route path="/powered_by_halodotapi" element={<OtherCreators />} />
-					<Route path="/donate" element={<Donate />} />
 					<Route path="/privacy" element={() => {window.location.href="/privacy.html"}} />
 					<Route path="*" element={<UhOh />} />
 				</Routes>

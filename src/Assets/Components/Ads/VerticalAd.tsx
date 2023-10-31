@@ -6,8 +6,8 @@ interface AdProps
 	isAdFree?: boolean;
 }
 
-export function AutoAd(props: AdProps)
+export function VerticalAd(props: AdProps)
 {
 	const { adId, isAdFree } = props;
-	return <Ad adId={adId} format="auto" isAdFree={isAdFree} />;
+	return <Ad adId={adId} format="autorelaxed" isAdFree={isAdFree} />
 }

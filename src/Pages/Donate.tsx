@@ -36,7 +36,7 @@ export function Donate()
 							<Grid item xs={10} md={3} lg={3} sx={{ m: 2 }}>
 								<ImageCardWithContent image={tier1}>
 									<Typography variant="h5" sx={{ textAlign: "center" }}><Link href="https://patreon.com/spartanrecord?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=creatorshare_creator&utm_content=join_link">Subscribe on Patreon</Link></Typography>
-									<Typography variant="body2" sx={{ textAlign: "center" }}>Subscribe for to SpartanRecord's Patreon</Typography>
+									<Typography variant="body2" sx={{ textAlign: "center" }}>Go ad-free and subscribe to SpartanRecord's Patreon</Typography>
 								</ImageCardWithContent>
 							</Grid>
 						</Grid>

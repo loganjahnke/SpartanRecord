@@ -4,10 +4,11 @@ import { Converter } from "../../../Objects/Helpers/Statics/Converter";
 import { Player } from "../../../Objects/Model/Player";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { Image } from "../Common/Image";
+import { VIP } from "../../../Objects/Model/VIP";
 
 interface PlayerChipProps
 {
-	player: Player;
+	player: Player | VIP;
 	onClick?: (gamertag: string) => void;
 }
 

@@ -17,6 +17,7 @@ import { MatchSchema } from "./Schemas/MatchSchema";
 import { HaloDotAPISeason } from "./Schemas/AutocodeMetadata";
 import { CareerRankSchema, EmptyCareerRank } from "./Schemas/CareerRankSchema";
 import { URLReducer } from "../Objects/Helpers/Statics/URLReducer";
+import { VIP } from "../Objects/Model/VIP";
 
 export class SCFirebase
 {
@@ -446,20 +447,41 @@ export class SCFirebase
 	
 	//#region User
 	/**
-	 * Sees if this gamertag is allowed to see filters
+	 * Sees if this gamertag is subscribed to the Patreon
 	 * @param gamertag the gamertag to check the permissions of
-	 * @returns true if allowed to see filters
+	 * @returns true if is subscribed to the Patreon
 	 */
-	public async GetIsPremiumUser(gamertag: string): Promise<boolean>
+	public async GetIsAdFree(gamertag: string): Promise<boolean>
 	{
 		if (!gamertag) { return false; }
 
-		Debugger.Print("SCFirebase", "GetIsPremiumUser()", gamertag);
+		Debugger.Print("SCFirebase", "GetIsAdFree()", gamertag);
 
-		const snapshot = await this.__get(`allowed/${gamertag}`);
-		if (snapshot) { this.__setReadSize("GetIsPremiumUser", snapshot.val()); }
+		const snapshot = await this.__get(`ad_free/${gamertag}`);
+		if (snapshot) { this.__setReadSize("GetIsAdFree", snapshot.val()); }
 		return snapshot?.val() ?? false;
 	}
+
+	/**
+	 * Gets all VIPs (thanks kings)
+	 * @returns an array of VIPs
+	 */
+	public async GetAllVIPs(): Promise<VIP[]>
+    {
+		Debugger.Print("SCFirebase", "GetAllVIPs()");
+
+		const snapshot = await this.__get(`VIP`);
+		if (!snapshot) { return []; }
+		
+		const VIPs = [];
+		for (const gamertag in snapshot.val())
+		{
+			const appearance = await this.GetAppearance(gamertag) ?? new Appearance();
+			VIPs.push(new VIP(gamertag, appearance));
+		}
+
+        return VIPs;
+    }
 	//#endregion
 	
 	//#region Gamertag

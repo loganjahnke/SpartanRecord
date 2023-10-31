@@ -28,7 +28,7 @@ interface MultiMatchesViewProps extends ViewProps
 export function MultiMatchesView(props: MultiMatchesViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setBackgroundLoadingProgress, switchTab, player, updatePlayer, customs, local, setApiError } = props;
+	const { app, isSubscribedToPatreon, player, customs, local, setLoadingMessage, setBackgroundLoadingProgress, switchTab, updatePlayer, setApiError } = props;
 	const { gamertag } = useParams();
 	//#endregion
 	
@@ -251,7 +251,10 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 				<Grid container spacing={2} sx={{ mt: 1 }}>
 					{matchesToShow && matchesToShow.length > 0 && matchesToShow.map((match, index) => (
 						<>
-							{index % 6 === 0 && <Grid item xs={12} md={6} lg={4} xl={3}><FluidAd adId="4720270834" /></Grid>}
+							{!isSubscribedToPatreon && index % 5 === 0 && <>
+								<Grid item xs={12} sx={{ display: { md: "none" }}}><FluidAd adId="4720270834" isAdFree={isSubscribedToPatreon} /></Grid>
+								<Grid item xs={0} md={6} lg={4} xl={3} sx={{ maxHeight: "1025px" }}><FluidAd adId="4720270834" isAdFree={isSubscribedToPatreon} /><Box sx={{ mt: 2 }} /><FluidAd adId="4720270834" isAdFree={isSubscribedToPatreon} /></Grid>
+							</>}
 							<PlayerMatchSummary key={match.id} match={match} player={match.expandedPlayer} goToMatch={goToMatch} gamertag={gamertag ?? ""} showExpanded hideExpected={customs || local || match.variant.name.includes("Infection")} />
 						</>
 					))}

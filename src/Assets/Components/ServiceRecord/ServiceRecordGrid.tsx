@@ -30,16 +30,15 @@ interface ServiceRecordGridProps
 	serviceRecord: ServiceRecord;
 	csrs?: CSRS[];
 	historicStats?: ServiceRecord[];
-	isAllowed?: boolean;
+	isSubscribedToPatreon?: boolean;
 	season?: string;
 	title?: string;
 	careerRank?: CareerRankSchema;
-	onMetricChanged: () => void;
 }
 
 export function ServiceRecordGrid(props: ServiceRecordGridProps)
 {
-	const { seasons, setSeason, setShowPerMatch, showPerMatch, serviceRecord, csrs, historicStats, season, title, careerRank, onMetricChanged } = props;
+	const { seasons, showPerMatch, serviceRecord, csrs, historicStats, season, title, careerRank, isSubscribedToPatreon, setSeason, setShowPerMatch } = props;
 
 	if (!serviceRecord || serviceRecord.IsEmpty() || serviceRecord.error) { return <></>; }
 
@@ -71,9 +70,9 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 				<Grid item xs={12}>
 					<KDABreakdown serviceRecord={serviceRecord} />
 				</Grid>
-				<Grid item xs={12}>
-					<FluidAd adId="4720270834" />
-				</Grid>
+				{!isSubscribedToPatreon && <Grid item xs={12}>
+					<FluidAd adId="4720270834" isAdFree={isSubscribedToPatreon} />
+				</Grid>}
 				<Grid item xs={12}>
 					<CareerRankBreakdown careerRank={careerRank} />
 				</Grid>
@@ -99,11 +98,11 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 					<TopMedals medals={serviceRecord.medals} matchesPlayed={serviceRecord.matchesPlayed} showPerMatch={showPerMatch} />
 				</Grid>
 				{historicStats && (!season) && <Grid item xs={12}>
-					<SeasonsChart seasons={seasons} historicServiceRecords={historicStats} onMetricChanged={onMetricChanged} />
+					<SeasonsChart seasons={seasons} historicServiceRecords={historicStats} />
 				</Grid>}
-				<Grid item xs={12}>
-					<FluidAd adId="4720270834" />
-				</Grid>
+				{!isSubscribedToPatreon && <Grid item xs={12}>
+					<FluidAd adId="4720270834" isAdFree={isSubscribedToPatreon} />
+				</Grid>}
 				<Grid item xs={12}>
 					<ModeBreakdown serviceRecord={serviceRecord} showPerMatch={showPerMatch} />
 				</Grid>

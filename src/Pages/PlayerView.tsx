@@ -16,7 +16,7 @@ import { HaloDotAPISeason } from "../Database/Schemas/AutocodeMetadata";
 export function PlayerView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setBackgroundLoadingProgress, player, updatePlayer, switchTab, setApiError, isAllowed } = props;
+	const { app, player, isSubscribedToPatreon, setLoadingMessage, setBackgroundLoadingProgress, updatePlayer, switchTab, setApiError } = props;
 	const { gamertag } = useParams();
 	//#endregion
 	
@@ -265,7 +265,7 @@ export function PlayerView(props: ViewProps)
 				{player && <ServiceRecordGrid 
 					serviceRecord={player.serviceRecord}
 					careerRank={player.careerRank}
-					isAllowed={isAllowed}
+					isSubscribedToPatreon={isSubscribedToPatreon}
 					season={season}
 					seasons={seasons}
 					setSeason={setSeason}
@@ -273,7 +273,6 @@ export function PlayerView(props: ViewProps)
 					historicStats={historicStats}
 					showPerMatch={showPerMatch}
 					setShowPerMatch={setShowPerMatch}
-					onMetricChanged={() => app.logger.LogChangeSeasonMetric()} 
 				/>}
 			</Box>
 		</Box>
