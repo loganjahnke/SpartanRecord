@@ -19,7 +19,7 @@ import { HaloDotAPISeason } from "../../../Database/Schemas/AutocodeMetadata";
 import { CareerRankSchema } from "../../../Database/Schemas/CareerRankSchema";
 import { CareerRankBreakdown } from "../CareerRank/CareerRankBreakdown";
 import { ModeBreakdown } from "../Breakdowns/Modes/ModeBreakdown";
-import { AutoAd } from "../Ads/AutoAd";
+import { FluidAd } from "../Ads/FluidAd";
 
 interface ServiceRecordGridProps
 {
@@ -71,9 +71,9 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 				<Grid item xs={12}>
 					<KDABreakdown serviceRecord={serviceRecord} />
 				</Grid>
-				{isAllowed && <Grid item xs={12}>
-					<AutoAd adId="8625509215" />
-				</Grid>}
+				<Grid item xs={12}>
+					<FluidAd adId="4720270834" />
+				</Grid>
 				<Grid item xs={12}>
 					<CareerRankBreakdown careerRank={careerRank} />
 				</Grid>
@@ -101,6 +101,9 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 				{historicStats && (!season) && <Grid item xs={12}>
 					<SeasonsChart seasons={seasons} historicServiceRecords={historicStats} onMetricChanged={onMetricChanged} />
 				</Grid>}
+				<Grid item xs={12}>
+					<FluidAd adId="4720270834" />
+				</Grid>
 				<Grid item xs={12}>
 					<ModeBreakdown serviceRecord={serviceRecord} showPerMatch={showPerMatch} />
 				</Grid>

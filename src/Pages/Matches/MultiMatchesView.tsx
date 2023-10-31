@@ -251,7 +251,7 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 				<Grid container spacing={2} sx={{ mt: 1 }}>
 					{matchesToShow && matchesToShow.length > 0 && matchesToShow.map((match, index) => (
 						<>
-							{isAllowed && index % 10 === 1 && <Grid item xs={12} md={6} lg={4} xl={3}><FluidAd adId="4720270834" /></Grid>}
+							{index % 6 === 0 && <Grid item xs={12} md={6} lg={4} xl={3}><FluidAd adId="4720270834" /></Grid>}
 							<PlayerMatchSummary key={match.id} match={match} player={match.expandedPlayer} goToMatch={goToMatch} gamertag={gamertag ?? ""} showExpanded hideExpected={customs || local || match.variant.name.includes("Infection")} />
 						</>
 					))}
