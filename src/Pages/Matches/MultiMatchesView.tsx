@@ -28,7 +28,7 @@ interface MultiMatchesViewProps extends ViewProps
 export function MultiMatchesView(props: MultiMatchesViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setBackgroundLoadingProgress, switchTab, player, updatePlayer, isAllowed, customs, local, setApiError } = props;
+	const { app, setLoadingMessage, setBackgroundLoadingProgress, switchTab, player, updatePlayer, customs, local, setApiError } = props;
 	const { gamertag } = useParams();
 	//#endregion
 	

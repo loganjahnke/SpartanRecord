@@ -39,7 +39,7 @@ interface ServiceRecordGridProps
 
 export function ServiceRecordGrid(props: ServiceRecordGridProps)
 {
-	const { seasons, setSeason, setShowPerMatch, showPerMatch, serviceRecord, csrs, historicStats, season, title, careerRank, onMetricChanged, isAllowed } = props;
+	const { seasons, setSeason, setShowPerMatch, showPerMatch, serviceRecord, csrs, historicStats, season, title, careerRank, onMetricChanged } = props;
 
 	if (!serviceRecord || serviceRecord.IsEmpty() || serviceRecord.error) { return <></>; }
 
