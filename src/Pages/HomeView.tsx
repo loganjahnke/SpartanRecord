@@ -15,7 +15,7 @@ import { WhatsNew } from "../Assets/Components/WhatsNew/WhatsNew";
 export function HomeView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, updatePlayer, switchTab } = props;
+	const { app, player, updatePlayer, switchTab } = props;
 	//#endregion
 	
 	//#region State
@@ -149,7 +149,7 @@ export function HomeView(props: ViewProps)
 						{showWhatsNew && <>
 							<Box sx={{ mt: { xs: 20 }}}></Box>
 							<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} />
-							<Box sx={{ textAlign: "center", mt: 6, alignSelf: "center", width: { xs: "90%", sm: "75%", md: "500px" }}}><WhatsNew onDismiss={onDismissWhatsNew} switchTab={switchTab} /></Box>
+							<Box sx={{ textAlign: "center", mt: 6, alignSelf: "center", width: { xs: "90%", sm: "75%", md: "500px" }}}><WhatsNew gamertag={player?.gamertag} onDismiss={onDismissWhatsNew} switchTab={switchTab} /></Box>
 						</>}
 						<Grow />
 						<Box sx={{ textAlign: "center", mt: 18 }}>

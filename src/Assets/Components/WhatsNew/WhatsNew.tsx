@@ -7,13 +7,14 @@ import { SRTabs } from "../Layout/AHDrawer";
 
 interface WhatsNewProps
 {
+	gamertag?: string;
 	onDismiss(): void;
 	switchTab: (url?: string, tab?: SRTabs) => void;
 }
 
 export function WhatsNew(props: WhatsNewProps)
 {
-	const { onDismiss, switchTab } = props;
+	const { gamertag, onDismiss, switchTab } = props;
 
 	const features: Map<string, Feature[]> = new Map();
 
@@ -42,7 +43,7 @@ export function WhatsNew(props: WhatsNewProps)
 			</CardContent>
 			<CardActions>
 				<Grow />
-				<Button variant="outlined" onClick={() => switchTab(`donate`, SRTabs.Donate)}>Donate</Button>
+				<Button variant="outlined" onClick={() => switchTab(`subscribe/${gamertag}`, SRTabs.Subscribe)}>Donate</Button>
 				<Button variant="contained" onClick={onDismiss}>Dismiss</Button>
 			</CardActions>
 		</Card>
