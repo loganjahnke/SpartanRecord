@@ -12,6 +12,7 @@ import { Debugger } from "../Objects/Helpers/Debugger";
 import { VIP } from "../Objects/Model/VIP";
 import { PlayerChip } from "../Assets/Components/PlayerAppearance/PlayerChip";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
+import { ArrowheadTheme } from "../Assets/Theme/ArrowheadTheme";
 
 export function PatreonView(props: ViewProps)
 {
@@ -91,10 +92,10 @@ export function PatreonView(props: ViewProps)
 	</>;
 
 	return (
-		<Box component="main" sx={{ flexGrow: 1, height: "calc(100% - 64px)" }}>
+		<Box component="main" sx={{ flexGrow: 1, height: {xs: "calc(100% - 24px)", md: "calc(100% - 32px)"}}}>
 			<Toolbar />
 			<Divider />
-			<Box sx={{ backgroundColor: "secondary.main", height: "100%", display: "flex", flexDirection: "column", textAlign: "left", alignItems: "flex-start", p: 4 }}>
+			<Box sx={{ backgroundColor: "secondary.main", minHeight: "100%", display: "flex", flexDirection: "column", textAlign: "left", alignItems: "flex-start", p: 4 }}>
 				<Box sx={{ textAlign: "center", width: "100%", mt: 6 }}>
 					{isAdFree && gamertag && 
 					<>
@@ -152,10 +153,12 @@ export function PatreonView(props: ViewProps)
 						</Card>
 					</Grid>
 				</Grid>
-				<Box sx={{ mt: 6, textAlign: "center", width: "100%", display: "flex", alignItems: "center", flexDirection: "column" }}>
-					<Typography variant="h3">Featured Subscribers</Typography>
-					<Box sx={{ maxWidth: "400px", mt: 2 }}>
-						{VIPs.map(vip => <PlayerChip player={vip} onClick={openVIP} />)}
+				<Box sx={{ mt: 6, mb: 6, width: "100%" }}>
+					<Box sx={{ p: 2, display: "flex", textAlign: "center", alignItems: "center", flexDirection: "column", backgroundColor: ArrowheadTheme.background, borderRadius: 4 }}>
+						<Typography variant="h3">VIP Subscribers</Typography>
+						<Box sx={{ maxWidth: "400px", mt: 2 }}>
+							{VIPs.map(vip => <PlayerChip player={vip} onClick={openVIP} />)}
+						</Box>
 					</Box>
 				</Box>
 			</Box>
