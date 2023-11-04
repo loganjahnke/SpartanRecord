@@ -124,6 +124,9 @@ export function LeaderboardView(props: ViewProps)
 			setMyLeader(await app.GetLeader(category, gamertag));
 		}
 
+		// Log leaderboard view
+		app.logger.LogLeaderboard();
+
 		setLoadingMessage("");
 	}, [app, category, gamertag, player, setLoadingMessage, setLeaders, setLeaderboardAverages, setMyLeader, switchTab, updatePlayer]);
 	

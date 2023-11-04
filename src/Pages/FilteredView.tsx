@@ -29,11 +29,12 @@ import { Helmet } from "react-helmet";
 import { ServiceRecordType } from "../Database/SCData";
 import { Debugger } from "../Objects/Helpers/Debugger";
 import { PlaylistChooser } from "../Assets/Components/Playlists/PlaylistChooser";
+import { FluidAd } from "../Assets/Components/Ads/FluidAd";
 
 export function FilteredView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, updatePlayer, switchTab, setApiError } = props;
+	const { app, isSubscribedToPatreon, setLoadingMessage, updatePlayer, switchTab, setApiError } = props;
 	const { node, filter, gamertag } = useParams();
 	//#endregion
 	
@@ -280,6 +281,9 @@ export function FilteredView(props: ViewProps)
 							<Grid item xs={12}>
 								<MatchesBreakdown serviceRecord={sr} />
 							</Grid>
+							{!isSubscribedToPatreon && <Grid item xs={12}>
+								<FluidAd adId="8600101244" isAdFree={isSubscribedToPatreon} />
+							</Grid>}
 							<Grid item xs={12}>
 								<KDABreakdown serviceRecord={sr} />
 							</Grid>
@@ -313,6 +317,9 @@ export function FilteredView(props: ViewProps)
 							<Grid item xs={12}>
 								<ShotsBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
 							</Grid>
+							{!isSubscribedToPatreon && <Grid item xs={12}>
+								<FluidAd adId="8600101244" isAdFree={isSubscribedToPatreon} />
+							</Grid>}
 							<Grid item xs={12}>
 								<DamageBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
 							</Grid>

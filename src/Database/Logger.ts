@@ -69,6 +69,11 @@ export class Logger
     public LogCareerRank = (): void => this.__logEvent("career_rank");
 
     /**
+     * Logs an event in Firebase analytics for going to the Leaderboard page
+     */
+    public LogLeaderboard = (): void => this.__logEvent("leaderboard");
+
+    /**
      * Logs an event in Firebase analytics for viewing the spartan company
      * @param company the spartan company
      */

@@ -10,11 +10,12 @@ import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { Helmet } from "react-helmet";
 import { Cookie } from "../Objects/Helpers/Cookie";
 import { Debugger } from "../Objects/Helpers/Debugger";
+import { FluidAd } from "../Assets/Components/Ads/FluidAd";
 
 export function MedalsView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, updatePlayer: setGamertag, switchTab } = props;
+	const { app, isSubscribedToPatreon, setLoadingMessage, updatePlayer: setGamertag, switchTab } = props;
 	const { gamertag } = useParams();
 	//#endregion
 	
@@ -89,6 +90,9 @@ export function MedalsView(props: ViewProps)
 					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.MultiKill} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
+					{!isSubscribedToPatreon && <Grid item xs={12} md={6} xl={4}>
+						<FluidAd adId="4720270834" isAdFree={isSubscribedToPatreon} />
+					</Grid>}
 					{/* Game Modes */}
 					<Grid item xs={12} sx={{ mt: 4 }}>
 						<Typography variant="h2">Game Modes</Typography>

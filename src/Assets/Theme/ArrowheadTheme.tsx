@@ -49,22 +49,22 @@ export class ArrowheadTheme
 	public static halo_tangelo = "#DA3A04";
 
 	public static halo_colors = [
-		this.halo_salmon,
-		this.halo_cerulean,
 		this.halo_sunshine,
-		this.halo_jade,
-		this.halo_cerise,
-		this.halo_tangelo,
-		this.halo_carrot,
-		this.halo_aubergine,
-		this.halo_grass,
-		this.halo_mint,
 		this.halo_sky,
+		this.halo_cerise,
+		this.halo_salmon,
+		this.halo_jade,
+		this.halo_aubergine,
+		this.halo_mint,
+		this.halo_tangelo,
+		this.halo_cotton_candy,
 		this.halo_lime,
+		this.halo_cerulean,
+		this.halo_carrot,
+		this.halo_grass,
 		this.halo_lavender,
 		this.halo_pineapple,
 		this.halo_vermilion,
-		this.halo_cotton_candy,
 	];
 	//#endregion
 	

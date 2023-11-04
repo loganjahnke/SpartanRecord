@@ -2,7 +2,6 @@ import { Box, Button, Card, CardActions, CardContent, CardMedia, IconButton, Typ
 import { SpartanCompany } from "../../../Objects/Model/SpartanCompany";
 
 import { Player } from "../../../Objects/Model/Player";
-import { Halo5Converter } from "../../../Objects/Helpers/Halo5Converter";
 
 import ArrowheadImg from "../../Images/arrowhead.png";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
@@ -11,6 +10,7 @@ import AddIcon from '@mui/icons-material/Add';
 import SyncIcon from '@mui/icons-material/Sync';
 import ClearIcon from '@mui/icons-material/Clear';
 import { ServiceRecordIcon } from "../../Icons/CustomIcons";
+import { CareerRankTitle } from "../../../Objects/Helpers/AllCareerRanks";
 
 export function MemberList(props: { company: SpartanCompany, goToMember: (gamertag: string) => void, deleteMember: (gamertag: string) => void, onAddGamertag: () => void, syncPlayers: () => void })
 {
@@ -18,7 +18,7 @@ export function MemberList(props: { company: SpartanCompany, goToMember: (gamert
 
 	return (
 		<Card sx={{ borderRadius: 3 }}>
-            <CardMedia component="img" height="200" image={"https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/playlists/ffa-slayer.jpg"} alt="Members" />
+            <CardMedia component="img" height="200" image={"https://blobs-infiniteugc.svc.halowaypoint.com/ugcstorage/playlist/f6c93ddd-a623-41b1-b9e3-81632ff73cfb/d54d4735-0167-4e5b-b0cd-5a46a41edecc/images/hero.jpg"} alt="Members" />
             <CardContent sx={{ backgroundColor: "divider", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 				<Typography variant="h6" sx={{ mb: 1 }}>Members</Typography>
 				{company.players.map(player => <MemberComponent player={player} goToMember={goToMember} deleteMember={deleteMember} />)}
@@ -40,7 +40,7 @@ function MemberComponent(props: { player: Player, goToMember: (gamertag: string)
 			<img src={player.appearance.emblemURL === "" ? ArrowheadImg : player.appearance.emblemURL} alt="emblem" width="48px" />
 			<Box sx={{ ml: 1, flexGrow: 1, display: "flex", flexDirection: "column" }}>
 				<Typography variant="body1">{player.gamertag}</Typography>
-				<Typography variant="body2" sx={{ fontWeight: 100 }}>{Halo5Converter.GetLevelFromScore(player.serviceRecord.totalScore)}</Typography>
+				<Typography variant="body2" sx={{ fontWeight: 100 }}>{CareerRankTitle(player.careerRank)}</Typography>
 			</Box>
 			<IconButton sx={{ color: ArrowheadTheme.text_primary }} onClick={() => goToMember(player.gamertag)}><ServiceRecordIcon /></IconButton>
 			<IconButton sx={{ color: ArrowheadTheme.text_primary }} onClick={() => deleteMember(player.gamertag)}><ClearIcon /></IconButton>

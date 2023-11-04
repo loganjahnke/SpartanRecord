@@ -25,7 +25,7 @@ export function PlaylistCard(props: PlaylistCardProps)
 	</>;
 
 	return (
-		<Card sx={{ margin: 2 }}>
+		<Card sx={{ margin: 2, maxWidth: "400px" }}>
 			{onPlaylistClicked && <CardActionArea onClick={() => onPlaylistClicked(playlist.id)}>{content}</CardActionArea>}
 			{!onPlaylistClicked && content}
 		</Card>

@@ -33,6 +33,11 @@ export function WhatsNew(props: WhatsNewProps)
 		new Feature("Patreon", "Consider subscribing to help keep SpartanRecord running!"),
 	]);
 
+	features.set("4.10", [
+		new Feature("Active Playlists redesign", "See the map and mode odds for a specific playlist"),
+		new Feature("Patreon", "Consider subscribing to help keep SpartanRecord running!"),
+	]);
+
 	return (
 		<Card sx={{ background: ArrowheadTheme.card + "DD" }}>
 			<CardContent>

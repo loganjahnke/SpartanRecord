@@ -1,4 +1,4 @@
-import { Box, Divider, FormControl, Grid, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, Toolbar } from "@mui/material";
+import { Box, Divider, FormControl, Grid, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 
@@ -11,11 +11,13 @@ import { PlaylistCard } from "./Components/PlaylistCard";
 
 import "../../Assets/Styles/Views/Playlist.css";
 import { Debugger } from "../../Objects/Helpers/Debugger";
+import { PlaylistOddsChart } from "../../Assets/Components/Charts/PlaylistOddsChart";
+import { FluidAd } from "../../Assets/Components/Ads/FluidAd";
 
 export function PlaylistsView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, setBackgroundLoadingProgress, switchTab } = props;
+	const { app, isSubscribedToPatreon, setLoadingMessage, setBackgroundLoadingProgress, switchTab } = props;
 	//#endregion
 	
 	//#region State
@@ -90,46 +92,101 @@ export function PlaylistsView(props: ViewProps)
 			<Divider />
 			<Box sx={{ p: 2, height: "calc(100% - 64px)" }}>
 				<Grid container spacing={2}>
-					<Grid item xs={12} sm={0} sx={{ display: { sm: "none" }}}>
+					<Grid item xs={12}>
 						<FormControl size="small">
 							<InputLabel>Playlists</InputLabel>
 							<Select value={(chosenPlaylist as any) as HTMLElement} label="Season" onChange={(event) => setChosenPlaylist(event.target.value as string)}>
 								{allPlaylists.filter(playlist => playlist.attributes.active).map(playlist => <MenuItem value={playlist.id}>{playlist.name}</MenuItem>)}
 							</Select>
 						</FormControl>
-						{allPlaylists.filter(playlist => chosenPlaylist === playlist.id).map(playlist => <PlaylistCard playlist={playlist} chosen overrideBackgroundColor={ArrowheadTheme.box} />)}
+						<Box sx={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+							{allPlaylists.filter(playlist => chosenPlaylist === playlist.id).map(playlist => <PlaylistCard playlist={playlist} chosen overrideBackgroundColor={ArrowheadTheme.box} />)}
+						</Box>
 					</Grid>
-					<Grid item xs={0} sm={6} xl={4} sx={{ display: { xs: "none", sm: "initial" }}}>
-						{allPlaylists.filter(playlist => playlist.attributes.active).map(playlist => <PlaylistCard playlist={playlist} chosen={playlist.id === chosenPlaylist} onPlaylistClicked={setChosenPlaylist} />)}
+					<Grid item xs={12} sm={6} xl={4}>
+						<Typography variant="h3">Map Odds</Typography>
+						<PlaylistOddsChart odds={weights.get(chosenPlaylist)?.maps ?? new Map<string, number>()} />
+						<TableContainer component={Box} sx={{ backgroundColor: ArrowheadTheme.box, borderRadius: 3, mt: 2 }}>
+							<Table>
+								<TableHead sx={{ backgroundColor: ArrowheadTheme.eagle }}>
+									<TableRow>
+										<TableCell>Map</TableCell>
+										<TableCell>Probability</TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{Array.from(weights.get(chosenPlaylist)?.maps.keys() ?? []).sort((a, b) => a < b ? -1 : 1).map(map => 
+										{
+											return (
+												<TableRow>
+													<TableCell>{map}</TableCell>
+													<TableCell>{weights.get(chosenPlaylist)?.maps.get(map) ?? "N/A"}%</TableCell>
+												</TableRow>
+											);
+										}
+									)}
+								</TableBody>
+							</Table>
+						</TableContainer>
 					</Grid>
-					<Grid item xs={12} sm={6} xl={8}>
-						<Table>
-							<TableHead>
-								<TableRow>
-									<TableCell>Map</TableCell>
-									<TableCell>Mode</TableCell>
-									<TableCell>Probability</TableCell>
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{Array.from(weights.get(chosenPlaylist)?.odds.keys() ?? []).map(name =>
-									{
-										const isFiesta = name.indexOf("Fiesta") !== -1;
-										const shortName = name.indexOf(":") !== -1 ? name.substring(name.indexOf(":") + 1) : name;
-										const midIndex = shortName.indexOf(" on ");
-										const mode = isFiesta ? name.substring(0, name.indexOf(":")) : (midIndex !== -1 ? shortName.substring(0, midIndex) : shortName);
-										const map = midIndex !== -1 ? shortName.substring(midIndex + 4) : shortName;
-										return (
-											<TableRow>
-												<TableCell>{map}</TableCell>
-												<TableCell>{mode}</TableCell>
-												<TableCell>{weights.get(chosenPlaylist)?.odds.get(name) ?? "N/A"}%</TableCell>
-											</TableRow>
-										);
-									}
-								)}
-							</TableBody>
-						</Table>
+					<Grid item xs={12} sm={6} xl={4}>
+						<Typography variant="h3">Mode Odds</Typography>
+						<PlaylistOddsChart odds={weights.get(chosenPlaylist)?.modes ?? new Map<string, number>()} />
+						<TableContainer component={Box} sx={{ backgroundColor: ArrowheadTheme.box, borderRadius: 3, mt: 2 }}>
+							<Table>
+								<TableHead sx={{ backgroundColor: ArrowheadTheme.eagle }}>
+									<TableRow>
+										<TableCell>Mode</TableCell>
+										<TableCell>Probability</TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{Array.from(weights.get(chosenPlaylist)?.modes.keys() ?? []).sort((a, b) => a < b ? -1 : 1).map(mode => 
+										{
+											return (
+												<TableRow>
+													<TableCell>{mode}</TableCell>
+													<TableCell>{weights.get(chosenPlaylist)?.modes.get(mode) ?? "N/A"}%</TableCell>
+												</TableRow>
+											);
+										}
+									)}
+								</TableBody>
+							</Table>
+						</TableContainer>
+					</Grid>
+					<Grid item xs={12} sm={6} xl={4}>
+						<Typography variant="h3">Map/Mode Combos</Typography>
+						{!isSubscribedToPatreon && <FluidAd adId="8600101244" isAdFree={isSubscribedToPatreon} />}
+						<TableContainer component={Box} sx={{ backgroundColor: ArrowheadTheme.box, borderRadius: 3, mt: 2 }}>
+							<Table>
+								<TableHead sx={{ backgroundColor: ArrowheadTheme.eagle }}>
+									<TableRow>
+										<TableCell>Map</TableCell>
+										<TableCell>Mode</TableCell>
+										<TableCell>Probability</TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{Array.from(weights.get(chosenPlaylist)?.odds.keys() ?? []).sort((a, b) => a < b ? -1 : 1).map(name =>
+										{
+											const isFiesta = name.indexOf("Fiesta") !== -1;
+											const shortName = name.indexOf(":") !== -1 ? name.substring(name.indexOf(":") + 1) : name;
+											const midIndex = shortName.indexOf(" on ");
+											const mode = isFiesta ? name.substring(0, name.indexOf(":")) : (midIndex !== -1 ? shortName.substring(0, midIndex) : shortName);
+											const map = midIndex !== -1 ? shortName.substring(midIndex + 4) : shortName;
+											return (
+												<TableRow>
+													<TableCell>{map}</TableCell>
+													<TableCell>{mode}</TableCell>
+													<TableCell>{weights.get(chosenPlaylist)?.odds.get(name) ?? "N/A"}%</TableCell>
+												</TableRow>
+											);
+										}
+									)}
+								</TableBody>
+							</Table>
+						</TableContainer>
 					</Grid>
 				</Grid>
 			</Box>

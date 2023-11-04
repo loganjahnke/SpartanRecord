@@ -5,12 +5,13 @@ interface AdProps
 {
 	adId: string;
 	format: string;
+	layout?: string;
 	isAdFree?: boolean;
 }
 
 export function Ad(props: AdProps)
 {
-	const { adId, format, isAdFree } = props;
+	const { adId, format, layout, isAdFree } = props;
 
 	const adDisplayedRef = useRef<boolean>(isAdFree ?? false);
 
@@ -54,7 +55,7 @@ export function Ad(props: AdProps)
 			data-ad-client="ca-pub-1147948296547143"
 			data-ad-slot={adId}
 			data-ad-format={format}
-			data-ad-layout-key={format === "fluid" ? "-6t+ed+2i-1n-4w" : ""}
+			data-ad-layout-key={layout ?? ""}
 			data-full-width-responsive={format === "auto" ? "true" : ""}></ins>
 	);
 }
