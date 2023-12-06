@@ -141,7 +141,7 @@ export const AllSeasons = {
             "image_urls": {
                 "season_logo": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoic2Vhc29ucy9pbnNpZ25pYV9zNV9SRUNfMjU2LnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D",
                 "card_background": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU3dpdGNoZXIvU2Vhc29uX1N3aXRjaGVyX1M1X1JFQy5wbmciLCJvcHRpb25zIjp7fX0%3D",
-                "battlepass_background": "https://blobs-infiniteugc.svc.halowaypoint.com/ugcstorage/playlist/4795cb47-5b32-4c87-98ab-02f12e94ca31/6ba2f14a-3861-4ad3-b645-57dd40c7295c/images/hero.jpg"
+                "battlepass_background": "https://blobs-infiniteugc.svc.halowaypoint.com/ugcstorage/playlist/96aedf55-1c7e-46d5-bdaf-19a1329fb95d/238fe5cb-5036-49d3-8962-615886147104/images/hero.jpg" //"https://blobs-infiniteugc.svc.halowaypoint.com/ugcstorage/playlist/4795cb47-5b32-4c87-98ab-02f12e94ca31/6ba2f14a-3861-4ad3-b645-57dd40c7295c/images/hero.jpg"
             },
             "properties": {
                 "identifier": "Season5-Op1",
