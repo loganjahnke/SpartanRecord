@@ -13,6 +13,8 @@ export function TwoTeamsMatch(props: TeamsMatch)
 {
 	const { match, myGamertag, onGamertagClick } = props;
 
+	const teams = match.teams.filter(team => team.players && team.players.length > 0);
+
 	return (
 		<>
 			<BackgroundWinnerIcon winner={match.teams[0].details.name === match.winner} />
@@ -28,18 +30,18 @@ export function TwoTeamsMatch(props: TeamsMatch)
 								subtitle={<MatchTitleCard match={match} />}
 							/>
 							{match.showPoints && <Compare category="Points" value1={match.teams[0].statistics.totalPoints} value2={match.teams[1].statistics.totalPoints} value1back={match.teams[0].color} value2back={match.teams[1].color} />}
-							<Compare category="Kills" value1={match.teams[0].statistics.summary.kills} value2={match.teams[1].statistics.summary.kills} value1back={match.teams[0].color} value2back={match.teams[1].color} />
-							<Compare category="Damage" value1={match.teams[0].statistics.damage.dealt} value2={match.teams[1].statistics.damage.dealt} value1back={match.teams[0].color} value2back={match.teams[1].color} />
-							<Compare category="MMR" value1={match.teams[0].mmr} value2={match.teams[1].mmr} value1back={match.teams[0].color} value2back={match.teams[1].color} />
-							<Compare category="Win Odds" value1={match.teams[0].oddsToWin} value2={match.teams[1].oddsToWin} isPercent value1back={match.teams[0].color} value2back={match.teams[1].color} />
+							{teams.some(team => team.statistics.summary.kills > 0) && <Compare category="Kills" value1={match.teams[0].statistics.summary.kills} value2={match.teams[1].statistics.summary.kills} value1back={match.teams[0].color} value2back={match.teams[1].color} />}
+							{teams.some(team => team.statistics.damage.dealt > 0) && <Compare category="Damage" value1={match.teams[0].statistics.damage.dealt} value2={match.teams[1].statistics.damage.dealt} value1back={match.teams[0].color} value2back={match.teams[1].color} />}
+							{teams.some(team => team.mmr > 0) && <Compare category="MMR" value1={match.teams[0].mmr} value2={match.teams[1].mmr} value1back={match.teams[0].color} value2back={match.teams[1].color} />}
+							{teams.some(team => team.oddsToWin > 0) && <Compare category="Win Odds" value1={match.teams[0].oddsToWin} value2={match.teams[1].oddsToWin} isPercent value1back={match.teams[0].color} value2back={match.teams[1].color} />}
 						</CardContent>
 					</Card>
 				</Grid>
 			</Grid>
 			<BackgroundWinnerIcon winner={match.teams[1].details.name === match.winner} />
 			<Grid container item spacing={2}>
-				{match.teams.map(team => (
-					<Grid item xs={12} lg={6}>
+				{teams.map(team => (
+					<Grid item xs={12} lg={teams.length === 1 ? 12 : 6}>
 						<TeamTable team={team} match={match} onGamertagClick={onGamertagClick} selectedGamertag={myGamertag} />
 					</Grid>
 				))}
