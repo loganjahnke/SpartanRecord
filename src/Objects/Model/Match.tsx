@@ -19,6 +19,8 @@ export class Match
     public playlist: Playlist;
     /** Was this a teams game? */
     public teamGame: boolean;
+    /** PVP or PVE */
+    public interaction: string;
     /** Arena or BTB */
     public experience: string;
     /** Matchmaking, custom, or local */
@@ -82,6 +84,7 @@ export class Match
         this.map = new Map(match?.data?.details?.map);
         this.playlist = new Playlist(match?.data?.details?.playlist);
         this.teamGame = (!!match?.data?.teams && match.data.teams.length > 0);
+        this.interaction = match?.data?.properties?.interaction ?? "";
         this.experience = match?.data?.properties?.experience ?? "";
         this.type = match?.data?.properties?.type === "custom" 
             ? "Custom"

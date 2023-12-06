@@ -116,7 +116,7 @@ export function PlayerMatchSummary(props: MatchSummaryProps)
 						</Box>
 					</CardContent>
 				</CardActionArea>
-				<PlayerMatchSummaryDetails player={match?.player} isRanked={match?.playlist?.ranked} medalsMode={MedalsMode.top3} />
+				<PlayerMatchSummaryDetails player={match?.player} isRanked={match?.playlist?.ranked} isPVE={match?.interaction?.toUpperCase() === "PVE"} medalsMode={MedalsMode.top3} />
 				<Box sx={{ backgroundColor: ArrowheadTheme.card, width: "100%", padding: "8px" }}>
 					{match.odds > 0 && <Typography variant="caption" component="div" sx={{ textAlign: "center", color: "#AAAAAA", fontSize: "0.6rem", textTransform: "uppercase" }}>Experience Odds: <Typography variant="subtitle1" component="span" sx={{ fontSize: "0.6rem" }}>{match.odds}%</Typography></Typography>}
 					<Typography variant="caption" component="div" sx={{ textAlign: "center", color: "#AAAAAA", fontSize: "0.6rem", textTransform: "uppercase" }}>Match Duration: <Typography variant="subtitle1" component="span" sx={{ fontSize: "0.6rem", textTransform: "none" }}>{match.duration.readable()}</Typography></Typography>

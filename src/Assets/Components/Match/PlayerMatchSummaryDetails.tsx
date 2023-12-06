@@ -21,12 +21,13 @@ interface PlayerMatchSummaryDetailsProps
 {
 	player?: PlayerMatchPlayer | MatchPlayer;
 	isRanked?: boolean;
+	isPVE?: boolean;
 	medalsMode: MedalsMode;
 }
 
 export function PlayerMatchSummaryDetails(props: PlayerMatchSummaryDetailsProps)
 {
-	const { player, isRanked, medalsMode } = props;
+	const { player, isRanked, isPVE, medalsMode } = props;
 
 	if (!player) { return <></>; }
 	if (player instanceof MatchPlayer && !player.stats) { return <></>; }
@@ -40,7 +41,9 @@ export function PlayerMatchSummaryDetails(props: PlayerMatchSummaryDetailsProps)
 	//#region Kills / Deaths Component
 	const KillsComponent = <Box sx={{ mt: 2, display: "flex", justifyContent: "center", width: "100%" }}>
 		<MatchBreakdown emphasize
-				main={new LeftvsRight(stats.kills, stats.deaths, "Kills", "Deaths", player.killExpectations.expected, player.deathExpectations.expected, stats.assists, "Assists")}
+				main={isPVE
+					? new LeftvsRight(stats.assists, stats.deaths, "Assists", "Deaths", player.killExpectations.expected, player.deathExpectations.expected)
+					: new LeftvsRight(stats.kills, stats.deaths, "Kills", "Deaths", player.killExpectations.expected, player.deathExpectations.expected, stats.assists, "Assists")}
 				additional={[
 					new LeftvsRight(Math.round(player.killExpectations.expected * 10) / 10, Math.round(player.deathExpectations.expected * 10) / 10, "", "", undefined, undefined, undefined, "expected", "Expectations: Halo Infinite's expected kills/deaths for the player."),
 				]}
@@ -88,8 +91,8 @@ export function PlayerMatchSummaryDetails(props: PlayerMatchSummaryDetailsProps)
 			<Box sx={{ backgroundColor: ArrowheadTheme.box, width: "100%", marginLeft: "-16px", padding: "8px 16px" }}>
 				<OutcomeChip player={player} />
 				{KillsComponent}
-				<GenericMode player={player} />
-				{DamageComponent}
+				<GenericMode player={player} isPVE={isPVE} />
+				{!isPVE && DamageComponent}
 				{AccuracyComponent}
 				{medalsMode !== MedalsMode.none && MedalsComponent}
 				<Box sx={{ mt: 2 }} />

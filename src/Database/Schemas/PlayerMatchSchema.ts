@@ -77,6 +77,7 @@ export interface PlaylistProperties {
   
 export interface MatchProperties {
 	type: string;
+	interaction: string;
 	experience: string;
 }
   

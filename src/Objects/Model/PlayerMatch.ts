@@ -18,6 +18,8 @@ export class PlayerMatch
     public playlist: Playlist;
     /** Player statistics and results */
     public player: PlayerMatchPlayer;
+    /** PVP or PVE */
+    public interaction: string;
     /** Arena or BTB */
     public experience: string;
     /** The datetime the match was played */
@@ -36,6 +38,7 @@ export class PlayerMatch
         this.map = new Map(match?.details?.map);
         this.playlist = new Playlist(match?.details?.playlist);
         this.player = new PlayerMatchPlayer(match?.player);
+        this.interaction = match?.properties?.interaction ?? "";
         this.experience = match?.properties?.experience ?? "";
         this.date = match?.started_at ? new Date(match.started_at) : new Date();
         this.duration = new TimePlayed(match?.playable_duration);
