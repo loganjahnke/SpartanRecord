@@ -103,8 +103,6 @@ export class SCPostman
 
 			if (newSR.matchesPlayed === currMatchesPlayed)
 			{
-				if (currRank > 0) { return; }
-
 				// Get Career Rank if it's currently empty
 				await Promise.all([
 					this.GetCareerRank(player)
