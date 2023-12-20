@@ -38,6 +38,12 @@ export function WhatsNew(props: WhatsNewProps)
 		new Feature("Patreon", "Consider subscribing to help keep SpartanRecord running!"),
 	]);
 
+	features.set("4.11", [
+		new Feature("Firefight", "Review Firefight match summaries"),
+		new Feature("Match Summary CSR Leaders", "See the lobby's CSR leaders from top to bottom in the match summary"),
+		new Feature("Patreon", "Consider subscribing to help keep SpartanRecord running!"),
+	]);
+
 	return (
 		<Card sx={{ background: ArrowheadTheme.card + "DD" }}>
 			<CardContent>

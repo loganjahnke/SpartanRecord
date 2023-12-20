@@ -60,9 +60,9 @@ export function LeaderRankTile(props: { leader: Leader, myGamertag?: string, isP
 	);
 }
 
-export function MatchRankTile(props: { player: MatchPlayer, value: number, myGamertag?: string, isPercent?: boolean, goToMember: Function, isSpree?: boolean })
+export function MatchRankTile(props: { player: MatchPlayer, value: number, myGamertag?: string, isPercent?: boolean, goToMember: Function, isCSR?: boolean, isSpree?: boolean })
 {
-	const { player, value, myGamertag, isPercent, goToMember, isSpree } = props;
+	const { player, value, myGamertag, isPercent, goToMember, isCSR, isSpree } = props;
 
 	return (
 		<Box sx={{ backgroundColor: "secondary.main", borderRadius: 3, display: "flex", flexDirection: "row", alignItems: "center", width: "90%", margin: 1, padding: 0, height: "48px", border: myGamertag === player.gamertag ? `1px solid ${ArrowheadTheme.halo_grass}` : "none" }}>
@@ -81,6 +81,7 @@ export function MatchRankTile(props: { player: MatchPlayer, value: number, myGam
 					<Typography sx={{ fontWeight: myGamertag === player.gamertag ? 900 : 500, color: myGamertag === player.gamertag ? ArrowheadTheme.halo_grass : ArrowheadTheme.text_primary }} variant="h6">{player.gamertag}</Typography>
 				</Box>
 				<Box sx={{ flexGrow: 1 }} />
+				{isCSR && <img alt={player.csr.post.GetTitle()} height="32px" src={player.csr.post.tierImageUrl} />}
 				{isSpree && value >=5 && <HighestSpreeMedal maxSpree={value} />}
                 <Typography variant="h5" sx={{ textAlign: "right", ml: 2, mr: 2, fontWeight: myGamertag === player.gamertag ? 900 : 500, color: myGamertag === player.gamertag ? ArrowheadTheme.halo_grass : ArrowheadTheme.text_primary }}>{(Math.round(value * 100) / 100).toLocaleString()}{isPercent ? "%" : ""}</Typography>
 			</Button>

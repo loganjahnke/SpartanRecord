@@ -28,6 +28,8 @@ export function DamageMatchRanks(props: MatchRanksProps)
 {
 	const { players, myGamertag, goToMember } = props;
 
+    const sliceCount = Math.min(8, players.length);
+
 	return (
         <Box sx={{ backgroundColor: "divider", borderRadius: 3, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
             <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "100%" }}>
@@ -36,7 +38,7 @@ export function DamageMatchRanks(props: MatchRanksProps)
                 </Box>
                 {[...players]
                     .sort((a, b) => b.stats.damage.dealt - a.stats.damage.dealt)
-                    .slice(0, 3)
+                    .slice(0, sliceCount)
                     .map((player) => <MatchRankTile player={player} value={player.stats.damage.dealt} myGamertag={myGamertag} goToMember={goToMember} />)}
             </Box>
 		</Box>

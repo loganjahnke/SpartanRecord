@@ -17,6 +17,7 @@ import { FFAMatch } from "../../Assets/Components/Match/FFAMatch";
 
 import "../../Assets/Styles/Views/SingleMatch.css";
 import { Debugger } from "../../Objects/Helpers/Debugger";
+import { CSRMatchRanks } from "../../Assets/Components/Ranks/CSRRanks";
 
 export function BetaSingleMatchView(props: ViewProps)
 {
@@ -199,6 +200,16 @@ export function BetaSingleMatchView(props: ViewProps)
 					{match && match.teams.length > 2 && <MultiTeamsMatch match={match} myGamertag={gamertag} onGamertagClick={onGamertagClick} />} {/* de9ff755-17bd-4e14-a0c2-668f3bda4fe2 */}
 					{match && !match.teamGame && <FFAMatch app={app} match={match} myGamertag={gamertag} onGamertagClick={onGamertagClick} />}     {/* 05a68b81-8b14-489b-82e4-4a57df911334 */}
 					<Grid container item spacing={2} xs={12}>
+						{match && match.playlist.ranked &&
+							<Grid item xs={12} md={6} xl={3}>
+								<CSRMatchRanks players={players} myGamertag={gamertag} goToMember={onGamertagClick} />
+							</Grid>
+						}
+						{match && !match.playlist.ranked &&
+							<Grid item xs={12} md={6} xl={3}>
+								<TopSpreeRanks players={players} myGamertag={gamertag} goToMember={onGamertagClick} />
+							</Grid>
+						}
 						<Grid item xs={12} md={6} xl={3}>
 							<KDAMatchRanks players={players} myGamertag={gamertag} goToMember={onGamertagClick} />
 						</Grid>
@@ -207,9 +218,6 @@ export function BetaSingleMatchView(props: ViewProps)
 						</Grid>
 						<Grid item xs={12} md={6} xl={3}>
 							<DamageMatchRanks players={players} myGamertag={gamertag} goToMember={onGamertagClick} />
-						</Grid>
-						<Grid item xs={12} md={6} xl={3}>
-							<TopSpreeRanks players={players} myGamertag={gamertag} goToMember={onGamertagClick} />
 						</Grid>
 					</Grid>
 				</Grid>

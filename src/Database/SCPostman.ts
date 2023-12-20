@@ -89,7 +89,6 @@ export class SCPostman
 		if (!player.gamertag) { return; }
 
 		const currMatchesPlayed = player.serviceRecord?.matchesPlayed ?? 0;
-		const currRank = player.careerRank?.data?.current?.rank ?? 0;
 
 		// See if anything has updated
 		if (!season)

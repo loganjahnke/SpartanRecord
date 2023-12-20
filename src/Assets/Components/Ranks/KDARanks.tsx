@@ -35,6 +35,8 @@ export function KDAMatchRanks(props: MatchRanksProps)
 {
 	const { players, myGamertag, goToMember } = props;
 
+    const sliceCount = Math.min(8, players.length);
+
 	return (
         <Box sx={{ backgroundColor: "divider", borderRadius: 3, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
             <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "100%" }}>
@@ -43,7 +45,7 @@ export function KDAMatchRanks(props: MatchRanksProps)
                 </Box>
                 {[...players]
                     .sort((a, b) => b.stats.kda - a.stats.kda)
-                    .slice(0, 3)
+                    .slice(0, sliceCount)
                     .map((player) => <MatchRankTile player={player} value={player.stats.kda} myGamertag={myGamertag} goToMember={goToMember} />)}
             </Box>
 		</Box>
