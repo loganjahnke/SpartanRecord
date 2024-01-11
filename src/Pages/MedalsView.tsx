@@ -160,6 +160,9 @@ export function MedalsView(props: ViewProps)
 						<MedalTypeBreakdown type={MedalType.Skill} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
 					<Grid item xs={12} md={6} xl={4}>
+						<MedalTypeBreakdown type={MedalType.Assists} medals={serviceRecord.medals} showAll={showAll} />
+					</Grid>
+					<Grid item xs={12} md={6} xl={4}>
 						<MedalTypeBreakdown type={MedalType.GameEnd} medals={serviceRecord.medals} showAll={showAll} />
 					</Grid>
 					<Grid item xs={12} md={6} xl={4}>
