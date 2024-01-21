@@ -29,10 +29,12 @@ export function TwoTeamsMatch(props: TeamsMatch)
 								backgroundURL={`url(${match.map.asset.thumbnail})`}
 								subtitle={<MatchTitleCard match={match} />}
 							/>
+							{teams.some(team => team.statistics.rounds && team.statistics.rounds.won > 1) && <Compare category="Rounds Won" value1={match.teams[0].statistics.rounds?.won ?? 0} value2={match.teams[1].statistics.rounds?.won ?? 0} value1back={match.teams[0].color} value2back={match.teams[1].color} />}
 							{match.showPoints && <Compare category="Points" value1={match.teams[0].statistics.totalPoints} value2={match.teams[1].statistics.totalPoints} value1back={match.teams[0].color} value2back={match.teams[1].color} />}
 							{teams.some(team => team.statistics.summary.kills > 0) && <Compare category="Kills" value1={match.teams[0].statistics.summary.kills} value2={match.teams[1].statistics.summary.kills} value1back={match.teams[0].color} value2back={match.teams[1].color} />}
 							{teams.some(team => team.statistics.damage.dealt > 0) && <Compare category="Damage" value1={match.teams[0].statistics.damage.dealt} value2={match.teams[1].statistics.damage.dealt} value1back={match.teams[0].color} value2back={match.teams[1].color} />}
-							{teams.some(team => team.mmr > 0) && <Compare category="MMR" value1={match.teams[0].mmr} value2={match.teams[1].mmr} value1back={match.teams[0].color} value2back={match.teams[1].color} />}
+							{teams.some(team => team.csr > 0) && <Compare category="Average CSR" value1={match.teams[0].csr} value2={match.teams[1].csr} value1back={match.teams[0].color} value2back={match.teams[1].color} />}
+							{teams.some(team => team.mmr > 0) && <Compare category="Average MMR" value1={match.teams[0].mmr} value2={match.teams[1].mmr} value1back={match.teams[0].color} value2back={match.teams[1].color} />}
 							{teams.some(team => team.oddsToWin > 0) && <Compare category="Win Odds" value1={match.teams[0].oddsToWin} value2={match.teams[1].oddsToWin} isPercent value1back={match.teams[0].color} value2back={match.teams[1].color} />}
 						</CardContent>
 					</Card>

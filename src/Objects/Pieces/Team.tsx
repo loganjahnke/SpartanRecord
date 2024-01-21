@@ -9,6 +9,7 @@ export class Team
     public details: TeamDetails;
     public statistics: ServiceRecord;
     public players: MatchPlayer[] = [];
+    public csr: number;
     public mmr: number;
     public oddsToWin: number;
 
@@ -24,7 +25,7 @@ export class Team
         this.statistics = new ServiceRecord(team?.stats);
         this.mmr = team?.stats?.mmr ?? 0;
         this.oddsToWin = team?.odds?.winning ?? 0;
-
+        
         if (playersData)
         {
             const filtered = playersData.filter((playerData: any) => playerData.properties?.team?.id === this.details.id);
@@ -37,5 +38,9 @@ export class Team
         {
             this.players = players;
         }
+
+        let totalCSR = 0;
+        this.players.forEach(player => totalCSR += player.csr.pre.value);
+        this.csr = totalCSR / this.players.length;
     }
 }

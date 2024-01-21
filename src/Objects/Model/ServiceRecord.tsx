@@ -17,6 +17,7 @@ import { Zone } from "../Pieces/Mode/Zone";
 import { PlayerMatch } from "./PlayerMatch";
 import { Infection } from "../Pieces/Mode/Infection";
 import { Extraction } from "../Pieces/Mode/Extraction";
+import { Rounds } from "../Pieces/Rounds";
 
 export class ServiceRecord
 {
@@ -37,6 +38,8 @@ export class ServiceRecord
     public timePlayed: TimePlayed;
     /** Contains all medals */
     public medals: Medal[];
+    /** If there is an error in the response, store it here */
+    public rounds?: Rounds;
     /** Capture the flag statistics */
     public ctf: CaptureTheFlag;
     /** Zone statistics */
@@ -273,6 +276,7 @@ export class ServiceRecord
             });
         }
 
+        this.rounds = new Rounds(stats?.core?.rounds);
         this.kda = core?.kda ?? 0;
         this.kdr = core?.kdr ?? 0;
         this.totalScore = core?.scores?.personal ?? 0;
