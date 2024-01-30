@@ -29,7 +29,7 @@ export function SeasonChooser(props: ServiceRecordFiltersProps)
 			<InputLabel>Season</InputLabel>
 			<Select value={(season as any === "" ? "All" : season as any) as HTMLElement} label="Season" onChange={handleSeasonChange}>
 				{!hideAll && <MenuItem value={"All"}>All</MenuItem>}
-				{seasons.map(season => <MenuItem value={season.properties.identifier}>Season {season.id}: {season.name}</MenuItem>)}
+				{seasons.map(season => <MenuItem value={season.properties.identifier}>{season.full_name || `Season ${season.id}: ${season.name}`}</MenuItem>)}
 			</Select>
 		</FormControl>
 	);

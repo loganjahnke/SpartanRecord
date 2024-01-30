@@ -183,7 +183,7 @@ export const SeasonsChart = (props: { seasons: HaloDotAPISeason[], historicServi
 		const labels = [];
 		for (let i = 0; i < seasons.length; i++)
 		{
-			labels.push("Season " + seasons[i].id + "." + seasons[i].version);
+			labels.push(seasons[i].season_name);
 			for (let j = 0; j < historicServiceRecords.length; j++)
 			{
 				if (historicServiceRecords[j].season !== seasons[i].properties.identifier) { continue; }
@@ -192,7 +192,7 @@ export const SeasonsChart = (props: { seasons: HaloDotAPISeason[], historicServi
 		}
 
 		setChartData({
-			labels: seasons.map((season) => season.id < 3 ? "Season " + (season.id) + "." + season.version : "Season " + season.id),
+			labels: seasons.map((season) => season.season_name),
 			datasets: [
 				{
 					backgroundColor: ArrowheadTheme.good,

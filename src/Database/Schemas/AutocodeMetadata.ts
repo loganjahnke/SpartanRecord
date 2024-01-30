@@ -21,6 +21,8 @@ export type AutocodeTeam = {
 export type HaloDotAPISeason = {
 	id: number,
 	version: number,
+	season_name: string,
+	full_name: string,
 	name: string,
 	description: string,
 	narrative_blurb: string,
