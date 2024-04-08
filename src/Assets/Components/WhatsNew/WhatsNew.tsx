@@ -44,6 +44,11 @@ export function WhatsNew(props: WhatsNewProps)
 		new Feature("Patreon", "Consider subscribing to help keep SpartanRecord running!"),
 	]);
 
+	features.set("4.12", [
+		new Feature("Extended Firefight Stats", "Review Firefight match summaries in extra detail + view your Firefight stats in your Service Record"),
+		new Feature("Patreon", "Consider subscribing to help keep SpartanRecord running!"),
+	]);
+
 	return (
 		<Card sx={{ background: ArrowheadTheme.card + "DD" }}>
 			<CardContent>

@@ -48,6 +48,7 @@ export type ServiceRecordStatsSchema = {
 		stockpile: StockpileSchema;
 		infection: InfectionSchema;
 		extraction: ExtractionSchema;
+		pve: FirefightSchema;
 	};
 }
 
@@ -216,4 +217,17 @@ export interface InfectionSchema
 	spartans_infected: number;
 	spartans_infected_as_alpha: number;
 	time_as_last_spartan_standing: DurationSchema;
+};
+
+export interface FirefightSchema
+{
+	boss_kills: number;
+	brute_kills: number;
+	elite_kills: number;
+	grunt_kills: number;
+	hunter_kills: number;
+	jackal_kills: number;
+	marine_kills: number;
+	sentinel_kills: number;
+	skimmer_kills: number;
 };

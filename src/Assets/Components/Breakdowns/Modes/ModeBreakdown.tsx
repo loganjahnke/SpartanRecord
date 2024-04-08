@@ -9,6 +9,7 @@ import { ZoneBreakdown } from "./ZoneBreakdown";
 import { OddballBreakdown } from "./OddballBreakdown";
 import { ExtractionBreakdown } from "./ExtractionBreakdown";
 import { InfectionBreakdown } from "./InfectionBreakdown";
+import { FirefightBreakdown } from "./FirefightBreakdown";
 
 export function ModeBreakdown(props: BreakdownProps)
 {
@@ -50,6 +51,9 @@ export function ModeBreakdown(props: BreakdownProps)
 		case "Extraction": 
 			breakdown = <ExtractionBreakdown {...props} />;
 			break;
+		case "Firefight": 
+			breakdown = <FirefightBreakdown {...props} />;
+			break;
 		default:
 			breakdown = <></>;
 			break;
@@ -68,6 +72,7 @@ export function ModeBreakdown(props: BreakdownProps)
 						<MenuItem value={"Stockpile"}>Stockpile</MenuItem>
 						<MenuItem value={"Infection"}>Infection</MenuItem>
 						<MenuItem value={"Extraction"}>Extraction</MenuItem>
+						<MenuItem value={"Firefight"}>Firefight</MenuItem>
 					</Select>
 				</FormControl>
 			</Box>

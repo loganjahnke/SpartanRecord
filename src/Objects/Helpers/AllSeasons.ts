@@ -172,7 +172,7 @@ export const AllSeasons = {
             "image_urls": {
                 "season_logo": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoic2Vhc29ucy9pbnNpZ25pYV9zNl9TT0ZfMjU2LnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D",
                 "card_background": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU3dpdGNoZXIvU2Vhc29uX1N3aXRjaGVyX1M2X1NPRi5wbmciLCJvcHRpb25zIjp7fX0%3D",
-                "battlepass_background": "https://blobs-infiniteugc.svc.halowaypoint.com/ugcstorage/playlist/a7afb613-9cfe-43d9-80f8-dfb84a34e6b0/0f78f73a-e6de-43fb-8450-d85849c232f9/images/hero.jpg"
+                "battlepass_background": "https://blobs-infiniteugc.svc.halowaypoint.com/ugcstorage/playlist/78b10320-8bc4-491b-a3d5-80fa1ca847f8/7e4fc6d8-fee1-4f6f-bc02-01155c5e1e85/images/screenshot1.jpg"
             },
             "properties": {
                 "identifier": "Season6-Op1",

@@ -11,7 +11,6 @@ import { DamageBreakdown } from "../Assets/Components/Breakdowns/DamageBreakdown
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { ImageCard } from "../Assets/Components/Cards/ImageCard";
 import { KDABreakdown } from "../Assets/Components/Breakdowns/KDABreakdown";
-import { LevelBreakdown } from "../Assets/Components/Breakdowns/LevelBreakdown";
 import { ServiceRecordFilters } from "../Assets/Components/ServiceRecord/ServiceRecordFilters";
 import { ViewProps } from "./Props/ViewProps";
 import { ChipFilters } from "../Assets/Components/ServiceRecord/ChipFilters";
@@ -286,9 +285,6 @@ export function FilteredView(props: ViewProps)
 							</Grid>}
 							<Grid item xs={12}>
 								<KDABreakdown serviceRecord={sr} />
-							</Grid>
-							<Grid item xs={12}>
-								<LevelBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
 							</Grid>
 							<Grid item xs={12}>
 								<TimePlayed serviceRecord={sr} showPerMatch={showPerMatch} />

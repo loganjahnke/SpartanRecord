@@ -168,6 +168,17 @@ export class AutocodeHelpers
 								seconds: 0,
 								human: "",
 							},
+						},
+						pve: {
+							boss_kills: 0,
+							brute_kills: 0,
+							elite_kills: 0,
+							grunt_kills: 0,
+							hunter_kills: 0,
+							jackal_kills: 0,
+							marine_kills: 0,
+							sentinel_kills: 0,
+							skimmer_kills: 0,
 						}
 					},
 				},

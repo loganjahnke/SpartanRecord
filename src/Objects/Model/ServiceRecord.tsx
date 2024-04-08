@@ -1,7 +1,7 @@
 import { HaloOutcome } from "../../Database/ArrowheadFirebase";
 import { TeamStatsSchema } from "../../Database/Schemas/MatchSchema";
 import { DurationSchema, PlayerStatsSchema } from "../../Database/Schemas/PlayerMatchSchema";
-import { ServiceRecordSchema, ServiceRecordDataSchema, isServiceRecordSchema, ServiceRecordStatsSchema, ServiceRecordMatchesSchema, CTFSchema, EliminationSchema, OddballSchema, StockpileSchema, ZoneServiceRecordSchema, ExtractionSchema, InfectionSchema, ZoneSchema } from "../../Database/Schemas/ServiceRecordSchema";
+import { ServiceRecordSchema, ServiceRecordDataSchema, isServiceRecordSchema, ServiceRecordStatsSchema, ServiceRecordMatchesSchema, CTFSchema, EliminationSchema, OddballSchema, StockpileSchema, ZoneServiceRecordSchema, ExtractionSchema, InfectionSchema, ZoneSchema, FirefightSchema } from "../../Database/Schemas/ServiceRecordSchema";
 import { AllMedals } from "../Helpers/AllMedals";
 import { Breakdowns } from "../Pieces/Breakdowns";
 import { CaptureTheFlag } from "../Pieces/Mode/CaptureTheFlag";
@@ -18,6 +18,7 @@ import { PlayerMatch } from "./PlayerMatch";
 import { Infection } from "../Pieces/Mode/Infection";
 import { Extraction } from "../Pieces/Mode/Extraction";
 import { Rounds } from "../Pieces/Rounds";
+import { Firefight } from "../Pieces/Mode/Firefight";
 
 export class ServiceRecord
 {
@@ -54,8 +55,10 @@ export class ServiceRecord
     public infection: Infection;
     /** Extraction statistics */
     public extraction: Extraction;
+    /** Firefight statistics */
+    public firefight: Firefight;
     /** Mode statistics */
-    public mode?: CTFSchema | OddballSchema | ZoneServiceRecordSchema | EliminationSchema | StockpileSchema | ExtractionSchema | InfectionSchema | ZoneSchema;
+    public mode?: CTFSchema | OddballSchema | ZoneServiceRecordSchema | EliminationSchema | StockpileSchema | ExtractionSchema | InfectionSchema | ZoneSchema | FirefightSchema;
     /** Raw autocode and firebase JSON */
     public data?: ServiceRecordDataSchema;
     /** If there is an error in the response, store it here */
@@ -172,6 +175,7 @@ export class ServiceRecord
             this.stockpile = new Stockpile(stats?.modes?.stockpile);
             this.infection = new Infection(stats?.modes?.infection);
             this.extraction = new Extraction(stats?.modes?.extraction);
+            this.firefight = new Firefight(stats?.modes?.pve);
         }
         else
         {
@@ -185,6 +189,7 @@ export class ServiceRecord
             this.stockpile = new Stockpile(stats?.mode as any);
             this.infection = new Infection(stats?.mode as any);
             this.extraction = new Extraction(stats?.mode as any);
+            this.firefight = new Firefight(stats?.mode as any);
         }
 
         // Get stubs for easy access

@@ -1,13 +1,14 @@
-import { CTFSchema, OddballSchema, ZoneSchema, EliminationSchema, StockpileSchema, ExtractionSchema, InfectionSchema, ZoneServiceRecordSchema } from "../../../../Database/Schemas/ServiceRecordSchema";
+import { CTFSchema, OddballSchema, ZoneSchema, EliminationSchema, StockpileSchema, ExtractionSchema, InfectionSchema, ZoneServiceRecordSchema, FirefightSchema } from "../../../../Database/Schemas/ServiceRecordSchema";
 import { CTFMode } from "./CTFMode";
 import { OddballMode } from "./OddballMode";
 import { ZoneMode } from "./ZoneMode";
 import { ExtractionMode } from "./ExtractionMode";
 import { InfectionMode } from "./InfectionMode";
+import { FirefightMode } from "./FirefightMode";
 
 interface MatchModeProps
 {
-	mode?: CTFSchema | OddballSchema | ZoneSchema | EliminationSchema | StockpileSchema | ExtractionSchema | InfectionSchema | ZoneServiceRecordSchema;
+	mode?: CTFSchema | OddballSchema | ZoneSchema | EliminationSchema | StockpileSchema | ExtractionSchema | InfectionSchema | ZoneServiceRecordSchema | FirefightSchema;
 }
 
 export function MatchMode(props: MatchModeProps)
@@ -39,6 +40,11 @@ export function MatchMode(props: MatchModeProps)
 	if (mode.hasOwnProperty("infected_killed"))
 	{
 		return <InfectionMode mode={mode as InfectionSchema} />
+	}
+
+	if (mode.hasOwnProperty("boss_kills"))
+	{
+		return <FirefightMode mode={mode as FirefightSchema} />
 	}
 
 	return <></>;

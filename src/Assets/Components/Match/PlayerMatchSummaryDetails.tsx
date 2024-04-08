@@ -41,9 +41,7 @@ export function PlayerMatchSummaryDetails(props: PlayerMatchSummaryDetailsProps)
 	//#region Kills / Deaths Component
 	const KillsComponent = <Box sx={{ mt: 2, display: "flex", justifyContent: "center", width: "100%" }}>
 		<MatchBreakdown emphasize
-				main={isPVE
-					? new LeftvsRight(stats.assists, stats.deaths, "Assists", "Deaths", player.killExpectations.expected, player.deathExpectations.expected)
-					: new LeftvsRight(stats.kills, stats.deaths, "Kills", "Deaths", player.killExpectations.expected, player.deathExpectations.expected, stats.assists, "Assists")}
+				main={new LeftvsRight(stats.kills, stats.deaths, "Kills", "Deaths", player.killExpectations.expected, player.deathExpectations.expected, stats.assists, "Assists")}
 				additional={[
 					new LeftvsRight(Math.round(player.killExpectations.expected * 10) / 10, Math.round(player.deathExpectations.expected * 10) / 10, "", "", undefined, undefined, undefined, "expected", "Expectations: Halo Infinite's expected kills/deaths for the player."),
 				]}
@@ -92,7 +90,7 @@ export function PlayerMatchSummaryDetails(props: PlayerMatchSummaryDetailsProps)
 				<OutcomeChip player={player} />
 				{KillsComponent}
 				<GenericMode player={player} isPVE={isPVE} />
-				{!isPVE && DamageComponent}
+				{DamageComponent}
 				{AccuracyComponent}
 				{medalsMode !== MedalsMode.none && MedalsComponent}
 				<Box sx={{ mt: 2 }} />
