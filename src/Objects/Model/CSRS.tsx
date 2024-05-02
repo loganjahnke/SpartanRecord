@@ -128,7 +128,7 @@ export class Rank
 
         let tierImageSuffix = this.tier?.toLowerCase() || "unranked";
         if (tierImageSuffix !== "unranked") { tierImageSuffix += "-" + this.subTier; }
-        this.tierImageUrl = data?.tier_image_url || "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/playlist-csrs/" + tierImageSuffix + ".png";
+        this.tierImageUrl = data?.tier_image_url || "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/csrs/" + tierImageSuffix + ".png";
     }
  
     /** Gets the title */

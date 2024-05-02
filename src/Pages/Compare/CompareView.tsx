@@ -335,7 +335,7 @@ export function CompareView(props: ViewProps)
 										compare1={<DynamicPlayerCard player={player} topDown rightAlign noMargin />}
 										compare2={gamertag2 ? <DynamicPlayerCard player={player2} topDown noMargin /> : <Button startIcon={<CompareArrows />} size="small" variant="contained" onClick={openAddGamertag}>Compare</Button>}
 										icon={<CompareArrows sx={{ color: ArrowheadTheme.leftEarlyText }} />}
-										backgroundURL="url(https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/playlists/ffa-slayer.jpg)"
+										backgroundURL="url(https://blobs-infiniteugc.svc.halowaypoint.com/ugcstorage/playlist/f6c93ddd-a623-41b1-b9e3-81632ff73cfb/c83bbafc-5685-4067-94bb-cd3a2d4d2b76/images/hero.jpg)"
 									/>
 									<Box sx={{ maxWidth: "800px", width: "100%", backgroundColor: ArrowheadTheme.box, borderRadius: "0 0 12px 12px" }}>
 										<CompareCareerRank category="Rank" value1={player?.careerRank} value2={player2.careerRank} />

@@ -56,7 +56,7 @@ export function AHAppBar(props: AHAppBarProps)
 						? <>
 							<Typography sx={{ ml: 2 }} variant="subtitle1">Getting latest data from</Typography>
 							<Box sx={{pl: 1}} />
-							<img src="https://halo.public.files.stdlib.com/static/halodotapi.png" height="24px" title="HaloDotAPI" alt="HaloDotAPI" />
+							<img src="https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vTWFudWZhY3R1cmVycy8zNDMucG5nIiwib3B0aW9ucyI6e319" height="36px" title="HaloDotAPI" alt="HaloDotAPI" />
 							{player && <Typography sx={{ ml: 1 }} variant="subtitle1">for {player.gamertag}</Typography>}
 						</>
 						: <Typography sx={{ ml: 2 }} variant="subtitle1">{backgroundLoadingMessage}</Typography>

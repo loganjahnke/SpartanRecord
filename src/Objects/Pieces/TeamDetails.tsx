@@ -14,39 +14,39 @@ export class TeamDetails
             
         if (this.name === "Eagle")
         {
-            this.emblem = "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/teams/eagle.png";
+            this.emblem = "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/teams/eagle.png";
         }
         else if (this.name === "Cobra")
         {
-            this.emblem = "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/teams/cobra.png";
+            this.emblem = "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/teams/cobra.png";
         }
         else if (this.name === "Hades")
         {
-            this.emblem = "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/teams/hades.png";
+            this.emblem = "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/teams/hades.png";
         }
         else if (this.name === "Valkyrie")
         {
-            this.emblem = "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/teams/valkyrie.png";
+            this.emblem = "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/teams/valkyrie.png";
         }
         else if (this.name === "Rampart")
         {
-            this.emblem = "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/teams/rampart.png";
+            this.emblem = "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/teams/rampart.png";
         }
         else if (this.name === "Cutlass")
         {
-            this.emblem = "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/teams/cutlass.png";
+            this.emblem = "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/teams/cutlass.png";
         }
         else if (this.name === "Valor")
         {
-            this.emblem = "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/teams/valor.png";
+            this.emblem = "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/teams/valor.png";
         }
         else if (this.name === "Hazard")
         {
-            this.emblem = "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/teams/hazard.png";
+            this.emblem = "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/teams/hazard.png";
         }
         else if (this.name === "Observer")
         {
-            this.emblem = "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/teams/observer.png";
+            this.emblem = "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/teams/observer.png";
         }
     }
 }

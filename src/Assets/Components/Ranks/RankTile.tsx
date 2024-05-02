@@ -95,20 +95,20 @@ function HighestSpreeMedal(props: { maxSpree: number })
 
 	return <img alt="Highest Spree Medal" height="32px" src={
 		maxSpree >= 40 
-			? "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/demon.png" :
+			? "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/2875941471.png" :
 		maxSpree >= 35
-			? "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/grim-reaper.png" :
+			? "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/2567026752.png" :
 		maxSpree >= 30
-			? "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/boogeyman.png" :
+			? "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/1720896992.png" :
 		maxSpree >= 25
-			? "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/nightmare.png" :
+			? "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/710323196.png" :
 		maxSpree >= 20
-			? "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/rampage.png" :
+			? "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/1486797009.png" :
 		maxSpree >= 15
-			? "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/running-riot.png" :
+			? "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/418532952.png" :
 		maxSpree >= 10
-			? "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/killing-frenzy.png" :
+			? "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/4261842076.png" :
 		maxSpree >= 5
-			? "https://halo.public.files.stdlib.com/static/infinite/images/multiplayer/medals/small/killing-spree.png" : ""
+			? "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/2780740615.png" : ""
 	} />
 }
