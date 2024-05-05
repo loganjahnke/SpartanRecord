@@ -1,0 +1,13 @@
+.whatsNewJump {
+	border-radius: 5px;
+	border: 2px solid transparent;
+	cursor: pointer;
+}
+
+.whatsNewJump:hover {
+	border: 2px solid #1B9D46;
+}
+
+.whatsNew {
+	border: 2px solid transparent;
+}

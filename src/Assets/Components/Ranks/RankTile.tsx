@@ -6,6 +6,7 @@ import { MatchPlayer } from "../../../Objects/Pieces/MatchPlayer";
 
 import ArrowheadImg from "../../Images/Secondary/Spartan-Record-Logo-Secondary-White.png";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
+import { Leader343 } from "../../../Objects/Model/Leaderboard343";
 
 export function RankTile(props: { player: Player, myGamertag?: string, value: number, isPercent?: boolean, goToMember: Function })
 {
@@ -56,6 +57,45 @@ export function LeaderRankTile(props: { leader: Leader, myGamertag?: string, isP
 				</Box>
 			</Box>
 			<Typography variant="h5" sx={{ flexGrow: 1, textAlign: "right", mr: 2 }}>{(Math.round(leader.value * 100) / 100).toLocaleString()}{isPercent ? "%" : ""}</Typography>
+		</Button>
+	);
+}
+
+export function Leader343RankTile(props: { leader: Leader343, goToMember: Function, rank: number })
+{
+	const { leader, goToMember, rank } = props;
+
+	return (
+		<Button onClick={() => goToMember(leader.gamertag)} sx={{ 
+			display: "flex",
+			flexDirection: "row",
+			alignItems: "center",
+			width: "90%", 
+			height: "48px", 
+			justifyContent: "flex-start", 
+			margin: 1, pl: 1, pr: 1, pt: 4, pb: 4,
+			borderRadius: 2, 
+			textTransform: "none", 
+			textAlign: "left", 
+			backgroundColor: "secondary.main" 
+		}}>
+			{leader.iconUrl === "" ? 
+				<Box sx={{ p: "4px", display: "flex", alignItems: "center" }}><img src={ArrowheadImg} alt="emblem" width="40px" /></Box> :
+				<img src={leader.iconUrl} alt="emblem" width="48px" />
+			}
+			
+			<Box sx={{ ml: 1, display: "flex", flexDirection: "column", fontSize: "0.8rem" }}>
+				<Typography variant="h6">{leader.gamertag}</Typography>
+				<Box sx={{ display: "flex", flexDirection: "row", fontSize: "0.75rem", alignItems: "center" }}>
+					<Typography variant="caption" sx={{ color: ArrowheadTheme.text_primary, mr: 1 }}>#{rank}</Typography>
+					<Divider flexItem orientation="vertical" sx={{ borderColor: ArrowheadTheme.thin_border, mr: 1 }}/>
+					<img src="https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/csrs/onyx-1.png" alt= "onyx" height="16px" />
+				</Box>
+			</Box>
+			<Box sx={{ flexGrow: 1, textAlign: "right", mr: 2 }}>
+				<Typography variant="h5">{leader.csr.toLocaleString()}</Typography>
+				<Typography variant="caption">CSR</Typography>
+			</Box>
 		</Button>
 	);
 }

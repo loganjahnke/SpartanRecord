@@ -109,7 +109,7 @@ export function BetaSingleMatchView(props: ViewProps)
 		}
 		else if (+event.target.value === 4)
 		{
-			openInHaloSouthAfrica();
+			openInHaloQuery();
 		}
 
 		setMenu(-1);
@@ -130,10 +130,10 @@ export function BetaSingleMatchView(props: ViewProps)
 		window.open("https://leafapp.co/game/" + match!.id, "_blank");
 	};
 
-	/** Open in Halo South Africa */
-	const openInHaloSouthAfrica = () =>
+	/** Open in Halo Query */
+	const openInHaloQuery = () =>
 	{
-		window.open(`https://halosa.co.za/match/${match!.id}`, "_blank");
+		window.open(`https://haloquery.com/matches/${match!.id}`, "_blank");
 	};
 
 	/** Open in HDH */
@@ -191,7 +191,7 @@ export function BetaSingleMatchView(props: ViewProps)
 									<MenuItem value={1}>Copy Match ID</MenuItem>
 									<MenuItem value={2}>Open in leafapp.co</MenuItem>
 									<MenuItem value={3}>Open in HaloDataHive.com</MenuItem>
-									<MenuItem value={4}>Open in Halo South Africa</MenuItem>
+									<MenuItem value={4}>Open in Halo Query</MenuItem>
 								</Select>
 								</FormControl>
 						</Box>

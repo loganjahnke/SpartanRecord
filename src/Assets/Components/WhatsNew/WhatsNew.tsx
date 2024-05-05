@@ -46,7 +46,13 @@ export function WhatsNew(props: WhatsNewProps)
 
 	features.set("4.12", [
 		new Feature("Extended Firefight Stats", "Review Firefight match summaries in extra detail + view your Firefight stats in your Service Record"),
-		new Feature("Patreon", "Consider subscribing to help keep SpartanRecord running!"),
+		new Feature("Patreon", "Consider subscribing to help keep SpartanRecord running!", "subscribe"),
+	]);
+
+	features.set("4.13", [
+		new Feature("Ranked Arena Leaderboard", "See the top 100 players in Ranked Arena with our new leaderboards page", "leaderboard/edfef3ac-9cbe-4fa2-b949-8f29deafd483"),
+		new Feature("Extended Firefight Stats", "Review Firefight match summaries in extra detail + view your Firefight stats in your Service Record"),
+		new Feature("Patreon", "Consider subscribing to help keep SpartanRecord running!", "subscribe"),
 	]);
 
 	return (
@@ -54,7 +60,7 @@ export function WhatsNew(props: WhatsNewProps)
 			<CardContent>
 				<Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: 700 }}>What's new?</Typography>
 				<List>
-					{features.get(process.env.REACT_APP_MAJOR_VERSION || "47")?.map(feature => <WhatsNewItem feature={feature} />)}
+					{features.get(process.env.REACT_APP_MAJOR_VERSION || "47")?.map(feature => <WhatsNewItem feature={feature} onJump={switchTab} />)}
 				</List>
 			</CardContent>
 			<CardActions>

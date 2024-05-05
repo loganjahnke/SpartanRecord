@@ -24,7 +24,8 @@ import { PatreonView } from "./Pages/PatreonView";
 import { CSRS } from "./Objects/Model/CSRS";
 import { OtherCreators } from "./Pages/OtherCreators";
 import { Admin } from "./Pages/Admin";
-import { LeaderboardView } from "./Pages/LeaderboardView";
+import { CSRLeaderboardView } from "./Pages/Leaderboards/CSRLeaderboardView";
+import { LegacyLeaderboardView } from "./Pages/Leaderboards/LegacyLeaderboardView";
 import { CompareView } from "./Pages/Compare/CompareView";
 import { BetaSingleMatchView } from "./Pages/Matches/BetaSingleMatchView";
 import { PlaylistsView } from "./Pages/Playlists/PlaylistsView";
@@ -182,9 +183,10 @@ const App = () =>
 					<Route path="/match/:id/:gamertag" element={<BetaSingleMatchView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 					
 					{/* Leaderboard Views */}
-					<Route path="/leaderboard" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
-					<Route path="/leaderboard/:gamertag" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
-					<Route path="/leaderboard/:gamertag/:category" element={<LeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
+					<Route path="/leaderboard/:playlist" element={<CSRLeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
+					<Route path="/legacy/leaderboard" element={<LegacyLeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
+					<Route path="/legacy/leaderboard/:gamertag" element={<LegacyLeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
+					<Route path="/legacy/leaderboard/:gamertag/:category" element={<LegacyLeaderboardView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 					
 					{/* Admin Views */}
 					<Route path="/subscribe" element={<PatreonView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />

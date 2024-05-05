@@ -3,17 +3,17 @@ import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 
-import { ViewProps } from "./Props/ViewProps";
-import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
-import { Leaderboard } from "../Database/ArrowheadFirebase";
-import { Leader, LeaderboardAverages } from "../Objects/Model/Leader";
-import { LeaderRanks } from "../Assets/Components/Ranks/LeaderRanks";
+import { ViewProps } from "../Props/ViewProps";
+import { SRTabs } from "../../Assets/Components/Layout/AHDrawer";
+import { Leaderboard } from "../../Database/ArrowheadFirebase";
+import { Leader, LeaderboardAverages } from "../../Objects/Model/Leader";
+import { LeaderRanks } from "../../Assets/Components/Ranks/LeaderRanks";
 import { Timeline } from "@mui/lab";
-import { TimelineEvent } from "../Assets/Components/Leaderboard/TimelineEvent";
-import { LeaderboardChooser } from "../Assets/Components/Leaderboard/LeaderboardChooser";
-import { Debugger } from "../Objects/Helpers/Debugger";
+import { TimelineEvent } from "../../Assets/Components/Leaderboard/TimelineEvent";
+import { LeaderboardChooser } from "../../Assets/Components/Leaderboard/LeaderboardChooser";
+import { Debugger } from "../../Objects/Helpers/Debugger";
 
-export function LeaderboardView(props: ViewProps)
+export function LegacyLeaderboardView(props: ViewProps)
 {
 	//#region Props and Navigate
 	const { app, setLoadingMessage, player, updatePlayer, switchTab } = props;

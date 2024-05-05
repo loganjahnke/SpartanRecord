@@ -1,6 +1,6 @@
 import { SyntheticEvent } from "react";
 import { Box, Button, Divider, Drawer, Link, Tab, Tabs, Toolbar, Typography } from "@mui/material";
-import { Leaderboard, ServiceRecordFilter } from "../../../Database/ArrowheadFirebase";
+import { ServiceRecordFilter } from "../../../Database/ArrowheadFirebase";
 import { Player } from "../../../Objects/Model/Player";
 
 import PrimaryLogo from "../../Images/Primary/Spartan-Record-Logo-Primary-White.png";
@@ -34,6 +34,12 @@ export enum SRTabs
 	VariantsExtended = "Variants Extended",
 	
 	Leaderboard = "Leaderboards",
+	RankedArenaLeaders = "Ranked Arena",
+	SlayerLeaders = "Ranked Slayer",
+	DoublesLeaders = "Ranked Doubles",
+	TacticalLeaders = "Ranked Tactical Slayer",
+	SnipersLeaders = "Ranked Snipers",
+
 	Clips = "Clips",
 	ActivePlaylists = "Active Playlists",
 	Store = "Store",
@@ -125,7 +131,20 @@ export function AHDrawer(props: AHDrawerProps)
 				switchTab(`/spartan_company`, newTab);
 				break;
 			case SRTabs.Leaderboard:
-				switchTab(`/leaderboard/${player.gamertag}/${Leaderboard.Accuracy}`, newTab);
+			case SRTabs.RankedArenaLeaders:
+				switchTab(`/leaderboard/edfef3ac-9cbe-4fa2-b949-8f29deafd483`, newTab);
+				break;
+			case SRTabs.SnipersLeaders:
+				switchTab(`/leaderboard/6233381c-fc96-40b9-b1ff-f6a4de72dd7a`, newTab);
+				break;
+			case SRTabs.SlayerLeaders:
+				switchTab(`/leaderboard/dcb2e24e-05fb-4390-8076-32a0cdb4326e`, newTab);
+				break;
+			case SRTabs.TacticalLeaders:
+				switchTab(`/leaderboard/57e417dd-7366-4dda-9bdd-2802151d5e81`, newTab);
+				break;
+			case SRTabs.DoublesLeaders:
+				switchTab(`/leaderboard/fa5aa2a3-2428-4912-a023-e1eeea7b877c`, newTab);
 				break;
 			// Patreon exclusives
 			case SRTabs.Subscribe:
@@ -174,6 +193,9 @@ export function AHDrawer(props: AHDrawerProps)
 	{
 		switchTab("/", SRTabs.Search);
 	}
+
+	/** Tiny icon styling */
+	const tiny = { fontSize: "0.8rem", ml: 3, minHeight: 0 };
 	
 	//#region Drawer
 	const drawer = (
@@ -201,28 +223,26 @@ export function AHDrawer(props: AHDrawerProps)
 				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
 					<Tab value={SRTabs.Search} label={SRTabs.Search} icon={<SearchIcon />} iconPosition="start" />
 					<Tab value={SRTabs.ServiceRecord} label={SRTabs.ServiceRecord} icon={<ServiceRecordIcon />} iconPosition="start" />
-					<Tab value={SRTabs.CareerRank} label={SRTabs.CareerRank} icon={<SpartanCompanyIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab value={SRTabs.Compare} label={SRTabs.Compare} icon={<CompareArrows fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					{/* <Tab value={SRTabs.Yesterday} label={SRTabs.Yesterday} icon={<EventRepeat fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
-					<Tab value={SRTabs.Playlists} label={SRTabs.Playlists} icon={<PlaylistsIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab value={SRTabs.Variants} label={SRTabs.Variants} icon={<VariantsIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab value={SRTabs.Social} label={SRTabs.Social} icon={<SocialIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab value={SRTabs.Ranked} label={SRTabs.Ranked} icon={<RankedIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab value={SRTabs.SRCustoms} label="Customs" icon={<GamepadRounded fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab value={SRTabs.SRLocal} label="LAN" icon={<UsbRounded fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					{/* <Tab value={SRTabs.Maps} label={SRTabs.Maps} icon={<MapIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
-					{/* <Tab value={SRTabs.MatchOutcome} label={SRTabs.MatchOutcome} icon={<MatchOutcomeIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
+					<Tab value={SRTabs.CareerRank} label={SRTabs.CareerRank} icon={<SpartanCompanyIcon fontSize="inherit" />} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.Compare} label={SRTabs.Compare} icon={<CompareArrows fontSize="inherit" />} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.Playlists} label={SRTabs.Playlists} icon={<PlaylistsIcon fontSize="inherit" />} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.Variants} label={SRTabs.Variants} icon={<VariantsIcon fontSize="inherit" />} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.Social} label={SRTabs.Social} icon={<SocialIcon fontSize="inherit" />} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.Ranked} label={SRTabs.Ranked} icon={<RankedIcon fontSize="inherit" />} sx={tiny} iconPosition="start" />
 					<Tab value={SRTabs.Medals} label={SRTabs.Medals} icon={<MedalsIcon />} iconPosition="start" />
 					<Tab value={SRTabs.Matches} label={SRTabs.Matches} icon={<MatchesIcon />} iconPosition="start" />
-					<Tab value={SRTabs.MatchesCustoms} label={SRTabs.MatchesCustoms} icon={<GamepadRounded fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab value={SRTabs.MatchesLocal} label={SRTabs.MatchesLocal} icon={<UsbRounded fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					{/* <Tab value={SRTabs.BestMatches} label={SRTabs.BestMatches} icon={<BestMatchIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
+					<Tab value={SRTabs.MatchesCustoms} label={SRTabs.MatchesCustoms} icon={<GamepadRounded fontSize="inherit" />} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.MatchesLocal} label={SRTabs.MatchesLocal} icon={<UsbRounded fontSize="inherit" />} sx={tiny} iconPosition="start" />
 					<Tab value={SRTabs.Leaderboard} label={SRTabs.Leaderboard} icon={<LeaderboardRounded />} iconPosition="start" />
+					<Tab value={SRTabs.RankedArenaLeaders} label={SRTabs.RankedArenaLeaders} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.SlayerLeaders} label={SRTabs.SlayerLeaders} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.DoublesLeaders} label={SRTabs.DoublesLeaders} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.TacticalLeaders} label={SRTabs.TacticalLeaders} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.SnipersLeaders} label={SRTabs.SnipersLeaders} sx={tiny} iconPosition="start" />
 					<Tab value={SRTabs.Clips} label={SRTabs.Clips} icon={<PlayArrow />} iconPosition="start" />
 					<Tab value={SRTabs.ActivePlaylists} label={SRTabs.ActivePlaylists} icon={<PlaylistsIcon />} iconPosition="start" />
 					<Tab value={SRTabs.Store} label={SRTabs.Store} icon={<CreditsIcon />} iconPosition="start" />
 					<Tab value={SRTabs.Subscribe} label={SRTabs.Subscribe} icon={<SpartanCompanyIcon />} iconPosition="start" />
-					{/* <Tab value={SRTabs.SpartanCompany} label={<div>{SRTabs.SpartanCompany}<br/><Box sx={{ fontSize: "0.6rem", textTransform: "uppercase" }}>Beta</Box></div>} icon={<SpartanCompanyIcon />} iconPosition="start" /> */}
 				</Tabs>
 				: player && player.isPrivate ?
 				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
@@ -237,36 +257,41 @@ export function AHDrawer(props: AHDrawerProps)
 				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
 					<Tab value="Search" label="Search" icon={<SearchIcon />} iconPosition="start" />
 					<Tab value={SRTabs.ServiceRecord} label={SRTabs.ServiceRecord} icon={<ServiceRecordIcon />} iconPosition="start" />
-					<Tab value={SRTabs.CareerRank} label={SRTabs.CareerRank} icon={<SpartanCompanyIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab value={SRTabs.Compare} label={SRTabs.Compare} icon={<CompareArrows fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					{/* <Tab value={SRTabs.Yesterday} label={SRTabs.Yesterday} icon={<EventRepeat fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
-					<Tab value={SRTabs.Playlists} label={SRTabs.Playlists} icon={<PlaylistsIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab value={SRTabs.Variants} label={SRTabs.Variants} icon={<VariantsIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab value={SRTabs.Social} label={SRTabs.Social} icon={<SocialIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab value={SRTabs.Ranked} label={SRTabs.Ranked} icon={<RankedIcon fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab value={SRTabs.SRCustoms} label="Customs" icon={<GamepadRounded fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab value={SRTabs.SRLocal} label="LAN" icon={<UsbRounded fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
+					<Tab value={SRTabs.CareerRank} label={SRTabs.CareerRank} icon={<SpartanCompanyIcon fontSize="inherit" />} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.Compare} label={SRTabs.Compare} icon={<CompareArrows fontSize="inherit" />} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.Playlists} label={SRTabs.Playlists} icon={<PlaylistsIcon fontSize="inherit" />} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.Variants} label={SRTabs.Variants} icon={<VariantsIcon fontSize="inherit" />} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.Social} label={SRTabs.Social} icon={<SocialIcon fontSize="inherit" />} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.Ranked} label={SRTabs.Ranked} icon={<RankedIcon fontSize="inherit" />} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.SRCustoms} label="Customs" icon={<GamepadRounded fontSize="inherit" />} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.SRLocal} label="LAN" icon={<UsbRounded fontSize="inherit" />} sx={tiny} iconPosition="start" />
 					<Tab value={SRTabs.Medals} label={SRTabs.Medals} icon={<MedalsIcon />} iconPosition="start" />
 					<Tab value={SRTabs.Matches} label={SRTabs.Matches} icon={<MatchesIcon />} iconPosition="start" />
-					<Tab value={SRTabs.MatchesCustoms} label={SRTabs.MatchesCustoms} icon={<GamepadRounded fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab value={SRTabs.MatchesLocal} label={SRTabs.MatchesLocal} icon={<UsbRounded fontSize="inherit" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					{/*<Tab value={SRTabs.Maps} label={SRTabs.Maps} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab value={SRTabs.MatchOutcome} label={SRTabs.MatchOutcome} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" />
-					<Tab value={SRTabs.BestMatches} label={SRTabs.BestMatches} icon={<LockOutlinedIcon fontSize="small" />} sx={{ fontSize: "0.8rem", ml: 3, minHeight: 0 }} iconPosition="start" /> */}
+					<Tab value={SRTabs.MatchesCustoms} label={SRTabs.MatchesCustoms} icon={<GamepadRounded fontSize="inherit" />} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.MatchesLocal} label={SRTabs.MatchesLocal} icon={<UsbRounded fontSize="inherit" />} sx={tiny} iconPosition="start" />
 					<Tab value={SRTabs.Leaderboard} label={SRTabs.Leaderboard} icon={<LeaderboardRounded />} iconPosition="start" />
+					<Tab value={SRTabs.RankedArenaLeaders} label={SRTabs.RankedArenaLeaders} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.SlayerLeaders} label={SRTabs.SlayerLeaders} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.DoublesLeaders} label={SRTabs.DoublesLeaders} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.TacticalLeaders} label={SRTabs.TacticalLeaders} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.SnipersLeaders} label={SRTabs.SnipersLeaders} sx={tiny} iconPosition="start" />
 					<Tab value={SRTabs.Clips} label={SRTabs.Clips} icon={<PlayArrow />} iconPosition="start" />
 					<Tab value={SRTabs.ActivePlaylists} label={SRTabs.ActivePlaylists} icon={<PlaylistsIcon />} iconPosition="start" />
 					<Tab value={SRTabs.Store} label={SRTabs.Store} icon={<CreditsIcon />} iconPosition="start" />
 					<Tab value={SRTabs.Subscribe} label={SRTabs.Subscribe} icon={<SpartanCompanyIcon />} iconPosition="start" />
-					{/* <Tab value={SRTabs.SpartanCompany} label={<div>{SRTabs.SpartanCompany}<br/><Box sx={{ fontSize: "0.6rem", textTransform: "uppercase" }}>Beta</Box></div>} icon={<SpartanCompanyIcon />} iconPosition="start" /> */}
 				</Tabs>
 				:
 				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
 					<Tab value={SRTabs.Search} label={SRTabs.Search} icon={<SearchIcon />} iconPosition="start" />
+					<Tab value={SRTabs.Leaderboard} label={SRTabs.Leaderboard} icon={<LeaderboardRounded />} iconPosition="start" />
+					<Tab value={SRTabs.RankedArenaLeaders} label={SRTabs.RankedArenaLeaders} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.SlayerLeaders} label={SRTabs.SlayerLeaders} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.DoublesLeaders} label={SRTabs.DoublesLeaders} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.TacticalLeaders} label={SRTabs.TacticalLeaders} sx={tiny} iconPosition="start" />
+					<Tab value={SRTabs.SnipersLeaders} label={SRTabs.SnipersLeaders} sx={tiny} iconPosition="start" />
 					<Tab value={SRTabs.ActivePlaylists} label={SRTabs.ActivePlaylists} icon={<PlaylistsIcon />} iconPosition="start" />
 					<Tab value={SRTabs.Store} label={SRTabs.Store} icon={<CreditsIcon />} iconPosition="start" />
 					<Tab value={SRTabs.Subscribe} label={SRTabs.Subscribe} icon={<SpartanCompanyIcon />} iconPosition="start" />
-					{/* <Tab value={SRTabs.SpartanCompany} label={<div>{SRTabs.SpartanCompany}<br/><Box sx={{ fontSize: "0.6rem", textTransform: "uppercase" }}>Beta</Box></div>} icon={<SpartanCompanyIcon />} iconPosition="start" /> */}
 				</Tabs>
 				}
 			</Box>

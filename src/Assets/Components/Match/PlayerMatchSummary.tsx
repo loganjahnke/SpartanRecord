@@ -63,11 +63,11 @@ export function PlayerMatchSummary(props: MatchSummaryProps)
 		window.open("https://leafapp.co/game/" + match!.id, "_blank");
 	};
 
-	/** Open in Halo South Africa */
-	const openInHaloSouthAfrica = () =>
+	/** Open in Halo Query */
+	const openInHaloQuery = () =>
 	{
 		closeContextMenu();
-		window.open(`https://halosa.co.za/match/${match!.id}`, "_blank");
+		window.open(`https://haloquery.com/matches/${match!.id}`, "_blank");
 	};
 
 	/** Open in HDH */
@@ -137,7 +137,7 @@ export function PlayerMatchSummary(props: MatchSummaryProps)
 				<MenuItem onClick={copyMatchID}>Copy Match ID</MenuItem>
 				<MenuItem onClick={openInLeafApp}>Open in leafapp.co</MenuItem>
 				<MenuItem onClick={openInHaloDataHive}>Open in HaloDataHive.com</MenuItem>
-				<MenuItem onClick={openInHaloSouthAfrica}>Open in Halo South Africa</MenuItem>
+				<MenuItem onClick={openInHaloQuery}>Open in Halo Query</MenuItem>
 				<MenuItem onClick={openInHaloWaypoint}>Open in HaloWaypoint</MenuItem>
 			</Menu>
 			<Snackbar

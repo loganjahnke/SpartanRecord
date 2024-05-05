@@ -16,6 +16,7 @@ import { HaloDotAPIClip, HaloDotAPIClips } from "./Schemas/HaloDotAPIClip";
 import { CareerRankSchema } from "./Schemas/CareerRankSchema";
 import { AllSeasons } from "../Objects/Helpers/AllSeasons";
 import { SCFirebase } from "./SCFirebase";
+import { Leaderboard343 } from "../Objects/Model/Leaderboard343";
 
 export class SCPostman
 {
@@ -551,6 +552,19 @@ export class SCPostman
 	{
 		Debugger.Print("SCPostman", "GetMatches()", `Hit x${ids.length}`);
 		return await Promise.all(ids.map(id => this.__fetch(`/games/halo-infinite/stats/multiplayer/matches/${id}`)));
+	}
+	//#endregion
+
+	//#region Leaderboards
+	/**
+	 * Gets the CSR leaderboard
+	 * @param id the playlist ID, defaults to Ranked Arena
+	 */
+	public async GetCSRLeaderboard(id: string = "edfef3ac-9cbe-4fa2-b949-8f29deafd483"): Promise<Leaderboard343>
+	{
+		Debugger.Print("SCPostman", "GetCSRLeaderboard()", `Hit`);
+		const details = await this.__fetch(`/games/halo-infinite/tooling/leaderboards/csr?playlist_id=${id}`);
+		return new Leaderboard343(details);
 	}
 	//#endregion
 

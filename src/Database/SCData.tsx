@@ -16,6 +16,7 @@ import { SCPostman } from "./SCPostman";
 import { PlaylistWeights } from "../Objects/Pieces/PlaylistWeights";
 import { HaloDotAPIClip } from "./Schemas/HaloDotAPIClip";
 import { VIP } from "../Objects/Model/VIP";
+import { Leaderboard343 } from "../Objects/Model/Leaderboard343";
 
 /** The types of service records */
 export enum ServiceRecordType
@@ -500,6 +501,11 @@ export class SCData
     //#endregion
 
     //#region Leaderboards
+    /**
+	 * Gets the CSR leaderboard
+	 */
+	public GetCSRLeaderboard = async (id?: string): Promise<Leaderboard343> => this.halodapi.GetCSRLeaderboard(id);
+
     /**
 	 * Gets a leaderboard for a certain category
 	 * @param leaderboard the leaderboard to get
