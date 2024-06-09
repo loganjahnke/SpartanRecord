@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Box, Grid } from "@mui/material";
+import { Box, Button, Grid } from "@mui/material";
 import { CareerRankSchema, EmptyCareerRank } from "../../../Database/Schemas/CareerRankSchema";
 import { GetCareerRankMetadata, LifetimeRank } from "../../../Objects/Helpers/AllCareerRanks";
 import { CareerRankMetadata } from "../../../Database/Schemas/AutocodeMetadata";
@@ -11,7 +11,10 @@ import { ShowLifetimeToggle } from "./ShowLifetimeToggle";
 import { AutoAd } from "../Ads/AutoAd";
 import { FluidAd } from "../Ads/FluidAd";
 
+import { SpartanCompanyIcon } from "../../Icons/CustomIcons";
+
 import "../../Styles/Components/CareerRankProgression.css";
+import { HeroTrackerDialog } from "./HeroTrackerDialog";
 
 export function CareerRankProgression(props: { current: CareerRankSchema, serviceRecord: ServiceRecord, isSubscribedToPatreon?: boolean })
 {
@@ -22,6 +25,7 @@ export function CareerRankProgression(props: { current: CareerRankSchema, servic
 	//#region State
 	const [expandedType, setExpandedType] = useState(current?.data?.current?.properties?.type ?? "");
 	const [rank, setRank] = useState(current);
+	const [openHeroTracker, setOpenHeroTracker] = useState(false);
 	//#endregion
 
 	//#region Refs
@@ -65,10 +69,12 @@ export function CareerRankProgression(props: { current: CareerRankSchema, servic
 
 	return (
 		<Box>
+			<HeroTrackerDialog open={openHeroTracker} rank={rank} allRanks={allRanks} avgScore={avgScore} isSubscribedToPatreon={isSubscribedToPatreon} close={() => setOpenHeroTracker(false)} />
 			<Grid container spacing={2} className="currentProgressionGrid">
 				{/* Top */}
 				<Grid item xs={12}>
 					<Box sx={{ display: "flex", alignItems: "center", ml: 1, mb: 1 }}>
+						{rank.data.current.title !== "Hero" && <Button variant="outlined" endIcon={<SpartanCompanyIcon />} onClick={() => setOpenHeroTracker(true)}>Hero Tracker</Button>}
 						<Box sx={{ flexGrow: 1 }}></Box>
 						<ShowLifetimeToggle setShowLifetime={setShowLifetimeCallback} />
 					</Box>

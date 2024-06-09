@@ -166,11 +166,11 @@ export function CareerRankView(props: ViewProps)
 	return (
 		<Box component="main" sx={{ flexGrow: 1 }}>
 			<Helmet>
-				<title>{"Spartan Record | " + gamertag}</title>
-				<meta name="description" content={`Halo Infinite service record for ${gamertag}`} />
+				<title>{"Spartan Record | Career Rank"}</title>
+				<meta name="description" content={`Halo Infinite Career Rank for ${gamertag}`} />
 				<meta property="og:title" content="Spartan Record" />
             	<meta property="og:image" content="https://spartanrecord.com/images/banner.png" />
-				<link rel="canonical" href={`https://spartanrecord.com/service_record/${gamertag}`} />
+				<link rel="canonical" href={`https://spartanrecord.com/career_rank/${gamertag}`} />
 			</Helmet>
 			<Toolbar />
 			<Divider />

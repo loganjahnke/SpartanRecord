@@ -1,13 +1,16 @@
 {
   "name": "spartan_record",
-  "version": "4.13.0",
+  "version": "4.14.0",
   "private": true,
   "dependencies": {
+    "@babel/core": "^7.24.7",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@mui/icons-material": "^5.2.5",
     "@mui/lab": "^5.0.0-alpha.82",
     "@mui/material": "^5.8.0",
+    "@mui/x-date-pickers": "^7.6.2",
     "@testing-library/jest-dom": "^5.16.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
@@ -20,15 +23,18 @@
     "lib": "^4.3.3",
     "moment": "^2.29.4",
     "node-fetch": "^2.6.1",
-    "react": "^17.0.2",
+    "react": "^18.3.1",
     "react-chartjs-2": "^4.0.0",
-    "react-dom": "^17.0.2",
+    "react-dom": "^18.3.1",
     "react-helmet": "^6.1.0",
     "react-router-dom": "^6.0.2",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^5.0.1",
     "react-sortable-table": "^1.4.0",
-    "typescript": "^4.5.2",
-    "web-vitals": "^1.1.2"
+    "typescript": "^5.4.5",
+    "web-vitals": "^4.1.0"
+  },
+  "overrides": {
+    "typescript": "^5.4.5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -55,8 +61,8 @@
     ]
   },
   "devDependencies": {
-    "@types/react": "^17.0.37",
-    "@types/react-dom": "^17.0.11",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "@types/react-helmet": "^6.1.5",
     "eslint-config-google": "^0.14.0",
     "react-error-overlay": "^6.0.9"

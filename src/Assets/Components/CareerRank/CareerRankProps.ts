@@ -16,7 +16,7 @@ export interface CareerRankProgressionProps extends CareerRankProps
 export interface CareerRankProgressionExpansionProps extends CareerRankProgressionProps
 {
 	expanded: boolean;
-	setExpanded: (type: string) => void;
+	setExpanded?: (type: string) => void;
 }
 
 export interface CareerRankTileProps extends CareerRankProps

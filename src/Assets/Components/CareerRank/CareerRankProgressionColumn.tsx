@@ -10,7 +10,7 @@ export function CareerRankProgressionColumn(props: CareerRankProgressionExpansio
 	const { allRanks, type, current, avgScore, expanded, setExpanded } = props;
 
 	return (
-		<Accordion expanded={expanded} onClick={() => setExpanded(expanded ? "" : type)} className="progressionRow" sx={{ background: "transparent" }}>
+		<Accordion expanded={expanded} onClick={() => setExpanded ? setExpanded(expanded ? "" : type) : {}} className="progressionRow" sx={{ background: "transparent" }}>
 			<AccordionSummary expandIcon={<ExpandMoreIcon />}>
 				<Box className="progressionRowTitleContainer">
 					<Typography variant="h3" className="progressionRowTitle" sx={{

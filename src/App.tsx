@@ -193,7 +193,7 @@ const App = () =>
 					<Route path="/subscribe/:gamertag" element={<PatreonView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 					<Route path="/admin" element={<Admin app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 					<Route path="/powered_by_halodotapi" element={<OtherCreators />} />
-					<Route path="/privacy" element={() => {window.location.href="/privacy.html"}} />
+					<Route path="/privacy" handle={() => {window.location.href="/privacy.html"}} />
 					<Route path="*" element={<UhOh />} />
 				</Routes>
 			</Box>

@@ -55,6 +55,12 @@ export function WhatsNew(props: WhatsNewProps)
 		new Feature("Patreon", "Consider subscribing to help keep SpartanRecord running!", "subscribe"),
 	]);
 
+	features.set("4.14", [
+		new Feature("Your Great Journey to Hero", "Set a goal date and see how many games you need play per day to achieve the Hero rank"),
+		new Feature("Ranked Arena Leaderboard", "See the top 100 players in Ranked Arena with our new leaderboards page", "leaderboard/edfef3ac-9cbe-4fa2-b949-8f29deafd483"),
+		new Feature("Patreon", "Subscribe to go ad-free for your gamertag", "subscribe"),
+	]);
+
 	return (
 		<Card sx={{ background: ArrowheadTheme.card + "DD" }}>
 			<CardContent>
