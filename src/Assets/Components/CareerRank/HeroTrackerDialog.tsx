@@ -7,7 +7,6 @@ import { CareerRankMetadata } from "../../../Database/Schemas/AutocodeMetadata";
 import { CareerRankProgressionColumnTile } from "./CareerRankProgressionColumnTile";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AutoAd } from "../Ads/AutoAd";
 
 import moment from "moment";
 
@@ -38,7 +37,6 @@ export function HeroTrackerDialog(props: HeroTrackerDialogProps)
 			<DialogTitle sx={{ color: ArrowheadTheme.text_primary, backgroundColor: ArrowheadTheme.secondary }}>Your Great Journey to Hero</DialogTitle>		
 			<DialogContent sx={{ backgroundColor: ArrowheadTheme.box }}>
 				<CareerRankProgressionColumnTile rank={allRanks[allRanks.length - 1]} current={rank} avgScore={avgScore} />
-				<AutoAd adId="9800211278" isAdFree={isSubscribedToPatreon} />
 				<Box sx={{ mt: 4, maxWidth: "255px", textAlign: "center" }}>
 					<LocalizationProvider dateAdapter={AdapterMoment}>
 						<DatePicker label="Goal" value={goalDate} onChange={(newGoal) => setGoalDate(newGoal)} />
