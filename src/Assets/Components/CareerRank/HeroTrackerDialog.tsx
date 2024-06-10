@@ -45,8 +45,15 @@ export function HeroTrackerDialog(props: HeroTrackerDialogProps)
 					</LocalizationProvider>
 					{daysBetweenGoalAndToday && goalDate && goalDate.isValid() && 
 						<>
-							<Typography sx={{ mt: 2, mb: -0.5 }} variant="subtitle1">You need play</Typography>
-							<Typography variant="h5">{Math.ceil(matchesToHero / daysBetweenGoalAndToday)} games / day</Typography>
+							<Typography sx={{ mt: 3, mb: -0.5 }} variant="subtitle1">You need to play</Typography>
+							<Typography variant="h5">{Math.ceil(matchesToHero / daysBetweenGoalAndToday).toLocaleString()} games / day</Typography>
+							<Typography variant="subtitle1">to reach Hero by your goal date</Typography>
+						</>
+					}
+					{xpToRank && goalDate && goalDate.isValid() && 
+						<>
+							<Typography sx={{ mt: 3, mb: -0.5 }} variant="subtitle1">You need to average</Typography>
+							<Typography variant="h5">{Math.ceil(xpToRank / daysBetweenGoalAndToday).toLocaleString()} XP / day</Typography>
 							<Typography variant="subtitle1">to reach Hero by your goal date</Typography>
 						</>
 					}
