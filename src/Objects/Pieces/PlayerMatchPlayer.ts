@@ -95,7 +95,7 @@ export class PlayerMatchPlayer
     {
         if (this.experience === "btb") 
         { 
-            const modifiedXP = this.scores.personal * 1.75;
+            const modifiedXP = this.scores.personal * 1.8;
             return Math.floor(modifiedXP / 10) * 10; 
         }
         return this.scores.personal;
