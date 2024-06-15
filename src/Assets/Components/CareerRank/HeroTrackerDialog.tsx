@@ -23,7 +23,7 @@ interface HeroTrackerDialogProps
 
 export function HeroTrackerDialog(props: HeroTrackerDialogProps)
 {
-	const { open, rank, allRanks, avgScore, isSubscribedToPatreon, close } = props;
+	const { open, rank, allRanks, avgScore, close } = props;
 
 	const [goalDate, setGoalDate] = useState<moment.Moment | null>(Cookie.getHeroTrackerGoalDate() ?? moment().add(1, "years"));
 
