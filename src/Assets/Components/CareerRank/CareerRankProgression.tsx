@@ -36,7 +36,7 @@ export function CareerRankProgression(props: { current: CareerRankSchema, servic
 	/** Sets the appropriate career rank */
 	const setShowLifetimeCallback = useCallback((show: boolean) =>
 	{
-		const rankToShow = (show ? LifetimeRank(serviceRecord) : current) ?? EmptyCareerRank();
+		const rankToShow = (show ? LifetimeRank(serviceRecord, current) : current) ?? EmptyCareerRank();
 		setRank(rankToShow);
 		const type = rankToShow?.data?.current?.title === "Hero" ? "Hero" : rankToShow?.data?.current?.properties?.type;
 		setExpandedType(type ?? "");

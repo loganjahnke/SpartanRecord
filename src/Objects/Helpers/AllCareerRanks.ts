@@ -75,9 +75,11 @@ export function CareerRankBackground(rank: CareerRankSchema): string
 /**
  * Gets the lifetime rank of a service record
  * @param serviceRecord the service record
+ * @param current the current career rank
  */
-export function LifetimeRank(serviceRecord: ServiceRecord): CareerRankSchema
+export function LifetimeRank(serviceRecord: ServiceRecord, current: CareerRankSchema): CareerRankSchema
 {
+    if (current.data.level.total_xp > serviceRecord.totalScore) { return current; }
     const rank = GetRankFromScore(serviceRecord.totalScore);
     const currMetadata = GetCareerRankMetadata(rank);
     const nextMetadata = GetCareerRankMetadata(rank + 1) ?? currMetadata;
