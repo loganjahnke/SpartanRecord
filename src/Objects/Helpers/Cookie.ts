@@ -1,3 +1,4 @@
+import moment from "moment";
 import { Debugger } from "./Debugger";
 
 export class Cookie
@@ -310,6 +311,29 @@ export class Cookie
     {
         const version = process.env.REACT_APP_MAJOR_VERSION;
         this.set(`sc-hide-whatsnew${version}`, "true");
+    }
+    //#endregion
+
+    //#region Hero Tracker
+    /**
+     * Get the hero tracker goal date for the user
+     */
+    public static getHeroTrackerGoalDate(): moment.Moment | null
+    {
+        const dateAsString = this.get(`sr-hero-tracker-goal-date`);
+        if (!dateAsString) { return null; }
+
+        const momentDate = moment(dateAsString);
+        return momentDate;
+    }
+
+    /**
+     * Set the hero tracker goal date for the user
+     * @param date the date to set into the cookie
+     */
+    public static setHeroTrackerGoalDate(date: moment.Moment): void
+    {
+        this.set(`sr-hero-tracker-goal-date`, date.toString());
     }
     //#endregion
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Box, Typography } from "@mui/material";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { CareerRankSchema } from "../../../Database/Schemas/CareerRankSchema";
@@ -7,6 +7,7 @@ import { CareerRankMetadata } from "../../../Database/Schemas/AutocodeMetadata";
 import { CareerRankProgressionColumnTile } from "./CareerRankProgressionColumnTile";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from "@mui/x-date-pickers";
+import { Cookie } from "../../../Objects/Helpers/Cookie";
 
 import moment from "moment";
 
@@ -24,7 +25,13 @@ export function HeroTrackerDialog(props: HeroTrackerDialogProps)
 {
 	const { open, rank, allRanks, avgScore, isSubscribedToPatreon, close } = props;
 
-	const [goalDate, setGoalDate] = useState<moment.Moment | null>(moment().add(1, "years"));
+	const [goalDate, setGoalDate] = useState<moment.Moment | null>(Cookie.getHeroTrackerGoalDate() ?? moment().add(1, "years"));
+
+	const goalDateChanged = useCallback((newGoal: moment.Moment | null) => 
+	{
+		if (newGoal) { Cookie.setHeroTrackerGoalDate(newGoal); }
+		setGoalDate(newGoal);
+	}, [setGoalDate]);
 
 	if (!allRanks || allRanks.length === 0) { return <></>; }
 
@@ -39,7 +46,7 @@ export function HeroTrackerDialog(props: HeroTrackerDialogProps)
 				<CareerRankProgressionColumnTile rank={allRanks[allRanks.length - 1]} current={rank} avgScore={avgScore} />
 				<Box sx={{ mt: 4, maxWidth: "255px", textAlign: "center" }}>
 					<LocalizationProvider dateAdapter={AdapterMoment}>
-						<DatePicker label="Goal" value={goalDate} onChange={(newGoal) => setGoalDate(newGoal)} />
+						<DatePicker label="Goal" value={goalDate} onChange={goalDateChanged} />
 					</LocalizationProvider>
 					{daysBetweenGoalAndToday && goalDate && goalDate.isValid() && 
 						<>
