@@ -45,6 +45,8 @@ export class PlayerMatchPlayer
     public deathExpectations: Expectation;
     /** Mode statistics */
     public mode?: CTFSchema | OddballSchema | ZoneSchema | EliminationSchema | StockpileSchema | ExtractionSchema | InfectionSchema | ZoneServiceRecordSchema | FirefightSchema;
+    /** Arena or BTB */
+    public experience: string;
 
     /** The damage efficiency per kill */
     public get damageEfficiency(): number
@@ -88,7 +90,18 @@ export class PlayerMatchPlayer
         return this.rank + "th";
     }
 
-    constructor(data?: PlayerMatchPlayerSchema)
+    /** The XP for the player in the match */
+    public get xp(): number
+    {
+        if (this.experience === "btb") 
+        { 
+            const modifiedXP = this.scores.personal * 1.75;
+            return Math.floor(modifiedXP / 10) * 10; 
+        }
+        return this.scores.personal;
+    }
+
+    constructor(data?: PlayerMatchPlayerSchema, matchExperience?: string)
     {
         this.team = new TeamDetails(data?.properties?.team);
         this.summary = 
@@ -152,6 +165,7 @@ export class PlayerMatchPlayer
         this.rank = data?.rank ?? -1;
         this.won = data?.outcome === "win" || data?.outcome === "won";
         this.scores = data?.stats?.core?.scores ?? { personal: 0, points: 0 };
+        this.experience = matchExperience ?? "arena";
         this.outcome = this.won ? HaloOutcome.Win
 			: data?.outcome === "dnf" ? HaloOutcome.Left
 			: data?.outcome === "loss" ? HaloOutcome.Loss

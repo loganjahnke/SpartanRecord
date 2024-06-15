@@ -35,7 +35,8 @@ enum RecentMatchesDataSets
 	Damage = "Damage",
 	DamageEfficiency = "Damage Efficiency",
 	EnemyEfficiency = "Enemy Efficiency",
-	Accuracy = "Accuracy"
+	Accuracy = "Accuracy",
+	XP = "XP"
 }
 
 enum ChartType
@@ -155,36 +156,39 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 					grid: {
 						color: function(context: any)
 						{
-							if (context.tick.value === 0) { return ArrowheadTheme.text_primary; }
+							if (context.tick.value === 0) { return ArrowheadTheme.leftEarlyText; }
 							switch (dataSet.current)
 							{
 								case RecentMatchesDataSets.WinLoss: break;
 								case RecentMatchesDataSets.KDA: 
-									if (context.tick.value === sr.kda) { return ArrowheadTheme.selected; }
+									if (context.tick.value === sr.kda) { return ArrowheadTheme.leftEarlyText; }
 									break;
 								case RecentMatchesDataSets.KDR: 
-									if (context.tick.value === sr.kdr) { return ArrowheadTheme.selected; }
+									if (context.tick.value === sr.kdr) { return ArrowheadTheme.leftEarlyText; }
 									break;
 								case RecentMatchesDataSets.Kills: 
-									if (context.tick.value === sr.killsPerGame) { return ArrowheadTheme.selected; }
+									if (context.tick.value === sr.killsPerGame) { return ArrowheadTheme.leftEarlyText; }
 									break;
 								case RecentMatchesDataSets.Deaths: 
-									if (context.tick.value === sr.deathsPerGame) { return ArrowheadTheme.selected; }
+									if (context.tick.value === sr.deathsPerGame) { return ArrowheadTheme.leftEarlyText; }
 									break;
 								case RecentMatchesDataSets.Assists: 
-									if (context.tick.value === sr.assistsPerGame) { return ArrowheadTheme.selected; }
+									if (context.tick.value === sr.assistsPerGame) { return ArrowheadTheme.leftEarlyText; }
 									break;
 								case RecentMatchesDataSets.Damage: 
-									if (context.tick.value === sr.damagePerGame) { return ArrowheadTheme.selected; }
+									if (context.tick.value === sr.damagePerGame) { return ArrowheadTheme.leftEarlyText; }
 									break;
 								case RecentMatchesDataSets.DamageEfficiency: 
-									if (context.tick.value === sr.damageEfficiency) { return ArrowheadTheme.selected; }
+									if (context.tick.value === sr.damageEfficiency) { return ArrowheadTheme.leftEarlyText; }
 									break;
 								case RecentMatchesDataSets.EnemyEfficiency: 
-									if (context.tick.value === sr.enemyDamageEfficiency) { return ArrowheadTheme.selected; }
+									if (context.tick.value === sr.enemyDamageEfficiency) { return ArrowheadTheme.leftEarlyText; }
 									break;
 								case RecentMatchesDataSets.Accuracy: 
-									if (context.tick.value === sr.shots.accuracy) { return ArrowheadTheme.selected; }
+									if (context.tick.value === sr.shots.accuracy) { return ArrowheadTheme.leftEarlyText; }
+									break;
+								case RecentMatchesDataSets.XP: 
+									if (context.tick.value === sr.totalScore) { return ArrowheadTheme.leftEarlyText; }
 									break;
 								default: return "transparent";
 							}
@@ -221,6 +225,7 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 		switch (dataSet.current)
 		{
 			case RecentMatchesDataSets.WinLoss: label = "Win"; break;
+			case RecentMatchesDataSets.XP: label = "XP"; break;
 			case RecentMatchesDataSets.CSRRankedArena: label = RecentMatchesDataSets.CSRRankedArena; break;
 			case RecentMatchesDataSets.CSRDoubles: label = RecentMatchesDataSets.CSRDoubles; break;
 			case RecentMatchesDataSets.CSRFFA: label = RecentMatchesDataSets.CSRFFA; break;
@@ -243,6 +248,8 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 			datasets: [
 				{
 					label: label,
+					barPercentage: 1,
+					categoryPercentage: 0.95,
 					backgroundColor: matches.map(match => 
 					{
 						switch (dataSet.current)
@@ -263,6 +270,7 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 									? ArrowheadTheme.bad 
 									: ArrowheadTheme.good;
 							case RecentMatchesDataSets.Accuracy: return match.player.shots.accuracy > sr.shots.accuracy ? ArrowheadTheme.good : ArrowheadTheme.bad;
+							case RecentMatchesDataSets.XP: return ArrowheadTheme.good;
 							default: return match.player.won ? ArrowheadTheme.good : ArrowheadTheme.bad;
 						}
 					}),
@@ -288,6 +296,7 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 							case RecentMatchesDataSets.DamageEfficiency: return Math.round(match.player.damageEfficiency * 100);
 							case RecentMatchesDataSets.EnemyEfficiency: return Math.round(match.player.enemyDamageEfficiency * 100);
 							case RecentMatchesDataSets.Accuracy: return match.player.shots.accuracy;
+							case RecentMatchesDataSets.XP: return match.player.xp;
 							default: return match.player.won ? 1 : -1;
 						}
 					}),
@@ -330,6 +339,7 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 						<InputLabel id="data-set-label">Data Set</InputLabel>
 						<Select labelId="data-set-label" id="data-set" value={dataSet.current} label="Data Set" onChange={changeDataSet}>
 							<MenuItem value={RecentMatchesDataSets.WinLoss}>{RecentMatchesDataSets.WinLoss}</MenuItem>
+							<MenuItem value={RecentMatchesDataSets.XP}>{RecentMatchesDataSets.XP}</MenuItem>
 							<MenuItem value={RecentMatchesDataSets.CSRRankedArena}>{RecentMatchesDataSets.CSRRankedArena}</MenuItem>
 							<MenuItem value={RecentMatchesDataSets.CSRDoubles}>{RecentMatchesDataSets.CSRDoubles}</MenuItem>
 							<MenuItem value={RecentMatchesDataSets.CSRFFA}>{RecentMatchesDataSets.CSRFFA}</MenuItem>

@@ -33,13 +33,15 @@ export class PlayerMatch
 
     constructor(match?: PlayerMatchWithOddsSchema)
     {
+        const matchExperience = match?.properties?.experience ?? "arena";
+
         this.id = match?.id ?? "";
         this.variant = new GameVariant(match?.details?.ugcgamevariant);
         this.map = new Map(match?.details?.map);
         this.playlist = new Playlist(match?.details?.playlist);
-        this.player = new PlayerMatchPlayer(match?.player);
+        this.player = new PlayerMatchPlayer(match?.player, matchExperience);
+        this.experience = matchExperience
         this.interaction = match?.properties?.interaction ?? "";
-        this.experience = match?.properties?.experience ?? "";
         this.date = match?.started_at ? new Date(match.started_at) : new Date();
         this.duration = new TimePlayed(match?.playable_duration);
         this.expandedPlayer = new MatchPlayer();

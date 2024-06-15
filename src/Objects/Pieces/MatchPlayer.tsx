@@ -85,6 +85,12 @@ export class MatchPlayer
         return this.rank + "th";
     }
 
+    /** The XP for the player in the match */
+    public get xp(): number
+    {
+        return this.scores.personal;
+    }
+
     constructor(data?: MatchPlayerSchema, isRanked: boolean = false, timePlayedInSeconds: number = 0)
     {
         this.gamertag = "";

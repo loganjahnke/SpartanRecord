@@ -46,7 +46,7 @@ export function OutcomeChip(props: OutcomeChipProps)
 					</Box>
 					<Box sx={{ textAlign: "center" }}>
 						<Typography variant="caption" component="div" sx={{ color: "#BBBBBB", textTransform: "uppercase", fontSize: "0.6rem", mb: "-3px" }}>XP</Typography>
-						<Typography fontSize="small" component="div">{player.scores.personal.toLocaleString()}</Typography>
+						<Typography fontSize="small" component="div">{player.xp.toLocaleString()}</Typography>
 					</Box>
 				</Typography>
 			}
