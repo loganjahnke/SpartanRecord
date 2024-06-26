@@ -61,6 +61,12 @@ export function WhatsNew(props: WhatsNewProps)
 		new Feature("Patreon", "Subscribe to go ad-free for your gamertag", "subscribe"),
 	]);
 
+	features.set("4.15", [
+		new Feature("Your Great Journey to Hero (Alternate Mode)", "Set your games / day and see what date you will hit Hero"),
+		new Feature("Multi-Team Support", "View multi-team match summaries"),
+		new Feature("Patreon", "Subscribe to go ad-free for your gamertag", "subscribe"),
+	]);
+
 	return (
 		<Card sx={{ background: ArrowheadTheme.card + "DD" }}>
 			<CardContent>
