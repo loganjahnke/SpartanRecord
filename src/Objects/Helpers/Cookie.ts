@@ -1,5 +1,6 @@
 import moment from "moment";
 import { Debugger } from "./Debugger";
+import { HeroTrackerModeEnum } from "../../Assets/Components/CareerRank/HeroTrackerMode";
 
 export class Cookie
 {
@@ -334,6 +335,42 @@ export class Cookie
     public static setHeroTrackerGoalDate(date: moment.Moment): void
     {
         this.set(`sr-hero-tracker-goal-date`, date.toString());
+    }
+
+    /**
+     * Get the hero tracker games per day for the user
+     */
+    public static getHeroTrackerGamesPerDay(): number
+    {
+        const gamesPerDay = this.get(`sr-hero-tracker-games-per-day`);
+        return gamesPerDay ? +gamesPerDay : 1;
+    }
+
+    /**
+     * Set the hero tracker games per day for the user
+     * @param gamesPerDay the number of games per day
+     */
+    public static setHeroTrackerGamesPerDay(gamesPerDay: number): void
+    {
+        this.set(`sr-hero-tracker-games-per-day`, gamesPerDay.toString());
+    }
+
+    /**
+     * Get the hero tracker mode
+     */
+    public static getHeroTrackerMode(): HeroTrackerModeEnum
+    {
+        const mode = this.get(`sr-hero-tracker-mode`);
+        return mode === "Games per Day" ? HeroTrackerModeEnum.GamesPerDay : HeroTrackerModeEnum.GoalDate;
+    }
+
+    /**
+     * Set the hero tracker mode
+     * @param mode the hero tracker mode
+     */
+    public static setHeroTrackerMode(mode: HeroTrackerModeEnum): void
+    {
+        this.set(`sr-hero-tracker-mode`, mode);
     }
     //#endregion
 }
