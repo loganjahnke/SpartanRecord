@@ -43,4 +43,14 @@ export class Team
         this.players.forEach(player => totalCSR += player.csr.pre.value);
         this.csr = totalCSR / this.players.length;
     }
+
+    /**
+     * Searches for a specific gamertag in the match
+     * @param gamertag the gamertag to search for
+     * @returns true if the gamertag is in the match
+     */
+    public containsGamertag(gamertag: string): boolean
+    {
+        return this.players.some(player => player.gamertag === gamertag);
+    }
 }

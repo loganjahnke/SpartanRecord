@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Typography } from "@mui/material";
-import { GetColorForTeam } from "../../../Objects/Helpers/AllTeams";
+import { GetColorForTeam, ShouldInvertTextColorForTeam } from "../../../Objects/Helpers/AllTeams";
 import { Leader } from "../../../Objects/Model/Leader";
 import { Player } from "../../../Objects/Model/Player";
 import { MatchPlayer } from "../../../Objects/Pieces/MatchPlayer";
@@ -7,6 +7,7 @@ import { MatchPlayer } from "../../../Objects/Pieces/MatchPlayer";
 import ArrowheadImg from "../../Images/Secondary/Spartan-Record-Logo-Secondary-White.png";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { Leader343 } from "../../../Objects/Model/Leaderboard343";
+import { Converter } from "../../../Objects/Helpers/Statics/Converter";
 
 export function RankTile(props: { player: Player, myGamertag?: string, value: number, isPercent?: boolean, goToMember: Function })
 {
@@ -104,12 +105,16 @@ export function MatchRankTile(props: { player: MatchPlayer, value: number, myGam
 {
 	const { player, value, myGamertag, isPercent, goToMember, isCSR, isSpree } = props;
 
+	const teamColor = GetColorForTeam(player.team.name);
+	const shouldInvertColors = ShouldInvertTextColorForTeam(player.team.name);
+
 	return (
 		<Box sx={{ backgroundColor: "secondary.main", borderRadius: 3, display: "flex", flexDirection: "row", alignItems: "center", width: "90%", margin: 1, padding: 0, height: "48px", border: myGamertag === player.gamertag ? `1px solid ${ArrowheadTheme.halo_grass}` : "none" }}>
 			<Button disabled={player.type === "bot"} onClick={() => goToMember(player.gamertag)} sx={{ width: "100%", height: "100%", justifyContent: "flex-start", p: 0, borderRadius: 2, textTransform: "none", textAlign: "left" }}>
 				{player.team.emblem && <Box sx={{ 
-					backgroundImage: `url(${player.team.emblem})`, 
-					backgroundColor: GetColorForTeam(player.team.name), 
+					backgroundImage: `url(${player.team.emblem})`,
+					backgroundColor: shouldInvertColors ? Converter.GetColorInverse(teamColor) : teamColor, 
+					filter: shouldInvertColors ? "invert(0.7)" : "",
 					backgroundSize: "80%",
 					backgroundRepeat: "no-repeat",
 					width: "48px", 

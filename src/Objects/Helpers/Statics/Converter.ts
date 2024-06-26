@@ -63,6 +63,22 @@ export class Converter
 	}
 
 	/**
+	 * Gets the inverse of a color
+	 * @param background the background hex color
+	 */
+	public static GetColorInverse(background: string): string
+	{
+		const getRgb = (c: string) => parseInt(c, 16);
+		const applyStrength = (c: number, strength: number) => 255 - (255 * (1 - 1) + c * (2 * 1 - 1))
+
+		const r = getRgb(background.substring(1, 3));
+		const g = getRgb(background.substring(3, 5));
+		const b = getRgb(background.substring(5, 7));
+
+		return `rgb(${applyStrength(r, 0.7)}, ${applyStrength(g, 0.7)}, ${applyStrength(b, 0.7)})`;
+	}
+
+	/**
 	 * Gets the best text color to show against a background
 	 * @param background the background hex color
 	 * @returns the text color in hexidecimal

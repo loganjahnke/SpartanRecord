@@ -122,7 +122,7 @@ function PVPRow(props: TeamTableRowProps)
 					sx={{ pl: 2, pr: 2, position: "sticky", cursor: player.type === "bot" ? "default" : "pointer", left: 0, background: ArrowheadTheme.box }} 
 					component="th" 
 					scope="row" 
-					onClick={player.type === "player" ? () => onGamertagClick(player.gamertag) : undefined} 
+					onClick={player.type === "human" ? () => onGamertagClick(player.gamertag) : undefined} 
 					width={"150px"}>
 						<Typography sx={{ fontWeight: selectedGamertag === player.gamertag ? 900 : 500, color: selectedGamertag === player.gamertag ? ArrowheadTheme.halo_grass : player.leftEarly ? ArrowheadTheme.leftEarlyText : ArrowheadTheme.text_primary }} variant="body2">{player.gamertag}</Typography>
 				</TableCell>

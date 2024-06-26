@@ -6,6 +6,12 @@ export function GetColorForTeam(name: string): string
 	return (AllTeams as any)[name]?.color ?? ArrowheadTheme.halo_cerulean;
 }
 
+export function ShouldInvertTextColorForTeam(name: string): boolean
+{
+	if (!name) { return false; }
+	return name === "Valor" || name === "Observer";
+}
+
 export const AllTeams = {
 	Eagle:
 	{
@@ -23,13 +29,13 @@ export const AllTeams = {
 	{
 		id: 2,
 		emblem_url: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/teams/hades.png",
-		color: ArrowheadTheme.halo_jade
+		color: ArrowheadTheme.halo_cerise
 	},
 	Valkyrie:
 	{
 		id: 3,
 		emblem_url: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/teams/valkyrie.png",
-		color: ArrowheadTheme.halo_aubergine
+		color:  ArrowheadTheme.halo_aubergine
 	},
 	Rampart:
 	{
@@ -59,6 +65,6 @@ export const AllTeams = {
 	{
 		id: 8,
 		emblem_url: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/object/public/assets/games/halo-infinite/metadata/multiplayer/teams/observer.png",
-		color: ArrowheadTheme.halo_mint
+		color: ArrowheadTheme.halo_jade
 	}
 }
