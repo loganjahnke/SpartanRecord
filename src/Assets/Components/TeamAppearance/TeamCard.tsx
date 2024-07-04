@@ -3,7 +3,6 @@ import { GetColorForTeam, ShouldInvertTextColorForTeam } from "../../../Objects/
 import { Team } from "../../../Objects/Pieces/Team";
 
 import '../../Styles/Components/TeamCard.css';
-import { Converter } from "../../../Objects/Helpers/Statics/Converter";
 
 interface TeamCardProps
 {

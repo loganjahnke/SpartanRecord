@@ -1,5 +1,4 @@
 import { ToggleButtonGroup, ToggleButton } from "@mui/material";
-import { useState } from "react";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 
 export enum HeroTrackerModeEnum

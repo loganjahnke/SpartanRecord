@@ -196,7 +196,7 @@ export const AllSeasons = {
             "image_urls": {
                 "season_logo": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoic2Vhc29ucy9pbnNpZ25pYV9zNl9TT0ZfMjU2LnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D",
                 "card_background": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU3dpdGNoZXIvU2Vhc29uX1N3aXRjaGVyX1M2X1NPRi5wbmciLCJvcHRpb25zIjp7fX0%3D",
-                "battlepass_background": "https://support.halowaypoint.com/hc/article_attachments/25945755760660"
+                "battlepass_background": "https://spartanrecord.com/images/Anvil.jpg" // "https://support.halowaypoint.com/hc/article_attachments/25945755760660"
             },
             "properties": {
                 "identifier": "Season7-Op1",
