@@ -1,7 +1,7 @@
 import { HaloOutcome } from "../../Database/ArrowheadFirebase";
 import { TeamStatsSchema } from "../../Database/Schemas/MatchSchema";
 import { DurationSchema, PlayerStatsSchema } from "../../Database/Schemas/PlayerMatchSchema";
-import { ServiceRecordSchema, ServiceRecordDataSchema, isServiceRecordSchema, ServiceRecordStatsSchema, ServiceRecordMatchesSchema, CTFSchema, EliminationSchema, OddballSchema, StockpileSchema, ZoneServiceRecordSchema, ExtractionSchema, InfectionSchema, ZoneSchema, FirefightSchema } from "../../Database/Schemas/ServiceRecordSchema";
+import { ServiceRecordSchema, ServiceRecordDataSchema, isServiceRecordSchema, ServiceRecordStatsSchema, ServiceRecordMatchesSchema, CTFSchema, EliminationSchema, OddballSchema, StockpileSchema, ZoneServiceRecordSchema, ExtractionSchema, InfectionSchema, ZoneSchema, FirefightSchema, VIPSchema } from "../../Database/Schemas/ServiceRecordSchema";
 import { AllMedals } from "../Helpers/AllMedals";
 import { Breakdowns } from "../Pieces/Breakdowns";
 import { CaptureTheFlag } from "../Pieces/Mode/CaptureTheFlag";
@@ -58,7 +58,7 @@ export class ServiceRecord
     /** Firefight statistics */
     public firefight: Firefight;
     /** Mode statistics */
-    public mode?: CTFSchema | OddballSchema | ZoneServiceRecordSchema | EliminationSchema | StockpileSchema | ExtractionSchema | InfectionSchema | ZoneSchema | FirefightSchema;
+    public mode?: CTFSchema | OddballSchema | ZoneServiceRecordSchema | EliminationSchema | StockpileSchema | ExtractionSchema | InfectionSchema | ZoneSchema | FirefightSchema | VIPSchema;
     /** Raw autocode and firebase JSON */
     public data?: ServiceRecordDataSchema;
     /** If there is an error in the response, store it here */

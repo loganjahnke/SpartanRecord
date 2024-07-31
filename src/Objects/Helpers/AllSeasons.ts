@@ -164,8 +164,7 @@ export const AllSeasons = {
         {
             "id": 6,
             "version": 1,
-            "season_name": "CU29",
-            "full_name": "CU29: Spirit of Fire",
+            "season_name": "Season 6",
             "name": "Spirit of Fire",
             "description": "Placeholder Short Description",
             "narrative_blurb": "Placeholder Long Description",
@@ -188,9 +187,8 @@ export const AllSeasons = {
         {
             "id": 7,
             "version": 1,
-            "season_name": "CU32",
-            "full_name": "CU32: Banished Honor",
-            "name": "Spirit of Fire",
+            "season_name": "Season 7",
+            "name": "Banished Honor",
             "description": "Placeholder Short Description",
             "narrative_blurb": "Placeholder Long Description",
             "image_urls": {
@@ -209,9 +207,32 @@ export const AllSeasons = {
                 }
             ]
         },
+        {
+            "id": 8,
+            "version": 1,
+            "season_name": "Season 8",
+            "name": "Fleetcom",
+            "description": "Placeholder Short Description",
+            "narrative_blurb": "Placeholder Long Description",
+            "image_urls": {
+                "season_logo": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoic2Vhc29ucy9pbnNpZ25pYV9zNl9TT0ZfMjU2LnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D",
+                "card_background": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU3dpdGNoZXIvU2Vhc29uX1N3aXRjaGVyX1M2X1NPRi5wbmciLCJvcHRpb25zIjp7fX0%3D",
+                "battlepass_background": "https://spartanrecord.com/images/Fleetcom.jpg" // "https://support.halowaypoint.com/hc/article_attachments/25945755760660"
+            },
+            "properties": {
+                "identifier": "Season8-Op1",
+                "csr": "CsrSeason8-1"
+            },
+            "availability": [
+                {
+                    "start_date": "2024-07-30T18:00:00.000Z",
+                    "end_date": "2024-09-03T18:00:00.000Z"
+                }
+            ]
+        },
     ],
     "additional": {
-        "total": 8,
+        "total": 10,
         "query": {
             "language": "en-US"
         }

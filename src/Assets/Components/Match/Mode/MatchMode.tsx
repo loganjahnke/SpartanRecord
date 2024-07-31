@@ -1,14 +1,15 @@
-import { CTFSchema, OddballSchema, ZoneSchema, EliminationSchema, StockpileSchema, ExtractionSchema, InfectionSchema, ZoneServiceRecordSchema, FirefightSchema } from "../../../../Database/Schemas/ServiceRecordSchema";
+import { CTFSchema, OddballSchema, ZoneSchema, EliminationSchema, StockpileSchema, ExtractionSchema, InfectionSchema, ZoneServiceRecordSchema, FirefightSchema, VIPSchema } from "../../../../Database/Schemas/ServiceRecordSchema";
 import { CTFMode } from "./CTFMode";
 import { OddballMode } from "./OddballMode";
 import { ZoneMode } from "./ZoneMode";
 import { ExtractionMode } from "./ExtractionMode";
 import { InfectionMode } from "./InfectionMode";
 import { FirefightMode } from "./FirefightMode";
+import { VIPMode } from "./VIPMode";
 
 interface MatchModeProps
 {
-	mode?: CTFSchema | OddballSchema | ZoneSchema | EliminationSchema | StockpileSchema | ExtractionSchema | InfectionSchema | ZoneServiceRecordSchema | FirefightSchema;
+	mode?: CTFSchema | OddballSchema | ZoneSchema | EliminationSchema | StockpileSchema | ExtractionSchema | InfectionSchema | ZoneServiceRecordSchema | FirefightSchema | VIPSchema;
 }
 
 export function MatchMode(props: MatchModeProps)
@@ -45,6 +46,11 @@ export function MatchMode(props: MatchModeProps)
 	if (mode.hasOwnProperty("boss_kills"))
 	{
 		return <FirefightMode mode={mode as FirefightSchema} />
+	}
+
+	if (mode.hasOwnProperty("vip_kills"))
+	{
+		return <VIPMode mode={mode as VIPSchema} />
 	}
 
 	return <></>;

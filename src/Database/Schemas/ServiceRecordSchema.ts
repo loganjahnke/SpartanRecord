@@ -231,3 +231,14 @@ export interface FirefightSchema
 	sentinel_kills: number;
 	skimmer_kills: number;
 };
+
+export interface VIPSchema
+{
+	vip_kills: number;
+	vip_assists: number;
+	kills_as_vip: number;
+	times_selected_as_vip: number;
+	max_killing_spree_as_vip: number;
+	time_as_vip: DurationSchema;
+	longest_time_as_vip: DurationSchema;
+};
