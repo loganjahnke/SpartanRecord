@@ -29,6 +29,7 @@ import { ServiceRecordType } from "../Database/SCData";
 import { Debugger } from "../Objects/Helpers/Debugger";
 import { PlaylistChooser } from "../Assets/Components/Playlists/PlaylistChooser";
 import { FluidAd } from "../Assets/Components/Ads/FluidAd";
+import { ModeBreakdown } from "../Assets/Components/Breakdowns/Modes/ModeBreakdown";
 
 export function FilteredView(props: ViewProps)
 {
@@ -316,6 +317,9 @@ export function FilteredView(props: ViewProps)
 							{!isSubscribedToPatreon && <Grid item xs={12}>
 								<FluidAd adId="8600101244" isAdFree={isSubscribedToPatreon} />
 							</Grid>}
+							<Grid item xs={12}>
+								<ModeBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
+							</Grid>
 							<Grid item xs={12}>
 								<DamageBreakdown serviceRecord={sr} showPerMatch={showPerMatch} />
 							</Grid>
