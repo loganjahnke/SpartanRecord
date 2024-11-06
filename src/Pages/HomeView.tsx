@@ -24,7 +24,7 @@ export function HomeView(props: ViewProps)
 	const [recentPlayers, setRecentPlayers] = useState<Player[]>(Cookie.getRecents().map(gamertag => new Player(gamertag)));
 	const [favoritePlayers, setFavoritePlayers] = useState<Player[]>([]);
 	const [currSeason, setCurrSeason] = useState<HaloDotAPISeason>();
-	const [showWhatsNew, setShowWhatsNew] = useState(true);
+	const [showWhatsNew, setShowWhatsNew] = useState(false);
 	//#endregion
 
 	/** Controlled search component */
@@ -97,7 +97,7 @@ export function HomeView(props: ViewProps)
 
 		setVersion(await app.GetVersion());
 		setCurrSeason(await app.GetCurrentSeason());
-		setShowWhatsNew(!Cookie.getHideWhatsNew());
+		//setShowWhatsNew(!Cookie.getHideWhatsNew()); - disable for now, nothing new in a while
 
 		if (!loadFavoritePlayers())
 		{

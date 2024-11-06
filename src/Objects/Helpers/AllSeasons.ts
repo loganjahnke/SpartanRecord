@@ -230,9 +230,34 @@ export const AllSeasons = {
                 }
             ]
         },
+        {
+            "id": 9,
+            "version": 1,
+            "season_name": "Season 9",
+            "name": "Great Journey",
+            "description": "Placeholder Short Description",
+            "narrative_blurb": "Placeholder Long Description",
+            "image_urls": {
+                "season_logo": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoic2Vhc29ucy9pbnNpZ25pYV9FdmVyZ3JlZW5fMjU2LnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D",
+                "card_background": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU3dpdGNoZXIvU2Vhc29uX1N3aXRjaGVyX1M5X0gyQS5wbmciLCJvcHRpb25zIjp7fX0%3D",
+                "challenges_background": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU2NyZWVuQmFja2dyb3VuZHMvY2hhbGxlbmdlc19iYWNrZ3JvdW5kLnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D",
+                "battlepass_background": "https://wpassets.halowaypoint.com/wp-content/2024/11/OperationGreatJourney.jpg",
+                "storefront_background": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU2NyZWVuQmFja2dyb3VuZHMvc3RvcmVmcm9udF9iYWNrZ3JvdW5kLnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D"
+            },
+            "properties": {
+                "identifier": "Season9-Op1",
+                "csr": "CsrSeason9-1"
+            },
+            "availability": [
+                {
+                    "start_date": "2024-11-05T18:00:00.000Z",
+                    "end_date": "2024-12-03T18:00:00.000Z"
+                }
+            ]
+        },
     ],
     "additional": {
-        "total": 10,
+        "total": 11,
         "query": {
             "language": "en-US"
         }
