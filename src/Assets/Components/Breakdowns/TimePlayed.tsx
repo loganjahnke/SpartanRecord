@@ -16,14 +16,14 @@ export function TimePlayed(props: BreakdownProps)
 		const numdays = Math.floor((seconds % 31536000) / 86400); 
         let numhours: number | string = Math.floor(((seconds % 31536000) % 86400) / 3600);
         let numminutes: number | string = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
-		
-		if (numhours < 10) { numhours = "0" + numhours; }
-		if (numminutes < 10) { numminutes = "0" + numminutes; }
+        let numseconds: number | string = Math.floor((((seconds % 31536000) % 86400) % 3600) % 60);
 
         let daysStr = "";
-        const timeStr = +numhours > 0 
-            ? numhours + ":" + numminutes
-            : "00:" + numminutes;
+        let timeStr = "";
+
+        if (numhours > 0) { timeStr = numhours + "h " + numminutes + "m " + numseconds + "s "; }
+        else if (numminutes > 0) { timeStr = numminutes + "m " + numseconds + "s "; }
+        else { timeStr = numseconds + "s "; }
 
         if (numdays > 0)
         {

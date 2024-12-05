@@ -114,12 +114,13 @@ export class SCData
      */
     public async GetPlayerAppearanceAndCROnly(gamertag: string): Promise<Player>
     {
-        const player = new Player(gamertag);
+        const correct = await this.firebase.GetGamertag(gamertag);
+        const player = new Player(correct);
         
         // Try to get from firebase
         const [firebaseAppearance, firebaseCareerRank] = await Promise.all([
-            this.firebase.GetAppearance(gamertag),
-            this.firebase.GetCareerRank(gamertag)
+            this.firebase.GetAppearance(correct),
+            this.firebase.GetCareerRank(correct)
         ]);
 
         if (firebaseAppearance) { player.appearance = firebaseAppearance; }
@@ -128,8 +129,8 @@ export class SCData
 
         // Otherwise get from HaloDotAPI
         await Promise.all([this.halodapi.GetAppearance(player), this.halodapi.GetCareerRank(player)])
-        if (player.appearanceData) { this.firebase.SetAppearance(gamertag, player.appearanceData); }
-        if (player.careerRank) { this.firebase.SetCareerRank(gamertag, player.careerRank); }
+        if (player.appearanceData) { this.firebase.SetAppearance(correct, player.appearanceData); }
+        if (player.careerRank) { this.firebase.SetCareerRank(correct, player.careerRank); }
 
         return player;
     }
@@ -147,6 +148,18 @@ export class SCData
 		const player = new Player(correct);
 		await this.firebase.GetPlayer(player, season, historic);
 		return player;
+	}
+
+    /**
+     * Gets a service record from firebase
+     * @param gamertag the gamertag
+     * @param season the season identifier
+     * @returns the service record
+     */
+    public async GetServiceRecordFromFirebase(gamertag: string, season?: string): Promise<ServiceRecord>
+	{
+        const correct = await this.firebase.GetGamertag(gamertag);
+		return await this.firebase.GetServiceRecord(correct, season);
 	}
 
     /**
@@ -174,12 +187,25 @@ export class SCData
     }
 
     /**
+	 * Gets all uncached seasons from the input array
+	 * @param gamertag the gamertag to evaluate
+	 * @param seasons the available seasons
+     * @param year if set, checks the year node
+	 * @returns an array of uncached season identifiers
+	 */
+	public async GetUncachedHistoricSeasons(gamertag: string, seasons: HaloDotAPISeason[], year?: number): Promise<string[]>
+    {
+        return await this.firebase.GetUncachedHistoricSeasons(gamertag, seasons, year);
+    }
+
+    /**
 	 * Sets a previous season's statistics
 	 * @param gamertag the gamertag to set the historic statistics for
 	 * @param season the season identifier we are saving
 	 * @param sr the service record
+     * @param year if set, sets the year node
 	 */
-	public SetPreviousSeasonStats = async (gamertag: string, season: string, sr: ServiceRecordSchema): Promise<void> => this.firebase.SetPreviousSeasonStats(gamertag, season, (await this.GetCurrentSeason())!.properties.identifier, sr);
+	public SetPreviousSeasonStats = async (gamertag: string, season: string, sr: ServiceRecordSchema, year?: number): Promise<void> => this.firebase.SetPreviousSeasonStats(gamertag, season, (await this.GetCurrentSeason())!.properties.identifier, sr, year);
 
     /**
      * Sets a player into firebase
@@ -418,6 +444,17 @@ export class SCData
         this.__seasons[1].name += " Part II";
 
         return this.__seasons;
+    }
+
+    /**
+     * Get all 2024 seasons
+     * @returns the 2024 seasons in an array
+     */
+    public async Get2024Seasons(): Promise<HaloDotAPISeason[]>
+    {
+        const allSeasons = await this.GetSeasons();
+        const seasons2024 = allSeasons.filter(season => season.id === 6 || season.id === 7 || season.id === 8 || season.id === 9);
+        return seasons2024;
     }
 
     /**

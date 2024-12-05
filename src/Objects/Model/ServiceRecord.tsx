@@ -1,7 +1,7 @@
 import { HaloOutcome } from "../../Database/ArrowheadFirebase";
 import { TeamStatsSchema } from "../../Database/Schemas/MatchSchema";
 import { DurationSchema, PlayerStatsSchema } from "../../Database/Schemas/PlayerMatchSchema";
-import { ServiceRecordSchema, ServiceRecordDataSchema, isServiceRecordSchema, ServiceRecordStatsSchema, ServiceRecordMatchesSchema, CTFSchema, EliminationSchema, OddballSchema, StockpileSchema, ZoneServiceRecordSchema, ExtractionSchema, InfectionSchema, ZoneSchema, FirefightSchema, VIPSchema } from "../../Database/Schemas/ServiceRecordSchema";
+import { ServiceRecordSchema, ServiceRecordDataSchema, isServiceRecordSchema, ServiceRecordStatsSchema, ServiceRecordMatchesSchema, CTFSchema, EliminationSchema, OddballSchema, StockpileSchema, ZoneServiceRecordSchema, ExtractionSchema, InfectionSchema, ZoneSchema, FirefightSchema, VIPSchema, isServiceRecordSchemaWithoutDataNode } from "../../Database/Schemas/ServiceRecordSchema";
 import { AllMedals } from "../Helpers/AllMedals";
 import { Breakdowns } from "../Pieces/Breakdowns";
 import { CaptureTheFlag } from "../Pieces/Mode/CaptureTheFlag";
@@ -167,6 +167,22 @@ export class ServiceRecord
             stats = result.data.stats;
             timePlayed = result.data.time_played;
             matches = result.data.matches;
+
+            this.ctf = new CaptureTheFlag(stats?.modes?.capture_the_flag);
+            this.zone = new Zone(stats?.modes?.zones);
+            this.oddball = new Oddball(stats?.modes?.oddball);
+            this.elimination = new Elimination(stats?.modes?.elimination);
+            this.stockpile = new Stockpile(stats?.modes?.stockpile);
+            this.infection = new Infection(stats?.modes?.infection);
+            this.extraction = new Extraction(stats?.modes?.extraction);
+            this.firefight = new Firefight(stats?.modes?.pve);
+        }
+        else if (isServiceRecordSchemaWithoutDataNode(result))
+        {
+            this.data = result;
+            stats = result.stats;
+            timePlayed = result.time_played;
+            matches = result.matches;
 
             this.ctf = new CaptureTheFlag(stats?.modes?.capture_the_flag);
             this.zone = new Zone(stats?.modes?.zones);
@@ -421,6 +437,15 @@ export class ServiceRecord
             this.kda = (this.summary.kills + (this.summary.assists / 3) - this.summary.deaths) / this.matchesPlayed;
             this.damage.average = (this.damage.dealt / this.matchesPlayed) * 100;
         }
+
+        this.ctf.add(sr.ctf);
+        this.zone.add(sr.zone);
+        this.oddball.add(sr.oddball);
+        this.elimination.add(sr.elimination);
+        this.stockpile.add(sr.stockpile);
+        this.infection.add(sr.infection);
+        this.extraction.add(sr.extraction);
+        this.firefight.add(sr.firefight);
     }
 
     /**

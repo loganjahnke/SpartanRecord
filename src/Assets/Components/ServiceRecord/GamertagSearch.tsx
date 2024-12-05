@@ -9,6 +9,7 @@ export interface SearchProps
     onValueChanged: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onKeyPress: (event: React.KeyboardEvent<HTMLDivElement>) => void;
     onSearch: React.MouseEventHandler<HTMLButtonElement>;
+    onYearInReviewClick?: React.MouseEventHandler<HTMLButtonElement>;
     openRecent?: (gamertag: string) => void;
     error?: string;
     showSearchButton?: boolean;
@@ -17,7 +18,7 @@ export interface SearchProps
 
 export function GamertagSearch(props: SearchProps)
 {
-    const { recentPlayers, search, favoritePlayers, onValueChanged, onKeyPress, onSearch, openRecent } = props;
+    const { recentPlayers, search, favoritePlayers, onValueChanged, onKeyPress, onSearch, openRecent, onYearInReviewClick } = props;
     
     return (
         <Box sx={{ display: "flex", flexDirection: "column", textAlign: "center", alignItems: "center", pl: 4, pr: 4 }}>
@@ -26,6 +27,7 @@ export function GamertagSearch(props: SearchProps)
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mt: 3 }}>
                 <TextField label="Gamertag" variant="outlined" size="small" value={search} onChange={onValueChanged} onKeyPress={onKeyPress} />
                 <Button variant="contained" sx={{ ml: 2 }} onClick={onSearch}>Search</Button>
+                {onYearInReviewClick && <Button variant="outlined" sx={{ ml: 2 }} onClick={onYearInReviewClick}>Year in Review</Button>}
             </Box>
             {favoritePlayers.length > 0 &&
                 <Box sx={{ mt: 1 }}>

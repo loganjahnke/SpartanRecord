@@ -18,6 +18,23 @@ export function isServiceRecordSchema(object: any): object is ServiceRecordSchem
 	return false;
 }
 
+/**
+ * Determines if the object is a service record schema without the data node
+ * @param object the object to check
+ * @returns true if it is a service record schema without the data node
+ */
+export function isServiceRecordSchemaWithoutDataNode(object: any): object is ServiceRecordDataSchema
+{
+	if (object === undefined || object === null) { return false; }
+	return "matches" in object &&
+			"stats" in object &&
+			"time_played" in object;
+}
+
+export type ServiceRecordSchemaWithoutAdditional = {
+	data: ServiceRecordDataSchema;
+};
+
 export type ServiceRecordSchema = {
 	data: ServiceRecordDataSchema;
 	additional: {

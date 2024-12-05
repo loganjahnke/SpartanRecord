@@ -67,6 +67,11 @@ export function WhatsNew(props: WhatsNewProps)
 		new Feature("Patreon", "Subscribe to go ad-free for your gamertag", "subscribe"),
 	]);
 
+	features.set("4.16", [
+		new Feature("Check our your 2024 Year in Review", "See your Halo Infinite statistics for 2024"),
+		new Feature("Patreon", "Subscribe to go ad-free for your gamertag", "subscribe"),
+	]);
+
 	return (
 		<Card sx={{ background: ArrowheadTheme.card + "DD" }}>
 			<CardContent>

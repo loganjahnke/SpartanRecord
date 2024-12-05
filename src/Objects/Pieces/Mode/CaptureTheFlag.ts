@@ -30,4 +30,24 @@ export class CaptureTheFlag
 		this.killsAsFlagReturner = data.kills_as_flag_returner;
 		this.timeAsCarrier = new TimePlayed(data.time_as_flag_carrier);
 	}
+
+	/**
+     * Adds a CaptureTheFlag to this CaptureTheFlag
+     * @param other the other CaptureTheFlag
+     */
+	public add(other: CaptureTheFlag): void
+	{
+		if (!other) { return; }
+		this.flagCaptureAssists += other.flagCaptureAssists;
+		this.flagCaptures += other.flagCaptures;
+		this.flagCarriersKilled += other.flagCarriersKilled;
+		this.flagGrabs += other.flagGrabs;
+		this.flagReturnersKilled += other.flagReturnersKilled;
+		this.flagReturns += other.flagReturns;
+		this.flagSecures += other.flagSecures;
+		this.flagSteals += other.flagSteals;
+		this.killsAsFlagCarrier += other.killsAsFlagCarrier;
+		this.killsAsFlagReturner += other.killsAsFlagReturner;
+		this.timeAsCarrier.add(other.timeAsCarrier);
+	}
 }

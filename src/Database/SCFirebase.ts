@@ -150,20 +150,33 @@ export class SCFirebase
 	 * Gets the service record for the gamertag from Firebase
 	 * @param gamertag the gamertag to get the service record of
 	 * @param season the season identifier
+	 * @param year if set, gets the historic season from the year node
 	 * @returns the service record for the gamertag
 	 */
-	public async GetServiceRecord(gamertag: string, season?: string): Promise<ServiceRecord>
+	public async GetServiceRecord(gamertag: string, season?: string, year?: number): Promise<ServiceRecord>
 	{
-		Debugger.Print("SCFirebase", "GetServiceRecord()", gamertag);
+		Debugger.Print("SCFirebase", "GetServiceRecord()", `Gamertag: ${gamertag}, Season: ${season ? season : "All"}`);
 
 		let snapshot: DataSnapshot | undefined;
 		if (!season)
 		{
 			snapshot = await this.__get(`service_record/multiplayer/${gamertag}`);
 			if (snapshot) { this.__setReadSize("GetServiceRecord", snapshot.val()); }
+			return new ServiceRecord(snapshot?.val());
 		}
+		else 
+		{
+			snapshot = year
+				? await this.__get(`service_record/historic/year_in_review/${year}/season/${gamertag}/${season}`)
+				: await this.__get(`service_record/historic/season/${gamertag}/${season}`);
+			if (!snapshot) { return new ServiceRecord(); }
 
-		return new ServiceRecord(snapshot?.val());
+			const data = snapshot?.val() as any;
+			data.time_played = "";
+			if (snapshot) { this.__setReadSize("GetServiceRecord", data); }
+
+			return new ServiceRecord(data);
+		}
 	}
 
 	/**
@@ -188,9 +201,10 @@ export class SCFirebase
 	 * Determines if the previous season's are cached for a given gamertag
 	 * @param gamertag the gamertag to evaluate
 	 * @param seasons the available seasons
+	 * @param checkFinalSeasonInArray if true, checks all seasons in the input array
 	 * @returns true if we have these seasons saved in Firebase
 	 */
-	public async HasHistoricSeasonsCached(gamertag: string, seasons: HaloDotAPISeason[]): Promise<boolean>
+	public async HasHistoricSeasonsCached(gamertag: string, seasons: HaloDotAPISeason[], checkFinalSeasonInArray?: boolean): Promise<boolean>
 	{
 		Debugger.Print("SCFirebase", "HasHistoricSeasonsCached()", gamertag);
 		
@@ -207,12 +221,45 @@ export class SCFirebase
 		const currSeason = seasons[seasons.length - 1];
 		for (const season of seasons)
 		{
-			if (season.properties.identifier === currSeason.properties.identifier) { continue; }
+			if (!checkFinalSeasonInArray && season.properties.identifier === currSeason.properties.identifier) { continue; }
 			Debugger.Continue(season.properties.identifier + ": " + result[season.properties.identifier]);
 			if (!result[season.properties.identifier]) { return false; }
 		}
 
 		return true;
+	}
+
+	/**
+	 * Gets all uncached seasons from the input array
+	 * @param gamertag the gamertag to evaluate
+	 * @param seasons the available seasons
+	 * @param year if set, checks the year node
+	 * @returns an array of uncached season identifiers
+	 */
+	public async GetUncachedHistoricSeasons(gamertag: string, seasons: HaloDotAPISeason[], year?: number): Promise<string[]>
+	{
+		Debugger.Print("SCFirebase", "GetUncachedHistoricSeasons()", `Gamertag: ${gamertag}, Year: ${year ?? "N/A"}`);
+		
+		if (!seasons || seasons.length === 0) { return []; }
+
+		const snapshot = year 
+			? await this.__get(`service_record/historic/year_in_review/${year}/cached/${gamertag}`)
+			: await this.__get(`service_record/historic/cached/${gamertag}`);
+		if (!snapshot) { return seasons.map(season => season.properties.identifier); }
+
+		const result = snapshot.val();
+		if (!result) { return seasons.map(season => season.properties.identifier); }
+
+		this.__setReadSize("GetUncachedHistoricSeasons", result);
+
+		const seasonsNotCached: string[] = [];
+		for (const season of seasons)
+		{
+			Debugger.Continue(season.properties.identifier + ": " + result[season.properties.identifier]);
+			if (!result[season.properties.identifier]) {seasonsNotCached.push(season.properties.identifier); }
+		}
+
+		return seasonsNotCached;
 	}
 
 	/**
@@ -558,7 +605,7 @@ export class SCFirebase
 
 		if (!season)
 		{
-			await this.__set(`service_record/multiplayer/${gamertag}`, data);
+			await this.__set(`service_record/multiplayer/${gamertag}`, Converter.EliminateUnnecessaryNodes(data));
 		}
 		else if (currSeason)
 		{
@@ -584,15 +631,28 @@ export class SCFirebase
 	 * @param season the season identifier we are saving
 	 * @param currSeason the current season identifier
 	 * @param sr the service record
+	 * @param year if set, sets the year node
 	 */
-	public async SetPreviousSeasonStats(gamertag: string, season: string, currSeason: string, sr: ServiceRecordSchema): Promise<void>
+	public async SetPreviousSeasonStats(gamertag: string, season: string, currSeason: string, sr: ServiceRecordSchema, year?: number): Promise<void>
 	{
-		Debugger.Print("SCFirebase", "SetPreviousSeasonStats()", gamertag);
+		Debugger.Print("SCFirebase", "SetPreviousSeasonStats()", `${gamertag} - ${season}${year ? " - " + year : ""}`);
 
-		await Promise.all([
-			this.__set(`service_record/historic/season/${gamertag}/${season}`, Converter.AutocodeToSeasons(sr)),  // set abridged SR into historic season node
-			this.__set(`service_record/historic/cached/${gamertag}/${season}`, season !== currSeason),            // set flag stating we have the historic season cached
-		]);
+		if (!sr) { return; }
+		if (year)
+		{
+			await Promise.all([
+				this.__set(`service_record/historic/year_in_review/${year}/season/${gamertag}/${season}`, Converter.EliminateUnnecessaryNodes(sr)),  
+				this.__set(`service_record/historic/year_in_review/${year}/cached/${gamertag}/${season}`, season !== currSeason),
+			]);
+		}
+		else 
+		{
+			await Promise.all([
+				this.__set(`service_record/historic/season/${gamertag}/${season}`, Converter.AutocodeToSeasons(sr)),  // set abridged SR into historic season node
+				this.__set(`service_record/historic/cached/${gamertag}/${season}`, season !== currSeason),            // set flag stating we have the historic season cached
+			]);
+		}
+
 	}
 
 	/**

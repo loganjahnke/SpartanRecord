@@ -1,5 +1,5 @@
 import { AppearanceSchema } from "../../../Database/Schemas/AppearanceSchema";
-import { ServiceRecordSchema } from "../../../Database/Schemas/ServiceRecordSchema";
+import { ServiceRecordSchema, ServiceRecordSchemaWithoutAdditional } from "../../../Database/Schemas/ServiceRecordSchema";
 import { FirebaseSeasonServiceRecord } from "../../../Database/Schemas/FirebaseSeasonServiceRecord";
 import { Debugger } from "../Debugger";
 import { URLReducer } from "./URLReducer";
@@ -43,6 +43,16 @@ export class Converter
 				wins: sr.data.matches.wins,
 			},
 		}
+	}
+
+	/**
+	 * Removes the additional node in the service record
+	 * @param sr the autocode multiplayer service record
+	 * @returns the firebase seasons service record
+	 */
+	public static EliminateUnnecessaryNodes(sr: ServiceRecordSchema): ServiceRecordSchemaWithoutAdditional
+	{
+		return { data: sr.data }
 	}
 
 	/**

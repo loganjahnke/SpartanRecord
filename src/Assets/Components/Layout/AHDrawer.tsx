@@ -7,11 +7,13 @@ import PrimaryLogo from "../../Images/Primary/Spartan-Record-Logo-Primary-White.
 
 import { MatchesIcon, MedalsIcon, PlaylistsIcon, RankedIcon, SearchIcon, ServiceRecordIcon, SocialIcon, VariantsIcon, CreditsIcon, SpartanCompanyIcon } from "../../Icons/CustomIcons";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
-import { UsbRounded, GamepadRounded, LeaderboardRounded, LockOutlined, CompareArrows, PlayArrow } from "@mui/icons-material";
+import { UsbRounded, GamepadRounded, LeaderboardRounded, LockOutlined, CompareArrows, PlayArrow, CalendarMonth } from "@mui/icons-material";
 
 export enum SRTabs
 {
 	Search = "Search",
+
+	YearInReview = "Year in Review",
 
 	ServiceRecord = "Service Record",
 	CareerRank = "Career Rank",
@@ -87,6 +89,9 @@ export function AHDrawer(props: AHDrawerProps)
 		{
 			case SRTabs.Search:
 				switchTab("/", newTab);
+				break;
+			case SRTabs.YearInReview:
+				switchTab(`/year_in_review/2024/${player.gamertag}`, newTab);
 				break;
 			case SRTabs.ServiceRecord:
 				switchTab(`/service_record/${player.gamertag}`, newTab);
@@ -222,6 +227,7 @@ export function AHDrawer(props: AHDrawerProps)
 				{player && player.gamertag && isAllowed ? 
 				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
 					<Tab value={SRTabs.Search} label={SRTabs.Search} icon={<SearchIcon />} iconPosition="start" />
+					<Tab value={SRTabs.YearInReview} label={SRTabs.YearInReview} icon={<CalendarMonth />} iconPosition="start" />
 					<Tab value={SRTabs.ServiceRecord} label={SRTabs.ServiceRecord} icon={<ServiceRecordIcon />} iconPosition="start" />
 					<Tab value={SRTabs.CareerRank} label={SRTabs.CareerRank} icon={<SpartanCompanyIcon fontSize="inherit" />} sx={tiny} iconPosition="start" />
 					<Tab value={SRTabs.Compare} label={SRTabs.Compare} icon={<CompareArrows fontSize="inherit" />} sx={tiny} iconPosition="start" />
@@ -256,6 +262,7 @@ export function AHDrawer(props: AHDrawerProps)
 				: player && player.gamertag ?
 				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
 					<Tab value="Search" label="Search" icon={<SearchIcon />} iconPosition="start" />
+					<Tab value={SRTabs.YearInReview} label={SRTabs.YearInReview} icon={<CalendarMonth />} iconPosition="start" />
 					<Tab value={SRTabs.ServiceRecord} label={SRTabs.ServiceRecord} icon={<ServiceRecordIcon />} iconPosition="start" />
 					<Tab value={SRTabs.CareerRank} label={SRTabs.CareerRank} icon={<SpartanCompanyIcon fontSize="inherit" />} sx={tiny} iconPosition="start" />
 					<Tab value={SRTabs.Compare} label={SRTabs.Compare} icon={<CompareArrows fontSize="inherit" />} sx={tiny} iconPosition="start" />

@@ -41,6 +41,14 @@ export function HomeView(props: ViewProps)
 		switchTab(`service_record/${localGamertag}`, SRTabs.ServiceRecord);
 	}
 
+	/** When the Year in Review button is pressed */
+	function searchForGamertagYearInReview()
+	{
+		if (localGamertag === "") { return; }
+		updatePlayer(localGamertag);
+		switchTab(`year_in_review/2024/${localGamertag}`, SRTabs.YearInReview);
+	}
+
 	/** When the search button is pressed */
 	function openRecent(gamertag: string)
 	{
@@ -97,7 +105,7 @@ export function HomeView(props: ViewProps)
 
 		setVersion(await app.GetVersion());
 		setCurrSeason(await app.GetCurrentSeason());
-		//setShowWhatsNew(!Cookie.getHideWhatsNew()); - disable for now, nothing new in a while
+		setShowWhatsNew(!Cookie.getHideWhatsNew());
 
 		if (!loadFavoritePlayers())
 		{
@@ -142,13 +150,13 @@ export function HomeView(props: ViewProps)
 				<Box sx={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: "rgba(1,64,82, 0.8)", textAlign: "center", overflow: "auto" }}>
 					<Grow />
 					{!showWhatsNew && <>
-						<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} />
+						<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} onYearInReviewClick={searchForGamertagYearInReview} />
 						<Grow />
 					</>}
 					<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
 						{showWhatsNew && <>
 							<Box sx={{ mt: { xs: 20 }}}></Box>
-							<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} />
+							<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} onYearInReviewClick={searchForGamertagYearInReview} />
 							<Box sx={{ textAlign: "center", mt: 6, alignSelf: "center", width: { xs: "90%", sm: "75%", md: "500px" }}}><WhatsNew gamertag={player?.gamertag} onDismiss={onDismissWhatsNew} switchTab={switchTab} /></Box>
 						</>}
 						<Grow />

@@ -23,7 +23,7 @@ import { FluidAd } from "../Ads/FluidAd";
 
 interface ServiceRecordGridProps
 {
-	seasons: HaloDotAPISeason[];
+	seasons?: HaloDotAPISeason[];
 	setSeason?: (season: string) => void;
 	setShowPerMatch: (show: boolean) => void;
 	showPerMatch: boolean;
@@ -47,7 +47,7 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 			{/* Top */}
 			<Grid item xs={12}>
 				<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
-					{setSeason && <SeasonChooser season={season ?? "All"} setSeason={setSeason} seasons={seasons} />}
+					{setSeason && seasons && <SeasonChooser season={season ?? "All"} setSeason={setSeason} seasons={seasons} />}
 					{title && <Typography variant="h5">{title}</Typography>}
 					<Box sx={{ flexGrow: 1 }}></Box>
 					<ServiceRecordFilters setPerMatch={setShowPerMatch} />
@@ -97,7 +97,7 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 				<Grid item xs={12}>
 					<TopMedals medals={serviceRecord.medals} matchesPlayed={serviceRecord.matchesPlayed} showPerMatch={showPerMatch} />
 				</Grid>
-				{historicStats && (!season) && <Grid item xs={12}>
+				{historicStats && (!season) && seasons && <Grid item xs={12}>
 					<SeasonsChart seasons={seasons} historicServiceRecords={historicStats} />
 				</Grid>}
 				{!isSubscribedToPatreon && <Grid item xs={12}>

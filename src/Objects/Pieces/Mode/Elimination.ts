@@ -25,4 +25,22 @@ export class Elimination
 		this.roundsSurvived = data.rounds_survived;
 		this.timesRevivedByAlly = data.times_revived_by_ally;
 	}
+
+	/**
+     * Adds a Elimination to this Elimination
+     * @param other the other Elimination
+     */
+	public add(other: Elimination): void
+	{
+		if (!other) { return; }
+		this.alliesRevived += other.alliesRevived;
+		this.eliminationAssists += other.eliminationAssists;
+		this.eliminations += other.eliminations;
+		this.enemyRevivesDenied += other.enemyRevivesDenied;
+		this.executions += other.executions;
+		this.killsAsLastPlayerStanding += other.killsAsLastPlayerStanding;
+		this.lastPlayersStandingKilled += other.lastPlayersStandingKilled;
+		this.roundsSurvived += other.roundsSurvived;
+		this.timesRevivedByAlly += other.timesRevivedByAlly;
+	}
 }

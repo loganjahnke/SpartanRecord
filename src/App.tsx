@@ -33,6 +33,7 @@ import { StoreView } from "./Pages/Store/StoreView";
 import { ClipsView } from "./Pages/Clips/ClipsView";
 import { CareerRankSchema, EmptyCareerRank } from "./Database/Schemas/CareerRankSchema";
 import { CareerRankView } from "./Pages/Career Rank/CareerRankView";
+import { YearInReview } from "./Pages/YearInReview";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -169,6 +170,9 @@ const App = () =>
 					<Route path="/service_record/:node/:gamertag" element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 					<Route path="/service_record/:node/:gamertag/:filter" element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 					
+					{/* Year in Review */}
+					<Route path="/year_in_review/2024/:gamertag" element={<YearInReview app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
+
 					{/* Spartan Company Views */}
 					<Route path="/spartan_company" element={<SpartanCompanyView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 					
