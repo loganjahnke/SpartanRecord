@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Toolbar, Typography } from "@mui/material";
+import { Box, Button, Divider, Grid, Toolbar, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
@@ -6,19 +6,23 @@ import { useParams } from "react-router-dom";
 import { ViewProps } from "./Props/ViewProps";
 import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
-import { ServiceRecordGrid } from "../Assets/Components/ServiceRecord/ServiceRecordGrid";
 import { Player } from "../Objects/Model/Player";
 import { Debugger } from "../Objects/Helpers/Debugger";
+import { PlayerCard } from "../Assets/Components/PlayerAppearance/PlayerCard";
+import { ImageCardWithContent } from "../Assets/Components/Cards/ImageCardWithContent";
+import { GridItemCentered } from "../Assets/Components/Common/GridItemCentered";
+import { WelcomeToYearInReview } from "../Assets/Components/YearInReview/Callouts/WelcomeToYearInReview";
+import { PlaytimeCallout } from "../Assets/Components/YearInReview/Callouts/PlaytimeCallout";
+import { MatchesCallout } from "../Assets/Components/YearInReview/Callouts/MatchesCallout";
+import { AdCallout } from "../Assets/Components/YearInReview/Callouts/AdCallout";
+import { PlayerCardCallout } from "../Assets/Components/YearInReview/Callouts/PlayerCardCallout";
+import { CareerRankCallout } from "../Assets/Components/YearInReview/Callouts/CareerRankCallout";
 
 export function YearInReview(props: ViewProps)
 {
 	//#region Props and Navigate
 	const { app, player, isSubscribedToPatreon, setLoadingMessage, setBackgroundLoadingProgress, updatePlayer, switchTab } = props;
 	const { gamertag } = useParams();
-	//#endregion
-	
-	//#region State
-	const [showPerMatch, setShowPerMatch] = useState(false);
 	//#endregion
 
 	/**
@@ -103,7 +107,7 @@ export function YearInReview(props: ViewProps)
 		clearLoadingMessages();
 
 		// Log event
-		app.logger.LogViewServiceRecord();
+		app.logger.LogYearInReview();
 
 	}, [app, gamertag, switchTab, load2024, clearLoadingMessages]);
 	
@@ -113,6 +117,7 @@ export function YearInReview(props: ViewProps)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [gamertag]);
 
+	if (!player) { <></>; }
 	return (
 		<Box component="main" sx={{ flexGrow: 1 }}>
 			<Helmet>
@@ -125,21 +130,21 @@ export function YearInReview(props: ViewProps)
 			<Toolbar />
 			<Divider />
 			<Box sx={{ p: player ? 2 : 0, height: "calc(100% - 64px)" }}>
-				{player && player.serviceRecord?.error !== undefined &&
+				{player!.serviceRecord?.error !== undefined &&
 					<Box sx={{ m: 10, color: "primary.main" }}>
-						<Typography variant="h3">Couldn't load {player.gamertag}</Typography>
-						<Typography variant="h6">{player.serviceRecord.error}</Typography>
+						<Typography variant="h3">Couldn't load {player!.gamertag}</Typography>
+						<Typography variant="h6">{player!.serviceRecord.error}</Typography>
 						<Button sx={{ mt: 4 }} onClick={() => switchTab("/", SRTabs.Search)} variant="contained">Back to Search</Button>
 					</Box>
 				}
-				{player && <ServiceRecordGrid 
-					serviceRecord={player.serviceRecord}
-					careerRank={player.careerRank}
-					isSubscribedToPatreon={isSubscribedToPatreon}
-					csrs={player.csrs}
-					showPerMatch={showPerMatch}
-					setShowPerMatch={setShowPerMatch}
-				/>}
+				<Grid container spacing={2}>
+					<PlayerCardCallout player={player} />
+					<WelcomeToYearInReview delay="250ms" />
+					<PlaytimeCallout player={player} delay="3000ms" subdelay="5000ms" />
+					<MatchesCallout player={player} delay="8000ms" subdelay="10000ms" />
+					<AdCallout delay="12000ms" isSubscribedToPatreon={isSubscribedToPatreon} />
+					<CareerRankCallout delay="250ms" player={player} />
+				</Grid>
 			</Box>
 		</Box>
 	);

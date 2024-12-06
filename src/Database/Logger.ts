@@ -15,21 +15,6 @@ export class Logger
     }
 
 	/**
-     * Logs an event in Firebase analytics for viewing the gamertag's yesterday statistics
-     */
-    public LogViewYesterday = (): void => this.__logEvent("view_yesterday");
-
-	/**
-     * Logs an event in Firebase analytics for changing the season's chart metric
-     */
-    public LogChangeSeasonMetric = (): void => this.__logEvent("change_season_metric");
-
-	/**
-     * Logs an event in Firebase analytics for changing the recent match's metric
-     */
-    public LogChangeRecentMatchesMetric = (): void => this.__logEvent("change_matches_metric");
-
-	/**
      * Logs an event in Firebase analytics for viewing the gamertag's medals
      */
     public LogViewMedals = (): void => this.__logEvent("view_medals");
@@ -83,6 +68,11 @@ export class Logger
      * Logs an error that failed to load
      */
     public LogError = (): void => this.__logEvent("error");
+
+    /**
+     * Logs an event in Firebase analytics for viewing the year in review
+     */
+    public LogYearInReview = (): void => this.__logEvent("year_in_review");
 
     /**
      * Logs an event in Firebase analytics

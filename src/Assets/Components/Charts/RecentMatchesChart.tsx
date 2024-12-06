@@ -45,7 +45,7 @@ enum ChartType
 	Line = "Line"
 }
 
-export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceRecord, openMatch: (matchID: string) => void, onMetricChanged: () => void }) =>
+export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceRecord, openMatch: (matchID: string) => void }) =>
 {
 	ChartJS.defaults.color = "#DDDDDD";
 	ChartJS.defaults.font.family = "Roboto";
@@ -62,7 +62,7 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 	);
 
 	//#region Props
-	const { matches, sr, openMatch, onMetricChanged } = props;
+	const { matches, sr, openMatch } = props;
 	//#endregion
 
 	//#region Hooks
@@ -94,7 +94,6 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 	 */
 	const changeDataSet = useCallback((event?: SelectChangeEvent): void =>
 	{
-		onMetricChanged();
 		const newDataSet = event?.target.value as RecentMatchesDataSets ?? RecentMatchesDataSets.WinLoss;
 		if (event && dataSet.current === newDataSet) { return; }
 		dataSet.current = newDataSet;
@@ -303,7 +302,7 @@ export const RecentMatchesChart = (props: { matches: PlayerMatch[], sr: ServiceR
 				}
 			]
 		});
-	}, [matches, openMatch, sr, onMetricChanged, width]);
+	}, [matches, openMatch, sr, width]);
 
 	const initialChartData = {
 		labels: matches.map((_, index) => matches.length - index),

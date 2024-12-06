@@ -3,19 +3,30 @@ import { Player } from "../../../Objects/Model/Player";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { Image } from "../Common/Image";
 import { VIP } from "../../../Objects/Model/VIP";
+import { CalendarMonth } from "@mui/icons-material";
 
 interface PlayerChipProps
 {
 	player: Player | VIP;
 	onClick?: (gamertag: string) => void;
+	onSecondaryClick?: (gamertag: string) => void;
 }
 
 export function PlayerChip(props: PlayerChipProps)
 {
-	const { player, onClick } = props;
+	const { player, onClick, onSecondaryClick } = props;
 
 	return (
-		<Chip sx={{ border: "1px solid #95A3B3AA", background: "linear-gradient(-25deg, rgba(7,32,40,1) 0%, rgba(0,48,60,1) 25%, rgba(1,64,82,1) 50%, rgba(0,48,60,1) 75%, rgba(7,32,40,1) 100%)", margin: "4px 4px", p: 0.5, height: "36px" }} icon={<Image height="24px" src={player.appearance.emblemURL} alt="Emblem" crossOrigin="anonymous" />} onClick={onClick ? () => onClick(player.gamertag) : undefined} 
+		<Chip 
+			sx={{ 
+				border: "1px solid #95A3B3AA", 
+				background: "linear-gradient(-25deg, rgba(7,32,40,1) 0%, rgba(0,48,60,1) 25%, rgba(1,64,82,1) 50%, rgba(0,48,60,1) 75%, rgba(7,32,40,1) 100%)", 
+				margin: "4px 4px", p: 0.5, height: "36px" 
+			}} 
+			icon={<Image height="24px" src={player.appearance.emblemURL} alt="Emblem" crossOrigin="anonymous" />} 
+			onClick={onClick ? () => onClick(player.gamertag) : undefined} 
+			onDelete={onSecondaryClick ? () => onSecondaryClick(player.gamertag) : undefined}
+			deleteIcon={<CalendarMonth />}
 			label={
 				<>
 					<Box sx={{ textAlign: "left", mt: 0.5 }}>

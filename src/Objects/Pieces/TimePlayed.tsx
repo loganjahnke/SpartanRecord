@@ -41,9 +41,13 @@ export class TimePlayed
         else if (numminutes > 0) { timeStr = numminutes + "m " + numseconds + "s "; }
         else { timeStr = numseconds + "s "; }
 
-        if (numdays > 0)
+        if (numdays > 1)
         {
             daysStr = numdays + " days ";
+        }
+        else if (numdays > 0)
+        {
+            daysStr = numdays + " day ";
         }
 
         return daysStr + timeStr;

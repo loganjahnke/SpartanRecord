@@ -245,7 +245,7 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 						<KillDeathCard serviceRecord={combinedSR} />
 					</Grid>
 					<Grid item xs={12}>
-						<RecentMatchesChart matches={matchesToShow} sr={player?.serviceRecord ?? new ServiceRecord()} openMatch={goToMatch} onMetricChanged={() => app.logger.LogChangeSeasonMetric()} />
+						<RecentMatchesChart matches={matchesToShow} sr={player?.serviceRecord ?? new ServiceRecord()} openMatch={goToMatch} />
 					</Grid>
 				</Grid>
 				<Grid container spacing={2} sx={{ mt: 1 }}>

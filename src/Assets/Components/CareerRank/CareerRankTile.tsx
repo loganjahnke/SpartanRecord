@@ -5,9 +5,9 @@ import { CareerRankSchema } from "../../../Database/Schemas/CareerRankSchema";
 import { CurrentGrade, GetCareerRankMetadata, NextGrade } from "../../../Objects/Helpers/AllCareerRanks";
 import { URLReducer } from "../../../Objects/Helpers/Statics/URLReducer";
 
-export function CareerRankTile(props: { rank?: CareerRankSchema, rightAlign?: boolean })
+export function CareerRankTile(props: { rank?: CareerRankSchema, rightAlign?: boolean, hideBottomRow?: boolean, ultraLarge?: boolean })
 {
-	const { rank, rightAlign } = props;
+	const { rank, rightAlign, hideBottomRow, ultraLarge } = props;
 
     const background = ArrowheadTheme.box;
 	const previous = GetCareerRankMetadata((rank?.data?.current?.rank ?? 1) - 1);
@@ -19,16 +19,18 @@ export function CareerRankTile(props: { rank?: CareerRankSchema, rightAlign?: bo
 	const progress = rank.data.current.title === "Hero" ? 100 : (levelAmount - rank.data.level.remaining_xp_to_next_level) * 100 / levelAmount;
 	const color = rank.data.current.title === "Hero" ? "Hero" : (rank.data.current.properties.type || rank.data.current.title);
 
+	const rankIconHeight = ultraLarge ? "112px" : "48px"
+
 	return (
 		<Box sx={{ 
 			background: background, 
 			display: "grid",
-			gridTemplateColumns: rightAlign ? "auto 48px" : "48px auto",
+			gridTemplateColumns: rightAlign ? `auto ${ultraLarge ? "80px" : "48px"}` : `${ultraLarge ? "80px" : "48px"} auto`,
 			margin: 0.5, 
 			alignItems: "center",
 			padding: 0.5,
 			width: "100%" }}>
-			{!rightAlign && <Box sx={{ display: "flex", alignItems: "center" }}><img src={URLReducer.ConstructURLForGruntAPI(rank.data.current.image_urls.icon)} alt="Rank" height="48px" /></Box>}
+			{!rightAlign && <Box sx={{ display: "flex", alignItems: "center" }}><img src={URLReducer.ConstructURLForGruntAPI(rank.data.current.image_urls.icon)} alt="Rank" height={rankIconHeight} /></Box>}
 			<Box sx={{ mb: 1 }}>
 				<Box sx={{ display: "flex", flexDirection: "row", mb: 0.5, alignItems: "center" }}>
 					<Typography variant="subtitle1" sx={{ fontSize: "0.8rem", ml: 1 }}>{rank.data.current.title} {CurrentGrade(rank)}</Typography>
@@ -44,7 +46,8 @@ export function CareerRankTile(props: { rank?: CareerRankSchema, rightAlign?: bo
 							flexBasis: "75%", 
 							ml: 1, 
 							mr: 1, 
-							outline: color === "Onyx" ? "1px solid #5E3D19 !important" : "",
+							height: ultraLarge ? "25px !important" : "1px",
+							outline: color === "Onyx" ? `1px solid #5E3D19 !important` : "",
 							"> .MuiLinearProgress-bar": 
 								color === "Bronze" 
 									? { background: "linear-gradient(to right, #a16447 0%, #a16447 20%, #633522 50%, #7e462e 80%, #7e462e 100%)" } :
@@ -62,12 +65,14 @@ export function CareerRankTile(props: { rank?: CareerRankSchema, rightAlign?: bo
 									: { background: "linear-gradient(to left, #FFFFFF 0%, #ffffda 20%, #EFEFEF 50%, #ffffda 80%, #FCFCFC 100%)" } 
 						}} />
 				</Box>
-				<Box sx={{ display: "flex", flexDirection: "row", mt: 0.5, alignItems: "center" }}>
-					<Typography variant="caption" sx={{ fontSize: "0.8rem", ml: 1 }}>Total: {rank.data.level.total_xp.toLocaleString()} XP</Typography>
-					<Box sx={{ ml: 1 }} />
-					<Box sx={{ flexGrow: 1 }} />
-					{color !== "Hero" && rank.data.next && <Typography variant="caption" sx={{ display: "block", fontSize: "0.8rem", mr: 1 }}>{`${rank.data.level.remaining_xp_to_next_level.toLocaleString()} XP needed for next rank`}</Typography>}
-				</Box>
+				{!hideBottomRow &&
+					<Box sx={{ display: "flex", flexDirection: "row", mt: 0.5, alignItems: "center" }}>
+						<Typography variant="caption" sx={{ fontSize: "0.8rem", ml: 1 }}>Total: {rank.data.level.total_xp.toLocaleString()} XP</Typography>
+						<Box sx={{ ml: 1 }} />
+						<Box sx={{ flexGrow: 1 }} />
+						{color !== "Hero" && rank.data.next && <Typography variant="caption" sx={{ display: "block", fontSize: "0.8rem", mr: 1 }}>{`${rank.data.level.remaining_xp_to_next_level.toLocaleString()} XP needed for next rank`}</Typography>}
+					</Box>
+				}
 			</Box>
 			{rightAlign && <Box sx={{ display: "flex", alignItems: "center", justifySelf: "right" }}><img src={URLReducer.ConstructURLForGruntAPI(rank.data.current.image_urls.icon)} alt="Rank" height="48px" /></Box>}
 		</Box>
