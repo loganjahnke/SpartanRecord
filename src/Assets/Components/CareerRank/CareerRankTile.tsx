@@ -26,9 +26,9 @@ export function CareerRankTile(props: { rank?: CareerRankSchema, rightAlign?: bo
 			background: background, 
 			display: "grid",
 			gridTemplateColumns: rightAlign ? `auto ${ultraLarge ? "80px" : "48px"}` : `${ultraLarge ? "80px" : "48px"} auto`,
-			margin: 0.5, 
+			margin: ultraLarge ? 0 : 0.5, 
 			alignItems: "center",
-			padding: 0.5,
+			padding: ultraLarge ? 0 : 0.5,
 			width: "100%" }}>
 			{!rightAlign && <Box sx={{ display: "flex", alignItems: "center" }}><img src={URLReducer.ConstructURLForGruntAPI(rank.data.current.image_urls.icon)} alt="Rank" height={rankIconHeight} /></Box>}
 			<Box sx={{ mb: 1 }}>

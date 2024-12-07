@@ -14,7 +14,7 @@ import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import { Box } from "@mui/material";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 
-export const KillBreakdownChart = (props: { currentSR: ServiceRecord }) =>
+export const KillBreakdownChart = (props: { currentSR: ServiceRecord, legendOnBottom?: boolean }) =>
 {
 	ChartJS.defaults.color = "#DDDDDD";
 	ChartJS.defaults.font.family = "Roboto";
@@ -40,7 +40,7 @@ export const KillBreakdownChart = (props: { currentSR: ServiceRecord }) =>
 		plugins: {
 			legend: {
 				display: true,
-				position: "top" as const,
+				position: (props.legendOnBottom ? "bottom" as const : "top" as const),
 				color: "#FFFFFF"
 			},
 			title: {

@@ -154,12 +154,13 @@ export class SCData
      * Gets a service record from firebase
      * @param gamertag the gamertag
      * @param season the season identifier
+     * @param year if set, gets the historic season from the year node
      * @returns the service record
      */
-    public async GetServiceRecordFromFirebase(gamertag: string, season?: string): Promise<ServiceRecord>
+    public async GetServiceRecordFromFirebase(gamertag: string, season?: string, year?: number): Promise<ServiceRecord>
 	{
         const correct = await this.firebase.GetGamertag(gamertag);
-		return await this.firebase.GetServiceRecord(correct, season);
+		return await this.firebase.GetServiceRecord(correct, season, year);
 	}
 
     /**

@@ -17,7 +17,7 @@ export function PlayerCardCallout(props: PlayerCardCalloutProps)
 
 	return (
 		<GridItemCentered>
-			<ImageCardWithContent autoHeight>
+			<ImageCardWithContent autoHeight maxWidth>
 				<PlayerCard player={player} topDown ultraLarge />
 			</ImageCardWithContent>
 		</GridItemCentered>

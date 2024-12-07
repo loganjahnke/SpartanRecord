@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Grid, Toolbar, Typography } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 
@@ -8,15 +8,13 @@ import { ServiceRecord } from "../Objects/Model/ServiceRecord";
 import { SRTabs } from "../Assets/Components/Layout/AHDrawer";
 import { Player } from "../Objects/Model/Player";
 import { Debugger } from "../Objects/Helpers/Debugger";
-import { PlayerCard } from "../Assets/Components/PlayerAppearance/PlayerCard";
-import { ImageCardWithContent } from "../Assets/Components/Cards/ImageCardWithContent";
-import { GridItemCentered } from "../Assets/Components/Common/GridItemCentered";
 import { WelcomeToYearInReview } from "../Assets/Components/YearInReview/Callouts/WelcomeToYearInReview";
 import { PlaytimeCallout } from "../Assets/Components/YearInReview/Callouts/PlaytimeCallout";
 import { MatchesCallout } from "../Assets/Components/YearInReview/Callouts/MatchesCallout";
 import { AdCallout } from "../Assets/Components/YearInReview/Callouts/AdCallout";
 import { PlayerCardCallout } from "../Assets/Components/YearInReview/Callouts/PlayerCardCallout";
 import { CareerRankCallout } from "../Assets/Components/YearInReview/Callouts/CareerRankCallout";
+import { KillBreakdownCallout } from "../Assets/Components/YearInReview/Callouts/KillBreakdownCallout";
 
 export function YearInReview(props: ViewProps)
 {
@@ -51,13 +49,6 @@ export function YearInReview(props: ViewProps)
 			app.Get2024Seasons()
 		]);
 		
-		// Update state since next part might take awhile
-		updatePlayer(player.gamertag, player.appearance, player.serviceRecord, player.csrs, player.careerRank);
-		
-		// Update loading message
-		clearLoadingMessages();
-		setBackgroundLoadingProgress("Loading 2024 Year in Review");
-		
 		// Check for all uncached 2024 seasons
 		const uncachedSeasons = await app.GetUncachedHistoricSeasons(player.gamertag, seasons2024, 2024);
 
@@ -70,7 +61,7 @@ export function YearInReview(props: ViewProps)
 				return new ServiceRecord(srFromGruntAPI, season.properties.identifier);
 			}
 
-			return app.GetServiceRecordFromFirebase(player.gamertag, season.properties.identifier)
+			return app.GetServiceRecordFromFirebase(player.gamertag, season.properties.identifier, 2024);
 		}));
 
 		// Reduce into one service record
@@ -143,7 +134,8 @@ export function YearInReview(props: ViewProps)
 					<PlaytimeCallout player={player} delay="3000ms" subdelay="5000ms" />
 					<MatchesCallout player={player} delay="8000ms" subdelay="10000ms" />
 					<AdCallout delay="12000ms" isSubscribedToPatreon={isSubscribedToPatreon} />
-					<CareerRankCallout delay="250ms" player={player} />
+					<CareerRankCallout delay="15000ms" player={player} />
+					<KillBreakdownCallout delay="20000ms" killDeathDelay="22500ms" chartDelay="27500ms" player={player} />
 				</Grid>
 			</Box>
 		</Box>

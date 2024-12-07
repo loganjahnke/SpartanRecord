@@ -1,9 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import { GridItemCentered } from "../../Common/GridItemCentered";
 import { CalloutsProps } from "../Props/CalloutsProps";
-import { Zoomer } from "../Zoomer";
 import { ArrowheadTheme } from "../../../Theme/ArrowheadTheme";
 import { BreakdownTile } from "../../Breakdowns/BreakdownTile";
+import { GrowBox } from "../../Animations/GrowBox";
+import { CalloutStat } from "../Typography/CalloutStat";
 
 interface MatchesCalloutProps extends CalloutsProps
 {
@@ -19,17 +20,17 @@ export function MatchesCallout(props: MatchesCalloutProps)
 
 	return (
 		<GridItemCentered>
-			<Zoomer delay={delay} zoom content={
+			<GrowBox delay={delay} content={
 				<>
 					<Typography variant="h6">Let's take a look at your matches breakdown</Typography>
 					<Box sx={{ display: "flex", flexDirection: "row", width: "95%", textAlign: "left", mb: 1,
 						".MuiBox-root:first-child": { borderRadius: "8px 0 0 8px", mr: "1px" }, 
 						".MuiBox-root:last-child": { borderRadius: "0 8px 8px 0", ml: "1px" },
 						".MuiBox-root:not(:first-child):not(:last-child)": { ml: "1px", mr: "1px" } }}>
-						<BreakdownTile title="Wins" value={player!.serviceRecord.breakdowns.matches.wins} total={player!.serviceRecord.matchesPlayed} backgroundColor={ArrowheadTheme.good} />
-						<BreakdownTile title="Losses" value={player!.serviceRecord.breakdowns.matches.losses} total={player!.serviceRecord.matchesPlayed} backgroundColor={ArrowheadTheme.bad} />
+						<BreakdownTile title="Wins" value={player!.serviceRecord.breakdowns.matches.wins} total={player!.serviceRecord.breakdowns.matches.wins + player!.serviceRecord.breakdowns.matches.losses} backgroundColor={ArrowheadTheme.good} />
+						<BreakdownTile title="Losses" value={player!.serviceRecord.breakdowns.matches.losses} total={player!.serviceRecord.breakdowns.matches.wins + player!.serviceRecord.breakdowns.matches.losses} backgroundColor={ArrowheadTheme.bad} />
 					</Box>
-					<Zoomer delay={subdelay} zoom removeBottomPadding content={
+					<GrowBox delay={subdelay} nested content={
 						<MatchesComment {...props} />								
 					} />
 				</>
@@ -65,7 +66,7 @@ function MatchesComment(props: MatchesCalloutProps)
 
 	return (
 		<>
-			<Typography>You won <Typography variant="h5" component="span" sx={{ fontWeight: 600 }}>{(Math.round(player?.serviceRecord.winRate * 100) / 100).toLocaleString()}%</Typography> of your games</Typography>
+			<Typography sx={{ mt: 1 }}>You won <CalloutStat text={(Math.round(player?.serviceRecord.winRate * 100) / 100).toLocaleString() + "%"} /> of your games</Typography>
 			<Typography>{comment}</Typography>
 		</>
 	);

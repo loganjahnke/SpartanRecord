@@ -1,7 +1,7 @@
 import { GridItemCentered } from "../../Common/GridItemCentered";
 import { CalloutsProps } from "../Props/CalloutsProps";
-import { Zoomer } from "../Zoomer";
 import { FluidAd } from "../../Ads/FluidAd";
+import { GrowBox } from "../../Animations/GrowBox";
 
 interface AdCalloutProps extends CalloutsProps
 {
@@ -18,7 +18,7 @@ export function AdCallout(props: AdCalloutProps)
 	if (isSubscribedToPatreon) { return <></>; }
 	return (
 		<GridItemCentered>
-			<Zoomer delay={delay} zoom={isSubscribedToPatreon} content={
+			<GrowBox delay={delay} content={
 				<FluidAd adId="4720270834" isAdFree={isSubscribedToPatreon} />
 			} />
 		</GridItemCentered>

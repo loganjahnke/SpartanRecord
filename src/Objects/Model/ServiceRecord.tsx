@@ -3,7 +3,7 @@ import { TeamStatsSchema } from "../../Database/Schemas/MatchSchema";
 import { DurationSchema, PlayerStatsSchema } from "../../Database/Schemas/PlayerMatchSchema";
 import { ServiceRecordSchema, ServiceRecordDataSchema, isServiceRecordSchema, ServiceRecordStatsSchema, ServiceRecordMatchesSchema, CTFSchema, EliminationSchema, OddballSchema, StockpileSchema, ZoneServiceRecordSchema, ExtractionSchema, InfectionSchema, ZoneSchema, FirefightSchema, VIPSchema, isServiceRecordSchemaWithoutDataNode } from "../../Database/Schemas/ServiceRecordSchema";
 import { AllMedals } from "../Helpers/AllMedals";
-import { Breakdowns } from "../Pieces/Breakdowns";
+import { BreakdownCategory, BreakdownKills, Breakdowns } from "../Pieces/Breakdowns";
 import { CaptureTheFlag } from "../Pieces/Mode/CaptureTheFlag";
 import { Damage } from "../Pieces/Damage";
 import { Elimination } from "../Pieces/Mode/Elimination";
@@ -242,34 +242,7 @@ export class ServiceRecord
             accuracy: core?.shots?.accuracy ?? 0,
         };
 
-        this.breakdowns =
-        {
-            kills: 
-            {
-                melee: core?.breakdown?.kills?.melee ?? 0,
-                grenades: core?.breakdown?.kills?.grenades ?? 0,
-                headshots: core?.breakdown?.kills?.headshots ?? 0,
-                powerWeapons: core?.breakdown?.kills?.power_weapons ?? 0,
-                assassinations: core?.breakdown?.kills?.assassinations ?? 0,
-                splatters: core?.breakdown?.kills?.vehicles?.splatters ?? 0,
-                repulsor: core?.breakdown?.kills?.miscellaneous?.repulsor ?? 0,
-                fusionCoil: core?.breakdown?.kills?.miscellaneous?.fusion_coils ?? 0,
-                sticks: core?.breakdown?.kills?.sticks ?? 0
-            },
-            assists:
-            {
-                emp: core?.breakdown?.assists?.emp ?? 0,
-                driver: core?.breakdown?.assists?.driver ?? 0,
-                callouts: core?.breakdown?.assists?.callouts ?? 0
-            },
-            matches:
-            {
-                wins: matches?.wins ?? 0,
-                losses: matches?.losses ?? 0,
-                draws: matches?.ties ?? 0,
-                left: 0
-            }
-        };
+        this.breakdowns = new Breakdowns(core?.breakdown, matches);
 
         this.timePlayed = new TimePlayed({
             seconds: timePlayed?.seconds ?? 0,
@@ -378,34 +351,7 @@ export class ServiceRecord
             this.shots.accuracy = (this.shots.landed / this.shots.fired) * 100;
         }
 
-        this.breakdowns =
-        {
-            kills: 
-            {
-                melee: sr.breakdowns.kills.melee + this.breakdowns.kills.melee,
-                grenades: sr.breakdowns.kills.grenades + this.breakdowns.kills.grenades,
-                headshots: sr.breakdowns.kills.headshots + this.breakdowns.kills.headshots,
-                powerWeapons: sr.breakdowns.kills.powerWeapons + this.breakdowns.kills.powerWeapons,
-                assassinations: sr.breakdowns.kills.assassinations + this.breakdowns.kills.assassinations,
-                splatters: sr.breakdowns.kills.splatters + this.breakdowns.kills.splatters,
-                repulsor: sr.breakdowns.kills.repulsor + this.breakdowns.kills.repulsor,
-                fusionCoil: sr.breakdowns.kills.fusionCoil + this.breakdowns.kills.fusionCoil,
-                sticks: sr.breakdowns.kills.sticks + this.breakdowns.kills.sticks
-            },
-            assists:
-            {
-                emp: sr.breakdowns.assists.emp + this.breakdowns.assists.emp,
-                driver: sr.breakdowns.assists.driver + this.breakdowns.assists.driver,
-                callouts: sr.breakdowns.assists.callouts + this.breakdowns.assists.callouts
-            },
-            matches:
-            {
-                wins: this.breakdowns.matches.wins + (outcome && outcome === HaloOutcome.Win ? 1 : sr.breakdowns.matches.wins),
-                losses: this.breakdowns.matches.losses + (outcome && outcome === HaloOutcome.Loss ? 1 : sr.breakdowns.matches.losses),
-                left: this.breakdowns.matches.left + (outcome && outcome === HaloOutcome.Draw ? 1 : sr.breakdowns.matches.left),
-                draws: this.breakdowns.matches.draws + (outcome && outcome === HaloOutcome.Left ? 1 : sr.breakdowns.matches.draws)
-            }
-        };
+        this.breakdowns.add(sr.breakdowns);
 
         this.timePlayed = new TimePlayed({
             seconds: sr.timePlayed.seconds + this.timePlayed.seconds,
@@ -490,34 +436,7 @@ export class ServiceRecord
             this.shots.accuracy = (this.shots.landed / this.shots.fired) * 100;
         }
 
-        this.breakdowns =
-        {
-            kills: 
-            {
-                melee: this.breakdowns.kills.melee,
-                grenades: this.breakdowns.kills.grenades,
-                headshots: this.breakdowns.kills.headshots,
-                powerWeapons: this.breakdowns.kills.powerWeapons,
-                assassinations: this.breakdowns.kills.assassinations,
-                splatters: this.breakdowns.kills.splatters,
-                repulsor: this.breakdowns.kills.repulsor,
-                fusionCoil: this.breakdowns.kills.fusionCoil,
-                sticks: this.breakdowns.kills.sticks
-            },
-            assists:
-            {
-                emp: this.breakdowns.assists.emp,
-                driver: this.breakdowns.assists.driver,
-                callouts: this.breakdowns.assists.callouts
-            },
-            matches:
-            {
-                wins: this.breakdowns.matches.wins + (match.player.outcome === HaloOutcome.Win ? 1 : 0),
-                losses: this.breakdowns.matches.losses + (match.player.outcome === HaloOutcome.Loss ? 1 : 0),
-                left: this.breakdowns.matches.left + (match.player.outcome === HaloOutcome.Draw ? 1 : 0),
-                draws: this.breakdowns.matches.draws + (match.player.outcome === HaloOutcome.Left ? 1 : 0)
-            }
-        };
+        this.breakdowns.addMatch(match.player.outcome);
 
         this.timePlayed = new TimePlayed({
             seconds: this.timePlayed.seconds,
