@@ -10,6 +10,7 @@ import { useParams } from "react-router";
 
 import "../../Assets/Styles/Views/Clips.css";
 import { Debugger } from "../../Objects/Helpers/Debugger";
+import { UhOh } from "../UhOh";
 
 export function ClipsView(props: ViewProps)
 {
@@ -19,7 +20,7 @@ export function ClipsView(props: ViewProps)
 	//#endregion
 	
 	//#region State
-	const [clips, setClips] = useState<HaloDotAPIClip[]>([]);
+	const [clips, setClips] = useState<HaloDotAPIClip[] | undefined>();
 	//#endregion
 
 	/**
@@ -36,7 +37,7 @@ export function ClipsView(props: ViewProps)
 	 */
 	const loadClips = useCallback(async () =>
 	{
-		if (clips.length > 0 || !gamertag) { return; }
+		if ((clips && clips.length > 0) || !gamertag) { return; }
 
 		// Get the store
 		const videos = await app.GetClips(gamertag);
@@ -77,8 +78,9 @@ export function ClipsView(props: ViewProps)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	if (clips && clips.length === 0) { return <UhOh primaryMessage="You don't have any clips" secondaryMessage="Head to back to search to look for a different Gamertag." switchTab={switchTab} /> }
 	return (
-		<Box component="main" sx={{ flexGrow: 1 }}>
+		<Box component="main" className="pageContainer">
 			<Helmet>
 				<title>Spartan Record | Clips</title>
 				<meta name="description" content={`Halo Infinite clips for ${gamertag ?? ""}`} />
@@ -88,9 +90,9 @@ export function ClipsView(props: ViewProps)
 			</Helmet>
 			<Toolbar />
 			<Divider />
-			<Box sx={{ p: 2, height: "calc(100% - 64px)" }}>
+			<Box className="underToolbarContainer">
 				<Grid container spacing={2}>
-					{clips.map(clip => <ClipCard clip={clip} gamertag={gamertag ?? ""} />)}
+					{clips && clips.map(clip => <ClipCard clip={clip} gamertag={gamertag ?? ""} />)}
 				</Grid>
 			</Box>
 		</Box>

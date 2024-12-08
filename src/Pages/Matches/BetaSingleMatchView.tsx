@@ -160,7 +160,7 @@ export function BetaSingleMatchView(props: ViewProps)
 	};
 
 	return (
-		<Box component="main" sx={{ flexGrow: 1, width: "100%" }}>
+		<Box component="main" className="pageContainer">
 			<Helmet>
 				<title>{`Spartan Record | ${match?.mode.name} on ${match?.map.name}`}</title>
 				<meta name="description" content={`${gamertag} - ${match?.mode.name} on ${match?.map.name}`} />
@@ -170,7 +170,7 @@ export function BetaSingleMatchView(props: ViewProps)
 			</Helmet>
 			<Toolbar />
 			<Divider />
-			<Box sx={{ p: 2 }}>
+			<Box className="underToolbarContainer" sx={{ overflowX: "hidden" }}>
 				{/* Description of the game (map, mode, playlist) */}
 				<Grid container spacing={2} sx={{ alignItems: "flex-start", justifyContent: "flex-start" }}>
 					{/* Top */}

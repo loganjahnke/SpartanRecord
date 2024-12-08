@@ -24,7 +24,7 @@ export function GamertagSearch(props: SearchProps)
     const { recentPlayers, search, favoritePlayers, onValueChanged, onKeyPress, onSearch, openRecent, onYearInReviewClick, openRecentSecondaryAction } = props;
     
     return (
-        <Box sx={{ display: "flex", flexDirection: "column", textAlign: "center", alignItems: "center", pl: 4, pr: 4 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", textAlign: "center", alignItems: "center", pl: 4, pr: 4, minHeight: "55%", justifyContent: "flex-end" }}>
             <Typography variant="h3">Halo Infinite Service Record</Typography>
             <Typography variant="h6">Search for a gamertag to see Halo Infinite statistics such as KDA, KDR, and more</Typography>
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mt: 3 }}>

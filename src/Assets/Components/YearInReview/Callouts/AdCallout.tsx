@@ -1,9 +1,7 @@
 import { GridItemCentered } from "../../Common/GridItemCentered";
-import { CalloutsProps } from "../Props/CalloutsProps";
 import { FluidAd } from "../../Ads/FluidAd";
-import { OpacityBox } from "../../Animations/OpacityBox";
 
-interface AdCalloutProps extends CalloutsProps
+interface AdCalloutProps
 {
 	isSubscribedToPatreon?: boolean;
 }
@@ -13,14 +11,12 @@ interface AdCalloutProps extends CalloutsProps
  */
 export function AdCallout(props: AdCalloutProps)
 {
-	const { delay, isSubscribedToPatreon } = props;
+	const { isSubscribedToPatreon } = props;
 
 	if (isSubscribedToPatreon) { return <></>; }
 	return (
 		<GridItemCentered>
-			<OpacityBox delay={delay} content={
-				<FluidAd adId="4720270834" isAdFree={isSubscribedToPatreon} />
-			} />
+			<FluidAd adId="4720270834" isAdFree={isSubscribedToPatreon} />
 		</GridItemCentered>
 	);
 }

@@ -142,7 +142,7 @@ export function LegacyLeaderboardView(props: ViewProps)
 	}, [switchTab]);
 
 	return (
-		<Box component="main" sx={{ flexGrow: 1 }}>
+		<Box component="main" className="pageContainer">
 			<Helmet>
 				<title>{"Spartan Record | Leaderboards"}</title>
 				<meta name="description" content={`Halo Infinite leaderboards`} />
@@ -152,7 +152,7 @@ export function LegacyLeaderboardView(props: ViewProps)
 			</Helmet>
 			<Toolbar />
 			<Divider />
-			<Box sx={{ p: player ? 2 : 0, height: "calc(100% - 64px)" }}>
+			<Box className="underToolbarContainer">
 				<Grid container spacing={2}>
 					{/* Top */}
 					<Grid item xs={12}>

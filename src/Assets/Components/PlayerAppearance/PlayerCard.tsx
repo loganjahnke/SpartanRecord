@@ -52,7 +52,7 @@ export function PlayerCard(props: PlayerCardProps)
 
     if (!player) { return <></>; }
 	return showNameplate ? (
-        <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
+        <Box sx={{ display: "flex", alignItems: "center", width: "100%", position: "relative" }}>
             {onFavorite && player && player.gamertag && <Rating sx={{ mr: 2 }} value={isFavorite ? 1 : 0} max={1} onChange={() => onFavorite(player.gamertag)} />}
             <Box className="playerCard" sx={{ backgroundColor: "transparent", display: "flex", alignItems: "center", justifyContent: rightAlign ? "flex-end" : "flex-start", textAlign: "left", height: "100%", mr: noMargin ? 0 : -1, width: "100%" }}>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -72,7 +72,7 @@ export function PlayerCard(props: PlayerCardProps)
         </Box>
     )
     : !topDown ? (
-        <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
+        <Box sx={{ display: "flex", alignItems: "center", width: "100%", position: "relative" }}>
             {onFavorite && player && player.gamertag && <Rating sx={{ mr: 2 }} value={isFavorite ? 1 : 0} max={1} onChange={() => onFavorite(player.gamertag)} />}
             <Box className="playerCard" sx={{ backgroundColor: "transparent", display: "flex", flexDirection: "row", alignItems: "center", textAlign: rightAlign ? "right" : noImages ? "center" : "left", width: "100%" }}>
                 {!rightAlign && !noImages && player.appearance?.emblemURL && <Image src={player.appearance.emblemURL} alt="emblem" height={emblemHeight} crossOrigin="anonymous" />}
@@ -84,7 +84,7 @@ export function PlayerCard(props: PlayerCardProps)
             </Box>
         </Box>
     ) : (
-        <Box className={`${winner ? "topdownWinner" : ""}`} sx={{ backgroundColor: "transparent", display: "flex", flexDirection: "column", alignItems: "center", textAlign: rightAlign ? "right" : noImages ? "center" : "left" }}>
+        <Box className={`${winner ? "topdownWinner" : ""}`} sx={{ backgroundColor: "transparent", display: "flex", flexDirection: "column", alignItems: "center", textAlign: rightAlign ? "right" : noImages ? "center" : "left", position: "relative" }}>
             {!noImages && player.appearance?.emblemURL && <Image src={player.appearance.emblemURL} alt="emblem" height={emblemHeight} crossOrigin="anonymous" />}
             <Box sx={{ mt: 1 }} />
             <Typography className="playerNameGT" variant={gamertagTypingVariant}>{player.gamertag}</Typography>

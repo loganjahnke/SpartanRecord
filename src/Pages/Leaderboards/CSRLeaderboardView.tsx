@@ -12,7 +12,7 @@ import { Leaderboard343 } from "../../Objects/Model/Leaderboard343";
 export function CSRLeaderboardView(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, setLoadingMessage, player, switchTab } = props;
+	const { app, setLoadingMessage, switchTab } = props;
 	const { playlist } = useParams();
 	//#endregion
 	
@@ -49,7 +49,7 @@ export function CSRLeaderboardView(props: ViewProps)
 
 	if (!leaderboard) { return <></>; }
 	return (
-		<Box component="main" sx={{ flexGrow: 1 }}>
+		<Box component="main" className="pageContainer">
 			<Helmet>
 				<title>{"Spartan Record | Leaderboards"}</title>
 				<meta name="description" content={`Halo Infinite leaderboards`} />
@@ -59,7 +59,7 @@ export function CSRLeaderboardView(props: ViewProps)
 			</Helmet>
 			<Toolbar />
 			<Divider />
-			<Box sx={{ p: player ? 2 : 0, height: "calc(100% - 64px)" }}>
+			<Box className="underToolbarContainer">
 				<Grid container spacing={2}>
 					{/* Top */}
 					<Grid item xs={0} lg={2} />

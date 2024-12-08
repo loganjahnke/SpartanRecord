@@ -263,7 +263,7 @@ export function SpartanCompanyView(props: ViewProps)
 	//#endregion
 
 	return (
-		<Box component="main" sx={{ flexGrow: 1, height: "calc(100% - 64px)" }}>
+		<Box component="main" className="pageContainer">
 			<Helmet>
 				<title>{`Spartan Record | Spartan Company`}</title>
 				<meta name="description" content={`Halo Infinite - ${spartanCompany.name} Company`} />
@@ -288,7 +288,7 @@ export function SpartanCompanyView(props: ViewProps)
 			<RemoveGamertagDialog open={removeGamertagDialog} accept={closeRemoveGamertagDialog} cancel={cancelRemoveGamertagDialog} />
 			<EditCompanyDialog open={openEditCompanyDialog} accept={saveEditCompanyDialog} cancel={cancelEditCompanyDialog} spartanCompany={spartanCompany} sharedSR={sharedSR} loading={false} />
 			{ spartanCompany.players && spartanCompany.players.length > 0 ?
-			<Box sx={{ p: 2 }}>
+			<Box className="underToolbarContainer">
 				<Grid container spacing={2}>
 					{/* Top */}
 					<Grid container item spacing={2} xs={12}>

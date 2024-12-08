@@ -15,7 +15,7 @@ export function UhOh(props: UhOhProps)
 {
     const { ignoreHelmet, primaryMessage, secondaryMessage, switchTab } = props;
 
-    return <Box component="main" sx={{ flexGrow: 1, height: {xs: "calc(100% - 24px)", md: "calc(100% - 32px)"}}}>
+    return <Box component="main" className="pageContainer">
         {!ignoreHelmet &&
             <Helmet>
                 <title>{`Spartan Record | Page Not Found`}</title>
@@ -27,7 +27,7 @@ export function UhOh(props: UhOhProps)
         }
         <Toolbar />
         <Divider />
-        <Box sx={{ 
+        <Box className="underToolbarContainerNoPadding" sx={{ 
             height: "100%", 
             backgroundPosition: "center", 
             overflow: "hidden",

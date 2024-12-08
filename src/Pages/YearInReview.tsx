@@ -141,7 +141,7 @@ export function YearInReview(props: ViewProps)
 	if (player?.serviceRecord.IsEmpty()) { return <UhOh ignoreHelmet primaryMessage={`Nothing to show for ${player!.gamertag}`} secondaryMessage={`Did you play Halo Infinite with this gamertag in ${year}? Or is this gamertag invalid?`} switchTab={switchTab} /> }
 
 	return (
-		<Box component="main" sx={{ flexGrow: 1, height: "calc(100% + 34px)", overflow: "hidden", backgroundSize: "cover", backgroundPosition: "center", backgroundImage: `url(https://blobs-infiniteugc.svc.halowaypoint.com/ugcstorage/playlist/73b48e1e-05c4-4004-927d-965549b28396/17b616fb-f128-46c9-b966-7850b38445f9/images/hero.png)` }}>
+		<Box component="main" className="pageContainer" sx={{ overflow: "hidden", backgroundSize: "cover", backgroundPosition: "center", backgroundImage: `url(https://blobs-infiniteugc.svc.halowaypoint.com/ugcstorage/playlist/73b48e1e-05c4-4004-927d-965549b28396/17b616fb-f128-46c9-b966-7850b38445f9/images/hero.png)` }}>
 			<Helmet>
 				<title>{"Spartan Record | " + gamertag}</title>
 				<meta name="description" content={`Halo Infinite service record for ${gamertag}`} />
@@ -151,17 +151,17 @@ export function YearInReview(props: ViewProps)
 			</Helmet>
 			<Toolbar />
 			<Divider />
-			<Box sx={{ p: player ? 2 : 0, minHeight: "calc(100% - 96px)", maxHeight: "calc(100% - 96px)", overflow: "auto", backgroundColor: "rgba(1,64,82, 0.8)" }}>
+			<Box className="underToolbarContainer" sx={{ backgroundColor: "rgba(1,64,82, 0.8)" }}>
 				<Grid container spacing={2}>
 					<PlayerCardCallout player={player} />
 					<WelcomeToYearInReview delay="250ms" year={year} />
 					{step >= 1 && <PlaytimeCallout delay="250ms" player={player} subdelay="2000ms" />}
 					{step >= 2 && <MatchesCallout delay="250ms" player={player} subdelay="2000ms" />}
-					{step >= 3 && <AdCallout delay="250ms" isSubscribedToPatreon={isSubscribedToPatreon} />}
+					{step >= 3 && <AdCallout isSubscribedToPatreon={isSubscribedToPatreon} />}
 					{step >= 3 && <CareerRankCallout delay="250ms" heroDelay="2000ms" heroSnarkDelay="4000ms" player={player} />}
 					{step >= 4 && <KillBreakdownCallout delay="250ms" killDeathDelay="2000ms" chartDelay="5000ms" player={player} />}
 					{step >= 5 && <MedalsCallout delay="250ms" bestRareMedalDelay="3000ms" rarestRareMedalDelay="6000ms" player={player} />}
-					{step >= 6 && <AdCallout delay="250ms" isSubscribedToPatreon={isSubscribedToPatreon} />}
+					{step >= 6 && <AdCallout isSubscribedToPatreon={isSubscribedToPatreon} />}
 					{step >= 6 && <SpartanRecordCallout delay="250ms" patreonDelay="2000ms" player={player} isSubscribedToPatreon={isSubscribedToPatreon} switchTab={switchTab} />}
 					{step < 6 &&
 						<GridItemCentered>

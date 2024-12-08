@@ -7,7 +7,6 @@ import { Player } from "../Objects/Model/Player";
 import { Cookie } from "../Objects/Helpers/Cookie";
 import { Helmet } from "react-helmet";
 import { GamertagSearch } from "../Assets/Components/ServiceRecord/GamertagSearch";
-import { Grow } from "../Assets/Components/Common/Grow";
 import { HaloDotAPISeason } from "../Database/Schemas/AutocodeMetadata";
 import { Debugger } from "../Objects/Helpers/Debugger";
 import { WhatsNew } from "../Assets/Components/WhatsNew/WhatsNew";
@@ -135,7 +134,7 @@ export function HomeView(props: ViewProps)
 
 
 	return (
-		<Box component="main" sx={{ flexGrow: 1, height: {xs: "calc(100% - 24px)", md: "calc(100% - 32px)"}}}>
+		<Box component="main" className="pageContainer">
 			<Helmet>
 				<title>{`Spartan Record`}</title>
 				<meta name="description" content={`Halo Infinite statistics such as KDA, KDR, and more`} />
@@ -145,8 +144,7 @@ export function HomeView(props: ViewProps)
 			</Helmet>
 			<Toolbar />
 			<Divider />
-			<Box sx={{ 
-				height: "100%", 
+			<Box className="underToolbarContainerNoPadding" sx={{
 				backgroundPosition: "center", 
 				overflow: "hidden",
 				backgroundSize: "cover", 
@@ -154,26 +152,14 @@ export function HomeView(props: ViewProps)
 					? `url(${currSeason.image_urls.battlepass_background})`
 					: "url(https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU2NyZWVuQmFja2dyb3VuZHMvc2Vhc29uX3Vwc2VsbF9iYWNrZ3JvdW5kX1MzLnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D)" 
 			}}>
-				<Box sx={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: "rgba(1,64,82, 0.8)", textAlign: "center", overflow: "auto" }}>
-					<Grow />
-					{!showWhatsNew && <>
-						{/* <GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} onYearInReviewClick={searchForGamertagYearInReview} openRecentSecondaryAction={openRecentSecondaryAction} /> */}
-						<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} />
-						<Grow />
-					</>}
-					<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-						{showWhatsNew && <>
-							<Box sx={{ mt: { xs: 20 }}}></Box>
-							{/* <GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} onYearInReviewClick={searchForGamertagYearInReview} openRecentSecondaryAction={openRecentSecondaryAction} /> */}
-							<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} />
-							<Box sx={{ textAlign: "center", mt: 6, alignSelf: "center", width: { xs: "90%", sm: "75%", md: "500px" }}}><WhatsNew gamertag={player?.gamertag} onDismiss={onDismissWhatsNew} switchTab={switchTab} /></Box>
-						</>}
-						<Grow />
-						<Box sx={{ textAlign: "center", mt: 18 }}>
-							<Typography variant="subtitle1" sx={{ textAlign: "center" }}>
-								Powered by <Link sx={{ cursor: "pointer" }} href={process.env.REACT_APP_API_MARKETING_URL}>{process.env.REACT_APP_API_NAME}</Link>{halodotapiVersion ? ` v${halodotapiVersion} ` : " "}| Spartan Record v{process.env.REACT_APP_VERSION} | <Link href="/privacy.html">Privacy Policy</Link>
-							</Typography>
-						</Box>
+				<Box sx={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: "rgba(1,64,82, 0.8)", textAlign: "center", overflow: "auto", justifyContent: "center" }}>
+					{/* <GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} onYearInReviewClick={searchForGamertagYearInReview} openRecentSecondaryAction={openRecentSecondaryAction} /> */}
+					<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} />
+					{showWhatsNew && <Box sx={{ textAlign: "center", alignSelf: "center", mt: 6, width: { xs: "90%", sm: "75%", md: "500px" }}}><WhatsNew gamertag={player?.gamertag} onDismiss={onDismissWhatsNew} switchTab={switchTab} /></Box>}
+					<Box sx={{ textAlign: "center", flexGrow: 1, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+						<Typography variant="subtitle1" sx={{ textAlign: "center", fontSize: "0.6rem" }}>
+							Powered by <Link sx={{ cursor: "pointer" }} href={process.env.REACT_APP_API_MARKETING_URL}>{process.env.REACT_APP_API_NAME}</Link>{halodotapiVersion ? ` v${halodotapiVersion} ` : " "}| Spartan Record v{process.env.REACT_APP_VERSION} | <Link href="/privacy.html">Privacy Policy</Link>
+						</Typography>
 					</Box>
 				</Box>
 			</Box>

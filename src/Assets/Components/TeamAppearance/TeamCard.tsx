@@ -33,7 +33,7 @@ export function TeamCard(props: TeamCardProps)
 
     if (!team) { return <></>; }
 	return showNameplate ? (
-        <Box className="midflex teamCardWrapper" sx={{ justifyContent: rightAlign ? "flex-end" : "flex-start", mr: noMargin ? 0 : -1 }}>
+        <Box className="midflex teamCardWrapper" sx={{ justifyContent: rightAlign ? "flex-end" : "flex-start", mr: noMargin ? 0 : -1, position: "relative" }}>
             <Box className="midflex">
                 {!noImages && teamColor && 
 					<>
@@ -50,7 +50,7 @@ export function TeamCard(props: TeamCardProps)
         </Box>
     )
     : !topDown ? (
-        <Box className="midflex teamCardWrapper" sx={{ textAlign: rightAlign ? "right" : noImages ? "center" : "left" }}>
+        <Box className="midflex teamCardWrapper" sx={{ textAlign: rightAlign ? "right" : noImages ? "center" : "left", position: "relative" }}>
             {!rightAlign && !noImages && team.details.emblem && <img src={team.details.emblem} alt="emblem" height="48px" crossOrigin="anonymous" />}
             <Box sx={{ display: "flex", flexDirection: "column", mr: rightAlign && !noImages ? 1 : 0, ml: rightAlign || noImages ? 0 : 1, flexGrow: 1 }}>
 				<Typography variant="body1">{team.details.name}</Typography>

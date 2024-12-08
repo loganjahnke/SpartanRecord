@@ -215,7 +215,7 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
     }
 
 	return (
-		<Box component="main" sx={{ flexGrow: 1 }}>
+		<Box component="main" className="pageContainer">
 			<Helmet>
 				<title>{`Spartan Record | Matches | ${gamertag}`}</title>
 				<meta name="description" content={`Halo Infinite matches for ${gamertag}`} />
@@ -225,7 +225,7 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 			</Helmet>
 			<Toolbar />
 			<Divider />
-			<Box sx={{ p: 2 }}>
+			<Box className="underToolbarContainer">
 				<Grid container spacing={2}>
 					{/* Top */}
 					<Grid item xs={12}>

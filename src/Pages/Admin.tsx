@@ -17,7 +17,7 @@ export function Admin(_props: ViewProps)
 	//#endregion
 
 	return (
-		<Box component="main" sx={{ flexGrow: 1, height: "calc(100% - 32px)" }}>
+		<Box component="main" className="pageContainer">
 			<Helmet>
 				<title>{`Spartan Record | Admin`}</title>
 				<meta name="description" content={`Halo Infinite statistics such as KDA, KDR, and more`} />
@@ -27,7 +27,7 @@ export function Admin(_props: ViewProps)
 			</Helmet>
 			<Toolbar />
 			<Divider />
-			<Box sx={{ backgroundColor: "secondary.main", height: "100%", display: "flex", flexDirection: "column" }}>
+			<Box className="underToolbarContainer" sx={{ backgroundColor: "secondary.main", display: "flex", flexDirection: "column" }}>
 				<Box sx={{ display: "flex", mt: 2 }}>
 					<LabelValue label="Website Version" value={process.env.REACT_APP_VERSION} />
 					<LabelValue label="Hide What's New" value={Cookie.getHideWhatsNew() ? "Yes" : "No"} />

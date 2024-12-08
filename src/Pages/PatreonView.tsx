@@ -92,10 +92,10 @@ export function PatreonView(props: ViewProps)
 	</>;
 
 	return (
-		<Box component="main" sx={{ flexGrow: 1, height: {xs: "calc(100% - 24px)", md: "calc(100% - 32px)"}}}>
+		<Box component="main" className="pageContainer">
 			<Toolbar />
 			<Divider />
-			<Box sx={{ backgroundColor: "secondary.main", minHeight: "100%", display: "flex", flexDirection: "column", textAlign: "left", alignItems: "flex-start", p: 4 }}>
+			<Box className="underToolbarContainer" sx={{ backgroundColor: "secondary.main", display: "flex", flexDirection: "column", textAlign: "left", alignItems: "flex-start" }}>
 				<Box sx={{ textAlign: "center", width: "100%", mt: 6 }}>
 					{isAdFree && gamertag && 
 					<>

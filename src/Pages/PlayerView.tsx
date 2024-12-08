@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Toolbar, Typography } from "@mui/material";
+import { Box, Divider, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
@@ -12,6 +12,7 @@ import { SR } from "../Objects/Helpers/Statics/SR";
 import { Player } from "../Objects/Model/Player";
 import { Debugger } from "../Objects/Helpers/Debugger";
 import { HaloDotAPISeason } from "../Database/Schemas/AutocodeMetadata";
+import { UhOh } from "./UhOh";
 
 export function PlayerView(props: ViewProps)
 {
@@ -243,8 +244,9 @@ export function PlayerView(props: ViewProps)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [gamertag, season]);
 
+	if (player && player.serviceRecord?.error) { return <UhOh ignoreHelmet primaryMessage={`Couldn't load ${player!.gamertag}`} secondaryMessage={player!.serviceRecord.error} switchTab={switchTab} /> }
 	return (
-		<Box component="main" sx={{ flexGrow: 1 }}>
+		<Box component="main" className="pageContainer">
 			<Helmet>
 				<title>{"Spartan Record | " + gamertag}</title>
 				<meta name="description" content={`Halo Infinite service record for ${gamertag}`} />
@@ -254,14 +256,7 @@ export function PlayerView(props: ViewProps)
 			</Helmet>
 			<Toolbar />
 			<Divider />
-			<Box sx={{ p: player ? 2 : 0, height: "calc(100% - 64px)" }}>
-				{player && player.serviceRecord?.error !== undefined &&
-					<Box sx={{ m: 10, color: "primary.main" }}>
-						<Typography variant="h3">Couldn't load {player.gamertag}</Typography>
-						<Typography variant="h6">{player.serviceRecord.error}</Typography>
-						<Button sx={{ mt: 4 }} onClick={() => switchTab("/", SRTabs.Search)} variant="contained">Back to Search</Button>
-					</Box>
-				}
+			<Box className="underToolbarContainer" sx={{ overflow: "auto" }}>
 				{player && <ServiceRecordGrid 
 					serviceRecord={player.serviceRecord}
 					careerRank={player.careerRank}

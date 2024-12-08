@@ -303,7 +303,7 @@ export function CompareView(props: ViewProps)
 	const bestAllBack = (bestAllCSR1?.ranks.allTime.value ?? 0) > (bestAllCSR2?.ranks.allTime.value ?? 0) ? bestAllCSR1?.ranks.allTime.GetBackground() : bestAllCSR2?.ranks.allTime.GetBackground();
 
 	return (
-		<Box component="main" sx={{ flexGrow: 1, height: gamertag1 && gamertag2 ? "auto" : "calc(100% - 32px)" }}>
+		<Box component="main" className="pageContainer">
 			<Helmet>
 				<title>{"Spartan Record | Compare"}</title>
 				<meta name="description" content={`Comparing Halo Infinite service records for ${gamertag1} and ${gamertag2}`} />
@@ -326,7 +326,7 @@ export function CompareView(props: ViewProps)
 				recentPlayers={recentPlayers}
 				error={errorMessage} />
 			{gamertag1 && gamertag2 &&
-				<Box sx={{ p: player ? 2 : 0, height: "calc(100% - 64px)" }}>
+				<Box className="underToolbarContainer">
 					<Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", pt: 1, pb: 4 }}>
 						<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", flexGrow: 1 }}>
 								<>
@@ -359,7 +359,7 @@ export function CompareView(props: ViewProps)
 				</Box>
 			}
 			{(!gamertag1 || !gamertag2) &&
-				<Box sx={{ backgroundColor: "secondary.main", height: "100%", display: "flex", flexDirection: "column" }}>
+				<Box className="underToolbarContainer" sx={{ backgroundColor: "secondary.main", height: "100%", display: "flex", flexDirection: "column" }}>
 					<Grow />
 					<Box sx={{ backgroundColor: "secondary.main", display: "flex", flexDirection: "column", textAlign: "center", alignItems: "center", pl: 4, pr: 4 }}>
 						<Typography variant="h3">Compare Service Records</Typography>

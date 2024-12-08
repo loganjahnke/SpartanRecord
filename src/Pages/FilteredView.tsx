@@ -240,7 +240,7 @@ export function FilteredView(props: ViewProps)
 	}, [season]);
 
 	return (
-		<Box component="main" sx={{ flexGrow: 1 }}>
+		<Box component="main" className="pageContainer">
 			<Helmet>
 				<title>{`Spartan Record | Filtered | ${gamertag}`}</title>
 				<meta name="description" content={`${gamertag} - Halo Infinite statistics - ${node} - ${filter ?? "Filtered"}`} />
@@ -250,7 +250,7 @@ export function FilteredView(props: ViewProps)
 			</Helmet>
 			<Toolbar />
 			<Divider />
-			<Box sx={{ p: 2 }}>
+			<Box className="underToolbarContainer">
 				<Grid container spacing={2}>
 					{/* Top */}
 					<Grid item xs={12}>

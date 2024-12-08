@@ -137,7 +137,7 @@ const App = () =>
 
 	return (
 		<ThemeProvider theme={ArrowheadTheme.theme}>
-			<Box sx={{ display: "flex", backgroundColor: "background.paper", height: "calc(100vh - 34px)" }}>
+			<Box sx={{ display: "flex", backgroundColor: "background.paper", height: "100%" }}>
 				<AHAppBar player={player} handleDrawerToggle={handleDrawerToggle} backgroundLoadingMessage={backgroundLoadingProgress} />
 				<AHDrawer player={player} currentTab={tab} container={container} mobileOpen={mobileOpen} switchTab={switchTab} handleDrawerToggle={handleDrawerToggle} isAllowed={isSubscribedToPatreon} />
 				<AHLoading loadingMessage={loadingMessage} />
