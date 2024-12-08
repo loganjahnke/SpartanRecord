@@ -20,8 +20,8 @@ export function DynamicTeamCard(props: TeamCardProps)
 {
     const { loading } = props;
     return <>
-        <Box sx={{ display: { xs: "none", sm: "block" }}}><TeamCard {...props} showNameplate={true} /></Box>
-        {!loading && <Box sx={{ display: { sm: "none" }}}><TeamCard {...props} showNameplate={false} /></Box>}
+        <Box sx={{ display: { xs: "none", sm: "block" }, position: "relative" }}><TeamCard {...props} showNameplate={true} /></Box>
+        {!loading && <Box sx={{ display: { sm: "none" }, position: "relative" }}><TeamCard {...props} showNameplate={false} /></Box>}
     </>;
 }
 
@@ -34,7 +34,7 @@ export function TeamCard(props: TeamCardProps)
     if (!team) { return <></>; }
 	return showNameplate ? (
         <Box className="midflex teamCardWrapper" sx={{ justifyContent: rightAlign ? "flex-end" : "flex-start", mr: noMargin ? 0 : -1, position: "relative" }}>
-            <Box className="midflex">
+            <Box className="midflex" sx={{ position: "relative" }}>
                 {!noImages && teamColor && 
 					<>
 						<Box className={ winner ? "teamCard winner" : "teamCard"} sx={{ backgroundColor: teamColor }} />
@@ -58,7 +58,7 @@ export function TeamCard(props: TeamCardProps)
             {rightAlign && !noImages && team.details.emblem && <img src={team.details.emblem} alt="emblem" height="48px" crossOrigin="anonymous" />}
         </Box>
     ) : (
-		<Box className={`midflex teamCardWrapper topdown ${winner ? "topdownWinner" : ""}`} sx={{ textAlign: rightAlign ? "right" : noImages ? "center" : "left" }}>
+		<Box className={`midflex teamCardWrapper topdown ${winner ? "topdownWinner" : ""}`} sx={{ textAlign: rightAlign ? "right" : noImages ? "center" : "left", position: "relative" }}>
 			{winner && <Box className="topdownWinnerSVG" sx={{ WebkitMask: `url(${team.details.emblem}) center/contain` }} />}
 			{!noImages && team.details.emblem && <img src={team.details.emblem} alt="emblem" height="48px" crossOrigin="anonymous" />}
             <Box sx={{ mt: 1 }} />
