@@ -153,8 +153,7 @@ export function HomeView(props: ViewProps)
 					: "url(https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU2NyZWVuQmFja2dyb3VuZHMvc2Vhc29uX3Vwc2VsbF9iYWNrZ3JvdW5kX1MzLnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D)" 
 			}}>
 				<Box sx={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: "rgba(1,64,82, 0.8)", textAlign: "center", overflow: "auto", justifyContent: "center" }}>
-					{/* <GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} onYearInReviewClick={searchForGamertagYearInReview} openRecentSecondaryAction={openRecentSecondaryAction} /> */}
-					<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} />
+					<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} onYearInReviewClick={searchForGamertagYearInReview} openRecentSecondaryAction={openRecentSecondaryAction} />
 					{showWhatsNew && <Box sx={{ textAlign: "center", alignSelf: "center", mt: 6, width: { xs: "90%", sm: "75%", md: "500px" }}}><WhatsNew gamertag={player?.gamertag} onDismiss={onDismissWhatsNew} switchTab={switchTab} /></Box>}
 					<Box sx={{ textAlign: "center", flexGrow: 1, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
 						<Typography variant="subtitle1" sx={{ textAlign: "center", fontSize: "0.6rem" }}>
