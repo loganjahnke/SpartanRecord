@@ -3,8 +3,8 @@ import { GridItemCentered } from "../../Common/GridItemCentered";
 import { CalloutsProps } from "../Props/CalloutsProps";
 import { ArrowheadTheme } from "../../../Theme/ArrowheadTheme";
 import { BreakdownTile } from "../../Breakdowns/BreakdownTile";
-import { GrowBox } from "../../Animations/GrowBox";
 import { CalloutStat } from "../Typography/CalloutStat";
+import { OpacityBox } from "../../Animations/OpacityBox";
 
 interface MatchesCalloutProps extends CalloutsProps
 {
@@ -20,7 +20,7 @@ export function MatchesCallout(props: MatchesCalloutProps)
 
 	return (
 		<GridItemCentered>
-			<GrowBox delay={delay} content={
+			<OpacityBox delay={delay} content={
 				<>
 					<Typography variant="h6">Let's take a look at your matches breakdown</Typography>
 					<Box sx={{ display: "flex", flexDirection: "row", width: "95%", textAlign: "left", mb: 1,
@@ -30,7 +30,7 @@ export function MatchesCallout(props: MatchesCalloutProps)
 						<BreakdownTile title="Wins" value={player!.serviceRecord.breakdowns.matches.wins} total={player!.serviceRecord.breakdowns.matches.wins + player!.serviceRecord.breakdowns.matches.losses} backgroundColor={ArrowheadTheme.good} />
 						<BreakdownTile title="Losses" value={player!.serviceRecord.breakdowns.matches.losses} total={player!.serviceRecord.breakdowns.matches.wins + player!.serviceRecord.breakdowns.matches.losses} backgroundColor={ArrowheadTheme.bad} />
 					</Box>
-					<GrowBox delay={subdelay} nested content={
+					<OpacityBox delay={subdelay} nested content={
 						<MatchesComment {...props} />								
 					} />
 				</>

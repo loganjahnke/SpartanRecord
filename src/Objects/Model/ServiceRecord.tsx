@@ -3,7 +3,7 @@ import { TeamStatsSchema } from "../../Database/Schemas/MatchSchema";
 import { DurationSchema, PlayerStatsSchema } from "../../Database/Schemas/PlayerMatchSchema";
 import { ServiceRecordSchema, ServiceRecordDataSchema, isServiceRecordSchema, ServiceRecordStatsSchema, ServiceRecordMatchesSchema, CTFSchema, EliminationSchema, OddballSchema, StockpileSchema, ZoneServiceRecordSchema, ExtractionSchema, InfectionSchema, ZoneSchema, FirefightSchema, VIPSchema, isServiceRecordSchemaWithoutDataNode } from "../../Database/Schemas/ServiceRecordSchema";
 import { AllMedals } from "../Helpers/AllMedals";
-import { BreakdownCategory, BreakdownKills, Breakdowns } from "../Pieces/Breakdowns";
+import { Breakdowns } from "../Pieces/Breakdowns";
 import { CaptureTheFlag } from "../Pieces/Mode/CaptureTheFlag";
 import { Damage } from "../Pieces/Damage";
 import { Elimination } from "../Pieces/Mode/Elimination";
@@ -311,38 +311,37 @@ export class ServiceRecord
 
     /**
      * Adds a service record to this and returns a new one
-     * @param sr The service record to add
-     * @param outcome The outcome of the match
+     * @param other The service record to add
      */
-    public AddServiceRecord(sr: ServiceRecord, outcome?: HaloOutcome): void
+    public AddServiceRecord(other: ServiceRecord): void
     {
         this.summary = 
         {
-            kills: sr.summary.kills + this.summary.kills,
-            deaths: sr.summary.deaths + this.summary.deaths,
-            assists: sr.summary.assists + this.summary.assists,
-            betrayals: sr.summary.betrayals + this.summary.betrayals,
-            suicides: sr.summary.suicides + this.summary.suicides,
+            kills: other.summary.kills + this.summary.kills,
+            deaths: other.summary.deaths + this.summary.deaths,
+            assists: other.summary.assists + this.summary.assists,
+            betrayals: other.summary.betrayals + this.summary.betrayals,
+            suicides: other.summary.suicides + this.summary.suicides,
             vehicles:
             {
-                destroys: sr.summary.vehicles.destroys + this.summary.vehicles.destroys,
-                hijacks: sr.summary.vehicles.hijacks + this.summary.vehicles.hijacks
+                destroys: other.summary.vehicles.destroys + this.summary.vehicles.destroys,
+                hijacks: other.summary.vehicles.hijacks + this.summary.vehicles.hijacks
             },
-            medals: sr.summary.medals + this.summary.medals
+            medals: other.summary.medals + this.summary.medals
         };
 
         this.damage =
         {
-            taken: sr.damage.taken + this.damage.taken,
-            dealt: sr.damage.dealt + this.damage.dealt,
+            taken: other.damage.taken + this.damage.taken,
+            dealt: other.damage.dealt + this.damage.dealt,
             average: 0
         };
 
         this.shots = 
         {
-            fired: sr.shots.fired + this.shots.fired,
-            landed: sr.shots.landed + this.shots.landed,
-            missed: sr.shots.missed + this.shots.missed,
+            fired: other.shots.fired + this.shots.fired,
+            landed: other.shots.landed + this.shots.landed,
+            missed: other.shots.missed + this.shots.missed,
             accuracy: 0
         };
 
@@ -351,26 +350,26 @@ export class ServiceRecord
             this.shots.accuracy = (this.shots.landed / this.shots.fired) * 100;
         }
 
-        this.breakdowns.add(sr.breakdowns);
+        this.breakdowns.add(other.breakdowns);
 
         this.timePlayed = new TimePlayed({
-            seconds: sr.timePlayed.seconds + this.timePlayed.seconds,
+            seconds: other.timePlayed.seconds + this.timePlayed.seconds,
             human: ""
         });
 
-        const medals1 = new Map<number, Medal>();
-        sr.medals.forEach(m => medals1.set(m.id, m));
+        const medalsMap = new Map<number, Medal>();
+        other.medals.forEach(m => medalsMap.set(m.id, m));
         this.medals.forEach(m => 
         {
-            const medal = medals1.get(m.id) ?? new Medal({ id: m.id });
-            const count = medal.count + m.count;
-            medals1.set(m.id, Medal.FromCount(m.id, count));
+            const otherMedal = medalsMap.get(m.id) ?? new Medal({ id: m.id });
+            const count = otherMedal.count + m.count;
+            medalsMap.set(m.id, Medal.FromCount(m.id, count));
         });
 
-        this.medals = Array.from(medals1.values());
+        this.medals = Array.from(medalsMap.values());
 
-        this.totalScore = sr.totalScore + this.totalScore;
-        this.matchesPlayed = (sr.matchesPlayed === 0 ? 1 : sr.matchesPlayed) + this.matchesPlayed;
+        this.totalScore += other.totalScore;
+        this.matchesPlayed += other.matchesPlayed;
         
         if (this.summary.deaths !== 0)
         {
@@ -384,14 +383,14 @@ export class ServiceRecord
             this.damage.average = (this.damage.dealt / this.matchesPlayed) * 100;
         }
 
-        this.ctf.add(sr.ctf);
-        this.zone.add(sr.zone);
-        this.oddball.add(sr.oddball);
-        this.elimination.add(sr.elimination);
-        this.stockpile.add(sr.stockpile);
-        this.infection.add(sr.infection);
-        this.extraction.add(sr.extraction);
-        this.firefight.add(sr.firefight);
+        this.ctf.add(other.ctf);
+        this.zone.add(other.zone);
+        this.oddball.add(other.oddball);
+        this.elimination.add(other.elimination);
+        this.stockpile.add(other.stockpile);
+        this.infection.add(other.infection);
+        this.extraction.add(other.extraction);
+        this.firefight.add(other.firefight);
     }
 
     /**
@@ -443,7 +442,7 @@ export class ServiceRecord
             human: ""
         });
 
-        this.matchesPlayed = 1 + this.matchesPlayed;
+        this.matchesPlayed += 1;
         
         if (this.summary.deaths !== 0)
         {
@@ -458,6 +457,54 @@ export class ServiceRecord
         }
     }
     
+    /**
+     * Gets the rarest medal by MedalRarity, either returning the one with the highest count or lowest count greater than 0
+     * @param highestCount if true, gets the rarest medal you got the most
+     */
+    public getRarestMedal(highestCount?: boolean): Medal | undefined
+    {
+        const mythics = this.medals.filter(medal => medal.rarity === MedalRarity.Mythic);
+        if (mythics && mythics.length > 0) { return this.getHighestOrLowestMedal(mythics, highestCount); }
+
+        const legendaries = this.medals.filter(medal => medal.rarity === MedalRarity.Legendary);
+        if (legendaries && legendaries.length > 0) { return this.getHighestOrLowestMedal(legendaries, highestCount); }
+
+        const heroics = this.medals.filter(medal => medal.rarity === MedalRarity.Heoric);
+        if (heroics && heroics.length > 0) { return this.getHighestOrLowestMedal(heroics, highestCount); }
+
+        const normals = this.medals.filter(medal => medal.rarity === MedalRarity.Normal);
+        if (normals && normals.length > 0) { return this.getHighestOrLowestMedal(normals, highestCount); }
+    }
+
+    /**
+     * Gets the medal with the highest count or lowest count greater than 0
+     * @param highestCount if true, gets the medal you got the most
+     */
+    public getHighestOrLowestMedal(medals: Medal[], highestCount?: boolean): Medal | undefined
+    {
+        if (medals.length === 0) { return; }
+
+        let countToBeat = highestCount ? 0 : Number.MAX_VALUE;
+        let medalToBeat: Medal | undefined = undefined;
+        
+        for (const medal of medals)
+        {
+            if (medal.count <= 0) { continue; }
+            if (highestCount && ((medal.count > countToBeat) || (medalToBeat && medal.count === countToBeat && medal.sort > medalToBeat.sort)))
+            {
+                countToBeat = medal.count;
+                medalToBeat = medal;
+            }
+            else if (!highestCount && ((medal.count < countToBeat) || (medalToBeat && medal.count === countToBeat && medal.sort > medalToBeat.sort)))
+            {
+                countToBeat = medal.count;
+                medalToBeat = medal;
+            }
+        }
+
+        return medalToBeat;
+    }
+
     /**
      * Gets the entire group of medals that match the medal type
      * @param type the medal type

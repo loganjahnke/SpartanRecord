@@ -448,14 +448,20 @@ export class SCData
     }
 
     /**
-     * Get all 2024 seasons
-     * @returns the 2024 seasons in an array
+     * Get all seasons for a given year
+     * @returns the seasons for a given year in an array
      */
-    public async Get2024Seasons(): Promise<HaloDotAPISeason[]>
+    public async GetSeasonsForYear(year: number): Promise<HaloDotAPISeason[]>
     {
         const allSeasons = await this.GetSeasons();
-        const seasons2024 = allSeasons.filter(season => season.id === 6 || season.id === 7 || season.id === 8 || season.id === 9);
-        return seasons2024;
+
+        if (year === 2024)
+        {
+            const seasons2024 = allSeasons.filter(season => season.id === 6 || season.id === 7 || season.id === 8 || season.id === 9);
+            return seasons2024;
+        }
+
+        return [];
     }
 
     /**

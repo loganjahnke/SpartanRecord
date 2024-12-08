@@ -227,7 +227,7 @@ export function AHDrawer(props: AHDrawerProps)
 				{player && player.gamertag && isAllowed ? 
 				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
 					<Tab value={SRTabs.Search} label={SRTabs.Search} icon={<SearchIcon />} iconPosition="start" />
-					<Tab value={SRTabs.YearInReview} label={SRTabs.YearInReview} icon={<CalendarMonth />} iconPosition="start" />
+					{/* <Tab value={SRTabs.YearInReview} label={SRTabs.YearInReview} icon={<CalendarMonth />} iconPosition="start" /> */}
 					<Tab value={SRTabs.ServiceRecord} label={SRTabs.ServiceRecord} icon={<ServiceRecordIcon />} iconPosition="start" />
 					<Tab value={SRTabs.CareerRank} label={SRTabs.CareerRank} icon={<SpartanCompanyIcon fontSize="inherit" />} sx={tiny} iconPosition="start" />
 					<Tab value={SRTabs.Compare} label={SRTabs.Compare} icon={<CompareArrows fontSize="inherit" />} sx={tiny} iconPosition="start" />
@@ -262,7 +262,7 @@ export function AHDrawer(props: AHDrawerProps)
 				: player && player.gamertag ?
 				<Tabs orientation="vertical" value={currentTab} onChange={tabClicked}>
 					<Tab value="Search" label="Search" icon={<SearchIcon />} iconPosition="start" />
-					<Tab value={SRTabs.YearInReview} label={SRTabs.YearInReview} icon={<CalendarMonth />} iconPosition="start" />
+					{/* <Tab value={SRTabs.YearInReview} label={SRTabs.YearInReview} icon={<CalendarMonth />} iconPosition="start" /> */}
 					<Tab value={SRTabs.ServiceRecord} label={SRTabs.ServiceRecord} icon={<ServiceRecordIcon />} iconPosition="start" />
 					<Tab value={SRTabs.CareerRank} label={SRTabs.CareerRank} icon={<SpartanCompanyIcon fontSize="inherit" />} sx={tiny} iconPosition="start" />
 					<Tab value={SRTabs.Compare} label={SRTabs.Compare} icon={<CompareArrows fontSize="inherit" />} sx={tiny} iconPosition="start" />
@@ -305,7 +305,8 @@ export function AHDrawer(props: AHDrawerProps)
 			<Divider flexItem sx={{ flexGrow: 1 }} />
 			<Box sx={{ display: "flex", flexDirection: "column", p: 1, textAlign: "center" }}>
 				<Typography sx={{ m: 0.5 }} variant="body2">Powered by <Link href={process.env.REACT_APP_API_MARKETING_URL}>{process.env.REACT_APP_API_NAME}</Link></Typography>
-				<Typography sx={{ m: 0.5 }} variant="body2">Made by <Link href="https://twitter.com/Logan_Jahnke">Logan Jahnke</Link></Typography>
+				<Typography sx={{ m: 0.5 }} variant="body2">Follow us on <Link href="https://x.com/SpartanRecord">Twitter</Link></Typography>
+				<Typography sx={{ m: 0.5 }} variant="body2">Made by <Link href="https://x.com/Logan_Jahnke">Logan Jahnke</Link></Typography>
 			</Box>
 		</Box>
 	);

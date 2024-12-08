@@ -171,7 +171,7 @@ const App = () =>
 					<Route path="/service_record/:node/:gamertag/:filter" element={<FilteredView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 					
 					{/* Year in Review */}
-					<Route path="/year_in_review/2024/:gamertag" element={<YearInReview app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
+					<Route path="/year_in_review/:year/:gamertag" element={<YearInReview app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 
 					{/* Spartan Company Views */}
 					<Route path="/spartan_company" element={<SpartanCompanyView app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
@@ -198,7 +198,7 @@ const App = () =>
 					<Route path="/admin" element={<Admin app={arrowhead} setLoadingMessage={setLoadingMessage} setBackgroundLoadingProgress={setBackgroundLoadingProgress} player={player} updatePlayer={updatePlayer} switchTab={switchTab} setApiError={setApiError} isSubscribedToPatreon={isSubscribedToPatreon} />} />
 					<Route path="/powered_by_halodotapi" element={<OtherCreators />} />
 					<Route path="/privacy" handle={() => {window.location.href="/privacy.html"}} />
-					<Route path="*" element={<UhOh />} />
+					<Route path="*" element={<UhOh switchTab={switchTab} />} />
 				</Routes>
 			</Box>
 		</ThemeProvider>

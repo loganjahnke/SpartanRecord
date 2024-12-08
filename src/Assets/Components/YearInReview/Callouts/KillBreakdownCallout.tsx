@@ -1,13 +1,12 @@
 import { GridItemCentered } from "../../Common/GridItemCentered";
 import { CalloutsProps } from "../Props/CalloutsProps";
-import { GrowBox } from "../../Animations/GrowBox";
-import { KDABreakdown } from "../../Breakdowns/KDABreakdown";
 import { Box, Typography } from "@mui/material";
 import { CalloutStat } from "../Typography/CalloutStat";
 import { ArrowheadTheme } from "../../../Theme/ArrowheadTheme";
 import { BreakdownTile } from "../../Breakdowns/BreakdownTile";
 import { BreakdownCategory } from "../../../../Objects/Pieces/Breakdowns";
 import { KillBreakdownChart } from "../../Charts/KillBreakdownChart";
+import { OpacityBox } from "../../Animations/OpacityBox";
 
 interface KillBreakdownCalloutProps extends CalloutsProps
 {
@@ -25,10 +24,10 @@ export function KillBreakdownCallout(props: KillBreakdownCalloutProps)
 	if (!player) { return <></>; }
 	return (
 		<GridItemCentered>
-			<GrowBox delay={delay} content={
+			<OpacityBox delay={delay} content={
 				<>
 					<Typography>You conquered other Spartans, earning <CalloutStat text={Math.round(player.serviceRecord.killsPerGame * 100) / 100} /> kills per game!</Typography>
-					<GrowBox delay={killDeathDelay} nested content={
+					<OpacityBox delay={killDeathDelay} nested content={
 						<>
 							<Box sx={{ display: "flex", flexDirection: "row", width: "95%", textAlign: "left", mb: 1,
 								".MuiBox-root:first-child": { borderRadius: "8px 0 0 8px", mr: "1px" }, 
@@ -37,10 +36,10 @@ export function KillBreakdownCallout(props: KillBreakdownCalloutProps)
 								<BreakdownTile title="Kills" backgroundColor={ArrowheadTheme.good} value={player.serviceRecord.summary.kills} total={player.serviceRecord.summary.kills + player.serviceRecord.summary.deaths} />
 								<BreakdownTile title="Deaths" backgroundColor={ArrowheadTheme.bad} value={player.serviceRecord.summary.deaths} total={player.serviceRecord.summary.kills + player.serviceRecord.summary.deaths} />
 							</Box>
-							<Typography>That's a KDA of <CalloutStat text={Math.round(player.serviceRecord.kda * 100) / 100} /> and a KDR of <CalloutStat text={Math.round(player.serviceRecord.kdr * 100) / 100} /></Typography>
+							<Typography>That's a KDA of <CalloutStat text={Math.round(player.serviceRecord.kda * 100) / 100} /> and a KDR of <CalloutStat text={Math.round(player.serviceRecord.kdr * 100) / 100} />.</Typography>
 						</>
 					} />
-					<GrowBox delay={chartDelay} nested content={
+					<OpacityBox delay={chartDelay} nested content={
 						<>							
 							<BestKillComment {...props} />
 							<KillBreakdownChart currentSR={player.serviceRecord} legendOnBottom />
@@ -110,5 +109,8 @@ function BestKillComment(props: KillBreakdownCalloutProps)
 			break;
 	}
 
-	return <Typography sx={{ mt: 2, mb: 1 }}>Your top way to best other spartans was with <CalloutStat text={bestCategory} />, with a total of <CalloutStat text={totalValueForBest} /> kills. {comment}</Typography>
+	return <>
+		<Typography sx={{ mt: 2, mb: 1 }}>Your top way to best other spartans was with <CalloutStat text={bestCategory} />, with a total of <CalloutStat text={totalValueForBest} /> kills.</Typography>
+		<Typography sx={{ mb: 2 }}>{comment}</Typography>
+	</>
 }

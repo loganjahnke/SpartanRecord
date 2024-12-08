@@ -138,7 +138,7 @@ export const AllMedals = {
 		description: "Win a game with 15+ kills and no deaths",
 		type: MedalRarity.Mythic,
 		category: MedalType.GameEnd,
-		sort: 2,
+		sort: 20,
 		image_urls: {
 			small: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/865763896.png?width=72&height=72",
 			medium: "https://etxvqmdrjezgtwgueiar.supabase.co/storage/v1/render/image/public/assets/games/halo-infinite/metadata/multiplayer/medals/865763896.png?width=128&height=128",

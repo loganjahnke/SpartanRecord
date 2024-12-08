@@ -4,7 +4,7 @@ export enum MedalRarity
 {
 	Normal = "normal",
 	Heoric = "heroic",
-	Legendary = "lengendary",
+	Legendary = "legendary",
 	Mythic = "mythic"
 }
 
@@ -63,12 +63,12 @@ export class Medal
 
     constructor(data?: any, id?: number)
     {
-        this.id = id ?? data?.id ?? -1;
+        this.id = id ?? data?.id ?? 0;
         this.name = data?.name ?? "";
         this.rarity = data?.type ?? MedalRarity.Normal;
         this.type = data?.category ?? MedalType.Unknown;
         this.description = data?.description ?? "";
-        this.count = data?.count ?? -1;
+        this.count = data?.count ?? 0;
         this.sort = data?.sort ?? -1;
         this.images = { 
             small: data?.image_urls?.small ?? "", 

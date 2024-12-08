@@ -157,13 +157,15 @@ export function HomeView(props: ViewProps)
 				<Box sx={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: "rgba(1,64,82, 0.8)", textAlign: "center", overflow: "auto" }}>
 					<Grow />
 					{!showWhatsNew && <>
-						<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} onYearInReviewClick={searchForGamertagYearInReview} openRecentSecondaryAction={openRecentSecondaryAction} />
+						{/* <GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} onYearInReviewClick={searchForGamertagYearInReview} openRecentSecondaryAction={openRecentSecondaryAction} /> */}
+						<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} />
 						<Grow />
 					</>}
 					<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
 						{showWhatsNew && <>
 							<Box sx={{ mt: { xs: 20 }}}></Box>
-							<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} onYearInReviewClick={searchForGamertagYearInReview} openRecentSecondaryAction={openRecentSecondaryAction} />
+							{/* <GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} onYearInReviewClick={searchForGamertagYearInReview} openRecentSecondaryAction={openRecentSecondaryAction} /> */}
+							<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} />
 							<Box sx={{ textAlign: "center", mt: 6, alignSelf: "center", width: { xs: "90%", sm: "75%", md: "500px" }}}><WhatsNew gamertag={player?.gamertag} onDismiss={onDismissWhatsNew} switchTab={switchTab} /></Box>
 						</>}
 						<Grow />
