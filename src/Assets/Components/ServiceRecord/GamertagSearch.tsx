@@ -27,10 +27,12 @@ export function GamertagSearch(props: SearchProps)
         <Box sx={{ display: "flex", flexDirection: "column", textAlign: "center", alignItems: "center", pl: 4, pr: 4, minHeight: "55%", justifyContent: "flex-end" }}>
             <Typography variant="h3">Halo Infinite Service Record</Typography>
             <Typography variant="h6">Search for a gamertag to see Halo Infinite statistics such as KDA, KDR, and more</Typography>
-            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mt: 3 }}>
+            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mt: 3, flexWrap: "wrap", gap: "8px 0" }}>
                 <TextField label="Gamertag" variant="outlined" size="small" value={search} onChange={onValueChanged} onKeyPress={onKeyPress} />
-                <Button variant="contained" sx={{ ml: 2 }} onClick={onSearch} startIcon={<ServiceRecordIcon />}>Search</Button>
-                {onYearInReviewClick && <Button variant="contained" sx={{ ml: 2 }} onClick={onYearInReviewClick} startIcon={<CalendarMonth />}>Year in Review</Button>}
+                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <Button variant="contained" sx={{ ml: 2 }} onClick={onSearch} startIcon={<ServiceRecordIcon />}>Search</Button>
+                    {onYearInReviewClick && <Button variant="contained" sx={{ ml: 2 }} onClick={onYearInReviewClick} startIcon={<CalendarMonth />}>Year in Review</Button>}
+                </Box>
             </Box>
             {favoritePlayers.length > 0 &&
                 <Box sx={{ mt: 1 }}>
