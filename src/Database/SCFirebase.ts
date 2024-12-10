@@ -828,6 +828,15 @@ export class SCFirebase
 	/**
 	 * Gets the current API usage
 	 */
+	public async APILimit(): Promise<number>
+	{
+		const snapshot = await this.__get(`api/limit`);
+		return snapshot?.val() ?? 8000;
+	}
+
+	/**
+	 * Gets the current API usage
+	 */
 	public async CurrentAPIUsage(): Promise<number>
 	{
 		const timestamp = serverTimestamp() as any;

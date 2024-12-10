@@ -589,8 +589,18 @@ export class SCData
      */
     public async CanUpdate(): Promise<boolean>
     {
-        return await this.CurrentAPIUsage() < 8000;
+        const limit = await this.APILimit();
+        const currentUsage = await this.CurrentAPIUsage();
+        return currentUsage < limit;
     }
+
+    /**
+	 * Gets the current API limit
+	 */
+	public async APILimit(): Promise<number>
+	{
+		return await this.firebase.APILimit();
+	}
 
     /**
 	 * Gets the current API usage
