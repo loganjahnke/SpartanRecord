@@ -56,6 +56,19 @@ export class Player
     }
 
     /**
+     * Creates a player with an error message
+     * @param error the error message
+     * @returns the new player
+     */
+    public static createWithError(error: string): Player
+    {
+        const newPlayer = new Player();
+        newPlayer.serviceRecord = new ServiceRecord();
+        newPlayer.serviceRecord.error = error;
+        return newPlayer;
+    }
+
+    /**
      * Creates a copy of the player (not really a deep copy, but kinda close)
      * @param player the player
      * @returns the new player

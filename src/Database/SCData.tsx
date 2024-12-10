@@ -110,9 +110,10 @@ export class SCData
     /**
      * Gets the player's appearance from firebase
      * @param gamertag the gamertag
+     * @param canUseGruntAPI if true, can fallback to grunt.api
      * @returns the player
      */
-    public async GetPlayerAppearanceAndCROnly(gamertag: string): Promise<Player>
+    public async GetPlayerAppearanceAndCROnly(gamertag: string, canUseGruntAPI?: boolean): Promise<Player>
     {
         const correct = await this.firebase.GetGamertag(gamertag);
         const player = new Player(correct);
@@ -126,6 +127,7 @@ export class SCData
         if (firebaseAppearance) { player.appearance = firebaseAppearance; }
         if (firebaseCareerRank) { player.careerRank = firebaseCareerRank; }
         if (firebaseAppearance && firebaseCareerRank) { return player; }
+        if (canUseGruntAPI === false) { return player; }
 
         // Otherwise get from HaloDotAPI
         await Promise.all([this.halodapi.GetAppearance(player), this.halodapi.GetCareerRank(player)])

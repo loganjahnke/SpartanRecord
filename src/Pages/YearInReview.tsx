@@ -23,7 +23,7 @@ import { UhOh } from "./UhOh";
 export function YearInReview(props: ViewProps)
 {
 	//#region Props and Navigate
-	const { app, player, isSubscribedToPatreon, setLoadingMessage, setBackgroundLoadingProgress, updatePlayer, switchTab } = props;
+	const { app, player, isSubscribedToPatreon, setLoadingMessage, setBackgroundLoadingProgress, updatePlayer, switchTab, setApiError } = props;
 	const { year, gamertag } = useParams();
 	//#endregion
 
@@ -52,17 +52,35 @@ export function YearInReview(props: ViewProps)
 		const yearAsNumber = parseInt(year);
 		if (!yearAsNumber) { return new Player(); }
 
+		
 		// Set page gamertag and show loading message
 		setLoadingMessage(`Loading ${year} Year in Review`);
+		const canUseGruntAPI = await app.CanUpdate();
 				
 		// Get player appearance and career rank
 		const [player, seasonsForYear] = await Promise.all([
-			app.GetPlayerAppearanceAndCROnly(gamertag),
+			app.GetPlayerAppearanceAndCROnly(gamertag, canUseGruntAPI),
 			app.GetSeasonsForYear(yearAsNumber)
 		]);
+
+		// Ensure we can update from GruntAPI
+		if (!canUseGruntAPI && !player.careerRank)
+		{
+			setApiError(true);
+			const errorPlayer = Player.createWithError("Sorry! SpartanRecord.com hit the API limit, try again later.")
+			updatePlayer(gamertag, player.appearance, errorPlayer.serviceRecord);
+			return;
+		}
 		
 		// Check for all uncached 2024 seasons
 		const uncachedSeasons = await app.GetUncachedHistoricSeasons(player.gamertag, seasonsForYear, yearAsNumber);
+		if (uncachedSeasons.length > 0 && !canUseGruntAPI)
+		{
+			setApiError(true);
+			const errorPlayer = Player.createWithError("Sorry! SpartanRecord.com hit the API limit, try again later.")
+			updatePlayer(gamertag, player.appearance, errorPlayer.serviceRecord);
+			return;
+		}
 
 		// Get all the 2024 service records from Firebase
 		const serviceRecordsForSeasonsInYear = await Promise.all(seasonsForYear.map(async (season) => {
@@ -88,7 +106,7 @@ export function YearInReview(props: ViewProps)
 
 		return player;
 
-	}, [year, gamertag, app, setLoadingMessage, clearLoadingMessages, updatePlayer]);
+	}, [year, gamertag, app, setLoadingMessage, clearLoadingMessages, updatePlayer, setApiError]);
 
 	/**
 	 * Loads the data for the view
