@@ -255,6 +255,31 @@ export const AllSeasons = {
                 }
             ]
         },
+        {
+            "id": 10,
+            "version": 1,
+            "season_name": "Season 10",
+            "name": "Frontlines",
+            "description": "Placeholder Short Description",
+            "narrative_blurb": "Placeholder Long Description",
+            "image_urls": {
+                "season_logo": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoic2Vhc29ucy9pbnNpZ25pYV9FdmVyZ3JlZW5fMjU2LnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D",
+                "card_background": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU3dpdGNoZXIvU2Vhc29uX1N3aXRjaGVyX1MxMF9Gcm9udGxpbmVzLnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D",
+                "challenges_background": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU2NyZWVuQmFja2dyb3VuZHMvY2hhbGxlbmdlc19iYWNrZ3JvdW5kLnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D",
+                "battlepass_background": "https://wpassets.halowaypoint.com/wp-content/2025/01/AST_Switcher_Frontline_1920x1080_CLEAN.jpg",
+                "storefront_background": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU2NyZWVuQmFja2dyb3VuZHMvc3RvcmVmcm9udF9iYWNrZ3JvdW5kLnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D"
+            },
+            "properties": {
+                "identifier": "Season10-Op1",
+                "csr": "CsrSeason10-1"
+            },
+            "availability": [
+                {
+                    "start_date": "2025-02-04T18:00:00.000Z",
+                    "end_date": "2025-03-11T18:00:00.000Z"
+                }
+            ]
+        },
     ],
     "additional": {
         "total": 11,
