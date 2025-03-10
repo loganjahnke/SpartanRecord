@@ -147,7 +147,7 @@ export function PatreonView(props: ViewProps)
 									{tier3items}
 								</List>
 								<Typography sx={{ textAlign: "right" }} variant="h6">
-									$12/month
+									$10/month
 								</Typography>
 							</CardContent>
 						</Card>
