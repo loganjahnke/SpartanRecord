@@ -41,12 +41,12 @@ export function HomeView(props: ViewProps)
 	}
 
 	/** When the Year in Review button is pressed */
-	function searchForGamertagYearInReview()
-	{
-		if (localGamertag === "") { return; }
-		updatePlayer(localGamertag);
-		switchTab(`year_in_review/2024/${localGamertag}`, SRTabs.YearInReview);
-	}
+	// function searchForGamertagYearInReview()
+	// {
+	// 	if (localGamertag === "") { return; }
+	// 	updatePlayer(localGamertag);
+	// 	switchTab(`year_in_review/2024/${localGamertag}`, SRTabs.YearInReview);
+	// }
 
 	/** When the search button is pressed */
 	function openRecent(gamertag: string)
@@ -56,11 +56,11 @@ export function HomeView(props: ViewProps)
 	}
 
 	/** When the secondary recent button is pressed */
-	function openRecentSecondaryAction(gamertag: string)
-	{
-		updatePlayer(localGamertag);
-		switchTab(`year_in_review/2024/${gamertag}`, SRTabs.YearInReview);
-	}
+	// function openRecentSecondaryAction(gamertag: string)
+	// {
+	// 	updatePlayer(localGamertag);
+	// 	switchTab(`year_in_review/2024/${gamertag}`, SRTabs.YearInReview);
+	// }
 
 	/** When enter is pressed */
 	function searchForGamertagViaEnter(event: React.KeyboardEvent<HTMLDivElement>)
@@ -111,14 +111,14 @@ export function HomeView(props: ViewProps)
 
 		setVersion(await app.GetVersion());
 		setCurrSeason(await app.GetCurrentSeason());
-		setShowWhatsNew(!Cookie.getHideWhatsNew());
+		//setShowWhatsNew(!Cookie.getHideWhatsNew());
 
 		if (!loadFavoritePlayers())
 		{
 			loadRecentPlayers();
 		}
 
-	}, [app, setCurrSeason, setVersion, loadFavoritePlayers, loadRecentPlayers, setShowWhatsNew]);
+	}, [app, setCurrSeason, setVersion, loadFavoritePlayers, loadRecentPlayers]);
 
 	const onDismissWhatsNew = useCallback(() => 
 	{
@@ -153,7 +153,7 @@ export function HomeView(props: ViewProps)
 					: "url(https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU2NyZWVuQmFja2dyb3VuZHMvc2Vhc29uX3Vwc2VsbF9iYWNrZ3JvdW5kX1MzLnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D)" 
 			}}>
 				<Box sx={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: "rgba(1,64,82, 0.8)", textAlign: "center", overflow: "auto", justifyContent: "center" }}>
-					<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} onYearInReviewClick={searchForGamertagYearInReview} openRecentSecondaryAction={openRecentSecondaryAction} />
+					<GamertagSearch search={localGamertag} openRecent={openRecent} onValueChanged={onGamertagTextChange} onKeyPress={searchForGamertagViaEnter} onSearch={searchForGamertag} recentPlayers={recentPlayers} favoritePlayers={favoritePlayers} />
 					{showWhatsNew && <Box sx={{ textAlign: "center", alignSelf: "center", mt: 6, width: { xs: "90%", sm: "75%", md: "500px" }}}><WhatsNew gamertag={player?.gamertag} onDismiss={onDismissWhatsNew} switchTab={switchTab} /></Box>}
 					<Box sx={{ textAlign: "center", flexGrow: 1, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
 						<Typography variant="subtitle1" sx={{ textAlign: "center", fontSize: "0.6rem" }}>

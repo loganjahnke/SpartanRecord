@@ -45,7 +45,13 @@ export function StoreView(props: ViewProps)
 		}
 
 		// Get the store
-		const storeOfferings = await app.GetStore();
+		let storeOfferings = await app.GetStore();
+
+		// Remove the first three since they aren't ever real
+		if (storeOfferings && storeOfferings.length > 3)
+		{
+			storeOfferings = storeOfferings.slice(3);
+		}
 		
 		setOfferings(storeOfferings);
 
