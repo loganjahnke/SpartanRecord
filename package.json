@@ -1,6 +1,6 @@
 {
   "name": "spartan_record",
-  "version": "4.16.6",
+  "version": "4.17.0",
   "private": true,
   "dependencies": {
     "@babel/core": "^7.24.7",

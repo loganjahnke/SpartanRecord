@@ -506,6 +506,17 @@ export class ServiceRecord
     }
 
     /**
+     * Gets the number of medals for the medal ID
+     * @param medalId the medal ID to get the count of
+     */
+    public getMedalCount(medalId: number): number
+    {
+        const filtered = this.medals.filter(medal => medal.id === medalId);
+        if (!filtered || filtered.length === 0) { return 0; }
+        return filtered[0].count;
+    }
+
+    /**
      * Gets the entire group of medals that match the medal type
      * @param type the medal type
      * @returns array of medals sorted by rarity

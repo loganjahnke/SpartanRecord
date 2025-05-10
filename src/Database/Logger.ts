@@ -75,6 +75,11 @@ export class Logger
     public LogYearInReview = (): void => this.__logEvent("year_in_review");
 
     /**
+     * Logs an event in Firebase analytics for exporting a service record to CSV
+     */
+    public LogExport = (): void => this.__logEvent("export_to_csv");
+
+    /**
      * Logs an event in Firebase analytics
      * @param event the event name
      * @param params the optional parameters

@@ -1,4 +1,4 @@
-import { Grid, Box, Typography } from "@mui/material";
+import { Grid, Box, Typography, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { CSRS } from "../../../Objects/Model/CSRS";
 import { ServiceRecord } from "../../../Objects/Model/ServiceRecord";
 import { AssistBreakdown } from "../Breakdowns/AssistBreakdown";
@@ -20,9 +20,14 @@ import { CareerRankSchema } from "../../../Database/Schemas/CareerRankSchema";
 import { CareerRankBreakdown } from "../CareerRank/CareerRankBreakdown";
 import { ModeBreakdown } from "../Breakdowns/Modes/ModeBreakdown";
 import { FluidAd } from "../Ads/FluidAd";
+import { useState } from "react";
+import { CSV } from "../../../Objects/Helpers/Statics/CSV";
+import { SCData } from "../../../Database/SCData";
 
 interface ServiceRecordGridProps
 {
+	app: SCData;
+	gamertag: string;
 	seasons?: HaloDotAPISeason[];
 	setSeason?: (season: string) => void;
 	setShowPerMatch: (show: boolean) => void;
@@ -38,10 +43,25 @@ interface ServiceRecordGridProps
 
 export function ServiceRecordGrid(props: ServiceRecordGridProps)
 {
-	const { seasons, showPerMatch, serviceRecord, csrs, historicStats, season, title, careerRank, isSubscribedToPatreon, setSeason, setShowPerMatch } = props;
+	const { app, gamertag, seasons, showPerMatch, serviceRecord, csrs, historicStats, season, title, careerRank, isSubscribedToPatreon, setSeason, setShowPerMatch } = props;
+
+	const [menu, setMenu] = useState(-1);
+
+	/**
+	 * Triggered when the Options menu is changed
+	 */
+	const onOptionChanged = (event: SelectChangeEvent<HTMLElement>) =>
+	{
+		if (+event.target.value === 0)
+		{
+			app.logger.LogExport();
+			CSV.generate(gamertag, serviceRecord);
+		}
+
+		setMenu(-1);
+	};
 
 	if (!serviceRecord || serviceRecord.IsEmpty() || serviceRecord.error) { return <></>; }
-
 	return (
 		<Grid container spacing={2}>
 			{/* Top */}
@@ -51,6 +71,19 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 					{title && <Typography variant="h5">{title}</Typography>}
 					<Box sx={{ flexGrow: 1 }}></Box>
 					<ServiceRecordFilters setPerMatch={setShowPerMatch} />
+					<FormControl sx={{ width: "150px", ml: 2 }}>
+						<InputLabel id="additional-options-select-label"></InputLabel>
+						<Select
+							labelId="additional-options-select-label"
+							id="additional-options-select"
+							label=""
+							value={menu as any}
+							onChange={onOptionChanged}
+						>
+							<MenuItem disabled value={-1}>Options</MenuItem>
+							<MenuItem value={0}>Export to CSV</MenuItem>
+						</Select>
+					</FormControl>
 				</Box>
 			</Grid>
 			{/* Always the top three boxes */}

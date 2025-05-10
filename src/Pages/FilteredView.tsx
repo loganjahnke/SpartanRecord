@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, Toolbar } from "@mui/material";
+import { Box, Divider, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Toolbar } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -30,6 +30,7 @@ import { Debugger } from "../Objects/Helpers/Debugger";
 import { PlaylistChooser } from "../Assets/Components/Playlists/PlaylistChooser";
 import { FluidAd } from "../Assets/Components/Ads/FluidAd";
 import { ModeBreakdown } from "../Assets/Components/Breakdowns/Modes/ModeBreakdown";
+import { CSV } from "../Objects/Helpers/Statics/CSV";
 
 export function FilteredView(props: ViewProps)
 {
@@ -55,7 +56,24 @@ export function FilteredView(props: ViewProps)
 	
 	const [season, setSeason] = useState("");
 	const [seasons, setSeasons] = useState<HaloDotAPISeason[]>([]);
+	const [menu, setMenu] = useState(-1);
 	//#endregion
+
+	/**
+	 * Triggered when the Options menu is changed
+	 */
+	const onOptionChanged = (event: SelectChangeEvent<HTMLElement>) =>
+	{
+		if (!gamertag || !sr) { return; }
+		if (+event.target.value === 0)
+		{
+			app.logger.LogExport();
+			const prefix = selectedPlaylist?.name || selectedVariant?.name || node;
+			CSV.generate(gamertag, sr, prefix);
+		}
+
+		setMenu(-1);
+	};
 
 	const loadData = useCallback(async () => 
 	{		
@@ -79,16 +97,20 @@ export function FilteredView(props: ViewProps)
 
 			if (node === ServiceRecordFilter.Playlist)
 			{
-				setPlaylists(await app.GetPlaylists());
+				let playlists = await app.GetPlaylists();
+				playlists = playlists.filter(playlist => playlist.attributes.active);
+				playlists.sort((a, b) => a.name.localeCompare(b.name));
+
+				setPlaylists(playlists);
 				setVariants(undefined);
 				setFBFilters(undefined);
 				switchTab(undefined, SRTabs.Playlists);
 			}
 			else if (node === ServiceRecordFilter.Variant)
 			{
-				const notAllowed = ["unknown", "campaign", "extraction", "juggernaut", "vip", "escalation", "grifball", "assault"];
+				const notAllowed = ["unknown", "campaign", "grifball", "none", "academy", "race", "test", "tatanka"];
 				const variants = await app.GetVariants();
-				setVariants(variants.filter(variant => !notAllowed.includes(variant.name.toLowerCase())));
+				setVariants(variants.filter(variant => !notAllowed.includes(variant.name.toLowerCase()) && !variant.name.includes("(")));
 				setPlaylists(undefined);
 				setFBFilters(undefined);
 				switchTab(undefined, SRTabs.Variants);
@@ -259,6 +281,19 @@ export function FilteredView(props: ViewProps)
 							{node === ServiceRecordFilter.Playlist && <Box sx={{ ml: 2 }}><PlaylistChooser playlist={filter ?? ""} playlists={playlists ?? []} setPlaylist={onFilterSelected} hideAll useId /></Box>}
 							<Box sx={{ flexGrow: 1 }}></Box>
 							<ServiceRecordFilters setPerMatch={setShowPerMatch} />
+							<FormControl sx={{ width: "150px", ml: 2 }}>
+								<InputLabel id="additional-options-select-label"></InputLabel>
+								<Select
+									labelId="additional-options-select-label"
+									id="additional-options-select"
+									label=""
+									value={menu as any}
+									onChange={onOptionChanged}
+								>
+									<MenuItem disabled value={-1}>Options</MenuItem>
+									<MenuItem value={0}>Export to CSV</MenuItem>
+								</Select>
+							</FormControl>
 						</Box>
 					</Grid>
 					{/* Still top but less so*/}

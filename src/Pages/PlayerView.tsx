@@ -258,6 +258,8 @@ export function PlayerView(props: ViewProps)
 			<Divider />
 			<Box className="underToolbarContainer" sx={{ overflow: "auto" }}>
 				{player && <ServiceRecordGrid 
+					app={app}
+					gamertag={player.gamertag}
 					serviceRecord={player.serviceRecord}
 					careerRank={player.careerRank}
 					isSubscribedToPatreon={isSubscribedToPatreon}

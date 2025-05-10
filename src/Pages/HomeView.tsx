@@ -111,7 +111,7 @@ export function HomeView(props: ViewProps)
 
 		setVersion(await app.GetVersion());
 		setCurrSeason(await app.GetCurrentSeason());
-		//setShowWhatsNew(!Cookie.getHideWhatsNew());
+		setShowWhatsNew(!Cookie.getHideWhatsNew());
 
 		if (!loadFavoritePlayers())
 		{

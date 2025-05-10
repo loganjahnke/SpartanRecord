@@ -72,6 +72,11 @@ export function WhatsNew(props: WhatsNewProps)
 		new Feature("Patreon", "Subscribe to go ad-free for your gamertag", "subscribe"),
 	]);
 
+	features.set("4.17", [
+		new Feature("Export your Service Record", "Now you can export your Service Record to CSV"),
+		new Feature("Patreon", "Subscribe to go ad-free for your gamertag", "subscribe"),
+	]);
+
 	return (
 		<Card sx={{ background: ArrowheadTheme.card + "DD" }}>
 			<CardContent>

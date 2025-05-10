@@ -187,7 +187,7 @@ export function SingleMatchView(props: ViewProps)
 									<MenuItem value={3}>Open in HaloDataHive.com</MenuItem>
 									<MenuItem value={4}>Open in Halo South Africa</MenuItem>
 								</Select>
-								</FormControl>
+							</FormControl>
 						</Box>
 					</Grid>
 					<Grid container item spacing={2} xs={12} xl={4}>
