@@ -65,9 +65,13 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 	return (
 		<Grid container spacing={2}>
 			{/* Top */}
-			<Grid item xs={12}>
+			<Grid item xs={12} sm={6}>
 				<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
 					{setSeason && seasons && <SeasonChooser season={season ?? "All"} setSeason={setSeason} seasons={seasons} />}
+				</Box>
+			</Grid>
+			<Grid item xs={12} sm={6}>
+				<Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
 					{title && <Typography variant="h5">{title}</Typography>}
 					<Box sx={{ flexGrow: 1 }}></Box>
 					<ServiceRecordFilters setPerMatch={setShowPerMatch} />
@@ -81,7 +85,7 @@ export function ServiceRecordGrid(props: ServiceRecordGridProps)
 							onChange={onOptionChanged}
 						>
 							<MenuItem disabled value={-1}>Options</MenuItem>
-							<MenuItem value={0}>Export to CSV</MenuItem>
+							<MenuItem value={0}>Export</MenuItem>
 						</Select>
 					</FormControl>
 				</Box>
