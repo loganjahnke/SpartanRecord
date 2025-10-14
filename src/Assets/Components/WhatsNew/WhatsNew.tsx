@@ -4,6 +4,7 @@ import { WhatsNewItem } from "./WhatsNewItem";
 import { Grow } from "../Common/Grow";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { SRTabs } from "../Layout/AHDrawer";
+import { useCallback } from "react";
 
 interface WhatsNewProps
 {
@@ -17,6 +18,12 @@ export function WhatsNew(props: WhatsNewProps)
 	const { gamertag, onDismiss, switchTab } = props;
 
 	const features: Map<string, Feature[]> = new Map();
+
+	const onJump = useCallback((to: string) =>
+	{
+		if (to.startsWith("http")) { window.open(to); }
+		else { switchTab(to); }
+	}, [switchTab]);
 
 	features.set("48", [
 		new Feature("This What's New section!", "Not a fan? You can dismiss it."),
@@ -77,12 +84,17 @@ export function WhatsNew(props: WhatsNewProps)
 		new Feature("Patreon", "Subscribe to go ad-free for your gamertag", "subscribe"),
 	]);
 
+	features.set("4.18", [
+		new Feature("New iOS App", "Track your stats in the brand new Spartan Record app!", "https://apps.apple.com/us/app/spartan-record/id6470414461"),
+		new Feature("Patreon", "Subscribe to go ad-free for your gamertag", "subscribe"),
+	]);
+
 	return (
 		<Card sx={{ background: ArrowheadTheme.card + "DD" }}>
 			<CardContent>
 				<Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: 700 }}>What's new?</Typography>
 				<List>
-					{features.get(process.env.REACT_APP_MAJOR_VERSION || "47")?.map(feature => <WhatsNewItem feature={feature} onJump={switchTab} />)}
+					{features.get(process.env.REACT_APP_MAJOR_VERSION || "47")?.map(feature => <WhatsNewItem feature={feature} onJump={onJump} />)}
 				</List>
 			</CardContent>
 			<CardActions>

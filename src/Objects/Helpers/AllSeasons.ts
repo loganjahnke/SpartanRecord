@@ -332,7 +332,7 @@ export const AllSeasons = {
         }
     ],
     "additional": {
-        "total": 11,
+        "total": 12,
         "query": {
             "language": "en-US"
         }
