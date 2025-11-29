@@ -329,10 +329,36 @@ export const AllSeasons = {
                     "end_date": "2025-09-09T18:00:00.000Z"
                 }
             ]
+        },
+        {
+            "id": 13,
+            "version": 1,
+            "season_name": "Infinite",
+            "name": "Infinite",
+            "description": "Placeholder Short Description",
+            "narrative_blurb": "Placeholder Long Description",
+            "image_urls": {
+                "season_logo": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoic2Vhc29ucy9pbnNpZ25pYV9FdmVyZ3JlZW5fMjU2LnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D",
+                "card_background": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU3dpdGNoZXIvU2Vhc29uX1N3aXRjaGVyX1MxM19JbmZpbml0ZS5wbmciLCJvcHRpb25zIjp7fX0%3D",
+                "challenges_background": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU2NyZWVuQmFja2dyb3VuZHMvY2hhbGxlbmdlc19iYWNrZ3JvdW5kLnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D",
+                "battlepass_background": "https://wpassets.halowaypoint.com/wp-content/2025/11/VisID-OpInfinite-Wallpaper_Clean-1920x1080-R02B.png",
+                "storefront_background": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU2NyZWVuQmFja2dyb3VuZHMvc3RvcmVmcm9udF9iYWNrZ3JvdW5kLnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D"
+            },
+            "properties": {
+                "identifier": "Season13-Op1",
+                "csr": "CsrSeason13-1"
+            },
+            "availability": [
+                {
+                    "start_date": "2025-11-18T18:00:00.000Z",
+                    "end_date": "2035-11-18T18:00:00.000Z"
+                }
+            ]
         }
     ],
+    
     "additional": {
-        "total": 12,
+        "total": 13,
         "query": {
             "language": "en-US"
         }
