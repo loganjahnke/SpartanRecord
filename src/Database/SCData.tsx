@@ -462,6 +462,11 @@ export class SCData
             const seasons2024 = allSeasons.filter(season => season.id === 6 || season.id === 7 || season.id === 8 || season.id === 9);
             return seasons2024;
         }
+        else if (year === 2025)
+        {
+            const seasons2025 = allSeasons.filter(season => season.id === 10 || season.id === 11 || season.id === 12 || season.id === 13);
+            return seasons2025;
+        }
 
         return [];
     }

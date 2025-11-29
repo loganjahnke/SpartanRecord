@@ -91,7 +91,7 @@ export function AHDrawer(props: AHDrawerProps)
 				switchTab("/", newTab);
 				break;
 			case SRTabs.YearInReview:
-				switchTab(`/year_in_review/2024/${player.gamertag}`, newTab);
+				switchTab(`/year_in_review/2025/${player.gamertag}`, newTab);
 				break;
 			case SRTabs.ServiceRecord:
 				switchTab(`/service_record/${player.gamertag}`, newTab);

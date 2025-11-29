@@ -89,6 +89,12 @@ export function WhatsNew(props: WhatsNewProps)
 		new Feature("Patreon", "Subscribe to go ad-free for your gamertag", "subscribe"),
 	]);
 
+	features.set("4.19", [
+		new Feature("Check our your 2025 Year in Review", "See your Halo Infinite statistics for 2025"),
+		new Feature("New iOS App", "Track your stats in the brand new Spartan Record app!", "https://apps.apple.com/us/app/spartan-record/id6470414461"),
+		new Feature("Patreon", "Subscribe to go ad-free for your gamertag", "subscribe"),
+	]);
+
 	return (
 		<Card sx={{ background: ArrowheadTheme.card + "DD" }}>
 			<CardContent>

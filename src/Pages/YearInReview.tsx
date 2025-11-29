@@ -154,7 +154,7 @@ export function YearInReview(props: ViewProps)
 	//#endregion
 
 	if (!player || !year) { return <UhOh ignoreHelmet primaryMessage="Something went wrong Spartan" secondaryMessage="Go back to search to try again" switchTab={switchTab} />; }
-	if (parseInt(year) < 2024 || parseInt(year) > 2024) { return <UhOh ignoreHelmet primaryMessage={`Sneaky Spartan`} secondaryMessage={`Right now 2024 is the only Year in Review available on SpartanRecord.com`} switchTab={switchTab} /> }
+	if (parseInt(year) < 2024 || parseInt(year) > 2025) { return <UhOh ignoreHelmet primaryMessage={`Sneaky Spartan`} secondaryMessage={`${year} isn't available in Year in Review on SpartanRecord.com`} switchTab={switchTab} /> }
 	if (player?.serviceRecord.error) { return <UhOh ignoreHelmet primaryMessage={`Couldn't load ${player!.gamertag}`} secondaryMessage={player!.serviceRecord.error} switchTab={switchTab} /> }
 	if (player?.serviceRecord.IsEmpty()) { return <UhOh ignoreHelmet primaryMessage={`Nothing to show for ${player!.gamertag}`} secondaryMessage={`Did you play Halo Infinite with this gamertag in ${year}? Or is this gamertag invalid?`} switchTab={switchTab} /> }
 
