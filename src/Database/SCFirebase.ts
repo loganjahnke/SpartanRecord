@@ -18,6 +18,7 @@ import { HaloDotAPISeason } from "./Schemas/AutocodeMetadata";
 import { CareerRankSchema, EmptyCareerRank } from "./Schemas/CareerRankSchema";
 import { URLReducer } from "../Objects/Helpers/Statics/URLReducer";
 import { VIP } from "../Objects/Model/VIP";
+import { AllSeasons } from "../Objects/Helpers/AllSeasons";
 
 export class SCFirebase
 {
@@ -398,6 +399,25 @@ export class SCFirebase
 
 		return csrs;
 	}
+
+	/**
+	 * Gets the current CSR season
+	 */
+	public async GetCurrentCSRSeason(): Promise<string>
+    {
+		Debugger.Print("SCFirebase", "GetCurrentCSRSeason()");
+
+		const snapshot = await this.__get(`current_csr_season`);
+		if (!snapshot || !snapshot.val()) 
+		{ 
+			const result = AllSeasons; //await this.__fetch("/games/halo-infinite/metadata/multiplayer/seasons");
+			const seasons = result.data as any as HaloDotAPISeason[];
+			if (!seasons || seasons.length === 0) { return "CsrSeason13-1"; }
+			return seasons[seasons.length - 1]?.properties?.csr ?? "CsrSeason13-1";
+		}
+
+        return snapshot.val() as string;
+    }
 	//#endregion
 	
 	//#region Leaderboard

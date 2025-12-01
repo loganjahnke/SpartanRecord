@@ -168,9 +168,8 @@ export class SCPostman
 		Debugger.Print("SCPostman", "GetCSRS()", player.gamertag);
 
 		if (!season) 
-		{ 
-			const current = await this.__getCurrentSeason(); 
-			season = current?.properties.csr;
+		{
+			season = await this.__firebase.GetCurrentCSRSeason();
 		}
 		if (!season) { return; }
 
