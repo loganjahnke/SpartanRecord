@@ -341,7 +341,7 @@ export const AllSeasons = {
                 "season_logo": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoic2Vhc29ucy9pbnNpZ25pYV9FdmVyZ3JlZW5fMjU2LnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D",
                 "card_background": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU3dpdGNoZXIvU2Vhc29uX1N3aXRjaGVyX1MxM19JbmZpbml0ZS5wbmciLCJvcHRpb25zIjp7fX0%3D",
                 "challenges_background": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU2NyZWVuQmFja2dyb3VuZHMvY2hhbGxlbmdlc19iYWNrZ3JvdW5kLnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D",
-                "battlepass_background": "https://wpassets.halowaypoint.com/wp-content/2025/11/VisID-OpInfinite-Wallpaper_Clean-1920x1080-R02B.png",
+                "battlepass_background": "https://wpassets.halowaypoint.com/wp-content/2025/11/demon_117.jpg",
                 "storefront_background": "https://grunt.api.dotapi.gg/games/halo-infinite/tooling/cms-images?hash=eyJpZGVudGlmaWVyIjoiaGkiLCJwYXRoIjoicHJvZ3Jlc3Npb24vU2NyZWVuQmFja2dyb3VuZHMvc3RvcmVmcm9udF9iYWNrZ3JvdW5kLnBuZyIsIm9wdGlvbnMiOnt9fQ%3D%3D"
             },
             "properties": {
