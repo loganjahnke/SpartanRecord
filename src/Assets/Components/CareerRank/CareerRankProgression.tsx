@@ -63,8 +63,8 @@ export function CareerRankProgression(props: { current: CareerRankSchema, servic
 		allRanks.push(GetCareerRankMetadata(i));
 	}
 
-	// Get average score
-	const avgScore = serviceRecord.totalScore / serviceRecord.matchesPlayed;
+	// Get average score (double XP is permanent in latest Halo update)
+	const avgScore = (serviceRecord.totalScore / serviceRecord.matchesPlayed) * 2;
 	//#endregion
 
 	return (

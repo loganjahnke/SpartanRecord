@@ -34,7 +34,7 @@ export function CareerRankCallout(props: CareerRankCalloutProps)
 	}
 
 	// Calculate the XP for the goal date
-	const avgScore = careerRankForTheYear.data.level.total_xp / player.serviceRecord.matchesPlayed;
+	const avgScore = (careerRankForTheYear.data.level.total_xp / player.serviceRecord.matchesPlayed) * 2;
 	const gamesPerDay = player.serviceRecord.matchesPlayed / 365;
 	const xpToRank = allRanks[allRanks.length - 1].properties.threshold - player.careerRank.data.level.total_xp;
 	const matchesToHero = Math.ceil(xpToRank / Math.max(avgScore, 1));
