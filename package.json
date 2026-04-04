@@ -1,6 +1,6 @@
 {
   "name": "spartan_record",
-  "version": "4.19.5",
+  "version": "4.19.6",
   "private": true,
   "dependencies": {
     "@babel/core": "^7.24.7",
@@ -18,8 +18,8 @@
     "chart.js": "^3.6.2",
     "chartjs-plugin-datalabels": "^2.2.0",
     "firebase": "^12.7.0",
-    "firebase-admin": "^13.6.0",
-    "firebase-functions": "^7.0.2",
+    "firebase-admin": "^10.3.0",
+    "firebase-functions": "^4.9.0",
     "lib": "^4.3.3",
     "moment": "^2.29.4",
     "node-fetch": "^2.6.1",
