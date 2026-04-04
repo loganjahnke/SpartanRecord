@@ -17,6 +17,7 @@ import { AddGamertagDialog, AddGamertagInline } from "../Spartan Company/AddGame
 import { ArrowheadTheme } from "../../Assets/Theme/ArrowheadTheme";
 import { CompareHeader } from "../../Assets/Components/Compare/CompareHeader";
 import { CompareCareerRank } from "../../Assets/Components/Compare/CompareCareerRank";
+import { UhOh } from "../UhOh";
 
 export function CompareView(props: ViewProps)
 {
@@ -31,6 +32,7 @@ export function CompareView(props: ViewProps)
 	const [addGamertagDialog, setAddGamertagDialog] = useState(false);
 	const [loadingProfile, setLoadingProfile] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
+	const [criticalError, setCriticalErrorMessage] = useState("");
 	const [recentPlayers, setRecentPlayers] = useState<Player[]>(Cookie.getRecents().map(gamertag => new Player(gamertag)));
 	//#endregion
 
@@ -75,6 +77,13 @@ export function CompareView(props: ViewProps)
 			setErrorMessage("You already have " + gt + " pulled into the comparison.");
 			setLoadingProfile(false);
 			return "";
+		}
+
+		if (await app.IsGamertagPrivate(gt))
+		{
+			setErrorMessage(`${gt} is private and cannot be loaded.`);
+			setLoadingProfile(false);
+			return;
 		}
 
 		const realGamertag = await app.IsValidGamertag(gt);
@@ -252,6 +261,14 @@ export function CompareView(props: ViewProps)
 		// Update tab
 		switchTab(undefined, SRTabs.Compare);
 
+		// Check if gamertag is allowed to be loaded
+		if (await app.IsGamertagPrivate(gamertag1))
+		{
+			setCriticalErrorMessage(`${gamertag1} is private and cannot be loaded.`);
+			setLoadingProfile(false);
+			return;
+		}
+
 		// Load appearances
 		if (!gamertag2) { await loadRecentPlayers(); }
 
@@ -302,6 +319,7 @@ export function CompareView(props: ViewProps)
 	const bestAllCSR2 = player2?.GetBestAllTimeCSR();
 	const bestAllBack = (bestAllCSR1?.ranks.allTime.value ?? 0) > (bestAllCSR2?.ranks.allTime.value ?? 0) ? bestAllCSR1?.ranks.allTime.GetBackground() : bestAllCSR2?.ranks.allTime.GetBackground();
 
+	if (criticalError) { return <UhOh ignoreHelmet primaryMessage={`Couldn't load ${gamertag1}`} secondaryMessage={criticalError} switchTab={switchTab} /> }
 	return (
 		<Box component="main" className="pageContainer">
 			<Helmet>

@@ -11,6 +11,7 @@ import { Helmet } from "react-helmet";
 import { Cookie } from "../Objects/Helpers/Cookie";
 import { Debugger } from "../Objects/Helpers/Debugger";
 import { FluidAd } from "../Assets/Components/Ads/FluidAd";
+import { UhOh } from "./UhOh";
 
 export function MedalsView(props: ViewProps)
 {
@@ -20,6 +21,7 @@ export function MedalsView(props: ViewProps)
 	//#endregion
 	
 	//#region State
+	const [error, setError] = useState<string>("");
 	const [showAll, setShowAll] = useState(Cookie.getShowUnearnedMedals());
 	const [serviceRecord, setServiceRecord] = useState(new ServiceRecord());
 	//#endregion
@@ -34,6 +36,14 @@ export function MedalsView(props: ViewProps)
 		// Get service record of gamertag
 		if (gamertag)
 		{
+			// Check if gamertag is allowed to be loaded
+			if (await app.IsGamertagPrivate(gamertag))
+			{
+				setError(`${gamertag} is private and cannot be loaded.`);
+				setLoadingMessage("");
+				return;
+			}
+
 			// Set page gamertag and show loading message
 			setGamertag(gamertag);
 			const player = await app.GetMinimumPlayerDataFromFirebase(gamertag);
@@ -57,6 +67,7 @@ export function MedalsView(props: ViewProps)
 		Cookie.setShowUnearnedMedals(event.target.checked);
 	}
 
+	if (error) { return <UhOh ignoreHelmet primaryMessage={`Couldn't load ${gamertag}`} secondaryMessage={error} switchTab={switchTab} /> }
 	return (
 		<Box component="main" className="pageContainer">
 			<Helmet>

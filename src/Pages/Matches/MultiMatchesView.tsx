@@ -18,6 +18,7 @@ import { HaloDotAPIPlaylist } from "../../Database/Schemas/AutocodeMetadata";
 import { PlaylistChooser } from "../../Assets/Components/Playlists/PlaylistChooser";
 import { Grow } from "../../Assets/Components/Common/Grow";
 import { FluidAd } from "../../Assets/Components/Ads/FluidAd";
+import { UhOh } from "../UhOh";
 
 interface MultiMatchesViewProps extends ViewProps
 {
@@ -33,6 +34,7 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 	//#endregion
 	
 	//#region State
+	const [error, setError] = useState<string>("");
 	const [matches, setMatches] = useState<PlayerMatch[]>([]);
 	const [matchesToShow, setMatchesToShow] = useState<PlayerMatch[]>([]);
 	const [combinedSR, setCombinedSR] = useState(new ServiceRecord());
@@ -148,11 +150,21 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 		if (!gamertag) { return; }
 
 		// Clear messages from other views
+		setError("");
 		setLoadingMessage("");
 		setBackgroundLoadingProgress("");
 
 		// Load from HaloDotAPI
 		setLoadingMessage("Loading matches for " + gamertag);
+
+		// Check if gamertag is allowed to be loaded
+		if (await app.IsGamertagPrivate(gamertag))
+		{
+			setError(`${gamertag} is private and cannot be loaded.`);
+			setLoadingMessage("");
+			setBackgroundLoadingProgress("");
+			return;
+		}
 
 		// Load playlists
 		const [allMatches] = await Promise.all([
@@ -214,6 +226,7 @@ export function MultiMatchesView(props: MultiMatchesViewProps)
 		}
     }
 
+	if (error) { return <UhOh ignoreHelmet primaryMessage={`Couldn't load ${gamertag}`} secondaryMessage={error} switchTab={switchTab} /> }
 	return (
 		<Box component="main" className="pageContainer">
 			<Helmet>

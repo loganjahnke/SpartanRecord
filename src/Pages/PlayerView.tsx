@@ -22,6 +22,7 @@ export function PlayerView(props: ViewProps)
 	//#endregion
 	
 	//#region State
+	const [error, setError] = useState<string>("");
 	const [historicStats, setHistoricStats] = useState<ServiceRecord[]>([]);
 	const [showPerMatch, setShowPerMatch] = useState(false);
 	const [season, setSeason] = useState("");
@@ -79,8 +80,7 @@ export function PlayerView(props: ViewProps)
 
 			if (firebasePlayer.serviceRecord.IsEmpty())
 			{
-				firebasePlayer.serviceRecord.error = "Cannot load data, try again later.";
-				updatePlayer(gamertag, undefined, firebasePlayer.serviceRecord);
+				setError("Cannot load data, try again later.");
 			}
 
 			return false;
@@ -103,8 +103,7 @@ export function PlayerView(props: ViewProps)
 
 			if (firebasePlayer.serviceRecord.IsEmpty())
 			{
-				firebasePlayer.serviceRecord.error = "Cannot load data, try again later.";
-				updatePlayer(gamertag, undefined, firebasePlayer.serviceRecord);
+				setError("Cannot load data, try again later.");
 			}
 
 			return false;
@@ -113,8 +112,7 @@ export function PlayerView(props: ViewProps)
 		// Error checking
 		if (firebasePlayer.serviceRecord.IsEmpty() && gruntAPIPlayer.serviceRecord.IsEmpty())
 		{
-			firebasePlayer.serviceRecord.error = "Cannot load data, try again later.";
-			updatePlayer(gamertag, undefined, firebasePlayer.serviceRecord);
+			setError("Cannot load data, try again later.");
 			return false;
 		}
 
@@ -212,12 +210,21 @@ export function PlayerView(props: ViewProps)
 
 		// Update tab
 		switchTab(undefined, SRTabs.ServiceRecord);
+		setError("");
 
 		// Load available seasons
 		if (!seasons || seasons.length === 0) 
 		{ 
 			const allSeasons = await app.GetSeasons();
 			setSeasons(allSeasons);
+		}
+
+		// Check if gamertag is allowed to be loaded
+		if (await app.IsGamertagPrivate(gamertag))
+		{
+			setError(`${gamertag} is private and cannot be loaded.`);
+			clearLoadingMessages();
+			return;
 		}
 
 		// Get from firebase
@@ -244,7 +251,7 @@ export function PlayerView(props: ViewProps)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [gamertag, season]);
 
-	if (player && player.serviceRecord?.error) { return <UhOh ignoreHelmet primaryMessage={`Couldn't load ${player!.gamertag}`} secondaryMessage={player!.serviceRecord.error} switchTab={switchTab} /> }
+	if (error) { return <UhOh ignoreHelmet primaryMessage={`Couldn't load ${gamertag}`} secondaryMessage={error} switchTab={switchTab} /> }
 	return (
 		<Box component="main" className="pageContainer">
 			<Helmet>

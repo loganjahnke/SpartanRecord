@@ -93,16 +93,17 @@ export class SCData
             this.firebase.GetAppearance(gamertag)
         ]);
 
-        if (firebaseAppearance) { player.appearance = firebaseAppearance; }
-        if (firebaseAppearance) { return player; }
+        if (firebaseAppearance?.emblemURL) 
+        {
+            player.appearance = firebaseAppearance; 
+            return player;
+        }
 
         if (!await this.CanUpdate()) { return player; }
 
         // Otherwise get from HaloDotAPI
         await Promise.all([this.halodapi.GetAppearance(player)]);
         if (player.appearanceData) { this.firebase.SetAppearance(gamertag, player.appearanceData); }
-
-        // Update counter
 
         return player;
     }
@@ -136,6 +137,18 @@ export class SCData
 
         return player;
     }
+
+    /**
+     * Checks if the given gamertag is private
+     * @param gamertag the gamertag
+     * @returns true if the gamertag is not allowed the be loaded
+     */
+    public async IsGamertagPrivate(gamertag: string): Promise<boolean>
+	{
+        if (!gamertag) { return false; }
+        const allCaps = gamertag.toUpperCase();
+        return await this.firebase.IsGamertagPrivate(allCaps);
+	}
 
     /**
      * Gets a player from firebase

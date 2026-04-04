@@ -31,6 +31,7 @@ import { PlaylistChooser } from "../Assets/Components/Playlists/PlaylistChooser"
 import { FluidAd } from "../Assets/Components/Ads/FluidAd";
 import { ModeBreakdown } from "../Assets/Components/Breakdowns/Modes/ModeBreakdown";
 import { CSV } from "../Objects/Helpers/Statics/CSV";
+import { UhOh } from "./UhOh";
 
 export function FilteredView(props: ViewProps)
 {
@@ -40,6 +41,8 @@ export function FilteredView(props: ViewProps)
 	//#endregion
 	
 	//#region State
+	const [error, setError] = useState<string>("");
+
 	const [showPerMatch, setShowPerMatch] = useState(false);
     const [sr, setSR] = useState<ServiceRecord | undefined>();
 
@@ -78,9 +81,21 @@ export function FilteredView(props: ViewProps)
 	const loadData = useCallback(async () => 
 	{		
 		Debugger.LoadView("FilteredView");
+
+		// Gamertag is required
+		if (!gamertag) { switchTab("/", SRTabs.Search); return; }
 		
 		// Check if we need to check Firebase or HaloDotAPI
 		setLoadingMessage("Loading Filters");
+		setError("");
+
+		// Check if gamertag is allowed to be loaded
+		if (await app.IsGamertagPrivate(gamertag))
+		{
+			setError(`${gamertag} is private and cannot be loaded.`);
+			setLoadingMessage("");
+			return;
+		}
 
 		// Get seasons
 		if (!seasons || seasons.length === 0)
@@ -261,6 +276,7 @@ export function FilteredView(props: ViewProps)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [season]);
 
+	if (error) { return <UhOh ignoreHelmet primaryMessage={`Couldn't load ${gamertag}`} secondaryMessage={error} switchTab={switchTab} /> }
 	return (
 		<Box component="main" className="pageContainer">
 			<Helmet>

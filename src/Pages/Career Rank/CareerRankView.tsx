@@ -1,5 +1,5 @@
 import { Box, Divider, Toolbar } from "@mui/material";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 
@@ -20,6 +20,7 @@ export function CareerRankView(props: ViewProps)
 	//#endregion
 	
 	//#region State
+	const [error, setError] = useState<string>("");
 	//#endregion
 
 	/**
@@ -71,8 +72,7 @@ export function CareerRankView(props: ViewProps)
 			setApiError(true);
 			if (firebasePlayer.serviceRecord.IsEmpty())
 			{
-				firebasePlayer.serviceRecord.error = "Cannot load data, try again later.";
-				updatePlayer(gamertag, undefined, firebasePlayer.serviceRecord);
+				setError("Cannot load data, try again later.");
 			}
 			return false;
 		}
@@ -93,8 +93,7 @@ export function CareerRankView(props: ViewProps)
 
 			if (firebasePlayer.serviceRecord.IsEmpty())
 			{
-				firebasePlayer.serviceRecord.error = "Cannot load data, try again later.";
-				updatePlayer(gamertag, undefined, firebasePlayer.serviceRecord);
+				setError("Cannot load data, try again later.");
 			}
 
 			return;
@@ -103,8 +102,7 @@ export function CareerRankView(props: ViewProps)
 		// Error checking
 		if (firebasePlayer.serviceRecord.IsEmpty() && haloDotAPIPlayer.serviceRecord.IsEmpty())
 		{
-			firebasePlayer.serviceRecord.error = "Cannot load data, try again later.";
-			updatePlayer(gamertag, undefined, firebasePlayer.serviceRecord);
+			setError("Cannot load data, try again later.");
 			return false;
 		}
 
@@ -143,6 +141,15 @@ export function CareerRankView(props: ViewProps)
 
 		// Update tab
 		switchTab(undefined, SRTabs.CareerRank);
+		setError("");
+
+		// Check if gamertag is allowed to be loaded
+		if (await app.IsGamertagPrivate(gamertag))
+		{
+			setError(`${gamertag} is private and cannot be loaded.`);
+			clearLoadingMessages();
+			return;
+		}
 
 		// Get from firebase
 		const firebasePlayer = await loadFromFirebase();
@@ -164,7 +171,7 @@ export function CareerRankView(props: ViewProps)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [gamertag]);
 
-	if (player && player.serviceRecord?.error) { return <UhOh ignoreHelmet primaryMessage={`Couldn't load ${player!.gamertag}`} secondaryMessage={player!.serviceRecord.error} switchTab={switchTab} /> }
+	if (error) { return <UhOh ignoreHelmet primaryMessage={`Couldn't load ${gamertag}`} secondaryMessage={error} switchTab={switchTab} /> }
 	return (
 		<Box component="main" className="pageContainer">
 			<Helmet>

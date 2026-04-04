@@ -565,6 +565,18 @@ export class SCFirebase
 		if (snapshot) { this.__setReadSize("GetGamertag", snapshot.val()); }
 		return snapshot.val();
 	}
+
+	/**
+     * Checks if the given gamertag is private
+     * @param gamertag the gamertag
+     * @returns true if the gamertag is not allowed the be loaded
+     */
+    public async IsGamertagPrivate(gamertag: string): Promise<boolean>
+	{
+		Debugger.Print("SCFirebase", "IsGamertagPrivate()", `${gamertag}`);
+        const notAllowed = await this.__get(`private/${gamertag}`);
+		return !!notAllowed;
+	}
 	//#endregion
 	//#endregion
 

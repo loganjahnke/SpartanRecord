@@ -28,6 +28,7 @@ export function YearInReview(props: ViewProps)
 	//#endregion
 
 	//#region State
+	const [error, setError] = useState<string>("");
 	const [step, setStep] = useState(0);
 	//#endregion
 
@@ -67,8 +68,7 @@ export function YearInReview(props: ViewProps)
 		if (!canUseGruntAPI && !player.careerRank)
 		{
 			setApiError(true);
-			const errorPlayer = Player.createWithError("Sorry! SpartanRecord.com hit the API limit, try again later.")
-			updatePlayer(gamertag, player.appearance, errorPlayer.serviceRecord);
+			setError("Sorry! SpartanRecord.com hit the API limit, try again later.");
 			return;
 		}
 		
@@ -77,8 +77,7 @@ export function YearInReview(props: ViewProps)
 		if (uncachedSeasons.length > 0 && !canUseGruntAPI)
 		{
 			setApiError(true);
-			const errorPlayer = Player.createWithError("Sorry! SpartanRecord.com hit the API limit, try again later.")
-			updatePlayer(gamertag, player.appearance, errorPlayer.serviceRecord);
+			setError("Sorry! SpartanRecord.com hit the API limit, try again later.");
 			return;
 		}
 
@@ -120,6 +119,15 @@ export function YearInReview(props: ViewProps)
 
 		// Update tab
 		switchTab(undefined, SRTabs.YearInReview);
+		setError("");
+
+		// Check if gamertag is allowed to be loaded
+		if (await app.IsGamertagPrivate(gamertag))
+		{
+			setError(`${gamertag} is private and cannot be loaded.`);
+			clearLoadingMessages();
+			return;
+		}
 
 		// Get from firebase
 		await loadYearInReview();
@@ -155,7 +163,7 @@ export function YearInReview(props: ViewProps)
 
 	if (!player || !year) { return <UhOh ignoreHelmet primaryMessage="Something went wrong Spartan" secondaryMessage="Go back to search to try again" switchTab={switchTab} />; }
 	if (parseInt(year) < 2024 || parseInt(year) > 2025) { return <UhOh ignoreHelmet primaryMessage={`Sneaky Spartan`} secondaryMessage={`${year} isn't available in Year in Review on SpartanRecord.com`} switchTab={switchTab} /> }
-	if (player?.serviceRecord.error) { return <UhOh ignoreHelmet primaryMessage={`Couldn't load ${player!.gamertag}`} secondaryMessage={player!.serviceRecord.error} switchTab={switchTab} /> }
+	if (error) { return <UhOh ignoreHelmet primaryMessage={`Couldn't load ${gamertag}`} secondaryMessage={error} switchTab={switchTab} /> }
 	if (player?.serviceRecord.IsEmpty()) { return <UhOh ignoreHelmet primaryMessage={`Nothing to show for ${player!.gamertag}`} secondaryMessage={`Did you play Halo Infinite with this gamertag in ${year}? Or is this gamertag invalid?`} switchTab={switchTab} /> }
 
 	return (
