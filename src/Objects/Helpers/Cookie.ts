@@ -1,6 +1,7 @@
 import moment from "moment";
 import { Debugger } from "./Debugger";
 import { HeroTrackerModeEnum } from "../../Assets/Components/CareerRank/HeroTrackerMode";
+import { Version } from "./Statics/Version";
 
 export class Cookie
 {
@@ -300,7 +301,7 @@ export class Cookie
      */
     public static getHideWhatsNew(): boolean
     {
-        const version = process.env.REACT_APP_MAJOR_VERSION;
+        const version = Version.majorVersion;
         const hideWhatsNew = this.get(`sc-hide-whatsnew${version}`);
         return !!hideWhatsNew;
     }
@@ -310,7 +311,7 @@ export class Cookie
      */
     public static dismissWhatsNew(): void
     {
-        const version = process.env.REACT_APP_MAJOR_VERSION;
+        const version = Version.majorVersion;
         this.set(`sc-hide-whatsnew${version}`, "true");
     }
     //#endregion

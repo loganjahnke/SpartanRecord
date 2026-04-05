@@ -18,6 +18,7 @@ import { ArrowheadTheme } from "../../Assets/Theme/ArrowheadTheme";
 import { CompareHeader } from "../../Assets/Components/Compare/CompareHeader";
 import { CompareCareerRank } from "../../Assets/Components/Compare/CompareCareerRank";
 import { UhOh } from "../UhOh";
+import { Version } from "../../Objects/Helpers/Statics/Version";
 
 export function CompareView(props: ViewProps)
 {
@@ -386,7 +387,7 @@ export function CompareView(props: ViewProps)
 					</Box>
 					<Grow />
 					<Box sx={{ backgroundColor: "secondary.main", textAlign: "center", mt: 18 }}>
-						<Typography variant="subtitle1" sx={{ textAlign: "center" }}>Powered by <Link sx={{ cursor: "pointer" }} onClick={() => switchTab("/powered_by_halodotapi")}>HaloDotAPI</Link> v{process.env.REACT_APP_HALO_API_VERSION} | Spartan Record v{process.env.REACT_APP_VERSION}</Typography>
+						<Typography variant="subtitle1" sx={{ textAlign: "center" }}>Powered by <Link sx={{ cursor: "pointer" }} onClick={() => switchTab("/powered_by_halodotapi")}>HaloDotAPI</Link> v{process.env.REACT_APP_HALO_API_VERSION} | Spartan Record v{Version.version}</Typography>
 					</Box>
 				</Box>
 			}

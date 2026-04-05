@@ -8,6 +8,7 @@ import PrimaryLogo from "../../Images/Primary/Spartan-Record-Logo-Primary-White.
 import { MatchesIcon, MedalsIcon, PlaylistsIcon, RankedIcon, SearchIcon, ServiceRecordIcon, SocialIcon, VariantsIcon, CreditsIcon, SpartanCompanyIcon } from "../../Icons/CustomIcons";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { UsbRounded, GamepadRounded, LeaderboardRounded, LockOutlined, CompareArrows, PlayArrow, CalendarMonth } from "@mui/icons-material";
+import { Version } from "../../../Objects/Helpers/Statics/Version";
 
 export enum SRTabs
 {
@@ -304,7 +305,7 @@ export function AHDrawer(props: AHDrawerProps)
 			</Box>
 			<Divider flexItem sx={{ flexGrow: 1 }} />
 			<Box sx={{ display: "flex", flexDirection: "column", p: 1, textAlign: "center" }}>
-				<Typography sx={{ m: 0.5 }} variant="body2">Powered by <Link href={process.env.REACT_APP_API_MARKETING_URL}>{process.env.REACT_APP_API_NAME}</Link></Typography>
+				<Typography sx={{ m: 0.5 }} variant="body2">Powered by <Link href={Version.apiUrl}>{Version.apiName}</Link></Typography>
 				<Typography sx={{ m: 0.5 }} variant="body2">Follow us on <Link href="https://x.com/SpartanRecord">Twitter</Link></Typography>
 				<Typography sx={{ m: 0.5 }} variant="body2">Made by <Link href="https://x.com/Logan_Jahnke">Logan Jahnke</Link></Typography>
 			</Box>

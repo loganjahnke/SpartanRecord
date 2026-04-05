@@ -5,6 +5,7 @@ import { Grow } from "../Common/Grow";
 import { ArrowheadTheme } from "../../Theme/ArrowheadTheme";
 import { SRTabs } from "../Layout/AHDrawer";
 import { useCallback } from "react";
+import { Version } from "../../../Objects/Helpers/Statics/Version";
 
 interface WhatsNewProps
 {
@@ -99,7 +100,7 @@ export function WhatsNew(props: WhatsNewProps)
 			<CardContent>
 				<Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: 700 }}>What's new?</Typography>
 				<List>
-					{features.get(process.env.REACT_APP_MAJOR_VERSION || "47")?.map(feature => <WhatsNewItem feature={feature} onJump={onJump} />)}
+					{features.get(Version.majorVersion || "47")?.map(feature => <WhatsNewItem feature={feature} onJump={onJump} />)}
 				</List>
 			</CardContent>
 			<CardActions>

@@ -19,6 +19,7 @@ import { CareerRankSchema, EmptyCareerRank } from "./Schemas/CareerRankSchema";
 import { URLReducer } from "../Objects/Helpers/Statics/URLReducer";
 import { VIP } from "../Objects/Model/VIP";
 import { AllSeasons } from "../Objects/Helpers/AllSeasons";
+import { Version } from "../Objects/Helpers/Statics/Version";
 
 export class SCFirebase
 {
@@ -842,7 +843,7 @@ export class SCFirebase
 	 */
 	public async SetVersion(): Promise<void>
 	{		
-		let version = process.env.REACT_APP_VERSION;
+		let version = Version.version;
 		if (!version) { return; }
 
 		version = version.replaceAll(".", "-");

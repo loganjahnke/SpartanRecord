@@ -10,6 +10,7 @@ import { GamertagSearch } from "../Assets/Components/ServiceRecord/GamertagSearc
 import { HaloDotAPISeason } from "../Database/Schemas/AutocodeMetadata";
 import { Debugger } from "../Objects/Helpers/Debugger";
 import { WhatsNew } from "../Assets/Components/WhatsNew/WhatsNew";
+import { Version } from "../Objects/Helpers/Statics/Version";
 
 export function HomeView(props: ViewProps)
 {
@@ -158,7 +159,7 @@ export function HomeView(props: ViewProps)
 					{showWhatsNew && <Box sx={{ textAlign: "center", alignSelf: "center", mt: 6, width: { xs: "90%", sm: "75%", md: "500px" }}}><WhatsNew gamertag={player?.gamertag} onDismiss={onDismissWhatsNew} switchTab={switchTab} /></Box>}
 					<Box sx={{ textAlign: "center", flexGrow: 1, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
 						<Typography variant="subtitle1" sx={{ textAlign: "center", fontSize: "0.6rem" }}>
-							Powered by <Link sx={{ cursor: "pointer" }} href={process.env.REACT_APP_API_MARKETING_URL}>{process.env.REACT_APP_API_NAME}</Link>{halodotapiVersion ? ` v${halodotapiVersion} ` : " "}| Spartan Record v{process.env.REACT_APP_VERSION} | <Link href="/privacy.html">Privacy Policy</Link>
+							Powered by <Link sx={{ cursor: "pointer" }} href={Version.apiUrl}>{Version.apiName}</Link>{halodotapiVersion ? ` v${halodotapiVersion} ` : " "}| Spartan Record v{Version.version} | <Link href="/privacy.html">Privacy Policy</Link>
 						</Typography>
 					</Box>
 				</Box>
