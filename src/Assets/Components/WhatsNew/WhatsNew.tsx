@@ -95,6 +95,11 @@ export function WhatsNew(props: WhatsNewProps)
 		new Feature("Patreon", "Subscribe to go ad-free for your gamertag", "subscribe"),
 	]);
 
+	features.set("4.20", [
+		new Feature("Goodbye Ads", "Honestly I was only making like $3 a month on these, so it's time to remove them. Consider donating to keep SpartanRecord.com up and running!", "subscribe"),
+		new Feature("iOS App", "Track your stats in the Spartan Record app!", "https://apps.apple.com/us/app/spartan-record/id6470414461"),
+	]);
+
 	return (
 		<Card sx={{ background: ArrowheadTheme.card + "DD" }}>
 			<CardContent>

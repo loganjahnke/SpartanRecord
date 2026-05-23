@@ -63,7 +63,7 @@ const App = () =>
 	const [tab, setTab] = useState("Search");
 	const [loadingMessage, setLoadingMessage] = useState("");
 	const [backgroundLoadingProgress, setBackgroundLoadingProgress] = useState<string>("");
-	const [isSubscribedToPatreon, setIsSubscribedToPatreon] = useState(false);
+	const [isSubscribedToPatreon, setIsSubscribedToPatreon] = useState(true);
 	const [apiError, setApiError] = useState(false);
 	//#endregion
 
@@ -105,8 +105,8 @@ const App = () =>
 		}
 
 		setPlayer(newPlayer);
-		setIsSubscribedToPatreon(await arrowhead.GetIsSubscribedToPatreon(newPlayer.gamertag));
-	}, [player, arrowhead, setPlayer, setIsSubscribedToPatreon]);
+		//setIsSubscribedToPatreon(await arrowhead.GetIsSubscribedToPatreon(newPlayer.gamertag));
+	}, [player, arrowhead, setPlayer]);
 
 	/**
 	 * On the toast closing

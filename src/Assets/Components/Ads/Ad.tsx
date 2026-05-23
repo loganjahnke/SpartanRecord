@@ -48,14 +48,15 @@ export function Ad(props: AdProps)
 		}
 	}, []);
 
-	if (isAdFree) { return <></>; }
-	return (
-		<ins className="adsbygoogle"
-			style={{ display: "block" }}
-			data-ad-client="ca-pub-1147948296547143"
-			data-ad-slot={adId}
-			data-ad-format={format}
-			data-ad-layout-key={layout ?? ""}
-			data-full-width-responsive={format === "auto" ? "true" : ""}></ins>
-	);
+	return <></>;
+	// if (isAdFree) { return <></>; }
+	// return (
+	// 	<ins className="adsbygoogle"
+	// 		style={{ display: "block" }}
+	// 		data-ad-client="ca-pub-1147948296547143"
+	// 		data-ad-slot={adId}
+	// 		data-ad-format={format}
+	// 		data-ad-layout-key={layout ?? ""}
+	// 		data-full-width-responsive={format === "auto" ? "true" : ""}></ins>
+	// );
 }
