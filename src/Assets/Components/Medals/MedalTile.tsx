@@ -27,7 +27,7 @@ export function MedalTile(props: { medal: Medal, small?: boolean, matchesPlayed?
 			padding: 0.5 }}>
 			<Tooltip disableFocusListener arrow title={IS_DEBUGGING ? medal.id : medal.description}>
 				<Box sx={{ textAlign: "right" }}>
-					<img src={medal.images.medium} alt={medal.name} height={small ? "48px" : "64px"} />
+					<img src={medal.images.large} alt={medal.name} height={small ? "48px" : "64px"} />
 				</Box>
 			</Tooltip>
 			<Typography variant="caption" sx={{ textAlign: small ? "center" : "left", mt: small ? 0 : 0.5, ml: 0.5, fontSize: small ? "0.6rem" : "0.8rem" }}>{medal.name}</Typography>
@@ -46,7 +46,7 @@ export function MedalTile(props: { medal: Medal, small?: boolean, matchesPlayed?
 			padding: 0.5 }}>
 			<Tooltip disableFocusListener arrow title={IS_DEBUGGING ? medal.id : medal.description}>
 				<Box sx={{ textAlign: "left", ml: 2 }}>
-					<img src={medal.images.medium} alt={medal.name} height={small ? "48px" : "64px"} />
+					<img src={medal.images.large} alt={medal.name} height={small ? "48px" : "64px"} />
 				</Box>
 			</Tooltip>
 			<Box>
@@ -60,7 +60,7 @@ export function MedalTile(props: { medal: Medal, small?: boolean, matchesPlayed?
 			sx={{ backgroundColor: selectedID === medal.id ? ArrowheadTheme.good : "transparent", cursor: disabled ? "default" : "pointer", ":hover": { backgroundColor: disabled ? "transparent" : ArrowheadTheme.secondary } }} 
 			onClick={disabled ? undefined : () => select(medal.id)} 
 			title={disabled ? "Your company has not acquired this medal yet." : medal.name + ": " + medal.description}>
-			<img src={medal.images.medium} alt={medal.name} height="64px" style={{ filter: disabled ? "grayscale(100%)" : "" }} />
+			<img src={medal.images.large} alt={medal.name} height="64px" style={{ filter: disabled ? "grayscale(100%)" : "" }} />
 		</Button>
 
 	);
